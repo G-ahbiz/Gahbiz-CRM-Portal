@@ -13,15 +13,15 @@ export const routes: Routes = [
   {
     path: '', component: CrmLayout, children: [
       {
-        path: 'crm-dashboard', component: CrmDashboard, children: [
-          { path: 'main-dashboard', component: MainDashboard },
+        path: 'main', component: CrmDashboard, children: [
+          { path: 'dashboard', component: MainDashboard },
           { path: 'customers', component: CustomersCrm },
           { path: 'sales', component: SalesCrm },
           { path: 'invoices', component: InvoicesCrm },
           { path: 'orders', component: OrdersCrm },
           { path: 'reports', component: ReportsCrm },
           { path: 'settings', component: SettingsCrm },
-          { path: '', redirectTo: 'main-dashboard', pathMatch: 'full' }
+          { path: '', redirectTo: 'main', pathMatch: 'full' }
         ]
       },
       { path: '', redirectTo: 'crm-dashboard', pathMatch: 'full' }
