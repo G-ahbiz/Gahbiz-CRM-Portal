@@ -1,0 +1,20 @@
+.crm-layout {
+  width: 99dvw !important;
+  height: 99dvh !important;
+}
+
+.sidebar-container {
+  width: 20%;
+}
+
+.crm-layout-content {
+  width: 80%;
+}
+
+.dashboard-header-container {
+  height: 16%;
+}
+
+.content-container {
+  height: 84%;
+}

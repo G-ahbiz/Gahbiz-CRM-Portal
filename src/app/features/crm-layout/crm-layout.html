@@ -1,0 +1,21 @@
+<div class="container-fluid p-0 m-0">
+  <div class="crm-layout d-flex justify-content-start align-items-start overflow-hidden">
+
+    <!-- Sidebar Container -->
+    <div class="sidebar-container p-0 m-0 h-100 sidebar-bg border border-danger">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <div class="crm-layout-content border border-success h-100 content-bg">
+      <!-- Dashboard Header -->
+      <div class="dashboard-header-container p-0 m-0 border border-warning">
+        <app-header></app-header>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div class="content-container p-0 m-0 overflow-x-hidden overflow-y-auto border border-primary">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+  </div>

@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --sidebar-bg: #f9f9f9;
+  --content-bg: #F8FAFC;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.sidebar-bg {
+  background-color: var(--sidebar-bg);
+}
+
+.content-bg {
+  background-color: var(--content-bg);
+}
