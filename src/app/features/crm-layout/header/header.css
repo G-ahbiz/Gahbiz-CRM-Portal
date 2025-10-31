@@ -5,4 +5,18 @@
 .search-form-group {
   width: 20rem;
   height: 2rem;
+
+  >input {
+    outline: none;
+
+    &:focus {
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+  }
+}
+
+.dropdown-toggle {
+  border: none !important;
 }

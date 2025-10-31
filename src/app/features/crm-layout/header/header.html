@@ -15,8 +15,39 @@
     </div>
 
     <!-- icons & profile container -->
-    <div class="icon-profile-container">
+    <div class="icon-profile-container d-flex justify-content-start align-items-center gap-3">
+      <!-- icons container -->
+      <div class="icons-container d-flex justify-content-start align-items-center gap-3">
+        <!-- Language Switcher -->
+        <button type="button" class="btn p-0 m-0" title="Language Switcher" aria-label="Language Switcher">
+          <i class="pi pi-globe"></i>
+        </button>
+        <!-- notification icon -->
+        <button type="button" class="btn p-0 m-0" title="Notifications" aria-label="Notifications">
+          <img src="assets/images/header/notification.svg" alt="Notification" class="icon">
+        </button>
+        <!-- messages icon -->
+        <button type="button" class="btn p-0 m-0" title="Messages" aria-label="Messages">
+          <img src="assets/images/header/message.svg" alt="Message" class="icon">
+        </button>
+      </div>
 
+      <!-- profile container -->
+      <div class="profile-container">
+        <div class="btn-group">
+          <button type="button" class="btn dropdown-toggle d-flex justify-content-start align-items-center gap-2"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="assets/images/header/profile.svg" alt="Profile" class="icon">
+            <span class="text-nowrap fs-75 fw-medium">Tom Johnson</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">
+                <img src="assets/images/header/profile.svg" alt="Profile" class="icon">
+                <span class="text-nowrap fs-75 fw-medium">Tom Johnson</span>
+              </a></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -36,3 +36,11 @@ body {
 .cairo {
   font-family: 'Cairo', sans-serif;
 }
+
+.fs-75 {
+  font-size: 0.75rem !important;
+}
+
+.fs-875 {
+  font-size: 0.875rem !important;
+}
