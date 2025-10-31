@@ -1,0 +1,32 @@
+* {
+  transition: 0.5s all ease-in-out;
+}
+
+.sidebar-container {
+  width: 20rem;
+}
+
+.collapsed {
+  width: 3.5rem;
+  padding-inline: 0rem !important;
+}
+
+.fadeout {
+  opacity: 0;
+}
+
+.sidebar-text-color {
+  color: var(--sidebar-text-color);
+}
+
+.active {
+  background-color: var(--sidebar-active-color);
+
+  >button {
+    color: var(--sidebar-active-text-color) !important;
+
+    >img {
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(288deg) brightness(100%) contrast(100%);
+    }
+  }
+}

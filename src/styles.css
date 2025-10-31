@@ -3,6 +3,9 @@
 :root {
   --sidebar-bg: #f9f9f9;
   --content-bg: #F8FAFC;
+  --sidebar-text-color: #888888;
+  --sidebar-active-color: #005DB5;
+  --sidebar-active-text-color: #ffffff;
 }
 
 html, body {
@@ -20,4 +23,8 @@ body {
 
 .content-bg {
   background-color: var(--content-bg);
+}
+
+.p-75 {
+  padding: 0.75rem !important;
 }

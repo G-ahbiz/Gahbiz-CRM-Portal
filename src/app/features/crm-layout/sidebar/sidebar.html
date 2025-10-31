@@ -1,7 +1,73 @@
-<div class="container-fluid p-0 m-0 h-100 w-100">
+<div class="container-fluid p-0 m-0 h-100">
 
-  <div class="sidebar-container h-100 w-100">
-    <h1 class="">SideBar Container</h1>
+  <div
+    class="sidebar-container h-100 d-flex flex-column justify-content-start align-items-start px-3 py-4 overflow-hidden"
+    [class.collapsed]="isSidebarCollapsed()">
+
+    <!-- Sidebar Header -->
+    <div class="sidebar-header-container d-flex justify-content-between align-items-center w-100 mb-4">
+
+      <!-- Logo Container -->
+      <div class="logo-container w-100" [class.fadeout]="isSidebarCollapsed()">
+        <img src="assets/images/logo.png" alt="logo" class="logo">
+      </div>
+
+      <!-- Sidebar Collapse Icon -->
+      <div class="sidebar-collapse-icon-container">
+        <button class="btn p-0 m-0" title="Collapse Sidebar" (click)="toggleSidebar()">
+          <i class="pi pi-chevron-{{ isSidebarCollapsed() ? 'right' : 'left' }}"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sidebar Content -->
+    <div class="sidebar-content-container mt-5 w-100">
+      <ul class="list-unstyled">
+        <li class="w-100 p-75 rounded-3 border active">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/dashboard.svg" alt="Dashboard" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Dashboard</span>
+          </button>
+        </li>
+        <li class="w-100 p-75">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/customers.svg" alt="customers" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Customers</span>
+          </button>
+        </li>
+        <li class="w-100 p-75">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/sales.svg" alt="sales" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Sales</span>
+          </button>
+        </li>
+        <li class="w-100 p-75">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/invoices.svg" alt="invoices" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Invoices</span>
+          </button>
+        </li>
+        <li class="w-100 p-75">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/orders.svg" alt="orders" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Orders</span>
+          </button>
+        </li>
+        <li class="w-100 p-75">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/reports.svg" alt="reports" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Reports</span>
+          </button>
+        </li>
+        <li class="w-100 p-75">
+          <button class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+            <img src="assets/images/sidebar/settings.svg" alt="settings" class="sidebar-icon">
+            <span class="text-nowrap fs-6 fw-medium">Settings</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
   </div>
 
 </div>
