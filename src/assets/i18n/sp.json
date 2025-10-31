@@ -1,0 +1,16 @@
+{
+  "sidebar": {
+    "dashboard": "Tablero",
+    "customers": "Clientes",
+    "sales": "Ventas",
+    "invoices": "Facturas",
+    "orders": "Pedidos",
+    "reports": "Reportes",
+    "settings": "Configuraciones"
+  },
+  "header": {
+    "english": "Inglés",
+    "arabic": "Árabe",
+    "spanish": "Español"
+  }
+}

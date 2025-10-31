@@ -21,10 +21,10 @@ export const routes: Routes = [
           { path: 'orders', component: OrdersCrm },
           { path: 'reports', component: ReportsCrm },
           { path: 'settings', component: SettingsCrm },
-          { path: '', redirectTo: 'main', pathMatch: 'full' }
+          { path: '', redirectTo: 'orders', pathMatch: 'full' }
         ]
       },
-      { path: '', redirectTo: 'crm-dashboard', pathMatch: 'full' }
+      { path: '', redirectTo: 'main', pathMatch: 'full' }
     ]
   }
 ];

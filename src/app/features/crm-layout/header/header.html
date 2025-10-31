@@ -19,9 +19,34 @@
       <!-- icons container -->
       <div class="icons-container d-flex justify-content-start align-items-center gap-3">
         <!-- Language Switcher -->
-        <button type="button" class="btn p-0 m-0" title="Language Switcher" aria-label="Language Switcher">
-          <i class="pi pi-globe"></i>
-        </button>
+        <div class="btn-group language-btn-group">
+          <button type="button" class="btn gap-2 d-flex align-items-center outline-0" data-bs-toggle="dropdown"
+            aria-expanded="false" [title]="isEnglish() ? 'English' : isArabic() ? 'عربي' : isSpain() ? 'Español' : ''">
+            <i class="pi pi-globe fs-6"></i>
+          </button>
+
+          <ul class="dropdown-menu language-dropdown">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="#" (click)="setLanguage('en')">
+                <img src="assets/images/header/language-icons/america.svg" alt="" class="flag-icon">
+                <span class="">{{'header.english' | translate}}</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="#" (click)="setLanguage('ar')">
+                <img src="assets/images/header/language-icons/egypt.svg" alt="" class="flag-icon">
+                <span class="">{{'header.arabic' | translate}}</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" href="#" (click)="setLanguage('sp')">
+                <img src="assets/images/header/language-icons/spain.svg" alt="" class="flag-icon">
+                <span class="">{{'header.spanish' | translate}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <!-- notification icon -->
         <button type="button" class="btn p-0 m-0" title="Notifications" aria-label="Notifications">
           <img src="assets/images/header/notification.svg" alt="Notification" class="icon">

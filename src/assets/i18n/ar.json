@@ -1,0 +1,16 @@
+{
+  "sidebar": {
+    "dashboard": "الرئيسية",
+    "customers": "العملاء",
+    "sales": "المبيعات",
+    "invoices": "الفواتير",
+    "orders": "الطلبات",
+    "reports": "التقارير",
+    "settings": "الإعدادات"
+  },
+  "header": {
+    "english": "الانجليزية",
+    "arabic": "العربية",
+    "spanish": "الاسبانية"
+  }
+}

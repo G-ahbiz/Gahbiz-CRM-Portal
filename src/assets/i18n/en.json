@@ -1,0 +1,16 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "customers": "Customers",
+    "sales": "Sales",
+    "invoices": "Invoices",
+    "orders": "Orders",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "header": {
+    "english": "English",
+    "arabic": "Arabic",
+    "spanish": "Spanish"
+  }
+}
