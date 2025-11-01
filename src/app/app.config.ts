@@ -17,12 +17,14 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 // import { AuthInterceptor } from '@core/interceptors/auth.interceptor';
 import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
+    provideAnimations(),
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideTranslateService({
