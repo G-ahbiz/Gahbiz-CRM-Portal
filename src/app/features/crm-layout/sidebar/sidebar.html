@@ -45,15 +45,18 @@
         <!-- Sales -->
         <li class="sales w-100 p-75 rounded-3 d-grid overflow-hidden">
           <button type="button" routerLink="/main/sales" (click)="toggleSalesActive()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
-            <img src="assets/images/sidebar/sales.svg" alt="sales" class="sidebar-icon">
-            <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.sales' | translate }}</span>
+            class="btn p-0 m-0 w-100 d-flex justify-content-between align-items-center gap-3 sidebar-text-color">
+            <div class="d-flex align-items-center gap-3">
+              <img src="assets/images/sidebar/sales.svg" alt="sales" class="sidebar-icon">
+              <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.sales' | translate }}</span>
+            </div>
+            <i class="pi pi-angle-{{isSalesActive() ? 'up' : 'down'}}"></i>
           </button>
         </li>
 
         <li class="sales-content-container overflow-hidden">
-          <ul class="list-unstyled" [class]="isSalesActive() ? 'show px-75' : 'hide'"
-            [class.px-75]="!isSidebarCollapsed()">
+          <ul class="list-unstyled" [class]="isSalesActive() ? 'px-75' : 'hide'" [class.px-75]="!isSidebarCollapsed()">
+            <!-- Leads -->
             <li class="sales-leads w-100 p-75 rounded-3" routerLink="/main/sales/leads" routerLinkActive="active">
               <button type="button"
                 class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color">
@@ -61,6 +64,7 @@
                 <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.leads' | translate }}</span>
               </button>
             </li>
+            <!-- Sales Agents -->
             <li class="sales-agents w-100 p-75 rounded-3" routerLink="/main/sales/sales-agents"
               routerLinkActive="active">
               <button type="button"
