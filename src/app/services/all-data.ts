@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsInterface, ordersInterface } from './interfaces/all-interfaces';
+import { CardsInterface, customersDetailsInterface, ordersInterface } from './interfaces/all-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -8,20 +8,20 @@ export class AllData {
 
   // Orders Data
   ordersTabelData: ordersInterface[] = [
-    { id: 1, orderId: '67821', date: '2025-11-01', customer: 'Karin Daniel', total: 90, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 2, orderId: '58143', date: '2025-10-01', customer: 'Jenna Will', total: 680, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 3, orderId: '76542', date: '2025-09-01', customer: 'Ashley Rio', total: 380, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 4, orderId: '650789', date: '2025-08-01', customer: 'Jenna Will', total: 300, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 5, orderId: '87654', date: '2025-07-01', customer: 'Ashley Rio', total: 420, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 6, orderId: '98765', date: '2025-06-01', customer: 'Karin Daniel', total: 510, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 7, orderId: '12345', date: '2025-05-01', customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 8, orderId: '23456', date: '2025-04-01', customer: 'Ashley Rio', total: 280, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal' },
-    { id: 9, orderId: '34567', date: '2025-03-01', customer: 'Karin Daniel', total: 360, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal' },
-    { id: 10, orderId: '45678', date: '2025-02-01', customer: 'Jenna Will', total: 210, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal' },
-    { id: 11, orderId: '12345', date: '2025-01-01', customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card' },
-    { id: 12, orderId: '23456', date: '2025-01-01', customer: 'Ashley Rio', total: 280, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal' },
-    { id: 13, orderId: '34567', date: '2025-01-01', customer: 'Karin Daniel', total: 360, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal' },
-    { id: 14, orderId: '45678', date: '2025-01-01', customer: 'Jenna Will', total: 210, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal' },
+    { id: 1, orderId: '67821', date: '2025-11-01', customer: 'Karin Daniel', total: 90, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
+    { id: 2, orderId: '58143', date: '2025-10-01', customer: 'Jenna Will', total: 680, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
+    { id: 3, orderId: '76542', date: '2025-09-01', customer: 'Ashley Rio', total: 380, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 3 },
+    { id: 4, orderId: '650789', date: '2025-08-01', customer: 'Jenna Will', total: 300, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
+    { id: 5, orderId: '87654', date: '2025-07-01', customer: 'Ashley Rio', total: 420, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
+    { id: 6, orderId: '98765', date: '2025-06-01', customer: 'Karin Daniel', total: 510, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 3 },
+    { id: 7, orderId: '12345', date: '2025-05-01', customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
+    { id: 8, orderId: '23456', date: '2025-04-01', customer: 'Ashley Rio', total: 280, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 2 },
+    { id: 9, orderId: '34567', date: '2025-03-01', customer: 'Karin Daniel', total: 360, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 3 },
+    { id: 10, orderId: '45678', date: '2025-02-01', customer: 'Jenna Will', total: 210, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 1 },
+    { id: 11, orderId: '12345', date: '2025-01-01', customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
+    { id: 12, orderId: '23456', date: '2025-01-01', customer: 'Ashley Rio', total: 280, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 3 },
+    { id: 13, orderId: '34567', date: '2025-01-01', customer: 'Karin Daniel', total: 360, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 1 },
+    { id: 14, orderId: '45678', date: '2025-01-01', customer: 'Jenna Will', total: 210, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 2 },
   ];
 
   getOrdersTabelData() {
@@ -226,5 +226,58 @@ export class AllData {
 
   getInvoicesCardsData() {
     return this.invoicesCardsData;
+  }
+
+  // Customers Details Data
+  customersDetailsData: customersDetailsInterface[] = [
+    {
+      id: 1,
+      fullName: "Karin Daniel",
+      userName: "karin.daniel",
+      phoneNumber: "01012345678",
+      email: "karin.daniel@example.com",
+      dateOfBirth: "2025-11-02",
+      profileImageUrl: "https://via.placeholder.com/150",
+      gender: "Female",
+      nationalId: "1234567890123",
+      country: "United States",
+      state: "California",
+      postalCode: "123456",
+      userType: "Client",
+    },
+    {
+      id: 2,
+      fullName: "Jenna Will",
+      userName: "jenna.will",
+      phoneNumber: "01012345678",
+      email: "jenna.will@example.com",
+      dateOfBirth: "2025-11-02",
+      profileImageUrl: "https://via.placeholder.com/150",
+      gender: "Female",
+      nationalId: "1234567890123",
+      country: "United States",
+      state: "California",
+      postalCode: "123456",
+      userType: "Client",
+    },
+    {
+      id: 3,
+      fullName: "Ashley Rio",
+      userName: "ashley.rio",
+      phoneNumber: "01012345678",
+      email: "ashley.rio@example.com",
+      dateOfBirth: "2025-11-02",
+      profileImageUrl: "https://via.placeholder.com/150",
+      gender: "Female",
+      nationalId: "1234567890123",
+      country: "United States",
+      state: "California",
+      postalCode: "123456",
+      userType: "Client",
+    }
+  ]
+
+  getCustomersDetailsData() {
+    return this.customersDetailsData;
   }
 }

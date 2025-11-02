@@ -1,28 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { AllData } from '../../../services/all-data';
-import { TabsHeader } from "../../../shared/tabs-header/tabs-header";
-import { CardsInterface } from '../../../services/interfaces/all-interfaces';
-import { OrdersTabel } from './orders-tabel/orders-tabel';
+import { Component, OnInit } from '@angular/core';
+import { RouterOutlet } from "@angular/router";
 
 
 @Component({
   selector: 'app-orders-crm',
-  imports: [CommonModule, TabsHeader, OrdersTabel],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './orders-crm.html',
   styleUrl: './orders-crm.css',
 })
 export class OrdersCrm implements OnInit {
+  constructor() { }
+  ngOnInit() { }
 
-  cardsData: CardsInterface[] = [];
-
-  constructor(private allData: AllData) { }
-
-  ngOnInit() {
-    this.getCardsData()
-  }
-
-  getCardsData() {
-    this.cardsData = this.allData.getOrdersCardsData();
-  }
 }

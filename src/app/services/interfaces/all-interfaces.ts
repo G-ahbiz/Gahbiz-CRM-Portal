@@ -7,6 +7,7 @@ export interface ordersInterface {
   status: string;
   locations: string;
   paymentMethod: string;
+  clientId: number;
 }
 
 export interface CardsInterface {
@@ -16,4 +17,20 @@ export interface CardsInterface {
   bgColor: string;
   rating: number;
   ratingStatues: string;
+}
+
+export interface customersDetailsInterface {
+  id: number;
+  fullName: string;
+  userName: string;
+  phoneNumber: string;
+  email: string;
+  dateOfBirth: string;
+  profileImageUrl: string;
+  gender: string;
+  nationalId: string;
+  country: string;
+  state: string;
+  postalCode: string;
+  userType: string;
 }

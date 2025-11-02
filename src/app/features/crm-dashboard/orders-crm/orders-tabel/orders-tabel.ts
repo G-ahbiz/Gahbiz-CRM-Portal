@@ -4,10 +4,11 @@ import { AllData } from '../../../../services/all-data';
 import { ordersInterface } from '../../../../services/interfaces/all-interfaces';
 import { Paginator } from "../../../../shared/paginator/paginator";
 import { TranslateModule } from '@ngx-translate/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-orders-tabel',
-  imports: [CommonModule, Paginator, TranslateModule],
+  imports: [CommonModule, Paginator, TranslateModule, RouterLink],
   templateUrl: './orders-tabel.html',
   styleUrl: './orders-tabel.css',
 })
@@ -24,7 +25,7 @@ export class OrdersTabel implements OnInit {
   search: string = '';
   filterValue: string = 'all';
 
-  constructor(private allData: AllData) { }
+  constructor(private allData: AllData, private router: Router) { }
 
   ngOnInit() {
     this.getColumnsHeader();
@@ -65,6 +66,25 @@ export class OrdersTabel implements OnInit {
     ];
   }
 
+  // Orders Details
+  viewOrder(id: number) {
+    let orderId = sessionStorage.getItem('orderId');
+    if (orderId) {
+      sessionStorage.setItem('orderId', id.toString());
+      this.router.navigate(['/main/orders/order-details']);
+    } else {
+      sessionStorage.setItem('orderId', id.toString());
+      this.router.navigate(['/main/orders/order-details']);
+    }
+  }
+
+  checkOrderBox(id: number) {
+    const orderBox = document.getElementById(`order-${id}`) as HTMLInputElement;
+    if (orderBox) {
+      orderBox.checked = !orderBox.checked;
+    }
+  }
+
   /**
    * Handle pagination changes from the paginator component
    * @param paginatedData - The sliced data for the current page
@@ -73,9 +93,6 @@ export class OrdersTabel implements OnInit {
     this.paginationData = paginatedData;
   }
 
-  viewOrder(id: number) {
-    console.log(id);
-  }
 
   /**
    * Handle search input changes and filter orders data

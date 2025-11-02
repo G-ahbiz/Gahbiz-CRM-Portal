@@ -10,6 +10,8 @@ import { ReportsCrm } from './features/crm-dashboard/reports-crm/reports-crm';
 import { SettingsCrm } from './features/crm-dashboard/settings-crm/settings-crm';
 import { Leads } from './features/crm-dashboard/sales-crm/leads/leads';
 import { SalesAgents } from './features/crm-dashboard/sales-crm/sales-agents/sales-agents';
+import { OrderDetails } from './features/crm-dashboard/orders-crm/order-details/order-details';
+import { OrdersContent } from './features/crm-dashboard/orders-crm/orders-content/orders-content';
 
 export const routes: Routes = [
   {
@@ -26,7 +28,13 @@ export const routes: Routes = [
             ]
           },
           { path: 'invoices', component: InvoicesCrm },
-          { path: 'orders', component: OrdersCrm },
+          {
+            path: 'orders', component: OrdersCrm, children: [
+              { path: 'orders-main', component: OrdersContent },
+              { path: 'order-details', component: OrderDetails },
+              { path: '', redirectTo: 'orders-main', pathMatch: 'full' },
+            ]
+          },
           { path: 'reports', component: ReportsCrm },
           { path: 'settings', component: SettingsCrm },
           { path: '', redirectTo: 'orders', pathMatch: 'full' }

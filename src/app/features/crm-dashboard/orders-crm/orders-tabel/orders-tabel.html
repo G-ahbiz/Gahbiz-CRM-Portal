@@ -55,7 +55,7 @@
 
       <tbody class="overflow-y-auto">
         @for (order of paginationData; track order.id) {
-        <tr (click)="viewOrder(order.id)">
+        <tr (click)="checkOrderBox(order.id)">
           <td class="py-2">
             <input type="checkbox" name="select-order" id="order-{{ order.id }}">
           </td>
@@ -69,6 +69,9 @@
           <td class="py-2">
             <button class="btn btn-sm">
               <i class="pi pi-ellipsis-v"></i>
+            </button>
+            <button class="btn btn-sm" (click)="viewOrder(order.id); $event.stopPropagation()">
+              <i class="pi pi-eye"></i>
             </button>
           </td>
         </tr>
