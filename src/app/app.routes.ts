@@ -8,6 +8,8 @@ import { InvoicesCrm } from './features/crm-dashboard/invoices-crm/invoices-crm'
 import { OrdersCrm } from './features/crm-dashboard/orders-crm/orders-crm';
 import { ReportsCrm } from './features/crm-dashboard/reports-crm/reports-crm';
 import { SettingsCrm } from './features/crm-dashboard/settings-crm/settings-crm';
+import { Leads } from './features/crm-dashboard/sales-crm/leads/leads';
+import { SalesAgents } from './features/crm-dashboard/sales-crm/sales-agents/sales-agents';
 
 export const routes: Routes = [
   {
@@ -16,7 +18,13 @@ export const routes: Routes = [
         path: 'main', component: CrmDashboard, children: [
           { path: 'dashboard', component: MainDashboard },
           { path: 'customers', component: CustomersCrm },
-          { path: 'sales', component: SalesCrm },
+          {
+            path: 'sales', component: SalesCrm, children: [
+              { path: 'leads', component: Leads },
+              { path: 'sales-agents', component: SalesAgents },
+              { path: '', redirectTo: 'leads', pathMatch: 'full' }
+            ]
+          },
           { path: 'invoices', component: InvoicesCrm },
           { path: 'orders', component: OrdersCrm },
           { path: 'reports', component: ReportsCrm },

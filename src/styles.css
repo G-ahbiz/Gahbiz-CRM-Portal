@@ -6,6 +6,13 @@
   --sidebar-text-color: #888888;
   --sidebar-active-color: #005DB5;
   --sidebar-active-text-color: #ffffff;
+  --text-muted-clr: #888888;
+  --trend-up-clr: #059691;
+  --trend-down-clr: #E11D48;
+  --card-blue-bg-clr: #CCDFF080;
+  --card-green-bg-clr: #D1FAE580;
+  --card-yellow-bg-clr: #FEF3C780;
+  --card-red-bg-clr: #FFE4E680;
 }
 
 html, body {
@@ -43,4 +50,32 @@ body {
 
 .fs-875 {
   font-size: 0.875rem !important;
+}
+
+.text-muted-clr {
+  color: var(--text-muted-clr) !important;
+}
+
+.trend-up-clr {
+  color: var(--trend-up-clr) !important;
+}
+
+.trend-down-clr {
+  color: var(--trend-down-clr) !important;
+}
+
+.card-blue {
+  background-color: var(--card-blue-bg-clr) !important;
+}
+
+.card-green {
+  background-color: var(--card-green-bg-clr) !important;
+}
+
+.card-yellow {
+  background-color: var(--card-yellow-bg-clr) !important;
+}
+
+.card-red {
+  background-color: var(--card-red-bg-clr) !important;
 }
