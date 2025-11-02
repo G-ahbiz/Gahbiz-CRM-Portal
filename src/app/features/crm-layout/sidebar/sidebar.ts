@@ -12,9 +12,12 @@ import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-transla
 export class Sidebar implements OnInit {
 
   isSidebarCollapsed = signal<boolean>(false);
+  
   isArabic = signal<boolean>(false);
   isEnglish = signal<boolean>(false);
   isSpain = signal<boolean>(false);
+
+  isSalesActive = signal<boolean>(false);
 
   constructor(private translateService: TranslateService) { }
 
@@ -50,4 +53,7 @@ export class Sidebar implements OnInit {
     });
   }
 
+  toggleSalesActive() {
+    this.isSalesActive.set(!this.isSalesActive());
+  }
 }

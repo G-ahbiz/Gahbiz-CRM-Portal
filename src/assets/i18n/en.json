@@ -3,6 +3,8 @@
     "dashboard": "Dashboard",
     "customers": "Customers",
     "sales": "Sales",
+    "leads": "Leads",
+    "sales-agents": "Sales Agents",
     "invoices": "Invoices",
     "orders": "Orders",
     "reports": "Reports",

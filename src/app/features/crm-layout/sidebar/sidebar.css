@@ -30,3 +30,28 @@
     }
   }
 }
+
+.hide {
+  /* height: 0 !important; */
+  /* translate: 0 -100% !important; */
+  transform: translateY(-100%) !important;
+  /* opacity: 0 !important; */
+  /* animation: hideSales 1s ease-in-out forwards alternate; */
+}
+
+.show {
+  /* height: auto !important; */
+}
+
+.sales {}
+
+
+@keyframes hideSales {
+  from {
+    height: auto;
+  }
+
+  to {
+    height: 0;
+  }
+}

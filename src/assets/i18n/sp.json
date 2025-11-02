@@ -3,6 +3,8 @@
     "dashboard": "Tablero",
     "customers": "Clientes",
     "sales": "Ventas",
+    "leads": "Potenciales",
+    "sales-agents": "Asesores de Ventas",
     "invoices": "Facturas",
     "orders": "Pedidos",
     "reports": "Reportes",
