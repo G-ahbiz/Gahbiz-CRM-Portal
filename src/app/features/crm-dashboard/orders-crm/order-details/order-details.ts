@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { AllData } from '../../../../services/all-data';
 import { customersDetailsInterface, ordersInterface } from '../../../../services/interfaces/all-interfaces';
 import { TranslateModule, LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-order-details',
-  imports: [TranslateModule],
+  imports: [TranslateModule, DatePipe],
   templateUrl: './order-details.html',
   styleUrl: './order-details.css',
 })

@@ -10,3 +10,37 @@
     scale: 0.95;
   }
 }
+
+.order-details-content {
+  background-color: #F9F9F9 !important;
+}
+
+.form-select {
+  border-color: #E3E1E1 !important;
+  color: var(--primary-color) !important;
+
+  &:focus, &:active {
+    box-shadow: none;
+    outline: none;
+    /* border: none; */
+  }
+
+  &:hover {
+    background-color: transparent !important;
+  }
+
+  >option {
+    color: var(--primary-color) !important;
+
+    &:hover {
+      background-color: var(--primary-color) !important;
+      color: var(--sidebar-active-text-color) !important;
+    }
+  }
+}
+
+.btn {
+  background-color: #ffffff;
+  color: var(--primary-color) !important;
+  border-color: #E3E1E1 !important;
+}

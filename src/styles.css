@@ -13,6 +13,8 @@
   --card-green-bg-clr: #D1FAE580;
   --card-yellow-bg-clr: #FEF3C780;
   --card-red-bg-clr: #FFE4E680;
+  --primary-color: #005DB5;
+  --icon-bg-gray: #E3E1E1;
 }
 
 html, body {
@@ -66,6 +68,24 @@ body {
 
 .trend-down-clr {
   color: var(--trend-down-clr) !important;
+}
+
+.primary-clr {
+  color: var(--primary-color) !important;
+}
+
+.outline-primary-clr {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+
+  &:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--sidebar-active-text-color) !important;
+  }
+}
+
+.primary-bg-clr {
+  background-color: var(--primary-color) !important;
 }
 
 .card-blue {

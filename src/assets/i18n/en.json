@@ -17,6 +17,12 @@
   },
   "orders-crm": {
     "export": "Export",
-    "add-order": "Add Order"
+    "add-order": "Add Order",
+    "order-details": {
+      "title": "Order Details",
+      "order-id": "Order ID",
+      "save": "Save",
+      "download": "Download"
+    }
   }
 }

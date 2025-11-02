@@ -1,5 +1,5 @@
 <div class="container-fluid p-0 m-0">
-  <div class="order-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+  <div class="order-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 w-100">
 
     <div class="order-details-top w-100 d-flex justify-content-start align-items-center gap-3">
 
@@ -14,20 +14,66 @@
       <!-- Title -->
       <div class="order-details-title-container">
         <h1 class="mb-0 fs-4 fw-bold">
-          {{'orders-crm.order-details' | translate}}
+          {{'orders-crm.order-details.title' | translate}}
         </h1>
       </div>
 
     </div>
 
     <!-- Order Details -->
-    <div class="order-details-content w-100 d-flex flex-column justify-content-start align-items-start gap-3">
-      <div class="order-details-item w-100 d-flex justify-content-start align-items-center gap-3">
-        <div class="order-details-item-label">
-          <span class="fw-bold">{{'orders-crm.order-id' | translate}}</span>
+    <div class="order-details-content w-100 d-flex flex-column justify-content-start align-items-start gap-3 mt-4">
+      <!-- Order Details Top -->
+      <div class="order-details-top-container d-flex justify-content-between align-items-start gap-3 w-100">
+        <div class="orderId-container d-flex flex-column justify-content-center align-items-start gap-2">
+          <h6 class="fs-6 fw-semibold">
+            Order ID : #{{ currentOrder?.orderId }}
+          </h6>
+          <p class="m-0 p-0 text-muted-clr fs-875">
+            {{ currentOrder?.date | date:'EE, MMM dd,yyyy' }}
+          </p>
+          <p
+            class="statues fs-875 px-3 py-2 rounded-4 fw-medium {{ currentOrder?.status === 'Pending' ? 'card-yellow text-warning' : currentOrder?.status === 'Confirmed' ? 'card-green trend-up-clr' : currentOrder?.status === 'Cancelled' ? 'card-red trend-down-clr' : '' }}">
+            {{ currentOrder?.status }}
+          </p>
+        </div>
+
+        <div class="order-details-actions-container d-flex justify-content-center align-items-center gap-3">
+          <!-- Status Select -->
+          <div class="status-select-container">
+            <select class="form-select" aria-label="Default select" #statusSelect>
+              <option selected disabled>Update Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+
+          <!-- Save Button -->
+          <button type="button" class="btn btn-md save-btn d-flex justify-content-center align-items-center">
+            {{'orders-crm.order-details.save' | translate}}
+          </button>
+
+          <!-- Download Button -->
+          <button type="button"
+            class="btn btn-md download-btn px-3 text-white d-flex justify-content-center align-items-center gap-2">
+            <i class="pi pi-download"></i>
+            {{'orders-crm.order-details.download' | translate}}
+          </button>
+
+          <!-- Print Button -->
+          <button type="button"
+            class="btn btn-md d-flex print-btn justify-content-center align-items-center gap-2 px-3 py-2">
+            <!-- <i class="pi pi-print primary-clr fs-5"></i> -->
+            <img src="assets/images/orders/print.svg" alt="" class="">
+          </button>
+
         </div>
       </div>
-    </div>
 
+      <!-- Order Details Body -->
+       <div class="order-details-body w-100 d-flex flex-column justify-content-start align-items-start gap-3">
+        
+       </div>
+
+    </div>
   </div>
-</div>
