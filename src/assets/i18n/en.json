@@ -14,5 +14,8 @@
     "english": "English",
     "arabic": "Arabic",
     "spanish": "Spanish"
+  },
+  "orders-crm": {
+    "export": "Export"
   }
 }
