@@ -16,6 +16,7 @@
     "spanish": "Spanish"
   },
   "orders-crm": {
-    "export": "Export"
+    "export": "Export",
+    "add-order": "Add Order"
   }
 }

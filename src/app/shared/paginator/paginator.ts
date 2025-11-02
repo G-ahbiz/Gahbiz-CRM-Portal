@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-paginator',
@@ -6,9 +6,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   templateUrl: './paginator.html',
   styleUrl: './paginator.css',
 })
-export class Paginator implements OnInit {
+export class Paginator implements OnInit, OnChanges {
 
-  @Input() pageSize: number = 5;
+  @Input() pageSize: number = 4;
   @Input() totalItems: number = 0;
   @Input() data: any[] = [];
   @Output() paginatedData: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -19,6 +19,13 @@ export class Paginator implements OnInit {
 
   ngOnInit() {
     this.getPaginationData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // React to changes in data or totalItems
+    if (changes['data'] || changes['totalItems']) {
+      this.getPaginationData();
+    }
   }
 
   // Get Pagination Data

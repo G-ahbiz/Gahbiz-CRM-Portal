@@ -6,8 +6,39 @@
       </button>
     </div>
 
-    <div class="srch-filter-container">
-      <input type="text" class="form-control" placeholder="Search...">
+    <div class="srch-filter-container d-flex justify-content-start align-items-center gap-3">
+      <!-- Search Container -->
+      <div class="search-container d-flex justify-content-start align-items-center bg-white rounded-3 px-2">
+        <label for="search" class="m-0 p-0 text-muted">
+          <i class="pi pi-search"></i>
+        </label>
+        <input type="text" id="search" class="form-control border-0 bg-transparent" placeholder="Search..."
+          (input)="onSearchChange($any($event.target).value)" #searchInput>
+      </div>
+
+      <!-- Filter Container -->
+      <div class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3">
+        <select name="filter" id="filter" class="form-select border-0 bg-transparent" aria-label="Filter"
+          (change)="onFilterChange($any($event.target).value)">
+          <option value="all">All</option>
+          <option value="last-7-days" selected>Last 7 days</option>
+          <option value="last-30-days">Last 30 days</option>
+          <option value="last-60-days">Last 60 days</option>
+          <option value="last-90-days">Last 90 days</option>
+          <option value="last-180-days">Last 180 days</option>
+          <option value="last-365-days">Last Year</option>
+        </select>
+      </div>
+
+      <div class="add-order-btn-container">
+        <button
+          class="btn btn-sm btn-primary px-3 py-2 d-flex justify-content-start align-items-center gap-2 rounded-3">
+          <i class="pi pi-plus"></i>
+          {{ 'orders-crm.add-order' | translate }}
+        </button>
+      </div>
+
+
     </div>
   </div>
 
@@ -15,7 +46,7 @@
     <table class="table table-responsive table-hover overflow-y-auto">
       <thead>
         <th class="py-3 ps-2">
-          <input type="checkbox" name="select-all" id="select-all">
+          <input type="checkbox" name="select-all" id="select-all" (change)="onSelectAll($event)">
         </th>
         @for (column of columnsHeader; track column) {
         <th class="py-3 ps-2">{{ column }}</th>
@@ -26,7 +57,7 @@
         @for (order of paginationData; track order.id) {
         <tr (click)="viewOrder(order.id)">
           <td class="py-2">
-            <input type="checkbox" name="select-order" id="select-order">
+            <input type="checkbox" name="select-order" id="order-{{ order.id }}">
           </td>
           <td class="py-2">#{{ order.orderId }}</td>
           <td class="py-2">{{ order.date }}</td>
@@ -45,7 +76,7 @@
       </tbody>
     </table>
 
-    <app-paginator [pageSize]="4" [totalItems]="totalOrders" [data]="ordersData"
+    <app-paginator [pageSize]="4" [totalItems]="totalOrders" [data]="filteredOrders"
       (paginatedData)="onPaginationChange($event)">
     </app-paginator>
 
