@@ -1,5 +1,5 @@
 <div class="container-fluid p-0 m-0 overflow-x-hidden overflow-y-auto">
-  <div class="order-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 w-100">
+  <div class="order-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
 
     <div class="order-details-top w-100 d-flex justify-content-start align-items-center gap-3">
 
@@ -72,120 +72,160 @@
 
       <!-- Order Details Body -->
       <div class="order-details-body w-100 d-flex flex-column justify-content-start align-items-start gap-3 w-100">
-        <div class="cards-container-top d-flex flex-wrap justify-content-start align-items-start gap-3 w-100">
-
-          <!-- Customer Card -->
-          <div class="card border-0">
-            <div class="card-body d-flex justify-content-start align-items-start gap-3">
-              <!-- Card Icon -->
-              <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                <img src="assets/images/orders/cutomer.svg" alt="Customer Icon" class="">
+        <div class="cards-container w-100">
+          <!-- Cards Container Top -->
+          <div class="cards-container-top d-flex flex-wrap justify-content-start align-items-start gap-3 w-100">
+            <!-- Customer Card -->
+            <div class="card border-0">
+              <div class="card-body d-flex justify-content-start align-items-start gap-3">
+                <!-- Card Icon -->
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
+                  <img src="assets/images/orders/cutomer.svg" alt="Customer Icon" class="">
+                </div>
+                <!-- Card Info -->
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
+                  <h5 class="card-title m-0 fw-semibold">Customer</h5>
+                  <p class="customer-name m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Name: </span>
+                    <span>{{ cardsData[0].customerName }}</span>
+                  </p>
+                  <p class="customer-email m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Email: </span>
+                    <span>{{ cardsData[0].customerEmail }}</span>
+                  </p>
+                  <p class="customer-phone m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Phone: </span>
+                    <span>{{ cardsData[0].customerPhone }}</span>
+                  </p>
+                </div>
               </div>
-              <!-- Card Info -->
-              <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                <h5 class="card-title m-0 fw-semibold">Customer</h5>
-                <p class="customer-name m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Name: </span>
-                  <span>{{ cardsData[0].customerName }}</span>
-                </p>
-                <p class="customer-email m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Email: </span>
-                  <span>{{ cardsData[0].customerEmail }}</span>
-                </p>
-                <p class="customer-phone m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Phone: </span>
-                  <span>{{ cardsData[0].customerPhone }}</span>
-                </p>
+            </div>
+            <!-- Order Info Card -->
+            <div class="card border-0">
+              <div class="card-body d-flex justify-content-start align-items-start gap-3">
+                <!-- Card Icon -->
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
+                  <img src="assets/images/orders/cart.svg" alt="Cart Icon" class="">
+                </div>
+                <!-- Card Info -->
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
+                  <h5 class="card-title m-0 fw-semibold">Order Info</h5>
+                  <p class="shipping-address m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Shipping: </span>
+                    <span>{{ cardsData[0].cutomerAddress }}</span>
+                  </p>
+                  <p class="customer-email m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Pay: </span>
+                    <span>{{ cardsData[0].customerPaymentMethod }}</span>
+                  </p>
+                  <p class="customer-phone m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Status: </span>
+                    <span>{{ cardsData[0].orderStatus }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Delivery Card -->
+            <div class="card border-0">
+              <div class="card-body d-flex justify-content-start align-items-start gap-3">
+                <!-- Card Icon -->
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
+                  <img src="assets/images/orders/delivery.svg" alt="" class="">
+                </div>
+                <!-- Card Info -->
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
+                  <h5 class="card-title m-0 fw-semibold">Delivery</h5>
+                  <p class="customer-name m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Address: </span>
+                    <span>{{ cardsData[0].cutomerAddress }}</span>
+                  </p>
+                  <p class="customer-email m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">State: </span>
+                    <span>{{ cardsData[0].cutomerAddress }}</span>
+                  </p>
+                  <p class="customer-phone m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Postal Code: </span>
+                    <span>{{ cardsData[0].customerPostalCode }}</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Order Info Card -->
-          <div class="card border-0">
-            <div class="card-body d-flex justify-content-start align-items-start gap-3">
-              <!-- Card Icon -->
-              <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                <img src="assets/images/orders/cart.svg" alt="Cart Icon" class="">
-              </div>
-              <!-- Card Info -->
-              <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                <h5 class="card-title m-0 fw-semibold">Order Info</h5>
-                <p class="shipping-address m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Shipping: </span>
-                  <span>{{ cardsData[0].cutomerAddress }}</span>
-                </p>
-                <p class="customer-email m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Pay: </span>
-                  <span>{{ cardsData[0].customerPaymentMethod }}</span>
-                </p>
-                <p class="customer-phone m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Status: </span>
-                  <span>{{ cardsData[0].orderStatus }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Delivery Card -->
-          <div class="card border-0">
-            <div class="card-body d-flex justify-content-start align-items-start gap-3">
-              <!-- Card Icon -->
-              <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                <img src="assets/images/orders/delivery.svg" alt="" class="">
-              </div>
-              <!-- Card Info -->
-              <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                <h5 class="card-title m-0 fw-semibold">Delivery</h5>
-                <p class="customer-name m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Address: </span>
-                  <span>{{ cardsData[0].cutomerAddress }}</span>
-                </p>
-                <p class="customer-email m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">State: </span>
-                  <span>{{ cardsData[0].cutomerAddress }}</span>
-                </p>
-                <p class="customer-phone m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Postal Code: </span>
-                  <span>{{ cardsData[0].customerPostalCode }}</span>
-                </p>
+          <!-- Order Details Bottom -->
+          <div class="cards-container-bottom d-flex flex-wrap justify-content-start align-items-start gap-3 w-100 mt-4">
+            <!-- Payment Info Card -->
+            <div class="card border-0">
+              <div class="card-body d-flex justify-content-start align-items-start gap-3">
+                <!-- Card Icon -->
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
+                  <img src="assets/images/orders/payment.svg" alt="" class="">
+                </div>
+                <!-- Card Info -->
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
+                  <h5 class="card-title m-0 fw-semibold">Payment Info</h5>
+                  <p class="customer-name m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Payment Method: </span>
+                    <span>{{ cardsData[0].customerPaymentMethod }}</span>
+                  </p>
+                  <p class="customer-email m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Business Name: </span>
+                    <span>{{ cardsData[0].customerName }}</span>
+                  </p>
+                  <p class="customer-phone m-0 fw-medium fs-6">
+                    <span class="text-muted-clr">Expiration Date: </span>
+                    <span>{{ cardsData[0].customerPaymentExpirationDate }}</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Order Details Bottom -->
-        <div class="cards-container-bottom d-flex flex-wrap justify-content-start align-items-start gap-3 w-100 mt-4">
+        <div class="services-history-container w-100 h-100">
+          <h4 class="fs-5 fw-semibold">Services</h4>
 
-          <!-- Payment Info Card -->
-          <div class="card border-0">
-            <div class="card-body d-flex justify-content-start align-items-start gap-3">
-              <!-- Card Icon -->
-              <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                <img src="assets/images/orders/payment.svg" alt="" class="">
-              </div>
-              <!-- Card Info -->
-              <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                <h5 class="card-title m-0 fw-semibold">Payment Info</h5>
-                <p class="customer-name m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Payment Method: </span>
-                  <span>{{ cardsData[0].customerPaymentMethod }}</span>
-                </p>
-                <p class="customer-email m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Business Name: </span>
-                  <span>{{ cardsData[0].customerName }}</span>
-                </p>
-                <p class="customer-phone m-0 fw-medium fs-6">
-                  <span class="text-muted-clr">Expiration Date: </span>
-                  <span>{{ cardsData[0].customerPaymentExpirationDate }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="services-history-container">
-
+          <table class="table table-hover w-100">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" name="" id="">
+                </th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of servicesHistory; track service.id ; let i = $index) {
+              <tr>
+                <td scope="col"><input type="checkbox" name="select-service" id="service-{{ service.id }}"></td>
+                <td scope="col">{{ servicesData[i].name }}</td>
+                <td scope="col">$ {{ service?.total / service?.quantity }}</td>
+                <td scope="col">{{ service.quantity }}</td>
+                <td scope="col">$ {{ service.total }}</td>
+                <td>
+                  <button class="btn btn-sm bg-transparent border-0">
+                    <i class="pi pi-ellipsis-v"></i>
+                  </button>
+                  <button class="btn btn-sm bg-transparent border-0">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              }
+              <tr class="">
+                <td scope="col"> </td>
+                <td scope="col"> </td>
+                <td scope="col"> </td>
+                <td scope="col">{{servicesTotalQuantity}}</td>
+                <td scope="col">$ {{servicesTotalPrice}}</td>
+                <td scope="col"> </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
       </div>

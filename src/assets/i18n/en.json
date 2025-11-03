@@ -23,6 +23,9 @@
       "order-id": "Order ID",
       "save": "Save",
       "download": "Download"
+    },
+    "add-order-page": {
+      "title": "Add Order"
     }
   }
 }

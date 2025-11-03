@@ -1,3 +1,8 @@
+.order-details-container {
+  height: calc(100vh - 100px) !important;
+}
+
+
 .back-btn {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 
@@ -56,4 +61,8 @@
 
 .form-control {
   height: 10rem;
+}
+
+th,tr,td {
+  background: transparent !important;
 }

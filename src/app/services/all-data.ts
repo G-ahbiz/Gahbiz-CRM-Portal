@@ -8,20 +8,20 @@ export class AllData {
 
   // Orders Data
   ordersTabelData: ordersInterface[] = [
-    { id: 1, orderId: '67821', date: '2025-11-01', customer: 'Karin Daniel', total: 90, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
-    { id: 2, orderId: '58143', date: '2025-10-01', customer: 'Jenna Will', total: 680, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
-    { id: 3, orderId: '76542', date: '2025-09-01', customer: 'Ashley Rio', total: 380, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 3 },
-    { id: 4, orderId: '650789', date: '2025-08-01', customer: 'Jenna Will', total: 300, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
-    { id: 5, orderId: '87654', date: '2025-07-01', customer: 'Ashley Rio', total: 420, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
-    { id: 6, orderId: '98765', date: '2025-06-01', customer: 'Karin Daniel', total: 510, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 3 },
-    { id: 7, orderId: '12345', date: '2025-05-01', customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
-    { id: 8, orderId: '23456', date: '2025-04-01', customer: 'Ashley Rio', total: 280, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 2 },
-    { id: 9, orderId: '34567', date: '2025-03-01', customer: 'Karin Daniel', total: 360, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 3 },
-    { id: 10, orderId: '45678', date: '2025-02-01', customer: 'Jenna Will', total: 210, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 1 },
-    { id: 11, orderId: '12345', date: '2025-01-01', customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
-    { id: 12, orderId: '23456', date: '2025-01-01', customer: 'Ashley Rio', total: 280, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 3 },
-    { id: 13, orderId: '34567', date: '2025-01-01', customer: 'Karin Daniel', total: 360, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 1 },
-    { id: 14, orderId: '45678', date: '2025-01-01', customer: 'Jenna Will', total: 210, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 2 },
+    { id: 1, orderId: '67821', serviceID: 1, date: '2025-11-01', quantity: 2, cutomerID: 1, customer: 'Karin Daniel', total: 90, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
+    { id: 2, orderId: '58143', serviceID: 2, date: '2025-10-01', quantity: 3, cutomerID: 2, customer: 'Jenna Will', total: 120, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
+    { id: 3, orderId: '76542', serviceID: 3, date: '2025-09-01', quantity: 1, cutomerID: 3, customer: 'Ashley Rio', total: 100, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 3 },
+    { id: 4, orderId: '650789', serviceID: 4, date: '2025-08-01', quantity: 2, cutomerID: 1, customer: 'Jenna Will', total: 240, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
+    { id: 5, orderId: '87654', serviceID: 5, date: '2025-07-01', quantity: 2, cutomerID: 2, customer: 'Ashley Rio', total: 300, status: 'Delivered', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
+    { id: 6, orderId: '98765', serviceID: 6, date: '2025-06-01', quantity: 1, cutomerID: 3, customer: 'Karin Daniel', total: 600, status: 'Cancelled', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 3 },
+    { id: 7, orderId: '12345', serviceID: 7, date: '2025-05-01', quantity: 1, cutomerID: 1, customer: 'Jenna Will', total: 700, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },
+    { id: 8, orderId: '23456', serviceID: 8, date: '2025-04-01', quantity: 1, cutomerID: 2, customer: 'Ashley Rio', total: 800, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 2 },
+    { id: 9, orderId: '34567', serviceID: 9, date: '2025-03-01', quantity: 1, cutomerID: 3, customer: 'Karin Daniel', total: 900, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 3 },
+    { id: 10, orderId: '45678', serviceID: 9, date: '2025-02-01', quantity: 1, cutomerID: 1, customer: 'Jenna Will', total: 900, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 1 },
+    { id: 11, orderId: '12345', serviceID: 5, date: '2025-01-01', quantity: 1, cutomerID: 2, customer: 'Jenna Will', total: 100, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 2 },
+    { id: 12, orderId: '23456', serviceID: 1, date: '2025-01-01', quantity: 1, cutomerID: 3, customer: 'Ashley Rio', total: 280, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 3 },
+    { id: 13, orderId: '34567', serviceID: 4, date: '2025-01-01', quantity: 1, cutomerID: 1, customer: 'Karin Daniel', total: 360, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 1 },
+    { id: 14, orderId: '45678', serviceID: 2, date: '2025-01-01', quantity: 1, cutomerID: 2, customer: 'Jenna Will', total: 210, status: 'Confirmed', locations: 'LA, NY', paymentMethod: 'Paypal', clientId: 2 },
   ];
 
   getOrdersTabelData() {
@@ -67,7 +67,58 @@ export class AllData {
     return this.ordersCardsData;
   }
 
+  // Services Data
+  servicesData: any[] = [
+    {
+      id: 1,
+      name: "Service 1",
+      price: 45,
+    },
+    {
+      id: 2,
+      name: "Service 2",
+      price: 60,
+    },
+    {
+      id: 3,
+      name: "Service 3",
+      price: 100,
+    },
+    {
+      id: 4,
+      name: "Service 4",
+      price: 120,
+    },
+    {
+      id: 5,
+      name: "Service 5",
+      price: 150,
+    },
+    {
+      id: 6,
+      name: "Service 6",
+      price: 600,
+    },
+    {
+      id: 7,
+      name: "Service 7",
+      price: 700,
+    },
+    {
+      id: 8,
+      name: "Service 8",
+      price: 800,
+    },
+    {
+      id: 9,
+      name: "Service 9",
+      price: 900,
+    },
+  ]
 
+  getServicesData() {
+    return this.servicesData;
+  }
 
   // Sales Agent Data
   salesAgentCardsData: CardsInterface[] = [

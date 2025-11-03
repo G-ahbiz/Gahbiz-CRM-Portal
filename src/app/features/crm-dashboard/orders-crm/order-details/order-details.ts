@@ -15,11 +15,15 @@ export class OrderDetails {
   currentOrder: ordersInterface | undefined;
   customersDetails: customersDetailsInterface[] = [];
   clientPayments: clientPaymentsInterface[] = [];
+  servicesData: any[] = [];
 
   currentCustomerId: number | undefined;
   currentCustomer: customersDetailsInterface | undefined;
   currentClientPayment: clientPaymentsInterface | undefined;
+  currentServiceData: any | undefined;
   servicesHistory: any[] = [];
+  servicesTotalQuantity: number = 0;
+  servicesTotalPrice: number = 0;
   cardsData: any[] = [];
   constructor(private allData: AllData, private translate: TranslateService) { }
 
@@ -31,7 +35,9 @@ export class OrderDetails {
     this.getCurrentCustomer();
     this.getClientPayments();
     this.getCurrentClientPayment();
+    this.getServicesData();
     this.getCardsData();
+    this.getServicesHistory();
   }
 
   getOrderDetails() {
@@ -51,6 +57,7 @@ export class OrderDetails {
     this.currentCustomerId = this.currentOrder?.clientId;
     if (this.currentCustomerId) {
       this.currentCustomer = this.customersDetails.find(customer => customer.id === this.currentCustomerId);
+      console.log(`current customer:`, this.currentCustomerId);
     } else {
       this.currentCustomer = undefined;
     }
@@ -66,6 +73,11 @@ export class OrderDetails {
 
   getCurrentClientPayment() {
     this.currentClientPayment = this.clientPayments.find(payment => payment.clientId === this.currentCustomerId);
+  }
+
+
+  getServicesData() {
+    this.servicesData = this.allData.getServicesData();
   }
 
   getCardsData() {
@@ -85,6 +97,11 @@ export class OrderDetails {
 
   getServicesHistory() {
     this.servicesHistory = this.allOrders.filter(order => order.clientId === this.currentCustomerId);
+    this.currentServiceData = this.servicesData.find(service => service.id === this.currentOrder?.serviceID);
+    console.log(`current service data:`, this.currentServiceData);
+
+    this.servicesTotalQuantity = this.servicesHistory.reduce((total, service) => total + service.quantity, 0);
+    this.servicesTotalPrice = this.servicesHistory.reduce((total, service) => total + service.total, 0);
   }
 
   goBack() {

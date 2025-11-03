@@ -1,7 +1,10 @@
 export interface ordersInterface {
   id: number;
   orderId: string;
+  serviceID: number;
   date: string;
+  quantity: number;
+  cutomerID: number;
   customer: string;
   total: number;
   status: string;

@@ -4,11 +4,11 @@ import { AllData } from '../../../../services/all-data';
 import { ordersInterface } from '../../../../services/interfaces/all-interfaces';
 import { Paginator } from "../../../../shared/paginator/paginator";
 import { TranslateModule } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-orders-tabel',
-  imports: [CommonModule, Paginator, TranslateModule],
+  imports: [CommonModule, Paginator, TranslateModule, RouterLink],
   templateUrl: './orders-tabel.html',
   styleUrl: './orders-tabel.css',
 })

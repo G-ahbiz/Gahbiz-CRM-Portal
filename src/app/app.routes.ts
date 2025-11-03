@@ -12,6 +12,7 @@ import { Leads } from './features/crm-dashboard/sales-crm/leads/leads';
 import { SalesAgents } from './features/crm-dashboard/sales-crm/sales-agents/sales-agents';
 import { OrderDetails } from './features/crm-dashboard/orders-crm/order-details/order-details';
 import { OrdersContent } from './features/crm-dashboard/orders-crm/orders-content/orders-content';
+import { AddOrder } from './features/crm-dashboard/orders-crm/add-order/add-order';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,7 @@ export const routes: Routes = [
             path: 'orders', component: OrdersCrm, children: [
               { path: 'orders-main', component: OrdersContent },
               { path: 'order-details', component: OrderDetails },
+              { path: 'add-order', component: AddOrder },
               { path: '', redirectTo: 'orders-main', pathMatch: 'full' },
             ]
           },
