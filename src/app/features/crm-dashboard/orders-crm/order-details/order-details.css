@@ -44,3 +44,16 @@
   color: var(--primary-color) !important;
   border-color: #E3E1E1 !important;
 }
+
+.card {
+  width: 30%;
+  background: transparent !important;
+}
+
+.card-icon {
+  background-color: #E3E1E1;
+}
+
+.form-control {
+  height: 10rem;
+}

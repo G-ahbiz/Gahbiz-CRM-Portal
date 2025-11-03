@@ -34,3 +34,16 @@ export interface customersDetailsInterface {
   postalCode: string;
   userType: string;
 }
+
+export interface clientPaymentsInterface {
+  id: number;
+  clientId: number;
+  paymentMethod: string;
+  amount: number;
+  status: string;
+  date: string;
+  cardNumber: string;
+  cardHolderName: string;
+  cardExpirationDate: string;
+  cardCvv: string;
+}

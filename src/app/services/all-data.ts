@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsInterface, customersDetailsInterface, ordersInterface } from './interfaces/all-interfaces';
+import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, ordersInterface } from './interfaces/all-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -67,46 +67,7 @@ export class AllData {
     return this.ordersCardsData;
   }
 
-  // Customers Data
 
-  customersCardsData: CardsInterface[] = [
-    {
-      title: 'Total Customers',
-      value: 569,
-      icon: 'totalCustomers',
-      bgColor: 'card-blue',
-      rating: 2,
-      ratingStatues: 'up'
-    },
-    {
-      title: 'Clients',
-      value: 380,
-      icon: 'clients',
-      bgColor: 'card-green',
-      rating: 4,
-      ratingStatues: 'up',
-    },
-    {
-      title: 'Leads',
-      value: 80,
-      icon: 'leads',
-      bgColor: 'card-yellow',
-      rating: 4,
-      ratingStatues: 'up',
-    },
-    {
-      title: 'Users',
-      value: 109,
-      icon: 'users',
-      bgColor: 'card-red',
-      rating: 4,
-      ratingStatues: 'up',
-    },
-  ];
-
-  getCustomersCardsData() {
-    return this.customersCardsData;
-  }
 
   // Sales Agent Data
   salesAgentCardsData: CardsInterface[] = [
@@ -228,7 +189,8 @@ export class AllData {
     return this.invoicesCardsData;
   }
 
-  // Customers Details Data
+  // Customers Data
+
   customersDetailsData: customersDetailsInterface[] = [
     {
       id: 1,
@@ -280,4 +242,103 @@ export class AllData {
   getCustomersDetailsData() {
     return this.customersDetailsData;
   }
+
+  customersCardsData: CardsInterface[] = [
+    {
+      title: 'Total Customers',
+      value: 569,
+      icon: 'totalCustomers',
+      bgColor: 'card-blue',
+      rating: 2,
+      ratingStatues: 'up'
+    },
+    {
+      title: 'Clients',
+      value: 380,
+      icon: 'clients',
+      bgColor: 'card-green',
+      rating: 4,
+      ratingStatues: 'up',
+    },
+    {
+      title: 'Leads',
+      value: 80,
+      icon: 'leads',
+      bgColor: 'card-yellow',
+      rating: 4,
+      ratingStatues: 'up',
+    },
+    {
+      title: 'Users',
+      value: 109,
+      icon: 'users',
+      bgColor: 'card-red',
+      rating: 4,
+      ratingStatues: 'up',
+    },
+  ];
+
+  getCustomersCardsData() {
+    return this.customersCardsData;
+  }
+
+  // Client Payment
+
+  clientPaymentsData: clientPaymentsInterface[] = [
+    {
+      id: 1,
+      clientId: 1,
+      paymentMethod: "Credit Card",
+      amount: 100,
+      status: "Paid",
+      date: "2025-11-02",
+      cardNumber: "1234567890123456",
+      cardHolderName: "Karin Daniel",
+      cardExpirationDate: "09/27",
+      cardCvv: "123",
+    },
+    {
+      id: 2,
+      clientId: 2,
+      paymentMethod: "Credit Card",
+      amount: 100,
+      status: "Paid",
+      date: "2025-11-02",
+      cardNumber: "1234567890123456",
+      cardHolderName: "Jenna Will",
+      cardExpirationDate: "09/27",
+      cardCvv: "123",
+    },
+    {
+      id: 3,
+      clientId: 3,
+      paymentMethod: "Credit Card",
+      amount: 100,
+      status: "Paid",
+      date: "2025-11-02",
+      cardNumber: "1234567890123456",
+      cardHolderName: "Ashley Rio",
+      cardExpirationDate: "09/28",
+      cardCvv: "123",
+    },
+    {
+      id: 4,
+      clientId: 4,
+      paymentMethod: "Paypal",
+      amount: 100,
+      status: "Paid",
+      date: "2025-11-02",
+      cardNumber: "1234567890123456",
+      cardHolderName: "Karin Daniel",
+      cardExpirationDate: "09/27",
+      cardCvv: "123",
+    }
+  ]
+
+  getClientPaymentsData() {
+    return this.clientPaymentsData;
+  }
 }
+
+
+

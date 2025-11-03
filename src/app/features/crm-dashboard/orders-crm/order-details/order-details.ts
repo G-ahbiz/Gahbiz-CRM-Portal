@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AllData } from '../../../../services/all-data';
-import { customersDetailsInterface, ordersInterface } from '../../../../services/interfaces/all-interfaces';
+import { clientPaymentsInterface, customersDetailsInterface, ordersInterface } from '../../../../services/interfaces/all-interfaces';
 import { TranslateModule, LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 @Component({
@@ -14,8 +14,13 @@ export class OrderDetails {
   allOrders: ordersInterface[] = [];
   currentOrder: ordersInterface | undefined;
   customersDetails: customersDetailsInterface[] = [];
-  currentCustomer: customersDetailsInterface | undefined;
+  clientPayments: clientPaymentsInterface[] = [];
+
   currentCustomerId: number | undefined;
+  currentCustomer: customersDetailsInterface | undefined;
+  currentClientPayment: clientPaymentsInterface | undefined;
+  servicesHistory: any[] = [];
+  cardsData: any[] = [];
   constructor(private allData: AllData, private translate: TranslateService) { }
 
 
@@ -24,6 +29,9 @@ export class OrderDetails {
     this.getCurrentOrder();
     this.getCustomersDetails();
     this.getCurrentCustomer();
+    this.getClientPayments();
+    this.getCurrentClientPayment();
+    this.getCardsData();
   }
 
   getOrderDetails() {
@@ -50,6 +58,33 @@ export class OrderDetails {
 
   getCustomersDetails() {
     this.customersDetails = this.allData.getCustomersDetailsData();
+  }
+
+  getClientPayments() {
+    this.clientPayments = this.allData.getClientPaymentsData();
+  }
+
+  getCurrentClientPayment() {
+    this.currentClientPayment = this.clientPayments.find(payment => payment.clientId === this.currentCustomerId);
+  }
+
+  getCardsData() {
+    this.cardsData = [
+      {
+        customerName: this.currentCustomer?.fullName,
+        customerEmail: this.currentCustomer?.email,
+        customerPhone: this.currentCustomer?.phoneNumber,
+        customerPaymentMethod: this.currentClientPayment?.paymentMethod,
+        customerPaymentExpirationDate: this.currentClientPayment?.cardExpirationDate,
+        cutomerAddress: this.currentCustomer?.state,
+        customerPostalCode: this.currentCustomer?.postalCode,
+        orderStatus: this.currentOrder?.status,
+      }
+    ]
+  }
+
+  getServicesHistory() {
+    this.servicesHistory = this.allOrders.filter(order => order.clientId === this.currentCustomerId);
   }
 
   goBack() {
