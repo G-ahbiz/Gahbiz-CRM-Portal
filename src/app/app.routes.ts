@@ -16,6 +16,8 @@ import { AddOrder } from './features/crm-dashboard/orders-crm/add-order/add-orde
 import { AddInvoice } from './features/crm-dashboard/invoices-crm/add-invoice/add-invoice';
 import { InvoiceContent } from './features/crm-dashboard/invoices-crm/invoice-content/invoice-content';
 import { InvoiceDetails } from './features/crm-dashboard/invoices-crm/invoice-details/invoice-details';
+import { CustomersContent } from './features/crm-dashboard/customers-crm/customers-content/customers-content';
+import { AddCustomers } from './features/crm-dashboard/customers-crm/add-customers/add-customers';
 
 export const routes: Routes = [
   {
@@ -23,7 +25,13 @@ export const routes: Routes = [
       {
         path: 'main', component: CrmDashboard, children: [
           { path: 'dashboard', component: MainDashboard },
-          { path: 'customers', component: CustomersCrm },
+          {
+            path: 'customers', component: CustomersCrm, children: [
+              { path: 'customers-main', component: CustomersContent },
+              { path: 'add-customer', component: AddCustomers },
+              { path: '', redirectTo: 'customers-main', pathMatch: 'full' }
+            ]
+          },
           {
             path: 'sales', component: SalesCrm, children: [
               { path: 'leads', component: Leads },
