@@ -17,12 +17,16 @@ export class InvoiceDetails implements OnInit {
   statusSelect: HTMLSelectElement | null = null;
   allCustomers: customersDetailsInterface[] = [];
   currentCustomer: customersDetailsInterface | undefined;
+  servicesHistory: any[] = [];
+  servicesTotalQuantity: number = 0;
+  servicesTotalPrice: number = 0;
 
   constructor(private allData: AllData) { }
 
   ngOnInit(): void {
     this.getInvoiceDetails();
     this.getCustomersData();
+    this.getServicesHistory();
   }
 
   getInvoiceDetails() {
@@ -54,6 +58,12 @@ export class InvoiceDetails implements OnInit {
     } else {
       this.currentCustomer = undefined;
     }
+  }
+
+  getServicesHistory() {
+    this.servicesHistory = this.allData.getServicesHistoryData();
+    this.servicesTotalQuantity = this.servicesHistory.reduce((total, service) => total + service.quantity, 0);
+    this.servicesTotalPrice = this.servicesHistory.reduce((total, service) => total + service.total, 0);
   }
 
   onStatusChange(event: Event) {

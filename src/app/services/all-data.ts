@@ -6,6 +6,19 @@ import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, Inv
 })
 export class AllData {
 
+  // Services History Static Data
+  servicesHistoryData: any[] = [
+    { id: 1, name: 'Service 1', price: 100, quantity: 1, total: 100 },
+    { id: 2, name: 'Service 2', price: 200, quantity: 2, total: 400 },
+    { id: 3, name: 'Service 3', price: 300, quantity: 3, total: 900 },
+    { id: 4, name: 'Service 4', price: 400, quantity: 4, total: 1600 },
+    { id: 5, name: 'Service 5', price: 500, quantity: 5, total: 2500 },
+  ]
+
+  getServicesHistoryData() {
+    return this.servicesHistoryData;
+  }
+
   // Orders Data
   ordersTabelData: ordersInterface[] = [
     { id: 1, orderId: '67821', serviceID: 1, date: '2025-11-01', quantity: 2, cutomerID: 1, customer: 'Karin Daniel', total: 90, status: 'Pending', locations: 'LA, NY', paymentMethod: 'Credit Card', clientId: 1 },

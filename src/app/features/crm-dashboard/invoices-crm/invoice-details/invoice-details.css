@@ -11,3 +11,8 @@
   width: 30%;
   background: transparent !important;
 }
+
+
+th,td {
+  background: transparent !important;
+}

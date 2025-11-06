@@ -103,52 +103,54 @@
                 </div>
               </div>
             </div>
-            <!-- Order Info Card -->
+
+            <!-- Amount Card -->
             <div class="card border-0">
               <div class="card-body d-flex justify-content-start align-items-start gap-3">
                 <!-- Card Icon -->
                 <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                  <img src="assets/images/orders/cart.svg" alt="Cart Icon" class="">
+                  <img src="assets/images/invoices/money.svg" alt="Money Icon" class="">
                 </div>
                 <!-- Card Info -->
                 <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                  <h5 class="card-title m-0 fw-semibold">Order Info</h5>
+                  <h5 class="card-title m-0 fw-semibold">Amount</h5>
                   <p class="shipping-address m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Shipping: </span>
-                    <span>{{ currentInvoice?.customer }}</span>
+                    <span class="text-muted-clr">Total: </span>
+                    <span class="fw-medium">$ {{ currentInvoice?.total }}</span>
                   </p>
                   <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Pay: </span>
-                    <span>{{ currentInvoice?.paymentReceived }}</span>
+                    <span class="text-muted-clr">Payment Received: </span>
+                    <span class="fw-medium">$ {{ currentInvoice?.paymentReceived }}</span>
                   </p>
                   <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Status: </span>
-                    <span>{{ currentInvoice?.status }}</span>
+                    <span class="text-muted-clr">Due: </span>
+                    <span class="fw-medium">$ {{ currentInvoice?.due }}</span>
                   </p>
                 </div>
               </div>
             </div>
+
             <!-- Delivery Card -->
             <div class="card border-0">
               <div class="card-body d-flex justify-content-start align-items-start gap-3">
                 <!-- Card Icon -->
                 <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                  <img src="assets/images/orders/delivery.svg" alt="" class="">
+                  <img src="assets/images/invoices/delivery.svg" alt="" class="">
                 </div>
                 <!-- Card Info -->
                 <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
                   <h5 class="card-title m-0 fw-semibold">Delivery</h5>
                   <p class="customer-name m-0 fw-medium fs-6">
                     <span class="text-muted-clr">Address: </span>
-                    <span>{{ currentInvoice?.customer }}</span>
+                    <span>{{ currentCustomer?.state }}</span>
                   </p>
                   <p class="customer-email m-0 fw-medium fs-6">
                     <span class="text-muted-clr">State: </span>
-                    <span>{{ currentInvoice?.customer }}</span>
+                    <span>{{ currentCustomer?.state }}</span>
                   </p>
                   <p class="customer-phone m-0 fw-medium fs-6">
                     <span class="text-muted-clr">Postal Code: </span>
-                    <span>{{ currentInvoice?.customer }}</span>
+                    <span>{{ currentCustomer?.postalCode }}</span>
                   </p>
                 </div>
               </div>
@@ -185,10 +187,10 @@
           </div>
         </div>
 
-        <!-- <div class="services-history-container w-100 h-100">
+        <div class="services-history-container w-100 h-100">
           <h4 class="fs-5 fw-semibold">Services</h4>
 
-          <table class="table table-hover w-100">
+          <table class="table table-hover w-100 mt-3">
             <thead>
               <tr>
                 <th>
@@ -205,8 +207,8 @@
               @for (service of servicesHistory; track service.id ; let i = $index) {
               <tr>
                 <td scope="col"><input type="checkbox" name="select-service" id="service-{{ service.id }}"></td>
-                <td scope="col">{{ servicesData[i].name }}</td>
-                <td scope="col">$ {{ service?.total / service?.quantity }}</td>
+                <td scope="col">{{ service.name }}</td>
+                <td scope="col">$ {{ service.price }}</td>
                 <td scope="col">{{ service.quantity }}</td>
                 <td scope="col">$ {{ service.total }}</td>
                 <td>
@@ -220,16 +222,13 @@
               </tr>
               }
               <tr class="">
-                <td scope="col"> </td>
-                <td scope="col"> </td>
-                <td scope="col"> </td>
+                <td scope="col" colspan="3">Summury</td>
                 <td scope="col">{{servicesTotalQuantity}}</td>
                 <td scope="col">$ {{servicesTotalPrice}}</td>
-                <td scope="col"> </td>
               </tr>
             </tbody>
           </table>
-        </div> -->
+        </div>
 
       </div>
 
