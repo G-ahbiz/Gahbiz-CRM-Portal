@@ -1,0 +1,99 @@
+<div class="container-fluid p-0 m-0">
+  <!-- Invoices Actions Container -->
+  <div class="invoices-actions-container mb-3 d-flex justify-content-between align-items-center">
+    <!-- Export Button Container -->
+    <div class="export-btn-container">
+      <button class="btn btn-sm outline-primary-clr px-3 py-2">
+        {{ 'invoices-crm.export' | translate }}
+      </button>
+    </div>
+
+    <div class="srch-filter-container d-flex justify-content-start align-items-center gap-3">
+      <!-- Search Container -->
+      <div class="search-container d-flex justify-content-start align-items-center bg-white rounded-3 px-2">
+        <label for="search" class="m-0 p-0 text-muted">
+          <img src="assets/images/shared/search.svg" alt="" class="">
+        </label>
+        <input type="text" id="search" class="form-control border-0 bg-transparent"
+          placeholder="{{ 'invoices-crm.search' | translate }}" (input)="onSearchChange($any($event.target).value)"
+          #searchInput>
+      </div>
+
+      <!-- Filter Container -->
+      <div class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3">
+        <select name="filter" id="filter" class="form-select border-0 bg-transparent" aria-label="Filter"
+          (change)="onFilterChange($any($event.target).value)">
+          <option value="all">{{ 'invoices-crm.all' | translate }}</option>
+          <option value="last-7-days" selected>{{ 'invoices-crm.last-7-days' | translate }}</option>
+          <option value="last-30-days">{{ 'invoices-crm.last-30-days' | translate }}</option>
+          <option value="last-60-days">{{ 'invoices-crm.last-60-days' | translate }}</option>
+          <option value="last-90-days">{{ 'invoices-crm.last-90-days' | translate }}</option>
+          <option value="last-180-days">{{ 'invoices-crm.last-180-days' | translate }}</option>
+          <option value="last-365-days">{{ 'invoices-crm.last-365-days' | translate }}</option>
+        </select>
+      </div>
+
+      <!-- Add Invoice Button -->
+      <div class="add-invoice-btn-container">
+        <button
+          class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-start align-items-center gap-2 rounded-3"
+          routerLink="/main/invoices/add-invoice">
+          <img src="assets/images/shared/plus.svg" alt="" class="">
+          {{ 'invoices-crm.add-invoice' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoices Table Container -->
+  <div class="table-responsive w-100 table-container">
+    <table class="table table-responsive table-hover invoices-table">
+      <thead>
+        <th class="py-3 ps-2">
+          <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+            (change)="onSelectAll($event)">
+        </th>
+        @for (header of invoicesTabelHeader; track header) {
+        <th class="py-3 ps-2 text-capitalize">{{ header }}</th>
+        }
+      </thead>
+      <tbody>
+        @for (invoice of paginatedInvoices; track trackByInvoiceId($index, invoice)) {
+        <tr>
+          <td>
+            <input type="checkbox" name="select-invoice" id="invoice-{{ invoice.id }}" [checked]="invoice.selected"
+              (change)="toggleInvoiceSelection(invoice)">
+          </td>
+          <td>#{{ invoice.id }}</td>
+          <td>{{ invoice.customer }}</td>
+          <td>{{ invoice.billDate }}</td>
+          <td>{{ invoice.dueDate }}</td>
+          <td>$ {{ invoice.total }}</td>
+          <td>$ {{ invoice.paymentReceived }}</td>
+          <td>$ {{ invoice.due }}</td>
+          <td class="p-2 text-center">
+            <span class="py-1 px-2 rounded-3"
+              [class]="invoice.status === 'Paid' ? 'text-success card-green' : invoice.status === 'Partially Paid' ? 'text-warning  card-yellow' : invoice.status === 'Unpaid' ? 'text-danger card-red' : ''">{{
+              invoice.status }}</span>
+          </td>
+          <td>
+            <button class="btn btn-sm">
+              <img src="assets/images/shared/options.svg" alt="" class="">
+            </button>
+            <button class="btn btn-sm" (click)="viewInvoice(invoice.id); $event.stopPropagation()">
+              <img src="assets/images/shared/eye.svg" alt="" class="">
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class=" d-flex justify-center bg-transparent w-100">
+      <p-paginator class="bg-transparent" (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
+        [totalRecords]="totalInvoicesTabelData" [rowsPerPageOptions]="[2, 4, 6, 8,10]" [showCurrentPageReport]="true"
+        [showPageLinks]="true" [showJumpToPageDropdown]="false"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" />
+    </div>
+  </div>
+</div>

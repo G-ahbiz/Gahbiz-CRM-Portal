@@ -25,11 +25,13 @@ export class OrdersTabel implements OnInit {
   search: string = '';
   filterValue: string = 'all';
 
-  constructor(private allData: AllData, private router: Router) { }
+  constructor(private allData: AllData, private router: Router)  { }
 
   ngOnInit() {
     this.getColumnsHeader();
     this.getOrdersData();
+    // Apply initial filter after data is loaded
+    this.applyFilters();
   }
 
   onSelectAll(event: Event) {

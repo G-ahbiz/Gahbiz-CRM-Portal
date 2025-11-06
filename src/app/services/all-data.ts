@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, ordersInterface } from './interfaces/all-interfaces';
+import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, Invoice, ordersInterface } from './interfaces/all-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -201,6 +201,21 @@ export class AllData {
   }
 
   // Invoices Data
+  invoicesTabelData: Invoice[] = [
+    { id: 1, customer: 'Karin Daniel', billDate: '2025-11-01', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Paid', clientId: 1 },
+    { id: 2, customer: 'Jenna Will', billDate: '2025-11-02', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Partially Paid', clientId: 2 },
+    { id: 3, customer: 'Ashley Rio', billDate: '2025-10-01', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Unpaid', clientId: 3 },
+    { id: 4, customer: 'Karin Daniel', billDate: '2025-9-01', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Paid', clientId: 1 },
+    { id: 5, customer: 'Jenna Will', billDate: '2025-10-25', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Paid', clientId: 2 },
+    { id: 6, customer: 'Ashley Rio', billDate: '2025-10-20', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Paid', clientId: 3 },
+    { id: 7, customer: 'Karin Daniel', billDate: '2025-01-10', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Paid', clientId: 1 },
+    { id: 8, customer: 'Jenna Will', billDate: '2025-10-15', dueDate: '2025-11-01', total: 100, paymentReceived: 100, due: 0, status: 'Paid', clientId: 2 },
+  ]
+
+  getInvoicesTabelData() {
+    return this.invoicesTabelData;
+  }
+
   invoicesCardsData: CardsInterface[] = [
     {
       title: 'Total Invoices',

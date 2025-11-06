@@ -10,3 +10,9 @@
     scale: 0.95;
   }
 }
+
+label {
+  color: var(--text-clr) !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}

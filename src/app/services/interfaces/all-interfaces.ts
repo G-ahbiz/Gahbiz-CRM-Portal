@@ -50,3 +50,16 @@ export interface clientPaymentsInterface {
   cardExpirationDate: string;
   cardCvv: string;
 }
+
+export interface Invoice {
+  id: number;
+  customer: string;
+  billDate: string;
+  dueDate: string;
+  total: number;
+  paymentReceived: number;
+  due: number;
+  status: string;
+  selected?: boolean;
+  clientId: number;
+}

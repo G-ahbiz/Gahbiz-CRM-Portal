@@ -27,5 +27,50 @@
     "add-order-page": {
       "title": "Add Order"
     }
+  },
+  "invoices-crm": {
+    "export": "Export",
+    "add-invoice": "Add Invoice",
+    "search": "Search...",
+    "filter": "Filter",
+    "all": "All",
+    "last-7-days": "Last 7 days",
+    "last-30-days": "Last 30 days",
+    "last-60-days": "Last 60 days",
+    "last-90-days": "Last 90 days",
+    "last-180-days": "Last 180 days",
+    "last-365-days": "Last Year",
+    "add-invoice-page": {
+      "title": "Invoice Details",
+      "customer": "Customer",
+      "bill-date": "Bill Date",
+      "due-date": "Due Date",
+      "total": "Total",
+      "services": "Services",
+      "select-services": "Select Services",
+      "payment-received": "Payment Received",
+      "due": "Due",
+      "status": "Status",
+      "select-status": "Select Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "partially-paid": "Partially Paid",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "invoice-details": {
+      "title": "Invoice Details",
+      "change-status": "Change Status",
+      "invoice-id": "Invoice ID",
+      "bill-date": "Bill Date",
+      "due-date": "Due Date",
+      "status": "Status",
+      "paid": "Paid",
+      "partially-paid": "Partially Paid",
+      "unpaid": "Unpaid",
+      "save": "Save",
+      "download": "Download",
+      "print": "Print"
+    }
   }
 }

@@ -18,5 +18,115 @@
 
   </div>
 
-  
+  <form [formGroup]="addOrderForm"
+    class="add-order-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white">
+
+    <!-- Full Name Container -->
+    <div class="fullName-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div class="form-group w-100">
+        <label for="firstName">First Name</label>
+        <input type="text" name="firstName" id="firstName" class="form-control" placeholder="First Name"
+          formControlName="firstName">
+      </div>
+      <div class="form-group w-100">
+        <label for="lastName">Last Name</label>
+        <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Last Name"
+          formControlName="lastName">
+      </div>
+    </div>
+
+    <!-- Email & Phone Container -->
+    <div class="emailPhone-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <!-- Email Container -->
+      <div class="form-group w-100">
+        <label for="email">Email
+          <span class="" [class]="checkValidity('email')">*</span>
+        </label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Email" formControlName="email">
+      </div>
+      <!-- Phone Container -->
+      <div class="form-group w-100">
+        <label for="phone">Phone
+          <span class="" [class]="checkValidity('phone')">*</span>
+        </label>
+        <div class="d-flex justify-content-between align-items-center gap-0">
+          <select name="phone-code" id="phone-code" class="form-select w-25" formControlName="phoneCode">
+            <option selected value="+1">+1</option>
+            <option value="+20">+20</option>
+            <option value="+34">+34</option>
+          </select>
+          <input type="tel" name="phone" id="phone" class="form-control w-75" placeholder="Phone"
+            formControlName="phone">
+        </div>
+      </div>
+    </div>
+
+    <!-- Address & Postal Code Container -->
+    <div class="address-postalCode-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div class="form-group w-100">
+        <label for="address">Address
+          <span class="" [class]="checkValidity('address')">*</span>
+        </label>
+        <input type="text" name="address" id="address" class="form-control" placeholder="Address"
+          formControlName="address">
+      </div>
+      <div class="form-group w-100">
+        <label for="postalCode">Postal Code
+          <span class="" [class]="checkValidity('postalCode')">*</span>
+        </label>
+        <input type="text" name="postalCode" id="postalCode" class="form-control" placeholder="Postal Code"
+          formControlName="postalCode">
+      </div>
+    </div>
+
+    <!-- Country & State Container -->
+    <div class="country-State-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div class="form-group w-100">
+        <label for="country">Country
+          <span class="" [class]="checkValidity('country')">*</span>
+        </label>
+        <input type="text" name="country" id="country" class="form-control" placeholder="Country"
+          formControlName="country">
+      </div>
+      <div class="form-group w-100">
+        <label for="state">State
+          <span class="" [class]="checkValidity('state')">*</span>
+        </label>
+        <input type="text" name="state" id="state" class="form-control" placeholder="State" formControlName="state">
+      </div>
+    </div>
+
+    <!-- Payment Method & Services Container -->
+    <div class="paymentMethod-services-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <!-- Payment Method Container -->
+      <div class="form-group w-100">
+        <label for="paymentMethod">Payment Method
+          <span class="" [class]="checkValidity('paymentMethod')">*</span>
+        </label>
+        <select name="paymentMethod" id="paymentMethod" class="form-select" placeholder="Payment Method"
+          formControlName="paymentMethod">
+          <option selected disabled>Select Payment Method</option>
+          <option value="1">cash</option>
+          <option value="2">credit card</option>
+          <option value="3">debit card</option>
+          <option value="4">bank transfer</option>
+          <option value="5">other</option>
+        </select>
+      </div>
+
+      <!-- Services Container -->
+      <div class="form-group w-100">
+        <label for="services">Services</label>
+        <select name="services" id="services" class="form-select" placeholder="Choose Services"
+          formControlName="services">
+          <option selected value="1">Service 1</option>
+          <option value="2">Service 2</option>
+          <option value="3">Service 3</option>
+        </select>
+      </div>
+    </div>
+
+
+  </form>
+
 </div>
