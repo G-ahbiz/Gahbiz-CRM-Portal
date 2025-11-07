@@ -1,8 +1,20 @@
 <div class="container-fluid p-0 m-0">
 
   <div class="card">
-    <p-table [value]="leadsData" sortField="id" [sortOrder]="1" [tableStyle]="{'min-width': '40rem'}" [paginator]="true"
-      [rows]="4">
+    <p-table [value]="leadsData" dataKey="id" sortField="id" [sortOrder]="1" [tableStyle]="{'min-width': '40rem'}"
+      [paginator]="true" [rowsPerPageOptions]="[2, 4, 6, 8, 10]" [rows]="4" [loading]="loading"
+      [globalFilterFields]="['name', 'service', 'status', 'source', 'assignedTo', 'value', 'createdDate']">
+      <ng-template #caption>
+        <div class="flex">
+            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt1)" />
+            <p-iconfield iconPosition="left" class="ml-auto">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" />
+            </p-iconfield>
+        </div>
+    </ng-template>
       <ng-template #header>
         <tr>
           <th class="d-flex justify-content-center align-items-center gap-2">
@@ -10,54 +22,52 @@
               <input type="checkbox" name="select-all" id="select-all">
             </div>
           </th>
-          <!-- @for (header of leadsTabelHeader; track header) { -->
-          <th pSortableColumn="'ID'">
+          <th [pSortableColumn]="'id'">
             <div class="flex items-center gap-2">
               ID
               <p-sortIcon field="'ID'" />
             </div>
           </th>
-          <!-- } -->
-          <th pSortableColumn="'Name'">
+          <th [pSortableColumn]="'name'">
             <div class="flex items-center gap-2">
               Name
-              <p-sortIcon field="'Name'" />
+              <p-sortIcon field="'name'" />
             </div>
           </th>
-          <th pSortableColumn="'Service'">
+          <th [pSortableColumn]="'service'">
             <div class="flex items-center gap-2">
               Service
-              <p-sortIcon field="'Service'" />
+              <p-sortIcon field="'service'" />
             </div>
           </th>
-          <th pSortableColumn="'Status'">
+          <th [pSortableColumn]="'status'">
             <div class="flex items-center gap-2">
               Status
-              <p-sortIcon field="'Status'" />
+              <p-sortIcon field="'status'" />
             </div>
           </th>
-          <th pSortableColumn="'Source'">
+          <th [pSortableColumn]="'source'">
             <div class="flex items-center gap-2">
               Source
-              <p-sortIcon field="'Source'" />
+              <p-sortIcon field="'source'" />
             </div>
           </th>
-          <th pSortableColumn="'Assigned To'">
+          <th [pSortableColumn]="'assignedTo'">
             <div class="flex items-center gap-2">
               Assigned To
-              <p-sortIcon field="'Assigned To'" />
+              <p-sortIcon field="'assignedTo'" />
             </div>
           </th>
-          <th pSortableColumn="'Value'">
+          <th [pSortableColumn]="'value'">
             <div class="flex items-center gap-2">
               Value
-              <p-sortIcon field="'Value'" />
+              <p-sortIcon field="'value'" />
             </div>
           </th>
-          <th pSortableColumn="'Created Date'">
+          <th [pSortableColumn]="'createdDate'">
             <div class="flex items-center gap-2">
               Created Date
-              <p-sortIcon field="'Created Date'" />
+              <p-sortIcon field="'createdDate'" />
             </div>
           </th>
           <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>

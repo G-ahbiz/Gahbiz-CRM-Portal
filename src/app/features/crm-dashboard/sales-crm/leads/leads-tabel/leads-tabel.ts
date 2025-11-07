@@ -4,7 +4,11 @@ import { CommonModule } from '@angular/common';
 import { AllData } from '../../../../../services/all-data';
 import { LeadsInterface } from '../../../../../services/interfaces/all-interfaces';
 import { Table } from 'primeng/table';
-import { SortEvent } from 'primeng/api';
+import { ProgressBar } from 'primeng/progressbar';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 
 export const leadsTabelHeader: readonly string[] = [
@@ -19,20 +23,17 @@ export const leadsTabelHeader: readonly string[] = [
 ];
 @Component({
   selector: 'app-leads-tabel',
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule],
   templateUrl: './leads-tabel.html',
   styleUrl: './leads-tabel.css',
   providers: [AllData]
 })
 export class LeadsTabel implements OnInit {
   @ViewChild('dt') dt!: Table;
-
+  loading: boolean = false;
   leadsData: LeadsInterface[] = [];
   leadsTabelHeader: readonly string[] = leadsTabelHeader;
 
-  // initialValue: LeadsInterface[] = [];
-
-  // isSorted: boolean | null = null;
 
   constructor(private allData: AllData) { }
 
@@ -41,7 +42,9 @@ export class LeadsTabel implements OnInit {
   }
 
   getLeadsData() {
+    this.loading = true;
     this.leadsData = this.allData.getLeadsTabelData();
+    this.loading = false;
   }
 
   viewLead(id: number) {
