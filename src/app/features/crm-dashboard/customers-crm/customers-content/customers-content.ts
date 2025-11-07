@@ -4,6 +4,7 @@ import { AllData } from '../../../../services/all-data';
 import { CardsInterface } from '../../../../services/interfaces/all-interfaces';
 import { TabsHeader } from '../../../../shared/tabs-header/tabs-header';
 
+
 @Component({
   selector: 'app-customers-content',
   imports: [TabsHeader, CommonModule],
