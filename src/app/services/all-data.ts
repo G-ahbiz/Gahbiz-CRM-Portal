@@ -229,14 +229,14 @@ export class AllData {
   }
 
   leadsTabelData: LeadsInterface[] = [
-    { id: 1, name: 'john smith', service: 'Service 1', source: 'Source 1', status: 'Status 1', assignedTo: 'Ahmed Mohamed', value: '100', createdDate: '2025-11-01' },
-    { id: 2, name: 'jane doe', service: 'Service 2', source: 'Source 2', status: 'Status 2', assignedTo: 'Omar Ali', value: '200', createdDate: '2025-11-02' },
-    { id: 3, name: 'jill doe', service: 'Service 3', source: 'Source 3', status: 'Status 3', assignedTo: 'Ahmed Hassanien', value: '300', createdDate: '2025-11-03' },
-    { id: 4, name: 'david rodriguez', service: 'Service 4', source: 'Source 4', status: 'Status 4', assignedTo: 'Mohamed Ali', value: '400', createdDate: '2025-11-04' },
-    { id: 5, name: 'emily johnson', service: 'Service 5', source: 'Source 5', status: 'Status 5', assignedTo: 'Youssef Ahmed', value: '500', createdDate: '2025-11-05' },
-    { id: 6, name: 'michael brown', service: 'Service 6', source: 'Source 6', status: 'Status 6', assignedTo: 'Hossam Nasr', value: '600', createdDate: '2025-11-06' },
-    { id: 7, name: 'olivia davis', service: 'Service 7', source: 'Source 7', status: 'Status 7', assignedTo: 'Fouad ZU', value: '700', createdDate: '2025-11-07' },
-    { id: 8, name: 'olivia davis', service: 'Service 8', source: 'Source 8', status: 'Status 8', assignedTo: 'Ahmed Mohamed', value: '800', createdDate: '2025-11-08' },
+    { id: 1, name: 'john smith', service: 'Service 1', source: 'Source 1', status: 'New', assignedTo: 'Ahmed Mohamed', value: '100', createdDate: '2025-11-01' },
+    { id: 2, name: 'jane doe', service: 'Service 2', source: 'Source 2', status: 'Qualified', assignedTo: 'Omar Ali', value: '200', createdDate: '2025-11-02' },
+    { id: 3, name: 'jill doe', service: 'Service 3', source: 'Source 3', status: 'In-Progress', assignedTo: 'Ahmed Hassanien', value: '300', createdDate: '2025-11-03' },
+    { id: 4, name: 'david rodriguez', service: 'Service 4', source: 'Source 4', status: 'Lost', assignedTo: 'Mohamed Ali', value: '400', createdDate: '2025-11-04' },
+    { id: 5, name: 'emily johnson', service: 'Service 5', source: 'Source 5', status: 'New', assignedTo: 'Youssef Ahmed', value: '500', createdDate: '2025-11-05' },
+    { id: 6, name: 'michael brown', service: 'Service 6', source: 'Source 6', status: 'New', assignedTo: 'Hossam Nasr', value: '600', createdDate: '2025-11-06' },
+    { id: 7, name: 'olivia davis', service: 'Service 7', source: 'Source 7', status: 'New', assignedTo: 'Fouad ZU', value: '700', createdDate: '2025-11-07' },
+    { id: 8, name: 'olivia davis', service: 'Service 8', source: 'Source 8', status: 'New', assignedTo: 'Ahmed Mohamed', value: '800', createdDate: '2025-11-08' },
   ]
 
   getLeadsTabelData() {

@@ -1,15 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { AllData } from '../../../../../services/all-data';
 import { LeadsInterface } from '../../../../../services/interfaces/all-interfaces';
 import { Table } from 'primeng/table';
-import { ProgressBar } from 'primeng/progressbar';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { Router, RouterLink } from '@angular/router';
 
+
+const SESSION_STORAGE_KEYS = {
+  LEAD_ID: 'leadId'
+} as const;
 
 export const leadsTabelHeader: readonly string[] = [
   'ID',
@@ -23,68 +27,54 @@ export const leadsTabelHeader: readonly string[] = [
 ];
 @Component({
   selector: 'app-leads-tabel',
-  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule],
+  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, RouterLink],
   templateUrl: './leads-tabel.html',
   styleUrl: './leads-tabel.css',
   providers: [AllData]
 })
 export class LeadsTabel implements OnInit {
   @ViewChild('dt') dt!: Table;
-  loading: boolean = false;
+  loading: boolean = true;
   leadsData: LeadsInterface[] = [];
   leadsTabelHeader: readonly string[] = leadsTabelHeader;
 
+  activityValues: number[] = [0, 100];
 
-  constructor(private allData: AllData) { }
+  searchValue: string = '';
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  constructor(private allData: AllData, private router: Router) { }
 
   ngOnInit() {
     this.getLeadsData()
   }
 
   getLeadsData() {
-    this.loading = true;
     this.leadsData = this.allData.getLeadsTabelData();
     this.loading = false;
   }
 
+  clear(table: Table) {
+    this.searchValue = '';
+    this.searchInput.nativeElement.value = '';
+    table.clear();
+  }
+
+
   viewLead(id: number) {
-    console.log(id);
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
+    this.router.navigate(['/main/sales/leads/leads-details']);
   }
 
   editLead(id: number) {
-    console.log(id);
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
+    this.router.navigate(['/main/sales/leads/add-lead']);
   }
 
   deleteLead(id: number) {
-    console.log(id);
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
+    this.router.navigate(['/main/sales/leads/add-lead']);
   }
 
-  // customSort(event: SortEvent) {
-  //   if (this.isSorted == null || this.isSorted === undefined) {
-  //     this.isSorted = true;
-  //     this.sortTableData(event);
-  //   } else if (this.isSorted == true) {
-  //     this.isSorted = false;
-  //     this.sortTableData(event);
-  //   } else if (this.isSorted == false) {
-  //     this.isSorted = null;
-  //     this.leadsData = [...this.initialValue];
-  //     this.dt.reset();
-  //   }
-  // }
 
-  // sortTableData(event: SortEvent) {
-  //   event.data?.sort((data1, data2) => {
-  //     let value1 = data1[event.field as keyof LeadsInterface];
-  //     let value2 = data2[event.field as keyof LeadsInterface];
-  //     let result = null;
-  //     if (value1 == null && value2 != null) result = -1;
-  //     else if (value1 != null && value2 == null) result = 1;
-  //     else if (value1 == null && value2 == null) result = 0;
-  //     else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
-  //     else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-  //     return event.order! * result;
-  //   });
-  // }
 }
