@@ -3,12 +3,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
 import { AllData } from '../../../../services/all-data';
-import { Invoice } from '../../../../services/interfaces/all-interfaces';
+import { Customer } from '../../../../services/interfaces/all-interfaces';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 
 // Constants
 const SESSION_STORAGE_KEYS = {
-  INVOICE_ID: 'invoiceId'
+  CUSTOMER_ID: 'customerId'
 } as const;
 
 const DATE_FILTER_DAYS: Record<string, number> = {
@@ -43,7 +43,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
   /**
    * Get paginated data slice based on current page state
    */
-  get paginatedInvoices(): Invoice[] {
+  get paginatedCustomers(): Customer[] {
     const start = this.first;
     const end = this.first + this.rows;
     return this.paginationData.slice(start, end);
@@ -59,23 +59,21 @@ export class CustomerTabel implements OnInit, OnDestroy {
   }
 
   // Table configuration
-  readonly invoicesTabelHeader: readonly string[] = [
-    'Invoices ID',
-    'CUSTOMER',
-    'Bill Date',
-    'DUE DATE',
-    'Total',
-    'Payment Received',
-    'Due',
+  readonly customersTabelHeader: readonly string[] = [
+    'Customer ID',
+    'Phone Number',
+    'Customer Name',
+    'No of Orders',
     'Status',
-    'Actions',
+    'Assigned To',
+    'Actions'
   ];
 
   // Data properties
-  private allInvoicesData: Invoice[] = [];
-  invoicesTabelData: Invoice[] = [];
-  paginationData: Invoice[] = [];
-  totalInvoicesTabelData: number = 0;
+  private allCustomersData: Customer[] = [];
+  customersTabelData: Customer[] = [];
+  paginationData: Customer[] = [];
+  totalCustomersTabelData: number = 0;
 
   // Selection state
   isAllSelected: boolean = false;
@@ -90,7 +88,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.loadInvoicesData();
+    this.loadCustomersData();
   }
 
   ngOnDestroy(): void {
@@ -98,43 +96,43 @@ export class CustomerTabel implements OnInit, OnDestroy {
   }
 
   /**
-   * Load initial invoices data from service
+   * Load initial customers data from service
    */
-  private loadInvoicesData(): void {
-    this.allInvoicesData = this.allData.getInvoicesTabelData().map((invoice: any) => ({
-      ...invoice,
+  private loadCustomersData(): void {
+    this.allCustomersData = this.allData.getCustomersTabelData().map((customer: Customer) => ({
+      ...customer,
       selected: false
     }));
-    this.invoicesTabelData = [...this.allInvoicesData];
+    this.customersTabelData = [...this.allCustomersData];
     this.applyFilters();
   }
 
   /**
-   * Get count of selected invoices
+   * Get count of selected customers
    */
-  get selectedInvoicesCount(): number {
-    return this.paginationData.filter(invoice => invoice.selected).length;
+  get selectedCustomersCount(): number {
+    return this.paginationData.filter(customer => customer.selected).length;
   }
 
   /**
    * Handle select all checkbox toggle
-   * Only affects invoices on the current page
+   * Only affects customers on the current page
    */
   onSelectAll(event: Event): void {
     const checkbox = event.target as HTMLInputElement;
     this.isAllSelected = checkbox.checked;
 
-    // Update selection state for all visible invoices on current page
-    this.paginatedInvoices.forEach(invoice => {
-      invoice.selected = this.isAllSelected;
+    // Update selection state for all visible customers on current page
+    this.paginatedCustomers.forEach(customer => {
+      customer.selected = this.isAllSelected;
     });
   }
 
   /**
-   * Toggle individual invoice selection
+   * Toggle individual customer selection
    */
-  toggleInvoiceSelection(invoice: Invoice): void {
-    invoice.selected = !invoice.selected;
+  toggleCustomerSelection(customer: Customer): void {
+    customer.selected = !customer.selected;
 
     // Update "select all" state based on individual selections
     this.updateSelectAllState();
@@ -145,28 +143,28 @@ export class CustomerTabel implements OnInit, OnDestroy {
    * Only checks invoices on the current page
    */
   private updateSelectAllState(): void {
-    const currentPageInvoices = this.paginatedInvoices;
-    if (currentPageInvoices.length === 0) {
+    const currentPageCustomers = this.paginatedCustomers;
+    if (currentPageCustomers.length === 0) {
       this.isAllSelected = false;
       return;
     }
 
-    const allSelected = currentPageInvoices.every(invoice => invoice.selected);
-    const noneSelected = currentPageInvoices.every(invoice => !invoice.selected);
+    const allSelected = currentPageCustomers.every(customer => customer.selected);
+    const noneSelected = currentPageCustomers.every(customer => !customer.selected);
 
     this.isAllSelected = allSelected && !noneSelected;
   }
 
   /**
-   * Navigate to invoice details page
+   * Navigate to customer details page
    */
-  viewInvoice(id: number): void {
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.INVOICE_ID, id.toString());
-    this.router.navigate(['/main/invoices/invoice-details']);
+  viewCustomer(id: number): void {
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.CUSTOMER_ID, id.toString());
+    this.router.navigate(['/main/customers/customer-details']);
   }
 
   /**
-   * Handle search input changes and filter invoices data
+   * Handle search input changes and filter customers data
    */
   onSearchChange(value: string): void {
     this.search = value.toLowerCase().trim();
@@ -174,90 +172,60 @@ export class CustomerTabel implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle filter dropdown changes and apply date range filtering
+   * Apply search filter to customers
    */
-  onFilterChange(value: string): void {
-    this.filterValue = value as FilterValue;
-    this.applyFilters();
-  }
-
-  /**
-   * Apply both search and date filters to the invoices data
-   * Searches across multiple invoice fields
-   * Filters by date range based on the selected filter value
-   */
-  private applyFilters(): void {
-    let filtered = this.applyDateFilter([...this.invoicesTabelData]);
-    filtered = this.applySearchFilter(filtered);
-
-    this.paginationData = filtered;
-    this.totalInvoicesTabelData = filtered.length;
-
-    // Reset to first page when filters change
-    this.first = 0;
-  }
-
-  /**
-   * Apply date range filter to invoices
-   */
-  private applyDateFilter(invoices: Invoice[]): Invoice[] {
-    if (this.filterValue === 'all') {
-      return invoices;
-    }
-
-    const days = DATE_FILTER_DAYS[this.filterValue] || 7;
-    const cutoffDate = this.getDateDaysAgo(days);
-
-    return invoices.filter(invoice => {
-      const invoiceDate = new Date(invoice.billDate);
-      return invoiceDate >= cutoffDate;
-    });
-  }
-
-  /**
-   * Apply search filter to invoices
-   */
-  private applySearchFilter(invoices: Invoice[]): Invoice[] {
+  private applySearchFilter(customers: Customer[]): Customer[] {
     if (!this.search) {
-      return invoices;
+      return customers;
     }
 
-    return invoices.filter(invoice => this.matchesSearchTerm(invoice, this.search));
+    return customers.filter(customer => this.matchesSearchTerm(customer, this.search));
   }
 
   /**
-   * Check if an invoice matches the search term
+   * Check if an customer matches the search term
    */
-  private matchesSearchTerm(invoice: Invoice, searchTerm: string): boolean {
+  private matchesSearchTerm(customer: Customer, searchTerm: string): boolean {
     const searchableFields = [
-      invoice.id?.toString(),
-      invoice.customer,
-      invoice.billDate,
-      invoice.dueDate,
-      invoice.total?.toString(),
-      invoice.paymentReceived?.toString(),
-      invoice.due?.toString(),
-      invoice.status
+      customer.id?.toString(),
+      customer.customer,
+      customer.phoneNumber,
+      customer.customerName,
+      customer.noOfOrders,
+      customer.status,
+      customer.assignedTo
     ];
 
     return searchableFields.some(field =>
-      field?.toLowerCase().includes(searchTerm)
+      (field as string)?.toLowerCase().includes(searchTerm)
     );
   }
 
   /**
-   * Get a date object for N days ago
+   * Apply all active filters and update pagination data
    */
-  private getDateDaysAgo(days: number): Date {
-    const date = new Date();
-    date.setDate(date.getDate() - days);
-    return date;
+  private applyFilters(): void {
+    // Start with all customers data
+    let filteredData = [...this.customersTabelData];
+
+    // Apply search filter
+    filteredData = this.applySearchFilter(filteredData);
+
+    // Update pagination data and total count
+    this.paginationData = filteredData;
+    this.totalCustomersTabelData = filteredData.length;
+
+    // Reset to first page when filters change
+    this.first = 0;
+
+    // Update select all state for new filtered data
+    this.updateSelectAllState();
   }
 
   /**
    * TrackBy function for ngFor optimization
    */
-  trackByInvoiceId(index: number, invoice: Invoice): number {
-    return invoice.id;
+  trackByCustomerId(index: number, customer: Customer): number {
+    return customer.id;
   }
 }

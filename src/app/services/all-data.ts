@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, Invoice, ordersInterface } from './interfaces/all-interfaces';
+import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, Invoice, ordersInterface, Customer } from './interfaces/all-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -320,6 +320,23 @@ export class AllData {
 
   getCustomersDetailsData() {
     return this.customersDetailsData;
+  }
+
+  customersTabelData: Customer[] = [
+    { id: 1, customer: 'Karin Daniel', phoneNumber: '01012345678', customerName: 'Karin Daniel', noOfOrders: 1, status: 'Lead', assignedTo: 'John Doe' },
+    { id: 2, customer: 'Jenna Will', phoneNumber: '01012345678', customerName: 'Jenna Will', noOfOrders: 1, status: 'User', assignedTo: 'John Doe' },
+    { id: 3, customer: 'Ashley Rio', phoneNumber: '01012345678', customerName: 'Ashley Rio', noOfOrders: 1, status: 'Inactive', assignedTo: 'John Doe' },
+    { id: 4, customer: 'Ahmed Mohammed', phoneNumber: '01012345678', customerName: 'Karin Daniel', noOfOrders: 1, status: 'Client', assignedTo: 'John Doe' },
+    { id: 5, customer: 'Mohamed Ali', phoneNumber: '01012345678', customerName: 'Mohamed Ali', noOfOrders: 1, status: 'Lead', assignedTo: 'John Doe' },
+    { id: 6, customer: 'Youssef Ahmed', phoneNumber: '01012345678', customerName: 'Youssef Ahmed', noOfOrders: 1, status: 'Lead', assignedTo: 'John Doe' },
+    { id: 7, customer: 'Omar Ali', phoneNumber: '01012345678', customerName: 'Ahmed Mohamed', noOfOrders: 1, status: 'Lead', assignedTo: 'John Doe' },
+    { id: 8, customer: 'Mohamed Ali', phoneNumber: '01012345678', customerName: 'Mohamed Ali', noOfOrders: 1, status: 'User', assignedTo: 'John Doe' },
+    { id: 9, customer: 'Hossam Nasr', phoneNumber: '01012345678', customerName: 'Youssef Ahmed', noOfOrders: 1, status: 'User', assignedTo: 'John Doe' },
+    { id: 10, customer: 'Fouad ZU', phoneNumber: '01012345678', customerName: 'Ahmed Mohamed', noOfOrders: 1, status: 'Client', assignedTo: 'John Doe' },
+  ]
+
+  getCustomersTabelData() {
+    return this.customersTabelData;
   }
 
   customersCardsData: CardsInterface[] = [

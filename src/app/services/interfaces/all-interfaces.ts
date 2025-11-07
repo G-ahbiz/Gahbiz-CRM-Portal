@@ -63,3 +63,14 @@ export interface Invoice {
   selected?: boolean;
   clientId: number;
 }
+
+export interface Customer {
+  id: number;
+  customer: string;
+  phoneNumber: string;
+  customerName: string;
+  noOfOrders: number;
+  status: string;
+  assignedTo: string;
+  selected?: boolean;
+}

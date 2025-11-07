@@ -72,5 +72,21 @@
       "download": "Download",
       "print": "Print"
     }
+  },
+  "customers-crm": {
+    "export": "Export",
+    "add-customer": "Add Customer",
+    "search": "Search...",
+    "customer-id": "Customer ID",
+    "phone-number": "Phone Number",
+    "customer-name": "Customer Name",
+    "no-of-orders": "No of Orders",
+    "status": "Status",
+    "assigned-to": "Assigned To",
+    "actions": "Actions",
+    "lead": "Lead",
+    "user": "User",
+    "inactive": "Inactive",
+    "client": "Client"
   }
 }
