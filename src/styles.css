@@ -25,6 +25,10 @@ html, body {
 body {
   margin: 0;
   font-family: 'Libre Franklin', sans-serif;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .sidebar-bg {
