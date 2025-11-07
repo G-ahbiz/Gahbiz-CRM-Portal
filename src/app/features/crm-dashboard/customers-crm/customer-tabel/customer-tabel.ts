@@ -25,12 +25,16 @@ const DATE_FILTER_DAYS: Record<string, number> = {
 type FilterValue = keyof typeof DATE_FILTER_DAYS;
 
 @Component({
-  selector: 'app-invoices-tabel',
-  imports: [CommonModule, TranslateModule, RouterLink, PaginatorModule],
-  templateUrl: './invoices-tabel.html',
-  styleUrl: './invoices-tabel.css',
+  selector: 'app-customer-tabel',
+  imports: [
+    CommonModule,
+    TranslateModule,
+    RouterLink,
+    PaginatorModule],
+  templateUrl: './customer-tabel.html',
+  styleUrl: './customer-tabel.css',
 })
-export class InvoicesTabel implements OnInit, OnDestroy {
+export class CustomerTabel implements OnInit, OnDestroy {
 
   // Pagination state
   first: number = 0;
