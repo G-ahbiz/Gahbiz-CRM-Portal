@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, Invoice, ordersInterface, Customer } from './interfaces/all-interfaces';
+import { CardsInterface, clientPaymentsInterface, customersDetailsInterface, Invoice, ordersInterface, Customer, SalesAgents } from './interfaces/all-interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -171,6 +171,21 @@ export class AllData {
 
   getSalesAgentCardsData() {
     return this.salesAgentCardsData;
+  }
+
+  salesAgents: SalesAgents[] = [
+    { id: 1, name: 'Shawn Stone', email: 'john.doe@example.com', phoneNumber: '01012345678', status: 'Active', assignedTo: 'John Doe', selected: false },
+    { id: 2, name: 'Randy Delgado', email: 'jane.doe@example.com', phoneNumber: '01012345678', status: 'Inactive', assignedTo: 'Jane Doe', selected: false },
+    { id: 3, name: 'Sarah Williams', email: 'sarah.williams@example.com', phoneNumber: '01012345678', status: 'Active', assignedTo: 'Sarah Williams', selected: false },
+    { id: 4, name: 'Jill Doe', email: 'jill.doe@example.com', phoneNumber: '01012345678', status: 'Inactive', assignedTo: 'Jill Doe', selected: false },
+    { id: 5, name: 'David Rodriguez', email: 'david.rodriguez@example.com', phoneNumber: '01012345678', status: 'Active', assignedTo: 'David Rodriguez', selected: false },
+    { id: 6, name: 'Emily Johnson', email: 'emily.johnson@example.com', phoneNumber: '01012345678', status: 'Inactive', assignedTo: 'Emily Johnson', selected: false },
+    { id: 7, name: 'Michael Brown', email: 'michael.brown@example.com', phoneNumber: '01012345678', status: 'Active', assignedTo: 'Michael Brown', selected: false },
+    { id: 8, name: 'Olivia Davis', email: 'olivia.davis@example.com', phoneNumber: '01012345678', status: 'Inactive', assignedTo: 'Olivia Davis', selected: false },
+  ]
+
+  getSalesAgents() {
+    return this.salesAgents;
   }
 
   // Leads Data

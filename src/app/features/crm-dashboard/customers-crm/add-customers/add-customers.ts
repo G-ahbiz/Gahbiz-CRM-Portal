@@ -44,4 +44,12 @@ export class AddCustomers implements OnInit {
     return (this.addCustomerForm.get('month')?.valid && !this.addCustomerForm.get('month')?.errors?.['required']) && (this.addCustomerForm.get('day')?.valid && !this.addCustomerForm.get('day')?.errors?.['required']) && (this.addCustomerForm.get('year')?.valid && !this.addCustomerForm.get('year')?.errors?.['required']) ? true : false;
   }
 
+  save() {
+    console.log(this.addCustomerForm.value);
+  }
+
+  cancel() {
+    window.history.back();
+  }
+
 }
