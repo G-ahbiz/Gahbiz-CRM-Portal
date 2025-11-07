@@ -55,13 +55,13 @@
           <td>{{ customer.phoneNumber }}</td>
           <td>{{ customer.customerName }}</td>
           <td>{{ customer.noOfOrders }}</td>
-          <td>{{ customer.status }}</td>
-          <td>{{ customer.assignedTo }}</td>
           <td class="p-2 text-center">
             <span class="py-1 px-2 rounded-3"
-              [class]="customer.status === 'Lead' ? 'text-primary card-primary' : customer.status === 'User' ? 'text-warning  card-yellow' : customer.status === 'Inactive' ? 'text-danger card-red' : customer.status === 'Client' ? 'text-success card-green' : ''">{{
-              customer.status }}</span>
+              [class]="customer.status === 'Lead' ? 'text-primary card-primary' : customer.status === 'User' ? 'text-warning  card-yellow' : customer.status === 'Inactive' ? 'text-danger card-red' : customer.status === 'Client' ? 'text-success card-green' : ''">
+              {{ customer.status }}
+            </span>
           </td>
+          <td>{{ customer.assignedTo }}</td>
           <td>
             <button class="btn btn-sm">
               <img src="assets/images/shared/options.svg" alt="" class="">

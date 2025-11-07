@@ -1,11 +1,3 @@
-.table-container {
-  /* height: calc(100dvh - 100px) ; */
-
-  /* &::-webkit-scrollbar {
-    display: none;
-  } */
-}
-
 .search-container {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
@@ -16,4 +8,8 @@
     outline: none;
     border: none;
   }
+}
+
+td,th {
+  text-align: center !important;
 }

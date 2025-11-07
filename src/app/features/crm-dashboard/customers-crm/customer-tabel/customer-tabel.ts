@@ -11,19 +11,6 @@ const SESSION_STORAGE_KEYS = {
   CUSTOMER_ID: 'customerId'
 } as const;
 
-const DATE_FILTER_DAYS: Record<string, number> = {
-  'all': 0,
-  'last-7-days': 7,
-  'last-30-days': 30,
-  'last-60-days': 60,
-  'last-90-days': 90,
-  'last-180-days': 180,
-  'last-365-days': 365
-} as const;
-
-
-type FilterValue = keyof typeof DATE_FILTER_DAYS;
-
 @Component({
   selector: 'app-customer-tabel',
   imports: [
@@ -80,7 +67,6 @@ export class CustomerTabel implements OnInit, OnDestroy {
 
   // Filter state
   search: string = '';
-  filterValue: FilterValue = 'all';
 
   constructor(
     private readonly router: Router,
@@ -191,13 +177,13 @@ export class CustomerTabel implements OnInit, OnDestroy {
       customer.customer,
       customer.phoneNumber,
       customer.customerName,
-      customer.noOfOrders,
+      customer.noOfOrders?.toString(),
       customer.status,
       customer.assignedTo
     ];
 
     return searchableFields.some(field =>
-      (field as string)?.toLowerCase().includes(searchTerm)
+      field?.toLowerCase().includes(searchTerm)
     );
   }
 
@@ -206,7 +192,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
    */
   private applyFilters(): void {
     // Start with all customers data
-    let filteredData = [...this.customersTabelData];
+    let filteredData = [...this.allCustomersData];
 
     // Apply search filter
     filteredData = this.applySearchFilter(filteredData);
