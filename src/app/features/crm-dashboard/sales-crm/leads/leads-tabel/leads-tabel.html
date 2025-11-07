@@ -1,1 +1,95 @@
-<p>leads-tabel works!</p>
+<div class="container-fluid p-0 m-0">
+
+  <div class="card">
+    <p-table [value]="leadsData" sortField="id" [sortOrder]="1" [tableStyle]="{'min-width': '40rem'}" [paginator]="true"
+      [rows]="4">
+      <ng-template #header>
+        <tr>
+          <th class="d-flex justify-content-center align-items-center gap-2">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" name="select-all" id="select-all">
+            </div>
+          </th>
+          <!-- @for (header of leadsTabelHeader; track header) { -->
+          <th pSortableColumn="'ID'">
+            <div class="flex items-center gap-2">
+              ID
+              <p-sortIcon field="'ID'" />
+            </div>
+          </th>
+          <!-- } -->
+          <th pSortableColumn="'Name'">
+            <div class="flex items-center gap-2">
+              Name
+              <p-sortIcon field="'Name'" />
+            </div>
+          </th>
+          <th pSortableColumn="'Service'">
+            <div class="flex items-center gap-2">
+              Service
+              <p-sortIcon field="'Service'" />
+            </div>
+          </th>
+          <th pSortableColumn="'Status'">
+            <div class="flex items-center gap-2">
+              Status
+              <p-sortIcon field="'Status'" />
+            </div>
+          </th>
+          <th pSortableColumn="'Source'">
+            <div class="flex items-center gap-2">
+              Source
+              <p-sortIcon field="'Source'" />
+            </div>
+          </th>
+          <th pSortableColumn="'Assigned To'">
+            <div class="flex items-center gap-2">
+              Assigned To
+              <p-sortIcon field="'Assigned To'" />
+            </div>
+          </th>
+          <th pSortableColumn="'Value'">
+            <div class="flex items-center gap-2">
+              Value
+              <p-sortIcon field="'Value'" />
+            </div>
+          </th>
+          <th pSortableColumn="'Created Date'">
+            <div class="flex items-center gap-2">
+              Created Date
+              <p-sortIcon field="'Created Date'" />
+            </div>
+          </th>
+          <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-lead>
+        <tr>
+          <td>
+            <input type="checkbox" name="select-lead" id="lead-{{ lead.id }}">
+          </td>
+          <td>{{ lead.id }}</td>
+          <td>{{ lead.name }}</td>
+          <td>{{ lead.service }}</td>
+          <td>{{ lead.status }}</td>
+          <td>{{ lead.source }}</td>
+          <td>{{ lead.assignedTo }}</td>
+          <td>{{ lead.value }}</td>
+          <td>{{ lead.createdDate }}</td>
+          <td class="d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-sm" (click)="viewLead(lead.id); $event.stopPropagation()">
+              <img src="assets/images/shared/eye.svg" alt="" class="">
+            </button>
+            <button class="btn btn-sm" (click)="editLead(lead.id); $event.stopPropagation()">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="btn btn-sm" (click)="deleteLead(lead.id); $event.stopPropagation()">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>

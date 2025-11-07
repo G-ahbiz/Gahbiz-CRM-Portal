@@ -84,3 +84,15 @@ export interface SalesAgents {
   assignedTo: string;
   selected?: boolean;
 }
+
+export interface LeadsInterface {
+  id: number;
+  name: string;
+  service: string;
+  status: string;
+  source: string;
+  assignedTo: string;
+  value: string;
+  createdDate: string;
+  selected?: boolean;
+}

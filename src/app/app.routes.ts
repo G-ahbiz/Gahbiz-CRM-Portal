@@ -1,62 +1,19 @@
 import { Routes } from '@angular/router';
 import { CrmLayout } from './features/crm-layout/crm-layout';
-import { CrmDashboard } from './features/crm-dashboard/crm-dashboard';
-import { MainDashboard } from './features/crm-dashboard/main-dashboard/main-dashboard';
-import { CustomersCrm } from './features/crm-dashboard/customers-crm/customers-crm';
-import { SalesCrm } from './features/crm-dashboard/sales-crm/sales-crm';
-import { InvoicesCrm } from './features/crm-dashboard/invoices-crm/invoices-crm';
-import { OrdersCrm } from './features/crm-dashboard/orders-crm/orders-crm';
-import { ReportsCrm } from './features/crm-dashboard/reports-crm/reports-crm';
-import { SettingsCrm } from './features/crm-dashboard/settings-crm/settings-crm';
-import { Leads } from './features/crm-dashboard/sales-crm/leads/leads';
-import { SalesAgents } from './features/crm-dashboard/sales-crm/sales-agents/sales-agents';
-import { OrderDetails } from './features/crm-dashboard/orders-crm/order-details/order-details';
-import { OrdersContent } from './features/crm-dashboard/orders-crm/orders-content/orders-content';
-import { AddOrder } from './features/crm-dashboard/orders-crm/add-order/add-order';
-import { AddInvoice } from './features/crm-dashboard/invoices-crm/add-invoice/add-invoice';
-import { InvoiceContent } from './features/crm-dashboard/invoices-crm/invoice-content/invoice-content';
-import { InvoiceDetails } from './features/crm-dashboard/invoices-crm/invoice-details/invoice-details';
-import { CustomersContent } from './features/crm-dashboard/customers-crm/customers-content/customers-content';
-import { AddCustomers } from './features/crm-dashboard/customers-crm/add-customers/add-customers';
+
 
 export const routes: Routes = [
   {
     path: '', component: CrmLayout, children: [
       {
-        path: 'main', component: CrmDashboard, children: [
-          { path: 'dashboard', component: MainDashboard },
-          {
-            path: 'customers', component: CustomersCrm, children: [
-              { path: 'customers-main', component: CustomersContent },
-              { path: 'add-customer', component: AddCustomers },
-              { path: '', redirectTo: 'customers-main', pathMatch: 'full' }
-            ]
-          },
-          {
-            path: 'sales', component: SalesCrm, children: [
-              { path: 'leads', component: Leads },
-              { path: 'sales-agents', component: SalesAgents },
-              { path: '', redirectTo: 'leads', pathMatch: 'full' }
-            ]
-          },
-          {
-            path: 'invoices', component: InvoicesCrm, children: [
-              { path: 'invoice-main', component: InvoiceContent },
-              { path: 'invoice-details', component: InvoiceDetails },
-              { path: 'add-invoice', component: AddInvoice },
-              { path: '', redirectTo: 'invoice-main', pathMatch: 'full' },
-            ]
-          },
-          {
-            path: 'orders', component: OrdersCrm, children: [
-              { path: 'orders-main', component: OrdersContent },
-              { path: 'order-details', component: OrderDetails },
-              { path: 'add-order', component: AddOrder },
-              { path: '', redirectTo: 'orders-main', pathMatch: 'full' },
-            ]
-          },
-          { path: 'reports', component: ReportsCrm },
-          { path: 'settings', component: SettingsCrm },
+        path: 'main', loadComponent: () => import('./features/crm-dashboard/crm-dashboard').then(m => m.CrmDashboard), children: [
+          { path: 'dashboard', loadComponent: () => import('./features/crm-dashboard/main-dashboard/main-dashboard').then(m => m.MainDashboard) },
+          { path: 'customers', loadChildren: () => import('./features/crm-dashboard/customers-crm/customers.routes').then(m => m.customersRoutes) },
+          { path: 'sales', loadChildren: () => import('./features/crm-dashboard/sales-crm/sales.routes').then(m => m.salesRoutes) },
+          { path: 'invoices', loadChildren: () => import('./features/crm-dashboard/invoices-crm/invoice.routes').then(m => m.invoiceRoutes) },
+          { path: 'orders', loadChildren: () => import('./features/crm-dashboard/orders-crm/orders.routes').then(m => m.ordersRoutes) },
+          { path: 'reports', loadComponent: () => import('./features/crm-dashboard/reports-crm/reports-crm').then(m => m.ReportsCrm) },
+          { path: 'settings', loadComponent: () => import('./features/crm-dashboard/settings-crm/settings-crm').then(m => m.SettingsCrm) },
           { path: '', redirectTo: 'orders', pathMatch: 'full' }
         ]
       },
