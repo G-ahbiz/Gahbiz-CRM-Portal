@@ -87,6 +87,9 @@
     "lead": "Lead",
     "user": "User",
     "inactive": "Inactive",
-    "client": "Client"
+    "client": "Client",
+    "add-customer-page": {
+      "title": "Add Customer"
+    }
   }
 }
