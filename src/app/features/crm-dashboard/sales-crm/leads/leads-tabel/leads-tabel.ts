@@ -43,6 +43,9 @@ export class LeadsTabel implements OnInit {
   searchValue: string = '';
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
+  // Selection state
+  isAllSelected: boolean = false;
+
   constructor(private allData: AllData, private router: Router) { }
 
   ngOnInit() {
@@ -58,6 +61,31 @@ export class LeadsTabel implements OnInit {
     this.searchValue = '';
     this.searchInput.nativeElement.value = '';
     table.clear();
+  }
+
+  onSelectAll(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    this.isAllSelected = checkbox.checked;
+
+    // Update selection state for all visible leads on current page
+    this.leadsData.forEach(lead => {
+      lead.selected = this.isAllSelected;
+    });
+  }
+
+  toggleLeadSelection(lead: LeadsInterface) {
+    lead.selected = !lead.selected;
+    this.updateSelectAllState();
+  }
+
+  private updateSelectAllState() {
+    const currentPageLeads = this.leadsData;
+    if (currentPageLeads.length === 0) {
+      this.isAllSelected = false;
+      return;
+    }
+
+    this.isAllSelected = currentPageLeads.every(lead => lead.selected);
   }
 
 

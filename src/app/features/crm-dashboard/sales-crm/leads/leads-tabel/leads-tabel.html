@@ -39,7 +39,8 @@
         <tr>
           <th class="d-flex justify-content-center align-items-center gap-2">
             <div class="flex items-center gap-2">
-              <input type="checkbox" name="select-all" id="select-all">
+              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+                (change)="onSelectAll($event)">
             </div>
           </th>
           <th [pSortableColumn]="'id'">
@@ -96,7 +97,8 @@
       <ng-template #body let-lead>
         <tr>
           <td>
-            <input type="checkbox" name="select-lead" id="lead-{{ lead.id }}">
+            <input type="checkbox" name="select-lead" id="lead-{{ lead.id }}" [checked]="lead.selected"
+              (change)="toggleLeadSelection(lead)">
           </td>
           <td>{{ lead.id }}</td>
           <td>{{ lead.name }}</td>
