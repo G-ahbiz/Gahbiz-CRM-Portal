@@ -1,1 +1,171 @@
-<p>leads-add works!</p>
+<div class="container-fluid p-0 m-0">
+
+  <!-- Top Container -->
+  <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
+    <div class="leads-add-back-btn-container">
+      <button class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
+        (click)="back()">
+        <i class="pi pi-chevron-left fs-875"></i>
+      </button>
+    </div>
+    <div class="leads-add-title-container">
+      <h1 class="mb-0 fs-4 fw-bold">{{'sales-crm.leads-add-page.title' | translate}}</h1>
+    </div>
+  </div>
+
+  <!-- Bottom Container -->
+  <div class="bottom-container d-flex flex-column justify-content-start align-items-start gap-3">
+    <!-- Form Container -->
+    <form [formGroup]="addLeadForm"
+      class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-5 mt-4 p-5 bg-white">
+      <!-- Name Container -->
+      <div class="form-group w-100">
+        <label for="name">
+          {{'sales-crm.leads-add-page.name' | translate}}
+          <span class="" [class]="checkValidity('name')">*</span>
+        </label>
+        <input type="text" name="name" id="name" class="form-control"
+          placeholder="{{'sales-crm.leads-add-page.name' | translate}}" formControlName="name">
+        <!-- Name Error Message -->
+        <div class="error-message d-flex justify-content-start align-items-start">
+          @if (checkErrors('name')) {
+          <span class="text-danger">{{'sales-crm.leads-add-page.name-required' | translate}}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Service & Value Container -->
+      <div class="service-value-container d-flex justify-content-between align-items-start gap-3 w-100">
+        <!-- Service Container -->
+        <div class="form-group w-100">
+          <label for="service">
+            {{'sales-crm.leads-add-page.service' | translate}}
+          </label>
+          <input type="text" name="service" id="service" class="form-control"
+            placeholder="{{'sales-crm.leads-add-page.service' | translate}}" formControlName="service" list="services">
+          <datalist id="services">
+            <option value="Service 1">
+            <option value="Service 2">
+            <option value="Service 3">
+          </datalist>
+          <!-- Service Error Message -->
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('service')) {
+            <span class="text-danger">{{'sales-crm.leads-add-page.service-required' | translate}}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Value Container -->
+        <div class="form-group w-100">
+          <label for="value">
+            {{'sales-crm.leads-add-page.value' | translate}}
+            <span class="" [class]="checkValidity('value')">*</span>
+          </label>
+          <input type="text" name="value" id="value" class="form-control"
+            placeholder="{{'sales-crm.leads-add-page.value' | translate}}" formControlName="value">
+          <!-- Value Error Message -->
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('value')) {
+            <span class="text-danger">{{'sales-crm.leads-add-page.value-required' | translate}}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Source & Status Container -->
+      <div class="source-status-container d-flex justify-content-between align-items-start gap-3 w-100">
+        <!-- Source Container -->
+        <div class="form-group w-100">
+          <label for="source">
+            {{'sales-crm.leads-add-page.source' | translate}}
+            <span class="" [class]="checkValidity('source')">*</span>
+          </label>
+          <input type="text" name="source" id="source" class="form-control"
+            placeholder="{{'sales-crm.leads-add-page.source' | translate}}" formControlName="source">
+          <!-- Source Error Message -->
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('source')) {
+            <span class="text-danger">{{'sales-crm.leads-add-page.source-required' | translate}}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Status Container -->
+        <div class="form-group w-100">
+          <label for="status">
+            {{'sales-crm.leads-add-page.status' | translate}}
+            <span class="" [class]="checkValidity('status')">*</span>
+          </label>
+          <select name="status" id="status" class="form-select" formControlName="status">
+            <option selected disabled>{{'sales-crm.leads-add-page.select-status' | translate}}</option>
+            <option value="1">{{'sales-crm.leads-add-page.new' | translate}}</option>
+            <option value="2">{{'sales-crm.leads-add-page.in-progress' | translate}}</option>
+            <option value="3">{{'sales-crm.leads-add-page.qualified' | translate}}</option>
+            <option value="4">{{'sales-crm.leads-add-page.lost' | translate}}</option>
+          </select>
+          <!-- Status Error Message -->
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('status')) {
+            <span class="text-danger">{{'sales-crm.leads-add-page.status-required' | translate}}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Assigned To & Created Date Container -->
+      <div class="assigned-to-created-date-container d-flex justify-content-between align-items-start gap-3 w-100">
+        <!-- Assigned To Container -->
+        <div class="form-group w-100">
+          <label for="assignedTo">
+            {{'sales-crm.leads-add-page.assigned-to' | translate}}
+            <span class="" [class]="checkValidity('assignedTo')">*</span>
+          </label>
+          <input type="text" name="assignedTo" id="assignedTo" class="form-control"
+            placeholder="{{'sales-crm.leads-add-page.assigned-to' | translate}}" formControlName="assignedTo">
+          <!-- Assigned To Error Message -->
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('assignedTo')) {
+            <span class="text-danger">{{'sales-crm.leads-add-page.assigned-to-required' | translate}}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Created Date Container -->
+        <div class="form-group w-100">
+          <label for="createdDate">
+            {{'sales-crm.leads-add-page.created-date' | translate}}
+            <span class="" [class]="checkValidity('createdDate')">*</span>
+          </label>
+          <input type="date" name="createdDate" id="createdDate" class="form-control"
+            placeholder="{{'sales-crm.leads-add-page.created-date' | translate}}" formControlName="createdDate">
+          <!-- Created Date Error Message -->
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('createdDate')) {
+            <span class="text-danger">{{'sales-crm.leads-add-page.created-date-required' | translate}}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button Container -->
+      <div class="buttons-container w-100 d-flex justify-content-between align-items-center gap-3">
+        <!-- Cancel Button -->
+        <button type="button"
+          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          (click)="cancel()">
+          {{'sales-crm.leads-add-page.cancel' | translate}}
+        </button>
+
+        <!-- Save Button -->
+        <button type="submit"
+          class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          (click)="saveLead()">
+          {{'sales-crm.leads-add-page.save-lead' | translate}}
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+</div>

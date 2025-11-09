@@ -1,3 +1,14 @@
 <div class="container-fluid p-0 m-0">
-  <router-outlet></router-outlet>
+  <!-- Sales Agents CRM Container -->
+  <div class="sales-agents-crm-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+
+    <div class="sales-agents-top w-100">
+      <app-tabs-header [title]="'Sales Agents'" [cardsData]="cardsData" [folderName]="'salesAgents'"></app-tabs-header>
+    </div>
+
+    <div class="sales-agents-cards w-100">
+      <app-sales-agents-cards></app-sales-agents-cards>
+    </div>
+
+  </div>
 </div>

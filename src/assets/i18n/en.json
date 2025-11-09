@@ -91,5 +91,31 @@
     "add-customer-page": {
       "title": "Add Customer"
     }
+  },
+  "sales-crm": {
+    "leads-add-page": {
+      "title": "Add Lead",
+      "name": "Name",
+      "service": "Service",
+      "source": "Source",
+      "status": "Status",
+      "select-status": "Select Status",
+      "new": "New",
+      "in-progress": "In Progress",
+      "qualified": "Qualified",
+      "lost": "Lost",
+      "assigned-to": "Assigned To",
+      "value": "Value",
+      "created-date": "Created Date",
+      "save-lead": "Save Lead",
+      "cancel": "Cancel",
+      "name-required": "Name is required",
+      "service-required": "Service is required",
+      "source-required": "Source is required",
+      "status-required": "Status is required",
+      "assigned-to-required": "Assigned To is required",
+      "value-required": "Value is required",
+      "created-date-required": "Created Date is required"
+    }
   }
 }
