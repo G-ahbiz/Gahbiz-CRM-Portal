@@ -1,1 +1,32 @@
-<p>sales-agents-details works!</p>
+<div class="container-fluid p-0 m-0">
+  <div class="sales-agents-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+    <div class="sales-agents-details-top w-100 d-flex justify-content-start align-items-center gap-3">
+      <!-- Back Button -->
+      <div class="sales-agents-details-back-btn-container">
+        <button
+          class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
+          (click)="goBack()">
+          <i class="pi pi-chevron-left fs-875"></i>
+        </button>
+      </div>
+      <!-- Title -->
+      <div class="sales-agents-details-title-container">
+        <img src="assets/images/salesAgents/{{salesAgentsDetailsData.imageUrl}}"
+          alt="{{salesAgentsDetailsData.name}}" class="sales-agent-image">
+        <h1 class="mb-0 fs-4 fw-bold">{{ salesAgentsDetailsData.name }}</h1>
+        <p class="m-0 p-0 text-muted-clr fs-875">{{ salesAgentsDetailsData.profession }}</p>
+      </div>
+    </div>
+
+    <!-- Sales Agents Details Content -->
+    <div
+      class="sales-agents-details-content w-100 d-flex flex-column justify-content-start align-items-start gap-3 mt-4">
+      <!-- Sales Agents Details Top -->
+      <div class="sales-agents-details-top-container d-flex justify-content-between align-items-start gap-3 w-100">
+        <div
+          class="sales-agents-details-top-left-container d-flex flex-column justify-content-center align-items-start gap-2">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

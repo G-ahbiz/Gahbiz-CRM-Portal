@@ -1,19 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { AllData } from '../../../../../services/all-data';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { PopoverModule } from 'primeng/popover';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sales-agents-cards',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, PopoverModule],
   templateUrl: './sales-agents-cards.html',
   styleUrl: './sales-agents-cards.css',
 })
 export class SalesAgentsCards implements OnInit {
 
   @Input() dataCards: any[] = [];
-
-  constructor(private allData: AllData) { }
+  searchValue: string = '';
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  constructor(private allData: AllData, private router: Router) { }
 
   ngOnInit() {
     this.getDataCards()
@@ -24,6 +27,24 @@ export class SalesAgentsCards implements OnInit {
   }
 
   onSearchChange(value: string) {
-    console.log(value);
+    this.searchValue = value.trim().toLowerCase();
+    if (this.searchValue === '') {
+      this.getDataCards();
+      return;
+    } else {
+      let filteredCards = this.dataCards.filter(card => card.name?.toLowerCase().includes(this.searchValue));
+      this.dataCards = filteredCards;
+    }
+  }
+
+  clearSearch() {
+    this.searchValue = '';
+    this.searchInput.nativeElement.value = '';
+    this.getDataCards();
+  }
+
+  navigateToSalesAgent(id: number) {
+    sessionStorage.setItem('salesAgentId', id.toString());
+    this.router.navigate(['/main/sales/sales-agents/sales-agent-details']);
   }
 }

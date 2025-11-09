@@ -189,18 +189,66 @@ export class AllData {
   }
 
   salesAgentsDataCards: any[] = [
-    { id: 1, name: 'shawn stone', proffession: 'Sales Agent', status: 'Active', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 4, onHold: 2 },
-    { id: 2, name: 'randy delgado', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 3, onHold: 1 },
-    { id: 3, name: 'sarah williams', proffession: 'Sales Agent', status: 'Active', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 2, onHold: 2 },
-    { id: 4, name: 'jill doe', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 3, onHold: 5 },
-    { id: 5, name: 'david rodriguez', proffession: 'Sales Agent', status: 'Active', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 5, onHold: 1 },
-    { id: 6, name: 'emily johnson', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 1, onHold: 4 },
-    { id: 7, name: 'michael brown', proffession: 'Sales Agent', status: 'Active', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 2, onHold: 3 },
-    { id: 8, name: 'olivia davis', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'https://via.placeholder.com/150', totalLeads: 100, sucsess: 3, onHold: 3 },
+    { id: 1, name: 'shawn stone', proffession: 'Sales Agent', status: 'Active', imageUrl: 'photo1.svg', totalLeads: 100, sucess: 4, onHold: 2 },
+    { id: 2, name: 'randy delgado', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'photo2.svg', totalLeads: 100, sucess: 3, onHold: 1 },
+    { id: 3, name: 'shawn stone', proffession: 'Sales Agent', status: 'Active', imageUrl: 'photo1.svg', totalLeads: 100, sucess: 2, onHold: 2 },
+    { id: 4, name: 'randy delgado', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'photo2.svg', totalLeads: 100, sucess: 3, onHold: 5 },
+    { id: 5, name: 'shawn stone', proffession: 'Sales Agent', status: 'Active', imageUrl: 'photo1.svg', totalLeads: 100, sucess: 5, onHold: 1 },
+    { id: 6, name: 'randy delgado', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'photo2.svg', totalLeads: 100, sucess: 1, onHold: 4 },
+    { id: 7, name: 'shawn stone', proffession: 'Sales Agent', status: 'Active', imageUrl: 'photo1.svg', totalLeads: 100, sucess: 2, onHold: 3 },
+    { id: 8, name: 'randy delgado', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'photo2.svg', totalLeads: 100, sucess: 3, onHold: 3 },
   ]
 
   getSalesAgentsDataCards() {
     return this.salesAgentsDataCards;
+  }
+
+  salesAgentsDetailsData: any[] = [
+    { id: 1, name: 'shawn stone', proffession: 'Sales Agent', status: 'Active', imageUrl: 'photo1.svg', totalLeads: 100, sucess: 4, onHold: 2 },
+    { id: 2, name: 'randy delgado', proffession: 'Sales Agent', status: 'Inactive', imageUrl: 'photo2.svg', totalLeads: 100, sucess: 3, onHold: 1 }
+  ]
+
+  getSalesAgentsDetailsData() {
+    return this.salesAgentsDetailsData;
+  }
+
+  salesAgentsDetailsDataCards: CardsInterface[] = [
+    {
+      title: 'Total Leads',
+      value: 250,
+      icon: 'totalLeads',
+      bgColor: 'card-blue',
+      rating: 2,
+      ratingStatues: 'up'
+    },
+    {
+      title: 'Converted Leads',
+      value: 180,
+      icon: 'convertedLeads',
+      bgColor: 'card-green',
+      rating: 4,
+      ratingStatues: 'up',
+    },
+    {
+      title: 'Monthly Target',
+      value: 78,
+      icon: 'monthlyTarget',
+      bgColor: 'card-yellow',
+      rating: 1,
+      ratingStatues: 'down',
+    },
+    {
+      title: 'Revenue Achieved',
+      value: 248,
+      icon: 'revenueAchieved',
+      bgColor: 'card-red',
+      rating: 2,
+      ratingStatues: 'down'
+    },
+  ]
+
+  getSalesAgentsDetailsDataCards() {
+    return this.salesAgentsDetailsDataCards;
   }
 
   // Leads Data
