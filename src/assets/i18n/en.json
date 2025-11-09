@@ -116,6 +116,12 @@
       "assigned-to-required": "Assigned To is required",
       "value-required": "Value is required",
       "created-date-required": "Created Date is required"
+    },
+    "sales-agents-cards": {
+      "assign-task": "Assign Task",
+      "add-sales-agent": "Add Sales Agent",
+      "sort": "Sort",
+      "search": "Search By Name"
     }
   }
 }
