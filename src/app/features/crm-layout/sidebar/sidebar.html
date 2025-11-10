@@ -26,7 +26,7 @@
       <ul class="list-unstyled">
         <!-- Dashboard -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/dashboard" routerLinkActive="active">
-          <button type="button"
+          <button type="button" (click)="checkSalesActive()"
             class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
             <img src="assets/images/sidebar/dashboard.svg" alt="Dashboard" class="sidebar-icon">
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.dashboard' | translate }}</span>
@@ -35,7 +35,7 @@
 
         <!-- Customers -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/customers" routerLinkActive="active">
-          <button type="button"
+          <button type="button" (click)="checkSalesActive()"
             class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
             <img src="assets/images/sidebar/customers.svg" alt="customers" class="sidebar-icon">
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.customers' | translate }}</span>
@@ -58,7 +58,7 @@
           <ul class="list-unstyled" [class]="isSalesActive() ? 'px-75' : 'hide'" [class.px-75]="!isSidebarCollapsed()">
             <!-- Leads -->
             <li class="sales-leads w-100 p-75 rounded-3" routerLink="/main/sales/leads" routerLinkActive="active">
-              <button type="button"
+              <button type="button" (click)="toggleLeadsActive()"
                 class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color">
                 <img src="assets/images/sidebar/leads.svg" alt="leads" class="sidebar-icon">
                 <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.leads' | translate }}</span>
@@ -67,7 +67,7 @@
             <!-- Sales Agents -->
             <li class="sales-agents w-100 p-75 rounded-3" routerLink="/main/sales/sales-agents"
               routerLinkActive="active">
-              <button type="button"
+              <button type="button" (click)="toggleSalesAgentsActive()"
                 class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color">
                 <img src="assets/images/sidebar/salesAgent.svg" alt="sales-agents" class="sidebar-icon">
                 <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.sales-agents' | translate }}</span>
@@ -78,7 +78,7 @@
 
         <!-- Invoices -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/invoices" routerLinkActive="active">
-          <button type="button"
+          <button type="button" (click)="checkSalesActive()"
             class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
             <img src="assets/images/sidebar/invoices.svg" alt="invoices" class="sidebar-icon">
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.invoices' | translate }}</span>
@@ -87,7 +87,7 @@
 
         <!-- Orders -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/orders" routerLinkActive="active">
-          <button type="button"
+          <button type="button" (click)="checkSalesActive()"
             class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
             <img src="assets/images/sidebar/orders.svg" alt="orders" class="sidebar-icon">
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.orders' | translate }}</span>
@@ -96,7 +96,7 @@
 
         <!-- Reports -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/reports" routerLinkActive="active">
-          <button type="button"
+          <button type="button" (click)="checkSalesActive()"
             class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
             <img src="assets/images/sidebar/reports.svg" alt="reports" class="sidebar-icon">
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.reports' | translate }}</span>
@@ -105,7 +105,7 @@
 
         <!-- Settings -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/settings" routerLinkActive="active">
-          <button type="button"
+          <button type="button" (click)="checkSalesActive()"
             class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
             <img src="assets/images/sidebar/settings.svg" alt="settings" class="sidebar-icon">
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.settings' | translate }}</span>

@@ -3,10 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { AllData } from '../../../../../services/all-data';
 import { CardsInterface, SalesAgents } from '../../../../../services/interfaces/all-interfaces';
+import { TabsHeader } from "../../../../../shared/tabs-header/tabs-header";
+import { SalesAgentsTabel } from "../sales-agents-tabel/sales-agents-tabel";
 
 @Component({
   selector: 'app-sales-agents-details',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, TabsHeader, SalesAgentsTabel],
   templateUrl: './sales-agents-details.html',
   styleUrl: './sales-agents-details.css',
 })
