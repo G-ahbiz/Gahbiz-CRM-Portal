@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LeadSummary } from '../../interfaces/lead-summary';
-import { ApiResponse } from '../../../../core/interfaces/api-response';
-import { environment } from '../../../../../environments/environment.development';
+import { ApiResponse } from '@core/interfaces/api-response';
+import { environment } from '@env/environment.development';
 
 @Injectable({
   providedIn: 'root',
@@ -24,5 +24,10 @@ export class LeadsApiService {
         assignedTo: assignedTo ? assignedTo : '',
       },
     });
+  }
+
+  deleteLead(id: string): Observable<ApiResponse<any>> {
+    const deleteLeadUrl = `${this.baseApi}${environment.leads.deleteLead(id)}`;
+    return this.httpClient.delete<ApiResponse<any>>(deleteLeadUrl);
   }
 }

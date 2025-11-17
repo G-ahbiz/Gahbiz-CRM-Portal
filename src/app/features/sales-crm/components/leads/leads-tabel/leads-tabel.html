@@ -2,7 +2,7 @@
   <div class="card border-0 bg-transparent">
     <p-table
       #dt1
-      [value]="leadsData"
+      [value]="leadsData()"
       dataKey="id"
       sortField="id"
       [sortOrder]="1"
@@ -14,6 +14,15 @@
       [lazy]="true"
       (onPage)="onPageChange($event)"
       [loading]="loading()"
+      [globalFilterFields]="[
+        'firstName',
+        'lasttName',
+        'servicesOfInterest',
+        'status',
+        'sourceName',
+        'assignedTo',
+        'creadtedAt'
+      ]"
     >
       <ng-template #caption>
         <div class="d-flex justify-content-between align-items-center">
@@ -162,7 +171,7 @@
             <button class="btn btn-sm" (click)="editLead(lead.id); $event.stopPropagation()">
               <i class="pi pi-pencil"></i>
             </button>
-            <button class="btn btn-sm" (click)="deleteLead(lead.id); $event.stopPropagation()">
+            <button class="btn btn-sm" (click)="onDeleteLead(lead.id); $event.stopPropagation()">
               <i class="pi pi-trash"></i>
             </button>
           </td>

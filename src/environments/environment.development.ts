@@ -3,5 +3,6 @@ export const environment = {
 
   leads: {
     getLeads: 'leads',
+    deleteLead: (id: string) => `leads/${id}`,
   },
 };

@@ -17,4 +17,8 @@ export class LeadsFacadeService {
   ): Observable<ApiResponse<LeadSummary>> {
     return this.leadsService.getAllLeads(pageNumber, pageSize, assignedTo);
   }
+
+  deleteLead(id: string): Observable<ApiResponse<any>> {
+    return this.leadsService.deleteLead(id);
+  }
 }

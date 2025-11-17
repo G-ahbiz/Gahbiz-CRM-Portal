@@ -1,4 +1,14 @@
-import { Component, ElementRef, inject, OnInit, OnDestroy, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  OnDestroy,
+  signal,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Table } from 'primeng/table';
@@ -48,7 +58,7 @@ export const leadsTabelHeader: readonly string[] = [
 export class LeadsTabel implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
   loading = signal<boolean>(true);
-  leadsData: LeadSummaryItem[] = [];
+  leadsData = signal<LeadSummaryItem[]>([]);
   leadsTabelHeader: readonly string[] = leadsTabelHeader;
   activityValues: number[] = [0, 100];
 
@@ -100,7 +110,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response.succeeded) {
-            this.leadsData = response.data.items || [];
+            this.leadsData.set(response.data.items || []);
             this.totalRecords = response.data.totalCount || 0;
             this.pageNumber = response.data.pageNumber || 1;
             this.totalPages = response.data.totalPages || 0;
@@ -109,9 +119,28 @@ export class LeadsTabel implements OnInit, OnDestroy {
           }
         },
         error: (error: any) => {
-          this.toast.error(error.message || 'An error occurred while fetching leads');
+          console.error(error.message || 'An error occurred while fetching leads');
         },
       });
+  }
+
+  onDeleteLead(id: string) {
+    this.loading.set(true);
+    this.leadsFacadeService.deleteLead(id).subscribe({
+      next: (response) => {
+        if (response.succeeded) {
+          this.loadLeads(this.pageNumber, this.pageSize, this.searchValue());
+        } else {
+          this.toast.error(response.message);
+        }
+      },
+      error: (error) => {
+        console.error(error.message || 'An error occurred while fetching leads');
+      },
+      complete: () => {
+        this.loading.set(false);
+      },
+    });
   }
 
   onPageChange(event: any) {
@@ -163,11 +192,6 @@ export class LeadsTabel implements OnInit, OnDestroy {
   }
 
   editLead(id: number) {
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
-    this.router.navigate(['/main/sales/leads/add-lead']);
-  }
-
-  deleteLead(id: number) {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
     this.router.navigate(['/main/sales/leads/add-lead']);
   }
