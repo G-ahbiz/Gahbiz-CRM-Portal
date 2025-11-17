@@ -35,4 +35,11 @@ export class LeadsFacadeService {
   deleteLead(id: string): Observable<ApiResponse<any>> {
     return this.leadsService.deleteLead(id);
   }
+
+  exportLeads(leadIds: string[]): Observable<Blob> {
+    return this.leadsService.exportLeads(leadIds);
+  }
+  importLeads(file: FormData): Observable<ApiResponse<any>> {
+    return this.leadsService.importLeads(file);
+  }
 }

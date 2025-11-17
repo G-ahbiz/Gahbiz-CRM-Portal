@@ -25,6 +25,7 @@ import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-fac
 import { ApiResponse } from '@core/interfaces/api-response';
 import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { ToastService } from '@core/services/toast.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
@@ -50,6 +51,7 @@ export const leadsTabelHeader: readonly string[] = [
     IconFieldModule,
     InputIconModule,
     RouterLink,
+    TranslateModule,
   ],
   templateUrl: './leads-tabel.html',
   styleUrl: './leads-tabel.css',
@@ -59,6 +61,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
   loading = signal<boolean>(true);
   leadsData = signal<LeadSummaryItem[]>([]);
+  selectedLeads = signal<string[]>([]);
   leadsTabelHeader: readonly string[] = leadsTabelHeader;
   activityValues: number[] = [0, 100];
 
@@ -170,26 +173,37 @@ export class LeadsTabel implements OnInit, OnDestroy {
   onSelectAll(event: Event) {
     const checkbox = event.target as HTMLInputElement;
     this.isAllSelected = checkbox.checked;
-
     // Update selection state for all visible leads on current page
-    // this.leadsData.forEach((lead) => {
-    //   lead.selected = this.isAllSelected;
-    // });
+    this.leadsData().forEach((lead) => {
+      lead.selected = this.isAllSelected;
+    });
+    if (this.isAllSelected) {
+      this.selectedLeads.set(this.leadsData().map((lead) => lead.id.toString()));
+    } else {
+      this.selectedLeads.set([]);
+    }
   }
 
   toggleLeadSelection(lead: LeadSummaryItem) {
     lead.selected = !lead.selected;
+    if (lead.selected) {
+      this.selectedLeads.set([...this.selectedLeads(), lead.id.toString()]);
+    } else {
+      this.selectedLeads.set(
+        this.selectedLeads().filter((id: string) => id !== lead.id.toString())
+      );
+    }
     this.updateSelectAllState();
   }
 
   private updateSelectAllState() {
-    const currentPageLeads = this.leadsData;
+    const currentPageLeads = this.leadsData();
     if (currentPageLeads.length === 0) {
       this.isAllSelected = false;
       return;
     }
 
-    // this.isAllSelected = currentPageLeads.every((lead) => lead.selected);
+    this.isAllSelected = currentPageLeads.every((lead) => lead.selected);
   }
 
   viewLead(id: number) {
@@ -201,7 +215,43 @@ export class LeadsTabel implements OnInit, OnDestroy {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
     this.router.navigate(['/main/sales/leads/add-lead']);
   }
+  exportLeads() {
+    if (this.selectedLeads().length === 0) {
+      this.toast.error('Please select at least one lead to export');
+      return;
+    }
 
+    this.loading.set(true);
+    this.leadsFacadeService.exportLeads(this.selectedLeads()).subscribe({
+      next: (blob: Blob) => {
+        this.loading.set(false);
+
+        // Create a download link
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        // Set filename with timestamp
+        const timestamp = new Date().toISOString().slice(0, 10);
+        link.download = `leads-export-${timestamp}.xlsx`;
+
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        this.toast.success('Leads exported successfully');
+      },
+      error: (error) => {
+        this.loading.set(false);
+        this.toast.error('Failed to export leads');
+        console.error('Export error:', error);
+      },
+    });
+  }
   ngOnDestroy() {
     this.searchSubject.complete();
   }

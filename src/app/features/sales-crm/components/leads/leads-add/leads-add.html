@@ -1,19 +1,75 @@
 <div class="container-fluid p-0 m-0">
-  <!-- Top Container -->
-  <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
-    <div class="leads-add-back-btn-container">
+  <div class="leads-add-top-container w-100 d-flex justify-content-start align-items-center gap-3">
+    <!-- Top Container -->
+    <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
+      <div class="leads-add-back-btn-container">
+        <button
+          class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
+          (click)="back()"
+        >
+          <i class="pi pi-chevron-left fs-875"></i>
+        </button>
+      </div>
+      <div class="leads-add-title-container">
+        <h1 class="mb-0 fs-4 fw-bold">{{ 'sales-crm.leads-add-page.title' | translate }}</h1>
+      </div>
+    </div>
+    <div class="export-btn-container">
       <button
-        class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
-        (click)="back()"
+        class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+        (click)="showDialog()"
       >
-        <i class="pi pi-chevron-left fs-875"></i>
+        <i class="pi pi-upload fs-875"></i>
+        {{ 'sales-crm.leads-tabel.import' | translate }}
       </button>
     </div>
-    <div class="leads-add-title-container">
-      <h1 class="mb-0 fs-4 fw-bold">{{ 'sales-crm.leads-add-page.title' | translate }}</h1>
-    </div>
   </div>
-
+  <!-- Import Dialog -->
+  <p-dialog header="Import Leads" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
+    <div class="d-flex flex-column gap-3">
+      <span class="text-secondary">Import leads from an Excel or CSV file.</span>
+      <div class="form-group">
+        <label for="fileInput" class="form-label">Select File</label>
+        <input
+          type="file"
+          #fileInput
+          id="fileInput"
+          class="form-control"
+          accept=".xlsx,.xls,.csv"
+          (change)="onFileSelected($event)"
+        />
+        <small class="text-muted">only .xlsx (Microsoft Excel) files are supported.</small>
+      </div>
+      @if (selectedFileName()) {
+      <div class="alert alert-info py-2">
+        <i class="pi pi-file me-2"></i>
+        <span>{{ selectedFileName() }}</span>
+      </div>
+      }
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="closeDialog()"
+        [disabled]="isImporting()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="importLeads()"
+        [disabled]="!selectedFile() || isImporting()"
+      >
+        @if (!isImporting()) {
+        <span><i class="pi pi-upload me-2"></i>Import</span>
+        } @else {
+        <span><i class="pi pi-spin pi-spinner me-2"></i>Importing...</span>
+        }
+      </button>
+    </div>
+  </p-dialog>
   <!-- Bottom Container -->
   <div class="bottom-container d-flex flex-column justify-content-start align-items-start gap-3">
     <!-- Form Container -->
@@ -417,10 +473,11 @@
           (click)="saveLead()"
           [disabled]="isSubmitting()"
         >
-          <span *ngIf="!isSubmitting()">{{
-            'sales-crm.leads-add-page.save-lead' | translate
-          }}</span>
-          <span *ngIf="isSubmitting()">Saving...</span>
+          @if (!isSubmitting()) {
+          <span>{{ 'sales-crm.leads-add-page.save-lead' | translate }}</span>
+          } @else {
+          <span>Saving...</span>
+          }
         </button>
       </div>
     </form>

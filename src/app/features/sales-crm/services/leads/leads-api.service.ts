@@ -48,4 +48,19 @@ export class LeadsApiService {
     const deleteLeadUrl = `${this.baseApi}${environment.leads.deleteLead(id)}`;
     return this.httpClient.delete<ApiResponse<any>>(deleteLeadUrl);
   }
+
+  exportLeads(leadIds: string[]): Observable<Blob> {
+    const exportLeadsUrl = `${this.baseApi}${environment.leads.exportLeads}`;
+    return this.httpClient.post<Blob>(
+      exportLeadsUrl,
+      { leadIds },
+      { responseType: 'blob' as 'json' }
+    );
+  }
+
+  importLeads(ExcelFile: FormData): Observable<ApiResponse<any>> {
+    console.log(ExcelFile.get('file'));
+    const importLeadsUrl = `${this.baseApi}${environment.leads.importLeads}`;
+    return this.httpClient.post<ApiResponse<any>>(importLeadsUrl, ExcelFile as FormData);
+  }
 }

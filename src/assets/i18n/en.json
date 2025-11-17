@@ -122,6 +122,10 @@
       "add-sales-agent": "Add Sales Agent",
       "sort": "Sort",
       "search": "Search By Name"
+    },
+    "leads-tabel": {
+      "export": "Export",
+      "import": "Import"
     }
   }
 }

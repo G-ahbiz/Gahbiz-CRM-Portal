@@ -14,5 +14,31 @@
     "english": "Inglés",
     "arabic": "Árabe",
     "spanish": "Español"
+  },
+  "sales-crm": {
+    "leads-add-page": {
+      "title": "Agregar Lead",
+      "name": "Nombre",
+      "service": "Servicio",
+      "source": "Origen",
+      "status": "Estado",
+      "select-status": "Seleccionar Estado",
+      "new": "Nuevo",
+      "in-progress": "In Progress",
+      "qualified": "Calificado",
+      "lost": "Perdido",
+      "assigned-to": "Asignado a",
+      "value": "Valor",
+      "created-date": "Fecha de Creación",
+      "save-lead": "Guardar Lead",
+      "cancel": "Cancelar",
+      "name-required": "Nombre es requerido",
+      "service-required": "Servicio es requerido",
+      "source-required": "Origen es requerido",
+      "status-required": "Estado es requerido",
+      "assigned-to-required": "Asignado a es requerido",
+      "value-required": "Valor es requerido",
+      "created-date-required": "Fecha de Creación es requerida"
+    }
   }
 }

@@ -13,10 +13,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
 import { ToastService } from '@core/services/toast.service';
 import { Router } from '@angular/router';
-
+import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-leads-add',
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DialogModule],
   templateUrl: './leads-add.html',
   styleUrl: './leads-add.css',
 })
@@ -26,6 +26,12 @@ export class LeadsAdd {
   private toastService = inject(ToastService);
   private router = inject(Router);
   isSubmitting = signal<boolean>(false);
+  visible = signal<boolean>(false);
+
+  // Import file state
+  selectedFile = signal<File | null>(null);
+  selectedFileName = signal<string>('');
+  isImporting = signal<boolean>(false);
 
   constructor(private fb: FormBuilder) {
     this.addLeadForm = this.fb.group(
@@ -218,6 +224,64 @@ export class LeadsAdd {
     });
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.selectedFile.set(file);
+      this.selectedFileName.set(file.name);
+    }
+  }
+
+  importLeads() {
+    const file = this.selectedFile();
+    if (!file) {
+      this.toastService.error('Please select a file to import');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    ];
+
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
+      this.toastService.error('Invalid file type. Please upload an Excel or CSV file');
+      return;
+    }
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('ExcelFile', file);
+
+    this.isImporting.set(true);
+
+    this.leadsFacadeService.importLeads(formData).subscribe({
+      next: (response) => {
+        this.isImporting.set(false);
+        if (response.succeeded) {
+          this.toastService.success(response.message || 'Leads imported successfully');
+          this.closeDialog();
+          // Optionally refresh the leads table or navigate
+          // this.router.navigate(['/main/sales/leads/leads-main']);
+        } else {
+          this.toastService.error(response.message || 'Failed to import leads');
+        }
+      },
+      error: (error) => {
+        this.isImporting.set(false);
+        this.toastService.error(error?.error?.message || 'Failed to import leads');
+        console.error('Import error:', error);
+      },
+    });
+  }
+
+  closeDialog() {
+    this.visible.set(false);
+    this.selectedFile.set(null);
+    this.selectedFileName.set('');
+  }
+
   private convertToFormData(formValue: any): FormData {
     const formData = new FormData();
 
@@ -240,6 +304,10 @@ export class LeadsAdd {
     });
 
     return formData;
+  }
+
+  showDialog() {
+    this.visible.set(true);
   }
 
   cancel() {

@@ -14,5 +14,31 @@
     "english": "الانجليزية",
     "arabic": "العربية",
     "spanish": "الاسبانية"
+  },
+  "sales-crm": {
+    "leads-add-page": {
+      "title": "اضافة العميل",
+      "name": "الاسم",
+      "service": "الخدمة",
+      "source": "المصدر",
+      "status": "الحالة",
+      "select-status": "اختر الحالة",
+      "new": "جديد",
+      "in-progress": "قيد التنفيذ",
+      "qualified": "مؤهل",
+      "lost": "مفقود",
+      "assigned-to": "معين ل",
+      "value": "القيمة",
+      "created-date": "تاريخ الانشاء",
+      "save-lead": "اضافة العميل",
+      "cancel": "الغاء",
+      "name-required": "الاسم مطلوب",
+      "service-required": "الخدمة مطلوبة",
+      "source-required": "المصدر مطلوب",
+      "status-required": "الحالة مطلوبة",
+      "assigned-to-required": "معين ل مطلوب",
+      "value-required": "القيمة مطلوبة",
+      "created-date-required": "تاريخ الانشاء مطلوب"
+    }
   }
 }
