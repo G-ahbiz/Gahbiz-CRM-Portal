@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, OnDestroy, signal, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Table } from 'primeng/table';
@@ -7,8 +7,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterLink } from '@angular/router';
+import { finalize, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { AllData } from '../../../../../services/all-data';
 import { Leads } from '../../../interfaces/leads';
+import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
+import { ApiResponse } from '@core/interfaces/api-response';
+import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
+import { ToastService } from '@core/services/toast.service';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
@@ -39,35 +45,91 @@ export const leadsTabelHeader: readonly string[] = [
   styleUrl: './leads-tabel.css',
   providers: [AllData],
 })
-export class LeadsTabel implements OnInit {
+export class LeadsTabel implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
-  loading: boolean = true;
-  leadsData: Leads[] = [];
+  loading = signal<boolean>(true);
+  leadsData: LeadSummaryItem[] = [];
   leadsTabelHeader: readonly string[] = leadsTabelHeader;
-
   activityValues: number[] = [0, 100];
 
-  searchValue: string = '';
+  private readonly leadsFacadeService = inject(LeadsFacadeService);
+  private readonly toast = inject(ToastService);
+  private readonly router = inject(Router);
+  searchValue = signal<string>('');
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   // Selection state
   isAllSelected: boolean = false;
 
-  constructor(private allData: AllData, private router: Router) {}
+  // Pagination state
+  totalRecords: number = 0;
+  pageNumber: number = 1;
+  pageSize: number = 10;
+  totalPages: number = 0;
+
+  // Search state
+  private searchSubject = new Subject<string>();
 
   ngOnInit() {
-    this.getLeadsData();
+    this.setupSearchSubscription();
+    this.loadLeads();
   }
 
-  getLeadsData() {
-    this.leadsData = this.allData.getLeadsTabelData();
-    this.loading = false;
+  private setupSearchSubscription() {
+    this.searchSubject
+      .pipe(
+        debounceTime(300), // Wait 300ms after user stops typing
+        distinctUntilChanged() // Only emit if value changed
+      )
+      .subscribe((searchValue) => {
+        this.searchValue.set(searchValue);
+        this.pageNumber = 1;
+        this.loadLeads(this.pageNumber, this.pageSize, searchValue);
+      });
+  }
+
+  loadLeads(
+    pageNumber: number = this.pageNumber,
+    pageSize: number = this.pageSize,
+    searchValue: string = this.searchValue()
+  ) {
+    this.loading.set(true);
+    this.leadsFacadeService
+      .getAllLeads(pageNumber, pageSize, searchValue)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded) {
+            this.leadsData = response.data.items || [];
+            this.totalRecords = response.data.totalCount || 0;
+            this.pageNumber = response.data.pageNumber || 1;
+            this.totalPages = response.data.totalPages || 0;
+          } else {
+            this.toast.error(response.message);
+          }
+        },
+        error: (error: any) => {
+          this.toast.error(error.message || 'An error occurred while fetching leads');
+        },
+      });
+  }
+
+  onPageChange(event: any) {
+    this.pageNumber = event.page + 1; // PrimeNG uses 0-based index
+    this.pageSize = event.rows;
+    this.loadLeads(this.pageNumber, this.pageSize);
+  }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value); // Emit to subject instead of calling loadLeads directly
   }
 
   clear(table: Table) {
-    this.searchValue = '';
+    this.searchValue.set('');
     this.searchInput.nativeElement.value = '';
     table.clear();
+    this.loadLeads(this.pageNumber, this.pageSize, this.searchValue());
   }
 
   onSelectAll(event: Event) {
@@ -75,12 +137,12 @@ export class LeadsTabel implements OnInit {
     this.isAllSelected = checkbox.checked;
 
     // Update selection state for all visible leads on current page
-    this.leadsData.forEach((lead) => {
-      lead.selected = this.isAllSelected;
-    });
+    // this.leadsData.forEach((lead) => {
+    //   lead.selected = this.isAllSelected;
+    // });
   }
 
-  toggleLeadSelection(lead: Leads) {
+  toggleLeadSelection(lead: LeadSummaryItem) {
     lead.selected = !lead.selected;
     this.updateSelectAllState();
   }
@@ -92,7 +154,7 @@ export class LeadsTabel implements OnInit {
       return;
     }
 
-    this.isAllSelected = currentPageLeads.every((lead) => lead.selected);
+    // this.isAllSelected = currentPageLeads.every((lead) => lead.selected);
   }
 
   viewLead(id: number) {
@@ -108,5 +170,9 @@ export class LeadsTabel implements OnInit {
   deleteLead(id: number) {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
     this.router.navigate(['/main/sales/leads/add-lead']);
+  }
+
+  ngOnDestroy() {
+    this.searchSubject.complete();
   }
 }
