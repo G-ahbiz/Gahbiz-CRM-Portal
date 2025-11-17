@@ -94,7 +94,13 @@ export class LeadsTabel implements OnInit, OnDestroy {
       .subscribe((searchValue) => {
         this.searchValue.set(searchValue);
         this.pageNumber = 1;
-        this.loadLeads(this.pageNumber, this.pageSize, searchValue);
+        this.leadsFacadeService.searchLeads(this.pageNumber, this.pageSize, searchValue).subscribe({
+          next: (response) => {
+            if (response.succeeded) {
+              this.leadsData.set(response.data.items || []);
+            }
+          },
+        });
       });
   }
 

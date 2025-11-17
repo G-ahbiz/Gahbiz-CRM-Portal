@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { LeadsApiService } from './leads-api.service';
 import { ApiResponse } from '@core/interfaces/api-response';
-import { LeadSummary } from '@features/sales-crm/interfaces/lead-summary';
+import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { Observable } from 'rxjs';
+import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,19 @@ export class LeadsFacadeService {
     assignedTo: string = ''
   ): Observable<ApiResponse<LeadSummary>> {
     return this.leadsService.getAllLeads(pageNumber, pageSize, assignedTo);
+  }
+
+  searchLeads(
+    pageNumber: number = 1,
+    pageSize: number = 10,
+    query: string = ''
+  ): Observable<ApiResponse<LeadSummary>> {
+    return this.leadsService.searchLeads(pageNumber, pageSize, query);
+  }
+
+  addLead(addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
+    console.log(addLeadRequest);
+    return this.leadsService.addLead(addLeadRequest);
   }
 
   deleteLead(id: string): Observable<ApiResponse<any>> {

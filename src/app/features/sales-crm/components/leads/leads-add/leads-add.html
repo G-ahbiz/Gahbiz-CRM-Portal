@@ -1,171 +1,428 @@
 <div class="container-fluid p-0 m-0">
-
   <!-- Top Container -->
   <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
     <div class="leads-add-back-btn-container">
-      <button class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
-        (click)="back()">
+      <button
+        class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
+        (click)="back()"
+      >
         <i class="pi pi-chevron-left fs-875"></i>
       </button>
     </div>
     <div class="leads-add-title-container">
-      <h1 class="mb-0 fs-4 fw-bold">{{'sales-crm.leads-add-page.title' | translate}}</h1>
+      <h1 class="mb-0 fs-4 fw-bold">{{ 'sales-crm.leads-add-page.title' | translate }}</h1>
     </div>
   </div>
 
   <!-- Bottom Container -->
   <div class="bottom-container d-flex flex-column justify-content-start align-items-start gap-3">
     <!-- Form Container -->
-    <form [formGroup]="addLeadForm"
-      class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-5 mt-4 p-5 bg-white">
-      <!-- Name Container -->
-      <div class="form-group w-100">
-        <label for="name">
-          {{'sales-crm.leads-add-page.name' | translate}}
-          <span class="" [class]="checkValidity('name')">*</span>
-        </label>
-        <input type="text" name="name" id="name" class="form-control"
-          placeholder="{{'sales-crm.leads-add-page.name' | translate}}" formControlName="name">
-        <!-- Name Error Message -->
-        <div class="error-message d-flex justify-content-start align-items-start">
-          @if (checkErrors('name')) {
-          <span class="text-danger">{{'sales-crm.leads-add-page.name-required' | translate}}</span>
-          }
+    <form
+      [formGroup]="addLeadForm"
+      class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-5 mt-4 p-5 bg-white"
+    >
+      <!-- Personal Information Section -->
+      <div class="w-100">
+        <h5 class="mb-3 fw-bold">Personal Information</h5>
+
+        <!-- First Name & Last Name Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- First Name Container -->
+          <div class="form-group w-100">
+            <label for="firstName">
+              First Name
+              <span class="" [class]="checkValidity('firstName')">*</span>
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              id="firstName"
+              class="form-control"
+              placeholder="First Name"
+              formControlName="firstName"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('firstName')) {
+              <span class="text-danger">{{ getErrorMessage('firstName') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Last Name Container -->
+          <div class="form-group w-100">
+            <label for="lastName">
+              Last Name
+              <span class="" [class]="checkValidity('lastName')">*</span>
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              class="form-control"
+              placeholder="Last Name"
+              formControlName="lastName"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('lastName')) {
+              <span class="text-danger">{{ getErrorMessage('lastName') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Email & Phone Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Email Container -->
+          <div class="form-group w-100">
+            <label for="email">
+              Email
+              <span class="" [class]="checkValidity('eMail')">*</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="form-control"
+              placeholder="email@example.com"
+              formControlName="eMail"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('eMail')) {
+              <span class="text-danger">{{ getErrorMessage('email') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Phone Container -->
+          <div class="form-group w-100">
+            <label for="phone">
+              Phone
+              <span class="" [class]="checkValidity('phone')">*</span>
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              class="form-control"
+              placeholder="Phone Number"
+              formControlName="phone"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('phone')) {
+              <span class="text-danger">{{ getErrorMessage('phone') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- SSN & Gender Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- SSN Container -->
+          <div class="form-group w-100">
+            <label for="ssn"> SSN </label>
+            <input
+              type="text"
+              name="ssn"
+              id="ssn"
+              class="form-control"
+              placeholder="XXX-XX-XXXX"
+              formControlName="ssn"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('ssn')) {
+              <span class="text-danger">{{ getErrorMessage('ssn') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Gender Container -->
+          <div class="form-group w-100">
+            <label for="gender"> Gender </label>
+            <select name="gender" id="gender" class="form-select" formControlName="gender">
+              <option value="" selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="PreferNotToSay">Prefer not to say</option>
+            </select>
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('gender')) {
+              <span class="text-danger">{{ getErrorMessage('gender') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Date of Birth & Work At Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Date of Birth Container -->
+          <div class="form-group w-100">
+            <label for="dob"> Date of Birth </label>
+            <input type="date" name="dob" id="dob" class="form-control" formControlName="dob" />
+          </div>
+
+          <!-- Work At Container -->
+          <div class="form-group w-100">
+            <label for="workAt"> Work At </label>
+            <input
+              type="text"
+              name="workAt"
+              id="workAt"
+              class="form-control"
+              placeholder="Workplace"
+              formControlName="workAt"
+            />
+          </div>
         </div>
       </div>
 
-      <!-- Service & Value Container -->
-      <div class="service-value-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Service Container -->
-        <div class="form-group w-100">
-          <label for="service">
-            {{'sales-crm.leads-add-page.service' | translate}}
-          </label>
-          <input type="text" name="service" id="service" class="form-control"
-            placeholder="{{'sales-crm.leads-add-page.service' | translate}}" formControlName="service" list="services">
-          <datalist id="services">
-            <option value="Service 1">
-            <option value="Service 2">
-            <option value="Service 3">
-          </datalist>
-          <!-- Service Error Message -->
-          <div class="error-message d-flex justify-content-start align-items-start">
-            @if (checkErrors('service')) {
-            <span class="text-danger">{{'sales-crm.leads-add-page.service-required' | translate}}</span>
-            }
+      <!-- Location Information Section -->
+      <div class="w-100">
+        <h5 class="mb-3 fw-bold">Location Information</h5>
+
+        <!-- City & State Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- City Container -->
+          <div class="form-group w-100">
+            <label for="city"> City </label>
+            <input
+              type="text"
+              name="city"
+              id="city"
+              class="form-control"
+              placeholder="City"
+              formControlName="city"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('city')) {
+              <span class="text-danger">{{ getErrorMessage('city') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- State Container -->
+          <div class="form-group w-100">
+            <label for="state"> State </label>
+            <input
+              type="text"
+              name="state"
+              id="state"
+              class="form-control"
+              placeholder="State"
+              formControlName="state"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('state')) {
+              <span class="text-danger">{{ getErrorMessage('state') }}</span>
+              }
+            </div>
           </div>
         </div>
 
-        <!-- Value Container -->
-        <div class="form-group w-100">
-          <label for="value">
-            {{'sales-crm.leads-add-page.value' | translate}}
-            <span class="" [class]="checkValidity('value')">*</span>
-          </label>
-          <input type="text" name="value" id="value" class="form-control"
-            placeholder="{{'sales-crm.leads-add-page.value' | translate}}" formControlName="value">
-          <!-- Value Error Message -->
-          <div class="error-message d-flex justify-content-start align-items-start">
-            @if (checkErrors('value')) {
-            <span class="text-danger">{{'sales-crm.leads-add-page.value-required' | translate}}</span>
-            }
+        <!-- County & Zip Code Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- County Container -->
+          <div class="form-group w-100">
+            <label for="county"> County </label>
+            <input
+              type="text"
+              name="county"
+              id="county"
+              class="form-control"
+              placeholder="County"
+              formControlName="county"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('county')) {
+              <span class="text-danger">{{ getErrorMessage('county') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Zip Code Container -->
+          <div class="form-group w-100">
+            <label for="zipCode"> Zip Code </label>
+            <input
+              type="text"
+              name="zipCode"
+              id="zipCode"
+              class="form-control"
+              placeholder="Zip Code"
+              formControlName="zipCode"
+            />
+          </div>
+        </div>
+
+        <!-- Current City & From City Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Current City Container -->
+          <div class="form-group w-100">
+            <label for="currentCity"> Current City </label>
+            <input
+              type="text"
+              name="currentCity"
+              id="currentCity"
+              class="form-control"
+              placeholder="Current City"
+              formControlName="currentCity"
+            />
+          </div>
+
+          <!-- From City Container -->
+          <div class="form-group w-100">
+            <label for="fromCity"> From City </label>
+            <input
+              type="text"
+              name="fromCity"
+              id="fromCity"
+              class="form-control"
+              placeholder="From City"
+              formControlName="fromCity"
+            />
           </div>
         </div>
       </div>
 
-      <!-- Source & Status Container -->
-      <div class="source-status-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Source Container -->
-        <div class="form-group w-100">
-          <label for="source">
-            {{'sales-crm.leads-add-page.source' | translate}}
-            <span class="" [class]="checkValidity('source')">*</span>
-          </label>
-          <input type="text" name="source" id="source" class="form-control"
-            placeholder="{{'sales-crm.leads-add-page.source' | translate}}" formControlName="source">
-          <!-- Source Error Message -->
-          <div class="error-message d-flex justify-content-start align-items-start">
-            @if (checkErrors('source')) {
-            <span class="text-danger">{{'sales-crm.leads-add-page.source-required' | translate}}</span>
-            }
+      <!-- Lead Information Section -->
+      <div class="w-100">
+        <h5 class="mb-3 fw-bold">Lead Information</h5>
+
+        <!-- Status & Source Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Status Container -->
+          <div class="form-group w-100">
+            <label for="status"> Status </label>
+            <select name="status" id="status" class="form-select" formControlName="status">
+              <option value="" selected>Select Status</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Qualified">Qualified</option>
+              <option value="Converted">Converted</option>
+              <option value="Lost">Lost</option>
+            </select>
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('status')) {
+              <span class="text-danger">{{ getErrorMessage('status') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Source Container -->
+          <div class="form-group w-100">
+            <label for="source"> Source </label>
+            <input
+              type="text"
+              name="source"
+              id="source"
+              class="form-control"
+              placeholder="Lead Source"
+              formControlName="source"
+            />
           </div>
         </div>
 
-        <!-- Status Container -->
-        <div class="form-group w-100">
-          <label for="status">
-            {{'sales-crm.leads-add-page.status' | translate}}
-            <span class="" [class]="checkValidity('status')">*</span>
-          </label>
-          <select name="status" id="status" class="form-select" formControlName="status">
-            <option selected disabled>{{'sales-crm.leads-add-page.select-status' | translate}}</option>
-            <option value="1">{{'sales-crm.leads-add-page.new' | translate}}</option>
-            <option value="2">{{'sales-crm.leads-add-page.in-progress' | translate}}</option>
-            <option value="3">{{'sales-crm.leads-add-page.qualified' | translate}}</option>
-            <option value="4">{{'sales-crm.leads-add-page.lost' | translate}}</option>
-          </select>
-          <!-- Status Error Message -->
-          <div class="error-message d-flex justify-content-start align-items-start">
-            @if (checkErrors('status')) {
-            <span class="text-danger">{{'sales-crm.leads-add-page.status-required' | translate}}</span>
-            }
+        <!-- Source Name & Parent ID Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Source Name Container -->
+          <div class="form-group w-100">
+            <label for="sourceName"> Source Name </label>
+            <input
+              type="text"
+              name="sourceName"
+              id="sourceName"
+              class="form-control"
+              placeholder="Source Name"
+              formControlName="sourceName"
+            />
           </div>
-        </div>
-      </div>
 
-      <!-- Assigned To & Created Date Container -->
-      <div class="assigned-to-created-date-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Assigned To Container -->
-        <div class="form-group w-100">
-          <label for="assignedTo">
-            {{'sales-crm.leads-add-page.assigned-to' | translate}}
-            <span class="" [class]="checkValidity('assignedTo')">*</span>
-          </label>
-          <input type="text" name="assignedTo" id="assignedTo" class="form-control"
-            placeholder="{{'sales-crm.leads-add-page.assigned-to' | translate}}" formControlName="assignedTo">
-          <!-- Assigned To Error Message -->
-          <div class="error-message d-flex justify-content-start align-items-start">
-            @if (checkErrors('assignedTo')) {
-            <span class="text-danger">{{'sales-crm.leads-add-page.assigned-to-required' | translate}}</span>
-            }
+          <!-- Parent ID Container -->
+          <div class="form-group w-100">
+            <label for="parentId"> Parent ID </label>
+            <input
+              type="text"
+              name="parentId"
+              id="parentId"
+              class="form-control"
+              placeholder="Parent ID"
+              formControlName="parentId"
+            />
           </div>
         </div>
 
-        <!-- Created Date Container -->
-        <div class="form-group w-100">
-          <label for="createdDate">
-            {{'sales-crm.leads-add-page.created-date' | translate}}
-            <span class="" [class]="checkValidity('createdDate')">*</span>
-          </label>
-          <input type="date" name="createdDate" id="createdDate" class="form-control"
-            placeholder="{{'sales-crm.leads-add-page.created-date' | translate}}" formControlName="createdDate">
-          <!-- Created Date Error Message -->
-          <div class="error-message d-flex justify-content-start align-items-start">
-            @if (checkErrors('createdDate')) {
-            <span class="text-danger">{{'sales-crm.leads-add-page.created-date-required' | translate}}</span>
-            }
+        <!-- User ID & Services of Interest Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- User ID Container -->
+          <div class="form-group w-100">
+            <label for="userId"> Assigned User ID </label>
+            <input
+              type="text"
+              name="userId"
+              id="userId"
+              class="form-control"
+              placeholder="User ID"
+              formControlName="userId"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('userId')) {
+              <span class="text-danger">{{ getErrorMessage('userId') }}</span>
+              }
+            </div>
           </div>
+
+          <!-- Services of Interest Container -->
+          <div class="form-group w-100">
+            <label for="servicesOfInterest"> Services of Interest </label>
+            <input
+              type="text"
+              name="servicesOfInterest"
+              id="servicesOfInterest"
+              class="form-control"
+              placeholder="Service 1, Service 2, ..."
+              formControlName="servicesOfInterest"
+            />
+            <small class="text-muted">Separate multiple services with commas</small>
+          </div>
+        </div>
+
+        <!-- Notes Container -->
+        <div class="form-group w-100">
+          <label for="notes"> Notes </label>
+          <textarea
+            name="notes"
+            id="notes"
+            class="form-control"
+            rows="4"
+            placeholder="Additional notes about the lead"
+            formControlName="notes"
+          ></textarea>
         </div>
       </div>
 
       <!-- Submit Button Container -->
       <div class="buttons-container w-100 d-flex justify-content-between align-items-center gap-3">
         <!-- Cancel Button -->
-        <button type="button"
+        <button
+          type="button"
           class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
-          (click)="cancel()">
-          {{'sales-crm.leads-add-page.cancel' | translate}}
+          (click)="cancel()"
+          [disabled]="isSubmitting()"
+        >
+          {{ 'sales-crm.leads-add-page.cancel' | translate }}
         </button>
 
         <!-- Save Button -->
-        <button type="submit"
+        <button
+          type="submit"
           class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
-          (click)="saveLead()">
-          {{'sales-crm.leads-add-page.save-lead' | translate}}
+          (click)="saveLead()"
+          [disabled]="isSubmitting()"
+        >
+          <span *ngIf="!isSubmitting()">{{
+            'sales-crm.leads-add-page.save-lead' | translate
+          }}</span>
+          <span *ngIf="isSubmitting()">Saving...</span>
         </button>
       </div>
     </form>
   </div>
-
-
 </div>

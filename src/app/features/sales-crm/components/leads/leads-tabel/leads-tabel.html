@@ -129,7 +129,7 @@
           <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
         </tr>
       </ng-template>
-      <ng-template #body let-lead>
+      <ng-template #body let-lead let-rowIndex="rowIndex">
         <tr>
           <td>
             <input
@@ -140,9 +140,11 @@
               (change)="toggleLeadSelection(lead)"
             />
           </td>
-          <td>{{ lead.id }}</td>
+          <td>{{ rowIndex + 1 }}</td>
           <td>{{ lead.firstName }} {{ lead.lasttName }}</td>
-          <td>{{ lead.servicesOfInterest?.join(', ') }}</td>
+          <td>
+            {{ lead.servicesOfInterest?.join(', ') }}
+          </td>
           <td>
             <span
               class="py-1 px-2 rounded-3"
