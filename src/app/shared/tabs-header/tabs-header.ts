@@ -11,6 +11,7 @@ import { CardsInterface } from '../../services/interfaces/all-interfaces';
 })
 export class TabsHeader implements OnInit {
 
+  @Input() icon: string = '';
   @Input() title: string = '';
   @Input() cardsData: CardsInterface[] = [];
   @Input() folderName: string = '';

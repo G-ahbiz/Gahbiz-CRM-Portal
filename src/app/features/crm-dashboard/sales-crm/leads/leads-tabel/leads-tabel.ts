@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 
 const SESSION_STORAGE_KEYS = {
@@ -27,7 +28,7 @@ export const leadsTabelHeader: readonly string[] = [
 ];
 @Component({
   selector: 'app-leads-tabel',
-  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, RouterLink],
+  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, RouterLink, TranslateModule],
   templateUrl: './leads-tabel.html',
   styleUrl: './leads-tabel.css',
   providers: [AllData]
