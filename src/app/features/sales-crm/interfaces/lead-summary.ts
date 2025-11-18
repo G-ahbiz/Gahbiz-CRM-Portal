@@ -10,12 +10,17 @@ export interface LeadSummary {
 export interface LeadSummaryItem {
   id: number;
   firstName: string;
-  lasttName: string;
+  lastName: string;
   servicesOfInterest: string[];
   status: string;
   sourceName: string;
-  assignedTo: string;
-  creadtedAt: string;
+  assignedTo?: AssignedTo;
+  createdAt: string;
   updatedAt: string;
   selected?: boolean;
+}
+
+export interface AssignedTo {
+  id: string;
+  fullName: string;
 }

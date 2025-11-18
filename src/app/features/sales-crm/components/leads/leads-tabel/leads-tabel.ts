@@ -8,6 +8,7 @@ import {
   ViewChild,
   OnChanges,
   SimpleChanges,
+  DestroyRef,
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -26,10 +27,16 @@ import { ApiResponse } from '@core/interfaces/api-response';
 import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { ToastService } from '@core/services/toast.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { ROUTES, USER_TYPES } from '@shared/config/constants';
+import { AuthService } from '@core/services/auth.service';
+import { User } from '@features/auth/interfaces/sign-in/user';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
 } as const;
+
+const ALLOWED_SORT_FIELDS = ['firstName', 'status', 'source', 'sourceName'] as const;
 
 export const leadsTabelHeader: readonly string[] = [
   'ID',
@@ -64,11 +71,20 @@ export class LeadsTabel implements OnInit, OnDestroy {
   selectedLeads = signal<string[]>([]);
   leadsTabelHeader: readonly string[] = leadsTabelHeader;
   activityValues: number[] = [0, 100];
+  userTypes = USER_TYPES;
 
   private readonly leadsFacadeService = inject(LeadsFacadeService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  currentUser = signal<User | null>(null);
+
   searchValue = signal<string>('');
+  sortColumn = signal<string>('');
+  sortDirection = signal<string>('ASC');
+
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   // Selection state
@@ -84,6 +100,10 @@ export class LeadsTabel implements OnInit, OnDestroy {
   private searchSubject = new Subject<string>();
 
   ngOnInit() {
+    this.authService.currentUser$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
+      this.currentUser.set(user);
+    });
+
     this.setupSearchSubscription();
     this.loadLeads();
   }
@@ -110,11 +130,13 @@ export class LeadsTabel implements OnInit, OnDestroy {
   loadLeads(
     pageNumber: number = this.pageNumber,
     pageSize: number = this.pageSize,
-    searchValue: string = this.searchValue()
+    searchValue: string = this.searchValue(),
+    sortColumn: string = this.sortColumn(),
+    sortDirection: string = this.sortDirection()
   ) {
     this.loading.set(true);
     this.leadsFacadeService
-      .getAllLeads(pageNumber, pageSize, searchValue)
+      .getAllLeads(pageNumber, pageSize, searchValue, sortColumn, sortDirection)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (response) => {
@@ -153,7 +175,8 @@ export class LeadsTabel implements OnInit, OnDestroy {
   }
 
   onPageChange(event: any) {
-    this.pageNumber = event.page + 1; // PrimeNG uses 0-based index
+    this.pageNumber =
+      event.page !== undefined ? event.page + 1 : Math.floor(event.first / event.rows) + 1;
     this.pageSize = event.rows;
     this.loadLeads(this.pageNumber, this.pageSize);
   }
@@ -208,12 +231,12 @@ export class LeadsTabel implements OnInit, OnDestroy {
 
   viewLead(id: number) {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
-    this.router.navigate(['/main/sales/leads/leads-details']);
+    this.router.navigate([ROUTES.leadsDetails]);
   }
 
   editLead(id: number) {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
-    this.router.navigate(['/main/sales/leads/add-lead']);
+    this.router.navigate([ROUTES.addLead]);
   }
   exportLeads() {
     if (this.selectedLeads().length === 0) {
@@ -251,6 +274,24 @@ export class LeadsTabel implements OnInit, OnDestroy {
         console.error('Export error:', error);
       },
     });
+  }
+
+  onSortColumn(event: any) {
+    // Only allow sorting on specific columns
+    if (!ALLOWED_SORT_FIELDS.includes(event.field)) {
+      console.warn(`Sorting not allowed for field: ${event.field}`);
+      return;
+    }
+
+    this.sortColumn.set(event.field);
+    this.sortDirection.set(event.order === 1 ? 'ASC' : 'DESC');
+    this.loadLeads(
+      this.pageNumber,
+      this.pageSize,
+      this.searchValue(),
+      this.sortColumn(),
+      this.sortDirection()
+    );
   }
   ngOnDestroy() {
     this.searchSubject.complete();

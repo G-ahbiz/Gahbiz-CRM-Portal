@@ -1,0 +1,36 @@
+<div
+  class="sign-in-page vh-100 d-flex flex-column align-items-center justify-content-center p-4 bg-white"
+  [attr.dir]="dir()"
+>
+  <div
+    class="signin-container w-100 mx-auto bg-light rounded-4 shadow-sm p-5 d-flex flex-column justify-content-center"
+    style="max-width: 576px; min-height: auto"
+  >
+    <!-- Your existing content remains the same -->
+    <!-- Logo -->
+    <div class="d-flex justify-content-center mb-5">
+      <img
+        src="assets/images/logo/logo.png"
+        alt="Logo"
+        class="cursor-pointer transition-all"
+        style="height: 5rem; transition: transform 0.2s ease"
+        (click)="navigateToHome()"
+        (mouseenter)="$event.target.style.transform = 'scale(1.05)'"
+        (mouseleave)="$event.target.style.transform = 'scale(1)'"
+      />
+    </div>
+
+    <!-- Title -->
+    <header class="text-center mb-5">
+      <h1 class="text-dark fs-1 fw-bold mb-3">
+        {{ 'AUTH.WELCOME_TO_CRM' | translate }}
+      </h1>
+    </header>
+
+    <!-- Form -->
+    <div class="mb-4">
+      <app-sign-in-form (signInValues)="onSignInValues($event)" [isLoading]="isLoading()">
+      </app-sign-in-form>
+    </div>
+  </div>
+</div>

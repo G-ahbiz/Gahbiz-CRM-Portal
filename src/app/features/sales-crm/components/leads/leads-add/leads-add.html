@@ -14,6 +14,7 @@
         <h1 class="mb-0 fs-4 fw-bold">{{ 'sales-crm.leads-add-page.title' | translate }}</h1>
       </div>
     </div>
+    @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
     <div class="export-btn-container">
       <button
         class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
@@ -23,6 +24,7 @@
         {{ 'sales-crm.leads-tabel.import' | translate }}
       </button>
     </div>
+    }
   </div>
   <!-- Import Dialog -->
   <p-dialog header="Import Leads" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
@@ -408,6 +410,7 @@
         <!-- User ID & Services of Interest Container -->
         <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
           <!-- User ID Container -->
+          @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
           <div class="form-group w-100">
             <label for="userId"> Assigned User ID </label>
             <input
@@ -424,19 +427,25 @@
               }
             </div>
           </div>
+          }
 
           <!-- Services of Interest Container -->
+
           <div class="form-group w-100">
             <label for="servicesOfInterest"> Services of Interest </label>
-            <input
-              type="text"
-              name="servicesOfInterest"
-              id="servicesOfInterest"
-              class="form-control"
-              placeholder="Service 1, Service 2, ..."
+            <p-multiselect
+              [options]="services()"
               formControlName="servicesOfInterest"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="Select Services"
+              [maxSelectedLabels]="3"
+              [filter]="true"
+              (onFilter)="onFilterServices($event)"
+              [showClear]="true"
+              class="w-100"
             />
-            <small class="text-muted">Separate multiple services with commas</small>
+            <small class="text-muted">Search and select multiple services</small>
           </div>
         </div>
 

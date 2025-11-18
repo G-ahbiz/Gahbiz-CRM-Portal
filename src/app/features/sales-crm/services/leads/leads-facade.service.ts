@@ -4,6 +4,8 @@ import { ApiResponse } from '@core/interfaces/api-response';
 import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { Observable } from 'rxjs';
 import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request';
+import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-services';
+import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +16,17 @@ export class LeadsFacadeService {
   getAllLeads(
     pageNumber: number = 1,
     pageSize: number = 10,
-    assignedTo: string = ''
+    assignedTo: string = '',
+    sortColumn: string = '',
+    sortDirection: string = 'ASC'
   ): Observable<ApiResponse<LeadSummary>> {
-    return this.leadsService.getAllLeads(pageNumber, pageSize, assignedTo);
+    return this.leadsService.getAllLeads(
+      pageNumber,
+      pageSize,
+      assignedTo,
+      sortColumn,
+      sortDirection
+    );
   }
 
   searchLeads(
@@ -41,5 +51,12 @@ export class LeadsFacadeService {
   }
   importLeads(file: FormData): Observable<ApiResponse<any>> {
     return this.leadsService.importLeads(file);
+  }
+
+  getAllServices(): Observable<ApiResponse<PaginatedServices>> {
+    return this.leadsService.getAllServices();
+  }
+  searchServices(text: string): Observable<ApiResponse<ServiceDetails[]>> {
+    return this.leadsService.searchServices(text);
   }
 }

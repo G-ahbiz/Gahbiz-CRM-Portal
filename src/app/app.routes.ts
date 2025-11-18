@@ -1,10 +1,19 @@
 import { Routes } from '@angular/router';
 import { CrmLayout } from './shared/pages/crm-layout/crm-layout';
+import { NoAuthGuard } from '@core/guards/no-auth.guard';
+import { AuthGuard } from '@core/guards/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'auth',
+    canActivateChild: [NoAuthGuard],
+    loadChildren: () => import('./features/auth/auth.routing').then((m) => m.AUTH_ROUTES),
+  },
+  {
     path: 'main',
     component: CrmLayout,
+    canActivateChild: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboard',
@@ -39,7 +48,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/settings-crm/settings-crm').then((m) => m.SettingsCrm),
       },
-      { path: '', redirectTo: 'main', pathMatch: 'full' },
     ],
   },
+  { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
 ];

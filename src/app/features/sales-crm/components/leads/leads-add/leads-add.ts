@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
+  FormsModule,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -14,35 +15,68 @@ import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-fac
 import { ToastService } from '@core/services/toast.service';
 import { Router } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
+import { REG_EXP, USER_TYPES } from '@shared/config/constants';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AuthService } from '@core/services/auth.service';
+import { User } from '@features/auth/interfaces/sign-in/user';
 @Component({
   selector: 'app-leads-add',
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, DialogModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    DialogModule,
+    MultiSelectModule,
+  ],
   templateUrl: './leads-add.html',
   styleUrl: './leads-add.css',
 })
-export class LeadsAdd {
+export class LeadsAdd implements OnInit {
   addLeadForm: FormGroup;
   private leadsFacadeService = inject(LeadsFacadeService);
   private toastService = inject(ToastService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
+
   isSubmitting = signal<boolean>(false);
   visible = signal<boolean>(false);
+  services = signal<ServiceDetails[]>([]);
+  currentUser = signal<User | null>(null);
 
   // Import file state
   selectedFile = signal<File | null>(null);
   selectedFileName = signal<string>('');
   isImporting = signal<boolean>(false);
 
+  userTypes = USER_TYPES;
+
+  // Service filter state
+  private serviceFilterSubject = new Subject<string>();
+
   constructor(private fb: FormBuilder) {
     this.addLeadForm = this.fb.group(
       {
         firstName: [
           '',
-          [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-Z\s\-']+$/)],
+          [
+            Validators.required,
+            Validators.maxLength(100),
+            Validators.pattern(REG_EXP.NAME_PATTERN),
+          ],
         ],
         lastName: [
           '',
-          [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-Z\s\-']+$/)],
+          [
+            Validators.required,
+            Validators.maxLength(100),
+            Validators.pattern(REG_EXP.NAME_PATTERN),
+          ],
         ],
         eMail: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
         phone: ['', [Validators.required, this.phoneFormatValidator]],
@@ -51,13 +85,13 @@ export class LeadsAdd {
         userId: [''],
         servicesOfInterest: [],
         parentId: [''],
-        ssn: ['', [Validators.pattern(/^\d{3}-?\d{2}-?\d{4}$/)]],
+        ssn: ['', [Validators.pattern(REG_EXP.SSN_PATTERN)]],
         currentCity: ['', Validators.maxLength(100)],
         fromCity: ['', Validators.maxLength(100)],
         dob: ['', [this.dateFormatValidator, this.pastDateValidator]],
         status: [null],
         source: [null],
-        zipCode: ['', Validators.pattern(/^\d{5}(-\d{4})?$/)],
+        zipCode: ['', Validators.pattern(REG_EXP.ZIP_CODE_PATTERN)],
         city: ['', Validators.maxLength(100)],
         state: ['', Validators.maxLength(100)],
         county: ['', Validators.maxLength(100)],
@@ -71,6 +105,56 @@ export class LeadsAdd {
       }
     );
   }
+  ngOnInit(): void {
+    this.authService.currentUser$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
+      this.currentUser.set(user);
+    });
+
+    // Load initial services
+    this.leadsFacadeService
+      .getAllServices()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.services.set(response.data.items);
+        },
+      });
+
+    // Setup service filter subscription with debounce
+    this.serviceFilterSubject
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((filterText) => {
+        if (filterText && filterText.length > 0) {
+          this.searchServices(filterText);
+        } else {
+          this.getAllServices();
+        }
+      });
+  }
+
+  searchServices(text: string) {
+    this.leadsFacadeService
+      .searchServices(text)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.services.set(
+            [...this.services(), ...response.data].filter(
+              (service, index, self) => self.findIndex((t) => t.id === service.id) === index
+            )
+          );
+        },
+        error: (error) => {
+          this.toastService.error(error?.error?.message || 'Failed to search services');
+        },
+      });
+  }
+
+  onFilterServices(event: { filter: string }) {
+    // Emit to subject instead of calling directly - debounce will handle the delay
+    this.serviceFilterSubject.next(event.filter || '');
+  }
+
   // Custom Validators
   dateFormatValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
@@ -144,6 +228,17 @@ export class LeadsAdd {
     }
 
     return null;
+  }
+
+  getAllServices() {
+    this.leadsFacadeService.getAllServices().subscribe({
+      next: (response) => {
+        this.services.set(response.data.items);
+      },
+      error: (error) => {
+        this.toastService.error(error?.error?.message || 'Failed to get services');
+      },
+    });
   }
 
   // Helper method to get validation error messages
@@ -288,14 +383,15 @@ export class LeadsAdd {
     Object.keys(formValue).forEach((key) => {
       const value = formValue[key];
       if (value !== null && value !== undefined && value !== '') {
-        if (key === 'servicesOfInterest' && typeof value === 'string') {
-          // If servicesOfInterest is a comma-separated string, split and append as array
-          const services = value
-            .split(',')
-            .map((s: string) => s.trim())
-            .filter((s: string) => s);
-          services.forEach((service: string) => {
-            formData.append('servicesOfInterest[]', service);
+        if (key === 'servicesOfInterest' && Array.isArray(value)) {
+          // servicesOfInterest is an array of service IDs
+          value.forEach((serviceId: string) => {
+            formData.append('servicesOfInterest', serviceId);
+          });
+        } else if (Array.isArray(value)) {
+          // Handle other arrays
+          value.forEach((item) => {
+            formData.append(key, item);
           });
         } else {
           formData.append(key, value);

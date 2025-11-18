@@ -1,0 +1,50 @@
+<!-- Form -->
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <!-- Email -->
+  <app-input
+    [label]="'AUTH.EMAIL_ADDRESS' | translate"
+    id="identifier"
+    type="email"
+    [placeholder]="'AUTH.ENTER_EMAIL' | translate"
+    formControlName="identifier"
+    [isInvalid]="!!(identifier?.invalid && identifier?.touched)"
+    [errorMessage]="getFieldError('identifier')"
+    class="mb-3"
+  >
+  </app-input>
+
+  <!-- Password -->
+  <app-input
+    [label]="'AUTH.PASSWORD' | translate"
+    id="password"
+    variant="password"
+    [placeholder]="'AUTH.ENTER_PASSWORD' | translate"
+    formControlName="password"
+    [isInvalid]="!!(password?.invalid && password?.touched)"
+    [errorMessage]="getFieldError('password')"
+    [minlength]="8"
+    [maxlength]="64"
+    class="mb-3"
+  >
+  </app-input>
+
+  <app-button
+    type="submit"
+    [label]="'AUTH.LOGIN' | translate"
+    [disabled]="loginForm.invalid"
+    [loading]="isLoading()"
+    [loadingText]="'AUTH.SIGNING_IN' | translate"
+  >
+  </app-button>
+
+  <!-- Forgot Password Link -->
+  <div class="text-center m-2">
+    <a
+      [routerLink]="ROUTES.forgotPassword"
+      class="text-decoration-none small"
+      style="color: rgba(0, 93, 181, 1)"
+    >
+      {{ 'AUTH.FORGOT_PASSWORD' | translate }}
+    </a>
+  </div>
+</form>

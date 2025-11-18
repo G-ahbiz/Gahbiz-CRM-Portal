@@ -1,0 +1,28 @@
+/* Optional: you can add button-specific overrides here */
+button {
+  line-height: 1; /* keeps vertical alignment neat */
+  padding-inline: var(--space-md);
+  border-radius: 0.5rem; // rounded-lg consistency
+}
+
+button:hover:not(:disabled) {
+  background-color: rgba(0, 80, 160, 1) !important;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:host {
+  display: block;
+}

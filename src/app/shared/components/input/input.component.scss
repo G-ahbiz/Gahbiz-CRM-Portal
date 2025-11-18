@@ -1,0 +1,183 @@
+button,
+input[type='checkbox'],
+.toggle-switch {
+  transition: all 0.2s ease;
+}
+
+input:focus,
+button:focus {
+  outline-offset: 2px;
+}
+
+@media (min-height: 760px) {
+  input,
+  button,
+  select {
+    min-height: calc(var(--input-height) * 1.2);
+    font-size: calc(var(--font-md) * 1.1);
+  }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: auto;
+}
+
+:host .input-wrapper {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--input-height);
+  padding: 0 var(--space-sm);
+  border-radius: 0.5rem;
+  border: 1px solid var(--light-border);
+  background: var(--light-input);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* input inside wrapper */
+:host .input-wrapper input {
+  min-height: var(--input-height);
+  font-size: var(--font-md);
+  padding-right: calc(var(--space-md) + 2.25rem); /* space for lock icon or dropdown */
+  background: transparent;
+  outline: none;
+}
+
+/* phone dropdown button */
+:host .input-wrapper .phone-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--button-height);
+  font-size: var(--font-sm);
+  padding: 0 var(--space-sm);
+  background: transparent;
+  border: none;
+}
+
+/* lock icon position (absolute to not affect height) */
+:host .input-wrapper app-lock-password,
+:host .input-wrapper .lock-icon {
+  position: absolute;
+  right: calc(var(--space-sm));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+/* ensure dropdown list items scale */
+.phone-dropdown-wrapper {
+  min-width: 5%; /* never disappear */
+  z-index: 10;
+}
+
+.phone-dropdown-btn {
+  width: 100%; /* fill parent */
+  min-width: 0; /* allow shrink */
+  padding: 0 0.25rem;
+  font-size: 0.75rem; /* shrink text */
+}
+
+.dropdown-menu {
+  display: block !important;
+  z-index: 9999;
+  position: absolute;
+  background-color: white;
+}
+
+.form-control-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  gap: 0.25rem;
+}
+
+.form-control-wrapper:focus-within {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 428px) {
+  .form-control-wrapper {
+    padding: 0.25rem var(--space-xs);
+    gap: 0.25rem;
+  }
+
+  .form-input {
+    font-size: 0.875rem;
+  }
+
+  .phone-dropdown-btn {
+    font-size: 0.75rem;
+    padding: 0 0.25rem;
+  }
+}
+
+.form-error {
+  min-height: 1rem; /* reserve space for error always */
+  max-height: 1rem; /* keep it consistent */
+  transition: all 0.3s;
+}
+
+.error-message {
+  font-size: 0.8rem; /* small text */
+  line-height: 1.2; /* tighter spacing */
+  margin: 0; /* remove extra margin */
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.form-error:not(.h-0) .error-message {
+  opacity: 1;
+}
+
+.form-error.h-0 .error-message {
+  opacity: 0;
+}
+
+@media (min-height: 768px) {
+  .error-message {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 428px) {
+  .form-control-wrapper {
+    min-height: 2rem; /* smaller wrapper height */
+    padding: 0.25rem var(--space-xs);
+  }
+
+  .form-input {
+    font-size: 0.75rem; /* smaller text */
+    min-height: 1.75rem; /* match wrapper height */
+    padding-right: 1.5rem; /* adjust for lock/dropdown */
+  }
+
+  .phone-dropdown-btn {
+    font-size: 0.65rem;
+    padding: 0 0.2rem;
+    min-height: 1.5rem;
+  }
+
+  .form-label {
+    font-size: 0.7rem; /* smaller label */
+    margin-bottom: 0px;
+  }
+
+  .form-error {
+    min-height: 0.75rem; /* smaller reserved space for error */
+    max-height: 0.75rem;
+  }
+
+  .error-message {
+    font-size: 0.65rem; /* smaller error text */
+  }
+}

@@ -4,8 +4,6 @@
       #dt1
       [value]="leadsData()"
       dataKey="id"
-      sortField="id"
-      [sortOrder]="1"
       [tableStyle]="{ 'min-width': '60rem' }"
       [paginator]="true"
       [rows]="pageSize"
@@ -13,6 +11,7 @@
       [rowsPerPageOptions]="[5, 10, 20, 50]"
       [lazy]="true"
       (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
       [loading]="loading()"
       [globalFilterFields]="[
         'firstName',
@@ -88,53 +87,40 @@
               />
             </div>
           </th>
-          <th [pSortableColumn]="'id'">
-            <div class="flex items-center gap-2">
-              ID
-              <p-sortIcon field="'ID'" />
-            </div>
+          <th>
+            <div class="flex items-center gap-2">ID</div>
           </th>
           <th [pSortableColumn]="'firstName'">
             <div class="flex items-center gap-2">
               Name
-              <p-sortIcon field="'firstName'" />
+              <p-sortIcon field="firstName" />
             </div>
           </th>
-          <th [pSortableColumn]="'servicesOfInterest'">
-            <div class="flex items-center gap-2">
-              Service
-              <p-sortIcon field="'servicesOfInterest'" />
-            </div>
+          <th>
+            <div class="flex items-center gap-2">Service</div>
           </th>
           <th [pSortableColumn]="'status'">
             <div class="flex items-center gap-2">
               Status
-              <p-sortIcon field="'status'" />
+              <p-sortIcon field="status" />
             </div>
           </th>
           <th [pSortableColumn]="'sourceName'">
             <div class="flex items-center gap-2">
               Source
-              <p-sortIcon field="'sourceName'" />
+              <p-sortIcon field="sourceName" />
             </div>
           </th>
-          <th [pSortableColumn]="'assignedTo'">
-            <div class="flex items-center gap-2">
-              Assigned To
-              <p-sortIcon field="'assignedTo'" />
-            </div>
+          @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
+          <th>
+            <div class="flex items-center gap-2">Assigned To</div>
           </th>
-          <th [pSortableColumn]="'value'">
-            <div class="flex items-center gap-2">
-              Value
-              <p-sortIcon field="'value'" />
-            </div>
+          }
+          <th>
+            <div class="flex items-center gap-2">Value</div>
           </th>
-          <th [pSortableColumn]="'creadtedAt'">
-            <div class="flex items-center gap-2">
-              Created Date
-              <p-sortIcon field="'creadtedAt'" />
-            </div>
+          <th>
+            <div class="flex items-center gap-2">Created Date</div>
           </th>
           <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
         </tr>
@@ -150,17 +136,25 @@
               (change)="toggleLeadSelection(lead)"
             />
           </td>
-          <td>{{ rowIndex + 1 }}</td>
-          <td>{{ lead.firstName }} {{ lead.lasttName }}</td>
+          <td [title]="lead.id">
+            {{ lead.id | slice : 0 : 8 }}{{ lead.id.length > 8 ? '...' : '' }}
+          </td>
+          <td>{{ lead.firstName }} {{ lead.lastName }}</td>
           <td>
-            {{ lead.servicesOfInterest?.join(', ') }}
+            <div
+              class="text-truncate"
+              style="max-width: 150px"
+              [title]="lead.servicesOfInterest?.join(', ')"
+            >
+              {{ lead.servicesOfInterest?.join(', ') }}
+            </div>
           </td>
           <td>
             <span
               class="py-1 px-2 rounded-3"
               [class]="
                 lead.status === 'New'
-                  ? 'text-white bg-black'
+                  ? 'text-white bg-primary'
                   : lead.status === 'Qualified'
                   ? 'text-success card-green'
                   : lead.status === 'In-Progress'
@@ -173,9 +167,11 @@
             >
           </td>
           <td>{{ lead.sourceName }}</td>
-          <td>{{ lead.assignedTo }}</td>
+          @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
+          <td>{{ lead.assignedTo?.fullName }}</td>
+          }
           <td>-</td>
-          <td>{{ lead.creadtedAt }}</td>
+          <td>{{ lead.createdAt | date : 'dd/MM/yyyy' }}</td>
           <td class="d-flex justify-content-center align-items-center gap-2">
             <button class="btn btn-sm" (click)="viewLead(lead.id); $event.stopPropagation()">
               <img src="assets/images/shared/eye.svg" alt="" class="" />

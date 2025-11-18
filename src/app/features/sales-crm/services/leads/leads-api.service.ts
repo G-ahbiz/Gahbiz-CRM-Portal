@@ -3,8 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LeadSummary, LeadSummaryItem } from '../../interfaces/lead-summary';
 import { ApiResponse } from '@core/interfaces/api-response';
-import { environment } from '@env/environment.development';
+import { environment } from '@env/environment';
 import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request';
+import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-services';
+import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,9 @@ export class LeadsApiService {
   getAllLeads(
     pageNumber: number = 1,
     pageSize: number = 10,
-    assignedTo: string = ''
+    assignedTo: string = '',
+    sortColumn: string = '',
+    sortDirection: string = 'ASC'
   ): Observable<ApiResponse<LeadSummary>> {
     const getLeadsUrl = `${this.baseApi}${environment.leads.getLeads}`;
     return this.httpClient.get<ApiResponse<LeadSummary>>(getLeadsUrl, {
@@ -23,6 +27,8 @@ export class LeadsApiService {
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
         assignedTo: assignedTo ? assignedTo : '',
+        sortColumn: sortColumn ? sortColumn : '',
+        sortDirection: sortDirection ? sortDirection : 'ASC',
       },
     });
   }
@@ -62,5 +68,15 @@ export class LeadsApiService {
     console.log(ExcelFile.get('file'));
     const importLeadsUrl = `${this.baseApi}${environment.leads.importLeads}`;
     return this.httpClient.post<ApiResponse<any>>(importLeadsUrl, ExcelFile as FormData);
+  }
+
+  getAllServices(): Observable<ApiResponse<PaginatedServices>> {
+    const getAllServicesUrl = `${this.baseApi}${environment.services.getAllServices}`;
+    return this.httpClient.get<ApiResponse<PaginatedServices>>(getAllServicesUrl);
+  }
+
+  searchServices(text: string): Observable<ApiResponse<ServiceDetails[]>> {
+    const searchServicesUrl = `${this.baseApi}${environment.services.searchServices(text)}`;
+    return this.httpClient.get<ApiResponse<ServiceDetails[]>>(searchServicesUrl);
   }
 }
