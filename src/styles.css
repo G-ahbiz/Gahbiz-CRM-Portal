@@ -1,0 +1,110 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --sidebar-bg: #f9f9f9;
+  --content-bg: #F8FAFC;
+  --sidebar-text-color: #888888;
+  --sidebar-active-color: #005DB5;
+  --sidebar-active-text-color: #ffffff;
+  --text-clr: #121212;
+  --text-muted-clr: #888888;
+  --trend-up-clr: #059691;
+  --trend-down-clr: #E11D48;
+  --card-blue-bg-clr: #CCDFF080;
+  --card-green-bg-clr: #D1FAE580;
+  --card-yellow-bg-clr: #FEF3C780;
+  --card-red-bg-clr: #FFE4E680;
+  --primary-color: #005DB5;
+  --icon-bg-gray: #E3E1E1;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Libre Franklin', sans-serif;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.sidebar-bg {
+  background-color: var(--sidebar-bg);
+}
+
+.content-bg {
+  background-color: var(--content-bg);
+}
+
+.p-75 {
+  padding: 0.75rem !important;
+}
+
+.px-75 {
+  padding-inline: 0.75rem !important;
+}
+
+.libre-franklin {
+  font-family: 'Libre Franklin', sans-serif;
+}
+
+.cairo {
+  font-family: 'Cairo', sans-serif;
+}
+
+.fs-75 {
+  font-size: 0.75rem !important;
+}
+
+.fs-875 {
+  font-size: 0.875rem !important;
+}
+
+.text-muted-clr {
+  color: var(--text-muted-clr) !important;
+}
+
+.trend-up-clr {
+  color: var(--trend-up-clr) !important;
+}
+
+.trend-down-clr {
+  color: var(--trend-down-clr) !important;
+}
+
+.primary-clr {
+  color: var(--primary-color) !important;
+}
+
+.outline-primary-clr {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+
+  &:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--sidebar-active-text-color) !important;
+  }
+}
+
+.primary-bg-clr {
+  background-color: var(--primary-color) !important;
+}
+
+.card-blue {
+  background-color: var(--card-blue-bg-clr) !important;
+}
+
+.card-green {
+  background-color: var(--card-green-bg-clr) !important;
+}
+
+.card-yellow {
+  background-color: var(--card-yellow-bg-clr) !important;
+}
+
+.card-red {
+  background-color: var(--card-red-bg-clr) !important;
+}

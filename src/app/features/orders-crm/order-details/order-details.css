@@ -1,0 +1,68 @@
+.order-details-container {
+  height: calc(100vh - 100px) !important;
+}
+
+
+.back-btn {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  &:active, &:focus {
+    outline: none;
+    border: none;
+  }
+
+  &:active {
+    scale: 0.95;
+  }
+}
+
+.order-details-content {
+  background-color: #F9F9F9 !important;
+}
+
+.form-select {
+  border-color: #E3E1E1 !important;
+  color: var(--primary-color) !important;
+
+  &:focus, &:active {
+    box-shadow: none;
+    outline: none;
+    /* border: none; */
+  }
+
+  &:hover {
+    background-color: transparent !important;
+  }
+
+  >option {
+    color: var(--primary-color) !important;
+
+    &:hover {
+      background-color: var(--primary-color) !important;
+      color: var(--sidebar-active-text-color) !important;
+    }
+  }
+}
+
+.btn {
+  background-color: #ffffff;
+  color: var(--primary-color) !important;
+  border-color: #E3E1E1 !important;
+}
+
+.card {
+  width: 30%;
+  background: transparent !important;
+}
+
+.card-icon {
+  background-color: #E3E1E1;
+}
+
+.form-control {
+  height: 10rem;
+}
+
+th,tr,td {
+  background: transparent !important;
+}

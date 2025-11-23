@@ -1,0 +1,15 @@
+.blue-clr {
+  color: var(--sidebar-active-color) !important;
+}
+
+.search-container {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.form-control, .form-select {
+  &:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+  }
+}

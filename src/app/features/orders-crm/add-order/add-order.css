@@ -1,0 +1,18 @@
+.back-btn {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+  &:active, &:focus {
+    outline: none;
+    border: none;
+  }
+
+  &:active {
+    scale: 0.95;
+  }
+}
+
+label {
+  color: var(--text-clr) !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}

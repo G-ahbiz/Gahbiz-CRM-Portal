@@ -1,0 +1,123 @@
+.verify-otp-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'verify-otp' 'branding';
+  min-height: 100vh;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: 'verify-otp branding';
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      bottom: 10%;
+      left: 50%;
+      width: 1px;
+      background-color: theme('colors.white');
+      transform: translateX(-0.5px);
+      z-index: 10;
+    }
+  }
+}
+
+.verify-otp-container {
+  grid-area: verify-otp;
+  min-height: 100vh;
+
+  @media (max-width: 640px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.otp-input {
+  width: clamp(2.5rem, 12vw, 4rem);
+  height: clamp(2.5rem, 12vw, 4rem);
+  font-size: clamp(1rem, 5vw, 1.5rem);
+  transition: all 0.2s ease-in-out;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+/* Scrollbar (same as forget-password) */
+.verify-otp-container::-webkit-scrollbar {
+  width: 6px;
+}
+.verify-otp-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 3px;
+}
+.verify-otp-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+.verify-otp-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-height: 760px) {
+  .verify-otp-page {
+    .verify-otp-container {
+      padding: var(--space-sm);
+
+      h1,
+      h2 {
+        font-size: var(--font-xl);
+      }
+
+      form {
+        gap: var(--space-sm);
+      }
+
+      input,
+      button {
+        height: calc(var(--input-height) + 1.4rem);
+        font-size: var(--font-lg);
+      }
+
+      .back-url {
+        font-size: var(--font-xs);
+      }
+    }
+  }
+}
+
+@media (min-height: 1000px) {
+  .verify-otp-page {
+    .verify-otp-container {
+      padding: var(--space-lg);
+
+      h1,
+      h2 {
+        font-size: var(--font-lg);
+      }
+
+      form {
+        gap: var(--space-sm);
+      }
+
+      input,
+      button {
+        height: calc(var(--input-height) + 1.4rem);
+        font-size: var(--font-md);
+      }
+    }
+  }
+}
+
+/* OTP input specific styles */
+.verify-otp-container input {
+  transition: all 0.2s ease-in-out;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+  }
+}

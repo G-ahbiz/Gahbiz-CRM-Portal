@@ -1,0 +1,11 @@
+.form-group input::placeholder {
+  font-size: 0.75rem;
+}
+
+td, th {
+  background-color: transparent !important;
+}
+
+tr:hover {
+  background-color: #0000ff20 !important;
+}

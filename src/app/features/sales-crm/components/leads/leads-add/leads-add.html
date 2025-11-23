@@ -1,0 +1,494 @@
+<div class="container-fluid p-0 m-0">
+  <div class="leads-add-top-container w-100 d-flex justify-content-start align-items-center gap-3">
+    <!-- Top Container -->
+    <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
+      <div class="leads-add-back-btn-container">
+        <button
+          class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
+          (click)="back()"
+        >
+          <i class="pi pi-chevron-left fs-875"></i>
+        </button>
+      </div>
+      <div class="leads-add-title-container">
+        <h1 class="mb-0 fs-4 fw-bold">{{ 'sales-crm.leads-add-page.title' | translate }}</h1>
+      </div>
+    </div>
+    @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
+    <div class="export-btn-container">
+      <button
+        class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+        (click)="showDialog()"
+      >
+        <i class="pi pi-upload fs-875"></i>
+        {{ 'sales-crm.leads-tabel.import' | translate }}
+      </button>
+    </div>
+    }
+  </div>
+  <!-- Import Dialog -->
+  <p-dialog header="Import Leads" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
+    <div class="d-flex flex-column gap-3">
+      <span class="text-secondary">Import leads from an Excel or CSV file.</span>
+      <div class="form-group">
+        <label for="fileInput" class="form-label">Select File</label>
+        <input
+          type="file"
+          #fileInput
+          id="fileInput"
+          class="form-control"
+          accept=".xlsx,.xls,.csv"
+          (change)="onFileSelected($event)"
+        />
+        <small class="text-muted">only .xlsx (Microsoft Excel) files are supported.</small>
+      </div>
+      @if (selectedFileName()) {
+      <div class="alert alert-info py-2">
+        <i class="pi pi-file me-2"></i>
+        <span>{{ selectedFileName() }}</span>
+      </div>
+      }
+    </div>
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="closeDialog()"
+        [disabled]="isImporting()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="importLeads()"
+        [disabled]="!selectedFile() || isImporting()"
+      >
+        @if (!isImporting()) {
+        <span><i class="pi pi-upload me-2"></i>Import</span>
+        } @else {
+        <span><i class="pi pi-spin pi-spinner me-2"></i>Importing...</span>
+        }
+      </button>
+    </div>
+  </p-dialog>
+  <!-- Bottom Container -->
+  <div class="bottom-container d-flex flex-column justify-content-start align-items-start gap-3">
+    <!-- Form Container -->
+    <form
+      [formGroup]="addLeadForm"
+      class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-5 mt-4 p-5 bg-white"
+    >
+      <!-- Personal Information Section -->
+      <div class="w-100">
+        <h5 class="mb-3 fw-bold">Personal Information</h5>
+
+        <!-- First Name & Last Name Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- First Name Container -->
+          <div class="form-group w-100">
+            <label for="firstName">
+              First Name
+              <span class="" [class]="checkValidity('firstName')">*</span>
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              id="firstName"
+              class="form-control"
+              placeholder="First Name"
+              formControlName="firstName"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('firstName')) {
+              <span class="text-danger">{{ getErrorMessage('firstName') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Last Name Container -->
+          <div class="form-group w-100">
+            <label for="lastName">
+              Last Name
+              <span class="" [class]="checkValidity('lastName')">*</span>
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              class="form-control"
+              placeholder="Last Name"
+              formControlName="lastName"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('lastName')) {
+              <span class="text-danger">{{ getErrorMessage('lastName') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Email & Phone Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Email Container -->
+          <div class="form-group w-100">
+            <label for="email">
+              Email
+              <span class="" [class]="checkValidity('eMail')">*</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              class="form-control"
+              placeholder="email@example.com"
+              formControlName="eMail"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('eMail')) {
+              <span class="text-danger">{{ getErrorMessage('email') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Phone Container -->
+          <div class="form-group w-100">
+            <label for="phone">
+              Phone
+              <span class="" [class]="checkValidity('phone')">*</span>
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              class="form-control"
+              placeholder="Phone Number"
+              formControlName="phone"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('phone')) {
+              <span class="text-danger">{{ getErrorMessage('phone') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- SSN & Gender Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- SSN Container -->
+          <div class="form-group w-100">
+            <label for="ssn"> SSN </label>
+            <input
+              type="text"
+              name="ssn"
+              id="ssn"
+              class="form-control"
+              placeholder="XXX-XX-XXXX"
+              formControlName="ssn"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('ssn')) {
+              <span class="text-danger">{{ getErrorMessage('ssn') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Gender Container -->
+          <div class="form-group w-100">
+            <label for="gender"> Gender </label>
+            <select name="gender" id="gender" class="form-select" formControlName="gender">
+              <option value="" selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="PreferNotToSay">Prefer not to say</option>
+            </select>
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('gender')) {
+              <span class="text-danger">{{ getErrorMessage('gender') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Date of Birth & Work At Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Date of Birth Container -->
+          <div class="form-group w-100">
+            <label for="dob"> Date of Birth </label>
+            <input type="date" name="dob" id="dob" class="form-control" formControlName="dob" />
+          </div>
+
+          <!-- Work At Container -->
+          <div class="form-group w-100">
+            <label for="workAt"> Work At </label>
+            <input
+              type="text"
+              name="workAt"
+              id="workAt"
+              class="form-control"
+              placeholder="Workplace"
+              formControlName="workAt"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Information Section -->
+      <div class="w-100">
+        <h5 class="mb-3 fw-bold">Location Information</h5>
+
+        <!-- City & State Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- City Container -->
+          <div class="form-group w-100">
+            <label for="city"> City </label>
+            <input
+              type="text"
+              name="city"
+              id="city"
+              class="form-control"
+              placeholder="City"
+              formControlName="city"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('city')) {
+              <span class="text-danger">{{ getErrorMessage('city') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- State Container -->
+          <div class="form-group w-100">
+            <label for="state"> State </label>
+            <input
+              type="text"
+              name="state"
+              id="state"
+              class="form-control"
+              placeholder="State"
+              formControlName="state"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('state')) {
+              <span class="text-danger">{{ getErrorMessage('state') }}</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- County & Zip Code Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- County Container -->
+          <div class="form-group w-100">
+            <label for="county"> County </label>
+            <input
+              type="text"
+              name="county"
+              id="county"
+              class="form-control"
+              placeholder="County"
+              formControlName="county"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('county')) {
+              <span class="text-danger">{{ getErrorMessage('county') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Zip Code Container -->
+          <div class="form-group w-100">
+            <label for="zipCode"> Zip Code </label>
+            <input
+              type="text"
+              name="zipCode"
+              id="zipCode"
+              class="form-control"
+              placeholder="Zip Code"
+              formControlName="zipCode"
+            />
+          </div>
+        </div>
+
+        <!-- Current City & From City Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Current City Container -->
+          <div class="form-group w-100">
+            <label for="currentCity"> Current City </label>
+            <input
+              type="text"
+              name="currentCity"
+              id="currentCity"
+              class="form-control"
+              placeholder="Current City"
+              formControlName="currentCity"
+            />
+          </div>
+
+          <!-- From City Container -->
+          <div class="form-group w-100">
+            <label for="fromCity"> From City </label>
+            <input
+              type="text"
+              name="fromCity"
+              id="fromCity"
+              class="form-control"
+              placeholder="From City"
+              formControlName="fromCity"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Lead Information Section -->
+      <div class="w-100">
+        <h5 class="mb-3 fw-bold">Lead Information</h5>
+
+        <!-- Status & Source Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Status Container -->
+          <div class="form-group w-100">
+            <label for="status"> Status </label>
+            <select name="status" id="status" class="form-select" formControlName="status">
+              <option value="" selected>Select Status</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Qualified">Qualified</option>
+              <option value="Converted">Converted</option>
+              <option value="Lost">Lost</option>
+            </select>
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('status')) {
+              <span class="text-danger">{{ getErrorMessage('status') }}</span>
+              }
+            </div>
+          </div>
+
+          <!-- Source Container -->
+          <div class="form-group w-100">
+            <label for="source"> Source </label>
+            <input
+              type="text"
+              name="source"
+              id="source"
+              class="form-control"
+              placeholder="Lead Source"
+              formControlName="source"
+            />
+          </div>
+        </div>
+
+        <!-- Source Name & Parent ID Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- Source Name Container -->
+          <div class="form-group w-100">
+            <label for="sourceName"> Source Name </label>
+            <input
+              type="text"
+              name="sourceName"
+              id="sourceName"
+              class="form-control"
+              placeholder="Source Name"
+              formControlName="sourceName"
+            />
+          </div>
+
+          <!-- Parent ID Container -->
+          <div class="form-group w-100">
+            <label for="parentId"> Parent ID </label>
+            <input
+              type="text"
+              name="parentId"
+              id="parentId"
+              class="form-control"
+              placeholder="Parent ID"
+              formControlName="parentId"
+            />
+          </div>
+        </div>
+
+        <!-- User ID & Services of Interest Container -->
+        <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+          <!-- User ID Container -->
+          @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
+          <div class="form-group w-100">
+            <label for="userId"> Assigned User ID </label>
+            <input
+              type="text"
+              name="userId"
+              id="userId"
+              class="form-control"
+              placeholder="User ID"
+              formControlName="userId"
+            />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (checkErrors('userId')) {
+              <span class="text-danger">{{ getErrorMessage('userId') }}</span>
+              }
+            </div>
+          </div>
+          }
+
+          <!-- Services of Interest Container -->
+
+          <div class="form-group w-100">
+            <label for="servicesOfInterest"> Services of Interest </label>
+            <p-multiselect
+              [options]="services()"
+              formControlName="servicesOfInterest"
+              optionLabel="name"
+              optionValue="id"
+              placeholder="Select Services"
+              [maxSelectedLabels]="3"
+              [filter]="true"
+              (onFilter)="onFilterServices($event)"
+              [showClear]="true"
+              class="w-100"
+            />
+            <small class="text-muted">Search and select multiple services</small>
+          </div>
+        </div>
+
+        <!-- Notes Container -->
+        <div class="form-group w-100">
+          <label for="notes"> Notes </label>
+          <textarea
+            name="notes"
+            id="notes"
+            class="form-control"
+            rows="4"
+            placeholder="Additional notes about the lead"
+            formControlName="notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Button Container -->
+      <div class="buttons-container w-100 d-flex justify-content-between align-items-center gap-3">
+        <!-- Cancel Button -->
+        <button
+          type="button"
+          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          (click)="cancel()"
+          [disabled]="isSubmitting()"
+        >
+          {{ 'sales-crm.leads-add-page.cancel' | translate }}
+        </button>
+
+        <!-- Save Button -->
+        <button
+          type="submit"
+          class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          (click)="saveLead()"
+          [disabled]="isSubmitting()"
+        >
+          @if (!isSubmitting()) {
+          <span>{{ 'sales-crm.leads-add-page.save-lead' | translate }}</span>
+          } @else {
+          <span>Saving...</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="container-fluid p-0 m-0">
+  <nav aria-label="Page navigation example" class="d-flex justify-content-end align-items-center gap-5">
+    <!-- Rows per page -->
+    <p class="text-muted-clr">Rows per page: {{ pageSize }}</p>
+    <!-- Pagination info -->
+    <p class="text-muted-clr">{{ getPaginationInfo() }}</p>
+
+    <!-- Pagination list -->
+    <ul class="pagination justify-content-end">
+
+      <!-- Previous page button -->
+      <li class="page-item {{currentPage == 1 ? 'disabled' : ''}}">
+        <button class="page-link blue-clr" (click)="previousPage()">Previous</button>
+      </li>
+      <!-- Pagination list items buttons -->
+      @for (i of totalPages; track i) {
+      <li class="page-item" (click)="goToPage(i)">
+        <button class="page-link blue-clr">{{ i }}</button>
+      </li>
+      }
+      <!-- Next page button -->
+      <li class="page-item {{currentPage == totalPages.length ? 'disabled' : ''}}">
+        <button class="page-link blue-clr" (click)="nextPage()">Next</button>
+      </li>
+    </ul>
+  </nav>
+</div>

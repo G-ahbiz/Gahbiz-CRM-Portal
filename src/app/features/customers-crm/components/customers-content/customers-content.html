@@ -1,0 +1,14 @@
+<div class="container-fluid p-0 m-0">
+  <!-- Customers CRM Container -->
+  <div class="customers-crm-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+
+    <div class="customers-top w-100">
+      <app-tabs-header [title]="'Customers'" [cardsData]="cardsData" [folderName]="'customers'"></app-tabs-header>
+    </div>
+
+    <div class="customers-table w-100">
+      <app-customer-tabel></app-customer-tabel>
+    </div>
+
+  </div>
+</div>

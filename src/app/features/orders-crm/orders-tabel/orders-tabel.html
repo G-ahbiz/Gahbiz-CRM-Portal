@@ -1,0 +1,89 @@
+<div class="container-fluid p-0 mx-0 my-4 overflow-hidden">
+  <!-- Orders Actions Container -->
+  <div class="orders-actions-container mb-3 d-flex justify-content-between align-items-center">
+    <div class="export-btn-container">
+      <button class="btn btn-sm btn-outline-primary px-3 py-2">
+        {{ 'orders-crm.export' | translate }}
+      </button>
+    </div>
+
+    <div class="srch-filter-container d-flex justify-content-start align-items-center gap-3">
+      <!-- Search Container -->
+      <div class="search-container d-flex justify-content-start align-items-center bg-white rounded-3 px-2">
+        <label for="search" class="m-0 p-0 text-muted">
+          <img src="assets/images/shared/search.svg" alt="" class="">
+        </label>
+        <input type="text" id="search" class="form-control border-0 bg-transparent" placeholder="Search..."
+          (input)="onSearchChange($any($event.target).value)" #searchInput>
+      </div>
+
+      <!-- Filter Container -->
+      <div class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3">
+        <select name="filter" id="filter" class="form-select border-0 bg-transparent" aria-label="Filter"
+          (change)="onFilterChange($any($event.target).value)">
+          <option value="all">All</option>
+          <option value="last-7-days" selected>Last 7 days</option>
+          <option value="last-30-days">Last 30 days</option>
+          <option value="last-60-days">Last 60 days</option>
+          <option value="last-90-days">Last 90 days</option>
+          <option value="last-180-days">Last 180 days</option>
+          <option value="last-365-days">Last Year</option>
+        </select>
+      </div>
+
+      <div class="add-order-btn-container">
+        <button class="btn btn-sm btn-primary px-3 py-2 d-flex justify-content-start align-items-center gap-2 rounded-3"
+          routerLink="/main/orders/add-order">
+          <img src="assets/images/shared/plus.svg" alt="" class="">
+          {{ 'orders-crm.add-order' | translate }}
+        </button>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- Orders Table Container -->
+  <div class="table-responsive w-100">
+    <table class="table table-responsive table-hover orders-table">
+      <thead>
+        <th class="py-3 ps-2">
+          <input type="checkbox" name="select-all" id="select-all" (change)="onSelectAll($event)">
+        </th>
+        @for (column of columnsHeader; track column) {
+        <th class="py-3 ps-2">{{ column }}</th>
+        }
+      </thead>
+
+      <tbody class="overflow-y-auto">
+        @for (order of paginationData; track order.id) {
+        <tr (click)="checkOrderBox(order.id)">
+          <td class="py-2">
+            <input type="checkbox" name="select-order" id="order-{{ order.id }}">
+          </td>
+          <td class="py-2">#{{ order.orderId }}</td>
+          <td class="py-2">{{ order.date }}</td>
+          <td class="py-2">{{ order.customer }}</td>
+          <td class="py-2 fw-bold">$ {{ order.total }}</td>
+          <td class="py-2">{{ order.status }}</td>
+          <td class="py-2">{{ order.locations }}</td>
+          <td class="py-2">{{ order.paymentMethod }}</td>
+          <td class="py-2">
+            <button class="btn btn-sm">
+              <img src="assets/images/shared/options.svg" alt="" class="">
+            </button>
+            <button class="btn btn-sm" (click)="viewOrder(order.id); $event.stopPropagation()">
+              <img src="assets/images/shared/eye.svg" alt="" class="">
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <app-paginator [pageSize]="4" [totalItems]="totalOrders" [data]="filteredOrders"
+      (paginatedData)="onPaginationChange($event)">
+    </app-paginator>
+
+  </div>
+</div>

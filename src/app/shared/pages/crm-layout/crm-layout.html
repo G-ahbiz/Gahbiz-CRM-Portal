@@ -1,0 +1,22 @@
+<div class="container-fluid p-0 m-0">
+  <div class="crm-layout d-flex justify-content-start align-items-start">
+
+    <!-- Sidebar Container -->
+    <div class="sidebar-container p-0 m-0 h-100 sidebar-bg">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <div class="crm-layout-content h-100 w-100 content-bg">
+      <!-- Dashboard Header -->
+      <div class="dashboard-header-container p-0 m-0">
+        <app-header></app-header>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div class="content-container p-0 m-0">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+
+  </div>
+</div>

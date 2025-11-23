@@ -1,0 +1,7 @@
+.add-invoice-container {
+  height: calc(100vh - 100px);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

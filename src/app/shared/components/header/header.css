@@ -1,0 +1,43 @@
+.header-container {
+  height: 6.25rem;
+}
+
+.search-form-group {
+  width: 20rem;
+  height: 2rem;
+
+  >input {
+    outline: none;
+
+    &:focus {
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+  }
+}
+
+.dropdown-toggle {
+  border: none !important;
+}
+
+.flag-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.language-dropdown {
+  right: 0;
+  animation: dropDown 0.3s ease-in-out alternate;
+}
+
+@keyframes dropDown {
+  from {
+    transform: translateY(20%);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,14 @@
+<div class="position-fixed top-0 end-0 d-flex flex-column gap-3 p-3" style="z-index: 9999; width: 18rem;">
+  @if (toast) {
+  <div 
+    class="px-4 py-3 rounded shadow-lg text-white d-flex align-items-center justify-content-between animate-slideIn"
+    [class.bg-success]="toast.type === 'success'"
+    [class.bg-danger]="toast.type === 'error'"
+    [class.bg-info]="toast.type === 'info'"
+    [class.bg-warning]="toast.type === 'warning'"
+  >
+    <span class="small fw-medium">{{ toast.message }}</span>
+    <button class="btn-close btn-close-white ms-3 p-0" (click)="dismiss()" aria-label="Close"></button>
+  </div>
+  }
+</div>

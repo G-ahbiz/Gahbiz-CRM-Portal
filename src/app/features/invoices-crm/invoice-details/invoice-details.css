@@ -1,0 +1,18 @@
+.invoice-details-container {
+  height: calc(100vh - 100px) !important;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+
+.card {
+  width: 30%;
+  background: transparent !important;
+}
+
+
+th,td {
+  background: transparent !important;
+}

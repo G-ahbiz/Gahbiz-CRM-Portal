@@ -1,0 +1,97 @@
+.sign-in-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'signin' 'branding';
+  min-height: 100vh;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: 'signin branding';
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      bottom: 10%;
+      left: 50%;
+      width: 1px;
+      background-color: theme('colors.white');
+      transform: translateX(-0.5px);
+      z-index: 10;
+    }
+  }
+}
+
+.signin-container {
+  grid-area: signin;
+  min-height: 100vh;
+
+  @media (max-width: 640px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Scrollbar (same as sign-up) */
+.signin-container::-webkit-scrollbar {
+  width: 6px;
+}
+.signin-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 3px;
+}
+.signin-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+.signin-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-height: 760px) {
+  .sign-in-page {
+    .signin-container {
+      padding: var(--space-sm);
+
+      h1,
+      h2 {
+        font-size: var(--font-lg);
+      }
+
+      form {
+        gap: var(--space-sm);
+      }
+
+      input,
+      button {
+        height: calc(var(--input-height) - 0.5rem);
+        font-size: var(--font-sm);
+      }
+    }
+  }
+}
+
+@media (min-height: 1000px) {
+  .sign-in-page {
+    .signin-container {
+      padding: var(--space-lg);
+
+      h1,
+      h2 {
+        font-size: var(--font-lg);
+      }
+
+      form {
+        gap: var(--space-md);
+      }
+
+      input,
+      button {
+        height: calc(var(--input-height) + 0.5rem);
+        font-size: var(--font-md);
+      }
+    }
+  }
+}

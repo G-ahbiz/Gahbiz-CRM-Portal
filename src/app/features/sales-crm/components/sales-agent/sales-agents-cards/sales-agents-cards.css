@@ -1,0 +1,21 @@
+.form-control {
+  &:focus {
+    box-shadow: none;
+    outline: none;
+    border: none;
+  }
+}
+
+.card {
+  width: 17.5625rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    translate: 0 -0.5rem;
+  }
+}
+
+.card-header {
+  background-color: #005DB50D;
+}
