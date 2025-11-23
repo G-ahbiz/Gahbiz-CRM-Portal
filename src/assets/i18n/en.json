@@ -319,7 +319,8 @@
     },
     "leads-tabel": {
       "export": "Export",
-      "import": "Import"
+      "import": "Import",
+      "addLead": "Add Lead"
     }
   }
 }

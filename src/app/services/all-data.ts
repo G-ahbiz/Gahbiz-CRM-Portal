@@ -442,6 +442,23 @@ export class AllData {
     return this.salesAgents;
   }
 
+  salesAgentTabel: any[] = [
+    { leadId: 67821, customer: 'Karin Daniel', phoneNumber: '(555)123-4567', DateAdded: '20/06/2025', source: 'Website', status: 'Contacted' },
+    { leadId: 67822, customer: 'Jenna Will', phoneNumber: '(555)123-4567', DateAdded: '15/09/2025', source: 'Referral', status: 'Assigned' },
+    { leadId: 67851, customer: 'Ashley Rio ', phoneNumber: '(555)123-4567', DateAdded: '15/11/2025', source: 'Social Media', status: 'Successful' },
+    { leadId: 87821, customer: 'Laura John', phoneNumber: '(555)123-4567', DateAdded: '15/10/2025', source: 'Website', status: 'Contacted' },
+    { leadId: 65321, customer: 'Julia Harry', phoneNumber: '(555)123-4567', DateAdded: '16/11/2025', source: 'Website', status: 'Lost' },
+    { leadId: 12521, customer: 'Maria Michael', phoneNumber: '(555)123-4567', DateAdded: '13/11/2025', source: 'Referral', status: 'Contacted' },
+    { leadId: 45621, customer: 'Emma Jack', phoneNumber: '(555)123-4567', DateAdded: '12/06/2025', source: 'Website', status: 'Contacted' },
+    { leadId: 56421, customer: 'Jamie Danny', phoneNumber: '(555)123-4567', DateAdded: '10/10/2025', source: 'Website', status: 'Contacted' },
+    { leadId: 67222, customer: 'Charlie Riki', phoneNumber: '(555)123-4567', DateAdded: '18/11/2025', source: 'Social Media', status: 'Contacted' },
+    { leadId: 67894, customer: 'Olivia Brown', phoneNumber: '(555)123-4567', DateAdded: '17/10/2025', source: 'Website', status: 'Contacted' },
+  ]
+
+  getSalesAgentTabel() {
+    return this.salesAgentTabel;
+  }
+
   salesAgentsDataCards: any[] = [
     {
       id: 1,

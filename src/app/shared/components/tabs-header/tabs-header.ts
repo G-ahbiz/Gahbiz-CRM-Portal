@@ -10,6 +10,7 @@ import { LogCard } from '../../interfaces/log-card';
   styleUrl: './tabs-header.css',
 })
 export class TabsHeader implements OnInit {
+  @Input() icon: string = '';
   @Input() title: string = '';
   @Input() cardsData: LogCard[] = [];
   @Input() folderName: string = '';

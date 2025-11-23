@@ -1,5 +1,8 @@
 <!-- Title -->
-<h1 class="title fs-4 fw-bold mb-4">{{title}}</h1>
+<div class="title-container d-flex justify-content-start align-items-center gap-3 mb-4">
+  <img src="assets/images/sidebar/{{icon}}.svg" alt="" class="">
+  <h1 class="title fs-4 fw-bold m-0">{{title}}</h1>
+</div>
 <!-- Cards Container -->
 <div class="cards-container d-flex flex-row justify-content-between align-items-center gap-3 w-100">
   @for (card of cardsData; track card.title) {
