@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { ROUTES } from '@shared/config/constants';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,7 +11,6 @@ import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-transla
   styleUrl: './sidebar.css',
 })
 export class Sidebar implements OnInit {
-
   isSidebarCollapsed = signal<boolean>(false);
 
   isArabic = signal<boolean>(false);
@@ -21,7 +21,9 @@ export class Sidebar implements OnInit {
   isLeadsActive = signal<boolean>(false);
   isSalesAgentsActive = signal<boolean>(false);
 
-  constructor(private translateService: TranslateService) { }
+  Routes = ROUTES;
+
+  constructor(private translateService: TranslateService) {}
 
   ngOnInit() {
     this.initializeTranslation();

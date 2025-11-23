@@ -13,6 +13,15 @@ export interface ordersInterface {
   clientId: number;
 }
 
+export interface CardsInterface {
+  title: string;
+  value: number;
+  icon: string;
+  bgColor: string;
+  rating: number;
+  ratingStatues: string;
+}
+
 export interface customersDetailsInterface {
   id: number;
   fullName: string;
@@ -63,5 +72,27 @@ export interface Customer {
   noOfOrders: number;
   status: string;
   assignedTo: string;
+  selected?: boolean;
+}
+
+export interface SalesAgents {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  status: string;
+  assignedTo: string;
+  selected?: boolean;
+}
+
+export interface LeadsInterface {
+  id: number;
+  name: string;
+  service: string;
+  status: string;
+  source: string;
+  assignedTo: string;
+  value: string;
+  createdDate: string;
   selected?: boolean;
 }

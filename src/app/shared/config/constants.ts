@@ -14,6 +14,7 @@ export const ROUTES = {
   allServices: '/all-services',
   leadsDetails: '/main/sales/leads/leads-details',
   addLead: '/main/sales/leads/add-lead',
+  leadsTable: '/main/sales/leads/leads-main',
 };
 
 export const USER_TYPES = {
