@@ -1,4 +1,198 @@
 {
+  "HOME": "Home",
+  "SIGN_IN": "Sign In",
+  "SIGN_UP": "Sign Up",
+  "AUTH": {
+    "WELCOME_BACK": "Welcome Back!",
+    "WELCOME_TO_CRM": "Welcome to CRM",
+    "DONT_HAVE_ACCOUNT": "Don't have an account?",
+    "SIGN_UP_NOW": "Sign up now",
+    "EMAIL_ADDRESS": "Email",
+    "PASSWORD": "Password",
+    "ENTER_EMAIL": "Enter your email",
+    "ENTER_PASSWORD": "Enter your password",
+    "LOGIN": "Login",
+    "SIGNING_IN": "Signing in...",
+    "FORGOT_PASSWORD": "Forgot your password?",
+    "LOGIN_WITH_GOOGLE": "Login with Google",
+    "LOGIN_WITH_FACEBOOK": "Login with Facebook",
+    "FORGOT_YOUR_PASSWORD": "Forgot your password?",
+    "NO_WORRIES": "No worries, we will send you reset instructions",
+    "RESET_PASSWORD": "Reset Password",
+    "RESETTING_PASSWORD": "Resetting password...",
+    "BACK_TO_LOGIN": "Back to login",
+    "PASSWORD_RESET": "Set new password",
+    "PASSWORD_RESET_INSTRUCTIONS": "Must be at least 8 characters",
+    "WE_SENT_CODE": "We sent a code to",
+    "CONTINUE": "Continue",
+    "VERIFYING": "Verifying...",
+    "DIDNT_RECEIVE_CODE": "Didn't receive a code?",
+    "CLICK_TO_RESEND": "Click to resend",
+    "NEW_PASSWORD": "Password",
+    "ENTER_NEW_PASSWORD": "Enter your password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "CONFIRM_NEW_PASSWORD": "Confirm your password",
+    "RESETTING_PASSWORD_LOADING": "Resetting password...",
+    "BACK_TO_OTP": "Back to OTP",
+    "PASSWORDS_DO_NOT_MATCH": "Passwords do not match",
+    "PASSWORD_RESET_SUCCESS": "Password reset successfully!",
+    "INVALID_OTP": "Invalid OTP code",
+    "FAILED_TO_VERIFY_OTP": "Failed to verify OTP",
+    "CODE_RESENT_SUCCESS": "Code resent successfully!",
+    "FAILED_TO_RESEND_CODE": "Failed to resend code",
+    "EMAIL_REQUIRED": "Email is required",
+    "PASSWORD_REQUIRED": "Password is required",
+    "VALID_EMAIL": "Please enter a valid email address",
+    "PASSWORD_PATTERN": "Password must be at least 8 characters with uppercase, lowercase, number and special character",
+    "CODE_REQUIRED": "Code is required",
+    "CODE_4_DIGITS": "Code must be 4 digits",
+    "CODE_NUMBERS_ONLY": "Code must contain only numbers",
+    "NEW_PASSWORD_REQUIRED": "New password is required",
+    "CONFIRM_PASSWORD_REQUIRED": "Confirm password is required",
+    "NEW_PASSWORD_PATTERN": "New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
+    "CONFIRM_PASSWORD_PATTERN": "Confirm password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
+    "ERRORS": {
+      "REQUIRED": "This field is required.",
+      "MIN_LENGTH": "Must be at least {{requiredLength}} characters long.",
+      "MAX_LENGTH": "Cannot exceed {{requiredLength}} characters.",
+      "EMAIL": "Please enter a valid email address.",
+      "FULLNAME_PATTERN": "Only letters, spaces, apostrophes, and hyphens are allowed.",
+      "PHONE_PATTERN": "Please enter a valid phone number.",
+      "PASSWORD_PATTERN": "Password must contain uppercase, lowercase, a number, and a special character.",
+      "INVALID": "The entered value is not valid."
+    }
+  },
+  "COMMON": {
+    "OR": "Or",
+    "AND": "And",
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+    "SUCCESS": "Success",
+    "ERROR": "Error",
+    "LOADING": "Loading...",
+    "SAVING": "Saving...",
+    "SUBMITTING": "Submitting...",
+    "YES": "Yes",
+    "NO": "No",
+    "CANCEL": "Cancel",
+    "CONFIRM": "Confirm",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "UPDATE": "Update",
+    "SAVE": "Save",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "PREVIOUS": "Previous",
+    "SEARCH": "Search",
+    "FILTER": "Filter",
+    "SORT": "Sort",
+    "VIEW": "View",
+    "ADD": "Add",
+    "REMOVE": "Remove",
+    "CREATED": "Created",
+    "UPDATED": "Updated",
+    "DELETED": "Deleted",
+    "TRY_AGAIN": "Try Again",
+    "READ_MORE": "Read More",
+    "NOT_AVAILABLE": "N/A",
+    "drag-and-drop-or": "Drag and Drop or ",
+    "browse": "Browse"
+  },
+  "NEW_PASSWORD": {
+    "ERRORS": {
+      "REQUIRED": "This field is required.",
+      "PASSWORD_PATTERN": "Password must contain uppercase, lowercase, a number, and a special character.",
+      "INVALID": "The entered value is not valid.",
+      "OTP_PATTERN": "Code must contain only numbers.",
+      "LENGTH": "Must be exactly {{requiredLength}} characters long."
+    },
+    "MESSAGES": {
+      "SUCCESS": "Password reset successfully!",
+      "INVALID_OTP": "Invalid OTP code",
+      "FAILED_TO_VERIFY_OTP": "Failed to verify OTP",
+      "CODE_RESENT_SUCCESS": "Code resent successfully!",
+      "FAILED_TO_RESEND_CODE": "Failed to resend code"
+    }
+  },
+  "SIGNUP": {
+    "TITLE": "Get Started Now",
+    "SUBTITLE": "Please enter your information to access your account",
+    "FIELDS": {
+      "FULL_NAME": "Full Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone",
+      "PASSWORD": "Password",
+      "TERMS": "I agree to the",
+      "TERMS_LINK": "Terms of Service",
+      "PRIVACY_LINK": "Privacy Policy"
+    },
+    "PLACEHOLDERS": {
+      "FULL_NAME": "Enter your full name",
+      "EMAIL": "Enter your email",
+      "PHONE": "Enter your phone",
+      "PASSWORD": "Enter your password"
+    },
+    "BUTTONS": {
+      "SUBMIT": "Sign Up",
+      "SUBMITTING": "Signing Up...",
+      "GOOGLE": "Sign Up with Google",
+      "FACEBOOK": "Sign Up with Facebook"
+    },
+    "MESSAGES": {
+      "SUCCESS_DETAIL": "We've sent a confirmation link to {{email}}.",
+      "FAILURE_EMAIL_EXISTS": "This email is already registered. Please log in instead.",
+      "FAILURE_INVALID_INPUT": "Some of your inputs are invalid. Please check and try again.",
+      "FAILURE_WEAK_PASSWORD": "Your password is too weak. Please choose a stronger one.",
+      "FAILURE_SERVER": "Server error occurred. Please try again later.",
+      "FAILURE": "Something went wrong. Please try again."
+    },
+    "ERRORS": {
+      "REQUIRED": "This field is required.",
+      "MIN_LENGTH": "Must be at least {{requiredLength}} characters long.",
+      "MAX_LENGTH": "Cannot exceed {{requiredLength}} characters.",
+      "EMAIL": "Please enter a valid email address.",
+      "FULLNAME_PATTERN": "Only letters, spaces, apostrophes, and hyphens are allowed.",
+      "PASSWORD_PATTERN": "Password must contain uppercase, lowercase, a number, and a special character.",
+      "INVALID": "The entered value is not valid.",
+      "US_PHONE_PATTERN": "US phone number must be in format: +1 followed by 10 digits (e.g., +11234567890)",
+      "PHONE_PATTERN": "Please enter a valid international phone number"
+    }
+  },
+  "CONFIRM_EMAIL": {
+    "TITLE": "Confirm Email",
+    "SUBTITLE": "We send a code to",
+    "BUTTONS": {
+      "SUBMIT": "Confirm Email",
+      "SUBMITTING": "Confirming...",
+      "RESEND": "Resend Code",
+      "RESENDING": "Resend code after",
+      "CONFIRM_WITH_EMAIL": "Confirm with Email Link"
+    },
+    "MESSAGES": {
+      "SUCCESS": "Your email has been confirmed successfully.",
+      "INVALID_OR_EXPIRED": "The verification code is invalid or has expired. Please try again or request a new one.",
+      "USER_NOT_FOUND": "We couldn't find your account. Please sign up again.",
+      "ALREADY_VERIFIED": "Your email is already confirmed. You can sign in directly.",
+      "UPDATE_FAILED": "We couldn't verify your email due to a system issue. Please try again later.",
+      "FAILURE": "We couldn't confirm your email right now. Please try again later.",
+      "RESEND_SUCCESS_OTP": "A new verification code has been sent to your email. Please check your inbox.",
+      "RESEND_SUCCESS_LINK": "A new verification link has been sent to your email. Please check your inbox.",
+      "RESEND_SUCCESS_GENERIC": "If your email is registered, you will receive a confirmation message shortly.",
+      "RESEND_ALREADY_VERIFIED": "Your email is already confirmed. You can sign in directly.",
+      "RESEND_FAILURE": "We couldn't resend the confirmation email. Please try again later.",
+      "INVALID_LINK": "The confirmation link is invalid.",
+      "BLOCKED": "We couldn't verify your registration. Please sign in again."
+    },
+    "ERRORS": {
+      "REQUIRED": "Code is required.",
+      "LENGTH": "Code must be exactly {{length}} digits.",
+      "DIGITS": "Code must contain only numbers.",
+      "INVALID": "Invalid code."
+    }
+  },
+  "HEADER": {
+    "LOG_OUT": "Log Out"
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "customers": "Customers",
@@ -90,6 +284,43 @@
     "client": "Client",
     "add-customer-page": {
       "title": "Add Customer"
+    }
+  },
+  "sales-crm": {
+    "leads-add-page": {
+      "title": "Add Lead",
+      "name": "Name",
+      "service": "Service",
+      "source": "Source",
+      "status": "Status",
+      "select-status": "Select Status",
+      "new": "New",
+      "in-progress": "In Progress",
+      "qualified": "Qualified",
+      "lost": "Lost",
+      "assigned-to": "Assigned To",
+      "value": "Value",
+      "created-date": "Created Date",
+      "save-lead": "Save Lead",
+      "cancel": "Cancel",
+      "name-required": "Name is required",
+      "service-required": "Service is required",
+      "source-required": "Source is required",
+      "status-required": "Status is required",
+      "assigned-to-required": "Assigned To is required",
+      "value-required": "Value is required",
+      "created-date-required": "Created Date is required"
+    },
+    "sales-agents-cards": {
+      "assign-task": "Assign Task",
+      "add-sales-agent": "Add Sales Agent",
+      "sort": "Sort",
+      "search": "Search By Name"
+    },
+    "leads-tabel": {
+      "export": "Export",
+      "import": "Import",
+      "addLead": "Add Lead"
     }
   }
 }

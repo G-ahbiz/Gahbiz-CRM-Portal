@@ -14,11 +14,10 @@ import {
 } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-// import { AuthInterceptor } from '@core/interceptors/auth.interceptor';
 import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { provideAnimations } from '@angular/platform-browser/animations';
-
+import { AuthInterceptor } from '@core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,19 +38,19 @@ export const appConfig: ApplicationConfig = {
         preset: Aura,
         options: {
           prefix: 'p',
-          darkModeSelector: 'system',
+          darkModeSelector: false,
           cssLayer: false,
-          ripple: true
-        }
+          ripple: true,
+        },
       },
       csp: {
-        nonce: '...'
-      }
+        nonce: '...',
+      },
     }),
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: AuthInterceptor,
-    //   multi: true,
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
 };
