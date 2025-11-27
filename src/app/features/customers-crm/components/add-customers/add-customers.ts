@@ -13,7 +13,7 @@ import { CustomersFacadeService } from '../../services/customers-facade.service'
 import { AuthService } from '@core/services/auth.service';
 import { GetSalesAgentsResponse } from '../../interfaces/get-sales-agents-response';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { GENDERS, LANGUAGES, ROUTES } from '@shared/config/constants';
+import { GENDERS, LANGUAGES, ROUTES, USER_TYPES } from '@shared/config/constants';
 import { AddCustomerRequest } from '../../interfaces/add-customer-request';
 import { ToastService } from '@core/services/toast.service';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
@@ -25,10 +25,11 @@ import { ErrorFacadeService } from '@core/services/error.facade.service';
 })
 export class AddCustomers implements OnInit {
   addCustomerForm: FormGroup;
-  salesAgents: GetSalesAgentsResponse[] = [];
+  salesAgents = signal<GetSalesAgentsResponse[]>([]);
   languages = Object.values(LANGUAGES);
   genders = Object.values(GENDERS);
   loading = signal<boolean>(false);
+  USER_TYPES = USER_TYPES;
 
   private router = inject(Router);
   private fb = inject(FormBuilder);
@@ -57,7 +58,7 @@ export class AddCustomers implements OnInit {
 
   ngOnInit() {
     this.currentUser$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((currentUser) => {
-      if (currentUser?.type === 'Manager') {
+      if (currentUser?.type === USER_TYPES.MANAGER || currentUser?.type === USER_TYPES.ADMIN) {
         this.getSalesAgents();
       } else {
         this.addCustomerForm.get('appUserId')?.setValue(currentUser?.id);
@@ -129,7 +130,7 @@ export class AddCustomers implements OnInit {
       .subscribe({
         next: (response) => {
           if (response.succeeded && response.data) {
-            this.salesAgents = response.data;
+            this.salesAgents.set(response.data);
           } else {
             const errorMsg = this.errorFacadeService.handleApiResponse(response);
             this.toast.error(errorMsg);

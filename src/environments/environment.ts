@@ -35,6 +35,6 @@ export const environment = {
     getAllCustomersPaginated: '/Customers/all',
     updateCustomer: '/Customers/update', // provide id in query
     deleteCustomer: (id: string) => `/Customers/${id}`,
-    getSalesAgents: '/SalesAgents',
+    getSalesAgents: '/SalesManagement/agentsList',
   },
 };

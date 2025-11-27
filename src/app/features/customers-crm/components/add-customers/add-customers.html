@@ -164,7 +164,8 @@
       </div>
 
       <!-- Assign User Container -->
-      @if((currentUser$ | async)?.type === 'Manager') {
+      @if((currentUser$ | async)?.type === USER_TYPES.MANAGER || (currentUser$ | async)?.type ===
+      USER_TYPES.ADMIN) {
       <div class="appUserId-container d-flex justify-content-start align-items-start gap-3 w-100">
         <div class="form-group w-100">
           <label for="appUserId" class="form-label">
@@ -175,7 +176,7 @@
             <option value="" disabled selected>
               {{ 'customers-crm.add-customer-page.select-user' | translate }}
             </option>
-            @for(agent of salesAgents; track agent.id) {
+            @for(agent of salesAgents(); track agent.id) {
             <option [value]="agent.id">{{ agent.name }}</option>
             }
           </select>
