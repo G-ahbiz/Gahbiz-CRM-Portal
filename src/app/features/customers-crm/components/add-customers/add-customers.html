@@ -166,13 +166,20 @@
       <!-- Assign User Container -->
       @if((currentUser$ | async)?.type === USER_TYPES.MANAGER || (currentUser$ | async)?.type ===
       USER_TYPES.ADMIN) {
-      <div class="appUserId-container d-flex justify-content-start align-items-start gap-3 w-100">
+      <div
+        class="assignedAgentId-container d-flex justify-content-start align-items-start gap-3 w-100"
+      >
         <div class="form-group w-100">
-          <label for="appUserId" class="form-label">
+          <label for="assignedAgentId" class="form-label">
             <span>{{ 'customers-crm.add-customer-page.assign-user' | translate }}</span>
-            <span [class]="checkValidity('appUserId')"> *</span>
+            <span [class]="checkValidity('assignedAgentId')"> *</span>
           </label>
-          <select name="appUserId" id="appUserId" class="form-select" formControlName="appUserId">
+          <select
+            name="assignedAgentId"
+            id="assignedAgentId"
+            class="form-select"
+            formControlName="assignedAgentId"
+          >
             <option value="" disabled selected>
               {{ 'customers-crm.add-customer-page.select-user' | translate }}
             </option>
@@ -180,9 +187,9 @@
             <option [value]="agent.id">{{ agent.name }}</option>
             }
           </select>
-          @if(addCustomerForm.get('appUserId')?.invalid &&
-          addCustomerForm.get('appUserId')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('appUserId') }}</div>
+          @if(addCustomerForm.get('assignedAgentId')?.invalid &&
+          addCustomerForm.get('assignedAgentId')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('assignedAgentId') }}</div>
           }
         </div>
       </div>

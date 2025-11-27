@@ -14,11 +14,11 @@ export class ErrorFacadeService {
    * Handle API Response errors and extract error message
    */
   handleApiResponse<T>(response: ApiResponse<T>): string {
-    if (response.errors && response.errors.length > 0) {
-      return response.errors[0];
-    }
     if (response.message) {
       return response.message;
+    }
+    if (response.errors && response.errors.length > 0) {
+      return response.errors[0];
     }
     return 'An error occurred while processing your request';
   }
@@ -86,13 +86,5 @@ export class ErrorFacadeService {
     }
 
     this.toastService.error(errorMessage);
-  }
-
-  /**
-   * Legacy method - kept for backward compatibility
-   */
-  handleError(error: HttpErrorResponse): Observable<never> {
-    const errorMessage = this.handleHttpError(error);
-    return throwError(() => new Error(errorMessage));
   }
 }

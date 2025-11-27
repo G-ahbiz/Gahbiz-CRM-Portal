@@ -52,7 +52,7 @@ export class AddCustomers implements OnInit {
       postalCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       address: ['', [Validators.required, Validators.maxLength(200)]],
       defaultLanguage: ['', [Validators.required]],
-      appUserId: ['', [Validators.required]],
+      assignedAgentId: ['', [Validators.required]],
     });
   }
 
@@ -61,7 +61,7 @@ export class AddCustomers implements OnInit {
       if (currentUser?.type === USER_TYPES.MANAGER || currentUser?.type === USER_TYPES.ADMIN) {
         this.getSalesAgents();
       } else {
-        this.addCustomerForm.get('appUserId')?.setValue(currentUser?.id);
+        this.addCustomerForm.get('assignedAgentId')?.setValue(currentUser?.id);
       }
     });
   }
@@ -161,7 +161,7 @@ export class AddCustomers implements OnInit {
       postalCode: 'Postal Code',
       address: 'Address',
       defaultLanguage: 'Default Language',
-      appUserId: 'Assigned User',
+      assignedAgentId: 'Assigned Agent',
     };
 
     const displayName = fieldDisplayNames[fieldName] || fieldName;

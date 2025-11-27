@@ -9,5 +9,5 @@ export interface AddCustomerRequest {
   Address: string;
   SSN: string;
   DefaultLanguage: string;
-  AppUserId: string;
+  AssignedAgentId: string;
 }
