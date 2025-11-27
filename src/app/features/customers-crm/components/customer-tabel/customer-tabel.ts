@@ -1,58 +1,53 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy, DestroyRef, inject, signal } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
-import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
-import { Subscription } from 'rxjs';
 import { ROUTES } from '@shared/config/constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
 import { ToastService } from '@core/services/toast.service';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
+const ALLOWED_SORT_FIELDS = ['Name'] as const;
+
 @Component({
   selector: 'app-customer-tabel',
-  imports: [CommonModule, TranslateModule, RouterLink, PaginatorModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    RouterLink,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+  ],
   templateUrl: './customer-tabel.html',
   styleUrl: './customer-tabel.css',
 })
 export class CustomerTabel implements OnInit {
   // Pagination state
-  first: number = 0;
-  rows: number = 4;
+  pageNumber: number = 1;
+  pageSize: number = 10;
+
+  // Sorting state
+  sortColumn = signal<string>('');
+  sortDirection = signal<'ASC' | 'DESC'>('ASC');
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(ToastService);
 
-  get paginatedCustomers(): CustomerViewModel[] {
-    return this.customersTabelData();
-  }
-
-  /**
-   * Handle page change events from PrimeNG paginator
-   */
-  onPageChange(event: PaginatorState): void {
-    this.first = event.first ?? 0;
-    this.rows = event.rows ?? 10;
-    this.loadCustomersData();
-  }
-
-  // Table configuration
-  readonly customersTabelHeader: readonly string[] = [
-    'Customer ID',
-    'Phone Number',
-    'Customer Name',
-    'No of Orders',
-    'Assigned To',
-    'Actions',
-  ];
-
   // Data properties
   customersTabelData = signal<CustomerViewModel[]>([]);
-  totalCustomersTabelData: number = 0;
+  totalRecords: number = 0;
   loading = signal<boolean>(false);
 
   // Selection state
@@ -74,14 +69,13 @@ export class CustomerTabel implements OnInit {
    * Load customers data from API
    */
   private loadCustomersData(): void {
-    const pageNumber = this.first / this.rows + 1;
-    const pageSize = this.rows;
-
     this.loading.set(true);
     this.customersFacade
       .getAllCustomers({
-        pageNumber,
-        pageSize,
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        sortColumn: this.sortColumn() || undefined,
+        sortDirection: this.sortColumn() ? this.sortDirection() : undefined,
       })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -96,16 +90,40 @@ export class CustomerTabel implements OnInit {
               selected: false,
             }))
           );
-          this.totalCustomersTabelData = response.totalCount;
+          this.totalRecords = response.totalCount;
           this.updateSelectAllState();
         },
         error: (err) => {
           console.error('Error loading customers', err);
         },
-        complete: () => {
-          console.log('complete');
-        },
       });
+  }
+
+  /**
+   * Handle page change events from PrimeNG table
+   */
+  onPageChange(event: any): void {
+    this.pageNumber =
+      event.page !== undefined ? event.page + 1 : Math.floor(event.first / event.rows) + 1;
+    this.pageSize = event.rows;
+    this.loadCustomersData();
+  }
+
+  /**
+   * Handle sort events from PrimeNG table
+   */
+  onSortColumn(event: any): void {
+    if (event.field === 'fullName') {
+      event.field = 'Name';
+    }
+    if (!ALLOWED_SORT_FIELDS.includes(event.field)) {
+      console.warn(`Sorting not allowed for field: ${event.field}`);
+      return;
+    }
+
+    this.sortColumn.set(event.field);
+    this.sortDirection.set(event.order === 1 ? 'ASC' : 'DESC');
+    this.loadCustomersData();
   }
 
   /**
@@ -141,7 +159,6 @@ export class CustomerTabel implements OnInit {
 
   /**
    * Update the select all checkbox state based on individual selections
-   * Only checks invoices on the current page
    */
   private updateSelectAllState(): void {
     const currentPageCustomers = this.customersTabelData();
@@ -150,10 +167,7 @@ export class CustomerTabel implements OnInit {
       return;
     }
 
-    const allSelected = currentPageCustomers.every((customer) => customer.selected);
-    const noneSelected = currentPageCustomers.every((customer) => !customer.selected);
-
-    this.isAllSelected = allSelected && !noneSelected;
+    this.isAllSelected = currentPageCustomers.every((customer) => customer.selected);
   }
 
   /**
@@ -164,6 +178,7 @@ export class CustomerTabel implements OnInit {
   }
 
   onDeleteCustomer(id: string): void {
+    this.loading.set(true);
     this.customersFacade
       .deleteCustomer(id)
       .pipe(
@@ -185,6 +200,7 @@ export class CustomerTabel implements OnInit {
         },
       });
   }
+
   editCustomer(id: string): void {
     console.log('editCustomer', id);
   }

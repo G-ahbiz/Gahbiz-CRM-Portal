@@ -1,130 +1,135 @@
 <div class="container-fluid p-0 m-0">
-  <!-- Customers Actions Container -->
-  <div class="customers-actions-container mb-3 d-flex justify-content-between align-items-center">
-    <!-- Export Button Container -->
-    <div class="export-btn-container">
-      <button class="btn btn-sm outline-primary-clr px-3 py-2">
-        {{ 'customers-crm.export' | translate }}
-      </button>
-    </div>
+  <div class="card border-0 bg-transparent">
+    <p-table
+      #dt1
+      [value]="customersTabelData()"
+      dataKey="id"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [lazy]="true"
+      (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
+      [loading]="loading()"
+    >
+      <ng-template #caption>
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Export Button Container -->
+          <div class="export-btn-container">
+            <button
+              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+            >
+              <i class="pi pi-download fs-875"></i>
+              {{ 'customers-crm.export' | translate }}
+            </button>
+          </div>
+          <!-- Filter and Search Container -->
+          <div class="d-flex justify-content-start align-items-center gap-0">
+            <p-iconfield iconPosition="left" class="fw-bold">
+              <p-inputicon>
+                <i class="pi pi-search"></i>
+              </p-inputicon>
+              <input
+                pInputText
+                type="text"
+                (input)="onSearchChange($any($event.target).value)"
+                #searchInput
+                placeholder="{{ 'invoices-crm.search' | translate }}"
+              />
+            </p-iconfield>
+          </div>
 
-    <div class="srch-filter-container d-flex justify-content-start align-items-center gap-3">
-      <!-- Search Container -->
-      <div
-        class="search-container d-flex justify-content-start align-items-center bg-white rounded-3 px-2"
-      >
-        <label for="search" class="m-0 p-0 text-muted">
-          <img src="assets/images/shared/search.svg" alt="" class="" />
-        </label>
-        <input
-          type="text"
-          id="search"
-          class="form-control border-0 bg-transparent"
-          placeholder="{{ 'invoices-crm.search' | translate }}"
-          (input)="onSearchChange($any($event.target).value)"
-          #searchInput
-        />
-      </div>
-
-      <!-- Add Customer Button -->
-      <div class="add-customer-btn-container">
-        <button
-          class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-start align-items-center gap-2 rounded-3"
-          routerLink="/main/customers/add-customer"
-        >
-          <img src="assets/images/shared/plus.svg" alt="" class="" />
-          {{ 'customers-crm.add-customer' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Customers Table Container -->
-  <div class="table-responsive w-100 h-auto table-container">
-    <div class="position-relative">
-      <!-- Loading Overlay -->
-      @if (loading()) {
-      <div
-        class="position-absolute w-100 h-100 top-0 start-0 bg-white bg-opacity-75 d-flex justify-content-center align-items-center"
-        style="z-index: 10"
-      >
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
+          <!-- Add Customer Button Container -->
+          <div class="d-flex justify-content-start align-items-center gap-0">
+            <button
+              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
+              routerLink="/main/customers/add-customer"
+            >
+              <img src="assets/images/shared/plus.svg" alt="" class="" />
+              {{ 'customers-crm.add-customer' | translate }}
+            </button>
+          </div>
         </div>
-      </div>
-      }
-
-      <table class="table table-responsive table-hover customers-table">
-        <thead>
-          <th class="py-3 ps-2">
-            <input
-              type="checkbox"
-              name="select-all"
-              id="select-all"
-              [checked]="isAllSelected"
-              (change)="onSelectAll($event)"
-            />
-          </th>
-          @for (header of customersTabelHeader; track header) {
-          <th class="py-3 ps-2 text-capitalize">{{ header }}</th>
-          }
-        </thead>
-        <tbody>
-          @for (customer of paginatedCustomers; track trackByCustomerId($index, customer)) {
-          <tr>
-            <td>
+        <div class="title-container my-4">
+          <h5 class="m-0 p-0">All Customers</h5>
+        </div>
+      </ng-template>
+      <ng-template #header>
+        <tr>
+          <th class="d-flex justify-content-center align-items-center gap-2">
+            <div class="flex items-center gap-2">
               <input
                 type="checkbox"
-                name="select-customer"
-                id="customer-{{ customer.id }}"
-                [checked]="customer.selected"
-                (change)="toggleCustomerSelection(customer)"
+                name="select-all"
+                id="select-all"
+                [checked]="isAllSelected"
+                (change)="onSelectAll($event)"
               />
-            </td>
-            <td>{{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}</td>
-            <td>{{ customer.phoneNumber }}</td>
-            <td>{{ customer.fullName }}</td>
-            <td>{{ customer.noOrders }}</td>
-            <td>{{ customer.assignedTo }}</td>
-            <td class="d-flex justify-content-center align-items-center gap-2">
-              <button
-                class="btn btn-sm"
-                (click)="viewCustomer(customer.id); $event.stopPropagation()"
-              >
-                <img src="assets/images/shared/eye.svg" alt="" class="" />
-              </button>
-              <button
-                class="btn btn-sm"
-                (click)="editCustomer(customer.id); $event.stopPropagation()"
-              >
-                <i class="pi pi-pencil"></i>
-              </button>
-              <button
-                class="btn btn-sm"
-                (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
-              >
-                <i class="pi pi-trash"></i>
-              </button>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <div class="d-flex justify-center bg-transparent w-100">
-      <p-paginator
-        class="bg-transparent"
-        (onPageChange)="onPageChange($event)"
-        [first]="first"
-        [rows]="rows"
-        [totalRecords]="totalCustomersTabelData"
-        [rowsPerPageOptions]="[2, 4, 6, 8, 10]"
-        [showCurrentPageReport]="true"
-        [showPageLinks]="true"
-        [showJumpToPageDropdown]="false"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-      />
-    </div>
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">ID</div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">Phone Number</div>
+          </th>
+          <th [pSortableColumn]="'fullName'">
+            <div class="flex items-center gap-2">
+              Customer Name
+              <p-sortIcon field="fullName" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">No of Orders</div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">Assigned To</div>
+          </th>
+          <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-customer let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              name="select-customer"
+              id="customer-{{ customer.id }}"
+              [checked]="customer.selected"
+              (change)="toggleCustomerSelection(customer)"
+            />
+          </td>
+          <td [title]="customer.id">
+            {{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
+          </td>
+          <td>{{ customer.phoneNumber }}</td>
+          <td>{{ customer.fullName }}</td>
+          <td>{{ customer.noOrders }}</td>
+          <td>{{ customer.assignedTo }}</td>
+          <td class="d-flex justify-content-center align-items-center gap-2">
+            <button
+              class="btn btn-sm"
+              (click)="viewCustomer(customer.id); $event.stopPropagation()"
+            >
+              <img src="assets/images/shared/eye.svg" alt="" class="" />
+            </button>
+            <button
+              class="btn btn-sm"
+              (click)="editCustomer(customer.id); $event.stopPropagation()"
+            >
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-sm"
+              (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 </div>
