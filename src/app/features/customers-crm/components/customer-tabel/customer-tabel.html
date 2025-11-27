@@ -10,22 +10,29 @@
 
     <div class="srch-filter-container d-flex justify-content-start align-items-center gap-3">
       <!-- Search Container -->
-      <div class="search-container d-flex justify-content-start align-items-center bg-white rounded-3 px-2">
+      <div
+        class="search-container d-flex justify-content-start align-items-center bg-white rounded-3 px-2"
+      >
         <label for="search" class="m-0 p-0 text-muted">
-          <img src="assets/images/shared/search.svg" alt="" class="">
+          <img src="assets/images/shared/search.svg" alt="" class="" />
         </label>
-        <input type="text" id="search" class="form-control border-0 bg-transparent"
-          placeholder="{{ 'invoices-crm.search' | translate }}" (input)="onSearchChange($any($event.target).value)"
-          #searchInput>
+        <input
+          type="text"
+          id="search"
+          class="form-control border-0 bg-transparent"
+          placeholder="{{ 'invoices-crm.search' | translate }}"
+          (input)="onSearchChange($any($event.target).value)"
+          #searchInput
+        />
       </div>
-
 
       <!-- Add Customer Button -->
       <div class="add-customer-btn-container">
         <button
           class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-start align-items-center gap-2 rounded-3"
-          routerLink="/main/customers/add-customer">
-          <img src="assets/images/shared/plus.svg" alt="" class="">
+          routerLink="/main/customers/add-customer"
+        >
+          <img src="assets/images/shared/plus.svg" alt="" class="" />
           {{ 'customers-crm.add-customer' | translate }}
         </button>
       </div>
@@ -34,52 +41,108 @@
 
   <!-- Customers Table Container -->
   <div class="table-responsive w-100 h-auto table-container">
-    <table class="table table-responsive table-hover customers-table">
-      <thead>
-        <th class="py-3 ps-2">
-          <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
-            (change)="onSelectAll($event)">
-        </th>
-        @for (header of customersTabelHeader; track header) {
-        <th class="py-3 ps-2 text-capitalize">{{ header }}</th>
-        }
-      </thead>
-      <tbody>
-        @for (customer of paginatedCustomers; track trackByCustomerId($index, customer)) {
-        <tr>
-          <td>
-            <input type="checkbox" name="select-customer" id="customer-{{ customer.id }}" [checked]="customer.selected"
-              (change)="toggleCustomerSelection(customer)">
-          </td>
-          <td>#{{ customer.id }}</td>
-          <td>{{ customer.phoneNumber }}</td>
-          <td>{{ customer.customerName }}</td>
-          <td>{{ customer.noOfOrders }}</td>
-          <td class="p-2 text-center">
-            <span class="py-1 px-2 rounded-3"
-              [class]="customer.status === 'Lead' ? 'text-primary card-primary' : customer.status === 'User' ? 'text-warning  card-yellow' : customer.status === 'Inactive' ? 'text-danger card-red' : customer.status === 'Client' ? 'text-success card-green' : ''">
-              {{ customer.status }}
-            </span>
-          </td>
-          <td>{{ customer.assignedTo }}</td>
-          <td>
-            <button class="btn btn-sm">
-              <img src="assets/images/shared/options.svg" alt="" class="">
-            </button>
-            <button class="btn btn-sm" (click)="viewCustomer(customer.id); $event.stopPropagation()">
-              <img src="assets/images/shared/eye.svg" alt="" class="">
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+    <div class="position-relative">
+      <!-- Loading Overlay -->
+      @if (loading()) {
+      <div
+        class="position-absolute w-100 h-100 top-0 start-0 bg-white bg-opacity-75 d-flex justify-content-center align-items-center"
+        style="z-index: 10"
+      >
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      }
 
-    <div class=" d-flex justify-center bg-transparent w-100">
-      <p-paginator class="bg-transparent" (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows"
-        [totalRecords]="totalCustomersTabelData" [rowsPerPageOptions]="[2, 4, 6, 8,10]" [showCurrentPageReport]="true"
-        [showPageLinks]="true" [showJumpToPageDropdown]="false"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" />
+      <table class="table table-responsive table-hover customers-table">
+        <thead>
+          <th class="py-3 ps-2">
+            <input
+              type="checkbox"
+              name="select-all"
+              id="select-all"
+              [checked]="isAllSelected"
+              (change)="onSelectAll($event)"
+            />
+          </th>
+          @for (header of customersTabelHeader; track header) {
+          <th class="py-3 ps-2 text-capitalize">{{ header }}</th>
+          }
+        </thead>
+        <tbody>
+          @for (customer of paginatedCustomers; track trackByCustomerId($index, customer)) {
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="select-customer"
+                id="customer-{{ customer.id }}"
+                [checked]="customer.selected"
+                (change)="toggleCustomerSelection(customer)"
+              />
+            </td>
+            <td>{{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}</td>
+            <td>{{ customer.phoneNumber }}</td>
+            <td>{{ customer.fullName }}</td>
+            <td>{{ customer.noOrders }}</td>
+            <td class="p-2 text-center">
+              <!-- <span
+                class="py-1 px-2 rounded-3"
+                [class]="
+                  customer.status === 'Customer'
+                    ? 'text-primary card-primary'
+                    : customer.status === 'User'
+                    ? 'text-warning  card-yellow'
+                    : customer.status === 'Inactive'
+                    ? 'text-danger card-red'
+                    : customer.status === 'Client'
+                    ? 'text-success card-green'
+                    : ''
+                "
+              >
+                {{ customer.status }}
+              </span> -->
+            </td>
+            <td>{{ customer.assignedTo }}</td>
+            <td class="d-flex justify-content-center align-items-center gap-2">
+              <button
+                class="btn btn-sm"
+                (click)="viewCustomer(customer.id); $event.stopPropagation()"
+              >
+                <img src="assets/images/shared/eye.svg" alt="" class="" />
+              </button>
+              <button
+                class="btn btn-sm"
+                (click)="editCustomer(customer.id); $event.stopPropagation()"
+              >
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button
+                class="btn btn-sm"
+                (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
+              >
+                <i class="pi pi-trash"></i>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-center bg-transparent w-100">
+      <p-paginator
+        class="bg-transparent"
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="totalCustomersTabelData"
+        [rowsPerPageOptions]="[2, 4, 6, 8, 10]"
+        [showCurrentPageReport]="true"
+        [showPageLinks]="true"
+        [showJumpToPageDropdown]="false"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+      />
     </div>
   </div>
 </div>

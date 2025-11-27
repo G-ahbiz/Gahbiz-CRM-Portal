@@ -31,8 +31,8 @@ export const environment = {
   customers: {
     addCustomer: '/Customers/Customer',
     leadToCustomer: (leadId: string) => `/Customers/${leadId}/ConvertLeadToCustomer`,
-    getCustomer: '/Customers', // can filter by id or name in query
-    getAllCustomersPaginated: '/Customers/all',
+    getCustomer: '/Customers', // provide id and/or name in query
+    getAllCustomers: '/Customers/all',
     updateCustomer: '/Customers/update', // provide id in query
     deleteCustomer: (id: string) => `/Customers/${id}`,
     getSalesAgents: '/SalesManagement/agentsList',

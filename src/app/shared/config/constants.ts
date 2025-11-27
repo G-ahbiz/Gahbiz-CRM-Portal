@@ -16,7 +16,7 @@ export const ROUTES = {
   // Customer
   customersTable: '/main/customers/customers-main',
   addCustomer: '/main/customers/add-customer',
-  customerDetails: '/main/customers/customer-details',
+  customerDetails: '/main/customers/customer-details/:id',
   // Checkout
   checkout: '/checkout',
   completeProfile: '/complete-profile',
