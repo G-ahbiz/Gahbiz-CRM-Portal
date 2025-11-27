@@ -1,20 +1,28 @@
 import { CountryCodes } from '@shared/interfaces/country-codes';
 
 export const ROUTES = {
-  home: '/',
+  // Auth
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',
   confirmEmail: '/auth/confirm-email',
   forgotPassword: '/auth/forgot-password',
   resetPassword: '/auth/reset-password',
+  // Main
+  home: '/',
+  // Sales
+  leadsDetails: '/main/sales/leads/leads-details',
+  addLead: '/main/sales/leads/add-lead',
+  leadsTable: '/main/sales/leads/leads-main',
+  // Customer
+  customersTable: '/main/customers/customers-main',
+  addCustomer: '/main/customers/add-customer',
+  customerDetails: '/main/customers/customer-details',
+  // Checkout
   checkout: '/checkout',
   completeProfile: '/complete-profile',
   appointmentService: '/appointment-service',
   wishlist: '/wishlist',
   allServices: '/all-services',
-  leadsDetails: '/main/sales/leads/leads-details',
-  addLead: '/main/sales/leads/add-lead',
-  leadsTable: '/main/sales/leads/leads-main',
 };
 
 export const USER_TYPES = {
@@ -49,6 +57,19 @@ export const COUNTRIES: CountryCodes[] = [
   { name: 'China', dialCode: '+86', iso2: 'cn' },
   { name: 'South Africa', dialCode: '+27', iso2: 'za' },
 ];
+
+export const LANGUAGES = {
+  ENGLISH: 'English',
+  ARABIC: 'Arabic',
+  SPANISH: 'Spanish',
+};
+
+export const GENDERS = {
+  MALE: 'Male',
+  FEMALE: 'Female',
+  OTHER: 'Other',
+  PREFER_NOT_TO_SAY: 'PreferNotToSay',
+};
 
 export const SIGNUP_CONSTANTS = {
   NAME_MIN: 3,

@@ -1,12 +1,15 @@
 <div class="container-fluid p-0 m-0">
-  <div class="add-customers-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+  <div
+    class="add-customers-container p-3 d-flex flex-column justify-content-start align-items-start gap-3"
+  >
     <!-- Top Container -->
     <div class="add-customers-top w-100 d-flex justify-content-start align-items-center gap-3">
       <!-- Back Button -->
       <div class="add-customers-back-btn-container">
         <button
           class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
-          (click)="goBack()">
+          (click)="goBack()"
+        >
           <i class="pi pi-chevron-left fs-875"></i>
         </button>
       </div>
@@ -19,120 +22,220 @@
     </div>
 
     <!-- Form Container -->
-    <form [formGroup]="addCustomerForm"
-      class="add-customers-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white">
+    <form
+      [formGroup]="addCustomerForm"
+      class="add-customers-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white"
+    >
       <!-- Full Name Container -->
       <div class="fullName-container d-flex justify-content-between align-items-start gap-3 w-100">
         <div class="form-group w-100">
           <label for="fullName" class="form-label">
-            <span>Full Name</span>
+            <span>{{ 'customers-crm.add-customer-page.full-name' | translate }}</span>
             <span [class]="checkValidity('fullName')">*</span>
           </label>
-          <input type="text" name="fullName" id="fullName" class="form-control" placeholder="Full Name"
-            formControlName="fullName">
+          <input
+            type="text"
+            name="fullName"
+            id="fullName"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.full-name-placeholder' | translate"
+            formControlName="fullName"
+          />
+          @if(addCustomerForm.get('fullName')?.invalid && addCustomerForm.get('fullName')?.touched)
+          {
+          <div class="text-danger small mt-1">{{ getErrorMessage('fullName') }}</div>
+          }
         </div>
       </div>
 
       <!-- Email & Gender Container -->
-      <div class="emailGender-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div
+        class="emailGender-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
         <!-- Email Container -->
         <div class="form-group w-100">
           <label for="email" class="form-label">
-            <span>Email</span>
+            <span>{{ 'customers-crm.add-customer-page.email' | translate }}</span>
             <span [class]="checkValidity('email')">*</span>
           </label>
-          <input type="email" name="email" id="email" class="form-control" placeholder="Email" formControlName="email">
+          <input
+            type="email"
+            name="email"
+            id="email"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.email-placeholder' | translate"
+            formControlName="email"
+          />
+          @if(addCustomerForm.get('email')?.invalid && addCustomerForm.get('email')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('email') }}</div>
+          }
         </div>
 
         <!-- Gender Container -->
         <div class="form-group w-100">
           <label for="gender" class="form-label">
-            <span>Gender</span>
+            <span>{{ 'customers-crm.add-customer-page.gender' | translate }}</span>
             <span [class]="checkValidity('gender')">*</span>
           </label>
           <select name="gender" id="gender" class="form-select" formControlName="gender">
-            <option selected disabled>Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
+            <option value="" disabled selected>
+              {{ 'customers-crm.add-customer-page.select-gender' | translate }}
+            </option>
+            @for(gender of genders; track gender) {
+            <option [value]="gender">{{ gender }}</option>
+            }
           </select>
+          @if(addCustomerForm.get('gender')?.invalid && addCustomerForm.get('gender')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('gender') }}</div>
+          }
         </div>
       </div>
 
-      <!-- Phone Number & National ID Container -->
-      <div class="phoneNumberNationalID-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <!-- Default Language Container -->
+      <div
+        class="defaultLanguage-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
+        <div class="form-group w-100">
+          <label for="defaultLanguage" class="form-label">
+            <span>{{ 'customers-crm.add-customer-page.default-language' | translate }}</span>
+            <span [class]="checkValidity('defaultLanguage')"> *</span>
+          </label>
+          <select
+            name="defaultLanguage"
+            id="defaultLanguage"
+            class="form-select"
+            formControlName="defaultLanguage"
+          >
+            <option value="" disabled selected>
+              {{ 'customers-crm.add-customer-page.select-language' | translate }}
+            </option>
+            @for(language of languages; track language) {
+            <option [value]="language">{{ language }}</option>
+            }
+          </select>
+          @if(addCustomerForm.get('defaultLanguage')?.invalid &&
+          addCustomerForm.get('defaultLanguage')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('defaultLanguage') }}</div>
+          }
+        </div>
+      </div>
+
+      <!-- Phone Number & SSN Container -->
+      <div
+        class="phoneNumberSSN-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
         <!-- Phone Number Container -->
         <div class="form-group w-100">
-          <label for="phoneNumber" class="form-label">
-            <span>Phone Number</span>
-            <span [class]="checkValidity('phoneNumber')"> *</span>
-            @if(addCustomerForm.get('phoneNumber')?.invalid && addCustomerForm.get('phoneNumber')?.touched) {
-            <span class="error text-danger"> invalid phone number</span>
-            }
+          <label for="phone" class="form-label">
+            <span>{{ 'customers-crm.add-customer-page.phone' | translate }}</span>
+            <span [class]="checkValidity('phone')"> *</span>
           </label>
-          <input type=" tel" name="phoneNumber" id="phoneNumber" class="form-control" placeholder="Phone Number"
-            formControlName="phoneNumber">
-        </div>
-
-        <!-- National ID Container -->
-        <div class="form-group w-100">
-          <label for="nationalId" class="form-label">
-            <span>National ID</span>
-            <span [class]="checkValidity('nationalId')"> *</span>
-            @if(addCustomerForm.get('nationalId')?.invalid && addCustomerForm.get('nationalId')?.touched) {
-            <span class="error text-danger"> invalid national ID</span>
-            }
-          </label>
-          <input type="text" name="nationalId" id="nationalId" class="form-control" placeholder="National ID"
-            formControlName="nationalId">
-        </div>
-      </div>
-
-      <!-- Date Of Birth Container -->
-      <div class="dateOfBirth-container d-flex flex-column justify-content-start align-items-start gap-3 w-50">
-        <label for="dateOfBirth">
-          <span>Date Of Birth</span>
-          <span [class]="checkDateOfBirthValidity() ? 'text-success' : 'text-danger'"> *</span>
-          @if(!checkDateOfBirthValidity() && addCustomerForm.get('month')?.touched &&
-          addCustomerForm.get('day')?.touched && addCustomerForm.get('year')?.touched) {
-          <span class="error text-danger"> invalid date of birth</span>
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.phone-placeholder' | translate"
+            formControlName="phone"
+          />
+          @if(addCustomerForm.get('phone')?.invalid && addCustomerForm.get('phone')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('phone') }}</div>
           }
-        </label>
-        <div class="form-group dateOfBirth-group d-flex justify-content-start align-items-center gap-3 w-75">
-          <input type="text" name="month" id="month" class="form-control text-center" placeholder="MM"
-            formControlName="month">
-          <span class="fs-4">/</span>
-          <input type="text" name="day" id="day" class="form-control text-center" placeholder="DD"
-            formControlName="day">
-          <span class="fs-4">/</span>
-          <input type="text" name="year" id="year" class="form-control text-center" placeholder="YYYY"
-            formControlName="year">
+        </div>
+
+        <!-- SSN Container -->
+        <div class="form-group w-100">
+          <label for="ssn" class="form-label">
+            <span>{{ 'customers-crm.add-customer-page.ssn' | translate }}</span>
+            <span [class]="checkValidity('ssn')"> *</span>
+          </label>
+          <input
+            type="text"
+            name="ssn"
+            id="ssn"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.ssn-placeholder' | translate"
+            formControlName="ssn"
+          />
+          @if(addCustomerForm.get('ssn')?.invalid && addCustomerForm.get('ssn')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('ssn') }}</div>
+          }
         </div>
       </div>
 
-      <hr class="w-100">
+      <!-- Assign User Container -->
+      @if((currentUser$ | async)?.type === USER_TYPES.MANAGER || (currentUser$ | async)?.type ===
+      USER_TYPES.ADMIN) {
+      <div
+        class="assignedAgentId-container d-flex justify-content-start align-items-start gap-3 w-100"
+      >
+        <div class="form-group w-100">
+          <label for="assignedAgentId" class="form-label">
+            <span>{{ 'customers-crm.add-customer-page.assign-user' | translate }}</span>
+            <span [class]="checkValidity('assignedAgentId')"> *</span>
+          </label>
+          <select
+            name="assignedAgentId"
+            id="assignedAgentId"
+            class="form-select"
+            formControlName="assignedAgentId"
+          >
+            <option value="" disabled selected>
+              {{ 'customers-crm.add-customer-page.select-user' | translate }}
+            </option>
+            @for(agent of salesAgents(); track agent.id) {
+            <option [value]="agent.id">{{ agent.name }}</option>
+            }
+          </select>
+          @if(addCustomerForm.get('assignedAgentId')?.invalid &&
+          addCustomerForm.get('assignedAgentId')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('assignedAgentId') }}</div>
+          }
+        </div>
+      </div>
+      }
+
+      <hr class="w-100" />
 
       <!-- Country & State Container -->
-      <div class="countryState-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div
+        class="countryState-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
         <!-- Country Container -->
         <div class="form-group w-100">
           <label for="country" class="form-label">
-            <span>Country</span>
+            <span>{{ 'customers-crm.add-customer-page.country' | translate }}</span>
             <span [class]="checkValidity('country')"> *</span>
-            @if(addCustomerForm.get('country')?.invalid && addCustomerForm.get('country')?.touched) {
-            <span class="error text-danger"> invalid country</span>
-            }
           </label>
-          <input type="text" name="country" id="country" class="form-control" placeholder="Country"
-            formControlName="country">
+          <input
+            type="text"
+            name="country"
+            id="country"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.country-placeholder' | translate"
+            formControlName="country"
+          />
+          @if(addCustomerForm.get('country')?.invalid && addCustomerForm.get('country')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('country') }}</div>
+          }
         </div>
         <!-- State Container -->
         <div class="form-group w-100">
           <label for="state" class="form-label">
-            <span>City/State</span>
+            <span>{{ 'customers-crm.add-customer-page.state' | translate }}</span>
             <span [class]="checkValidity('state')"> *</span>
           </label>
-          <input type="text" name="state" id="state" class="form-control" placeholder="State" formControlName="state">
+          <input
+            type="text"
+            name="state"
+            id="state"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.state-placeholder' | translate"
+            formControlName="state"
+          />
+          @if(addCustomerForm.get('state')?.invalid && addCustomerForm.get('state')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('state') }}</div>
+          }
         </div>
       </div>
 
@@ -140,21 +243,70 @@
       <div class="postalCode-container d-flex justify-content-start align-items-start gap-3 w-100">
         <div class="form-group w-100">
           <label for="postalCode" class="form-label">
-            <span>Postal Code</span>
+            <span>{{ 'customers-crm.add-customer-page.postal-code' | translate }}</span>
             <span [class]="checkValidity('postalCode')"> *</span>
-            @if(addCustomerForm.get('postalCode')?.invalid && addCustomerForm.get('postalCode')?.touched) {
-            <span class="error text-danger"> invalid postal code</span>
-            }
           </label>
-          <input type="text" name="postalCode" id="postalCode" class="form-control" placeholder="Postal Code"
-            formControlName="postalCode">
+          <input
+            type="text"
+            name="postalCode"
+            id="postalCode"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.postal-code-placeholder' | translate"
+            formControlName="postalCode"
+          />
+          @if(addCustomerForm.get('postalCode')?.invalid &&
+          addCustomerForm.get('postalCode')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('postalCode') }}</div>
+          }
         </div>
       </div>
 
-      <div class="butons-container d-flex justify-content-center align-items-center gap-3 w-100">
-        <button type="button" class="btn btn-sm outline-primary-clr flex-grow-1 py-2" (click)="cancel()">Cancel</button>
-        <button type="submit" class="btn btn-sm btn-primary primary-bg-clr flex-grow-1 py-2"
-          (click)="save()">Save</button>
+      <!-- Address Container -->
+      <div class="address-container d-flex justify-content-start align-items-start gap-3 w-100">
+        <div class="form-group w-100">
+          <label for="address" class="form-label">
+            <span>{{ 'customers-crm.add-customer-page.address' | translate }}</span>
+            <span [class]="checkValidity('address')"> *</span>
+          </label>
+          <textarea
+            name="address"
+            id="address"
+            class="form-control"
+            [placeholder]="'customers-crm.add-customer-page.address-placeholder' | translate"
+            formControlName="address"
+            rows="3"
+          ></textarea>
+          @if(addCustomerForm.get('address')?.invalid && addCustomerForm.get('address')?.touched) {
+          <div class="text-danger small mt-1">{{ getErrorMessage('address') }}</div>
+          }
+        </div>
+      </div>
+
+      <!-- Submit Button Container -->
+      <div class="buttons-container w-100 d-flex justify-content-between align-items-center gap-3">
+        <!-- Cancel Button -->
+        <button
+          type="button"
+          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          (click)="cancel()"
+          [disabled]="loading()"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+
+        <!-- Save Button -->
+        <button
+          type="submit"
+          class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          (click)="save()"
+          [disabled]="loading()"
+        >
+          @if (!loading()) {
+          <span>{{ 'COMMON.SAVE' | translate }}</span>
+          } @else {
+          <span>{{ 'customers-crm.add-customer-page.saving' | translate }}</span>
+          }
+        </button>
       </div>
     </form>
   </div>
