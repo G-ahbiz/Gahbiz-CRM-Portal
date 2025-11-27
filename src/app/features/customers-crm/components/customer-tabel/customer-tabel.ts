@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, inject, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { AllData } from '../../../../services/all-data';
-import { Customer } from '../../../../services/interfaces/all-interfaces';
+import { CustomersFacadeService } from '../../services/customers-facade.service';
+import { GetCustomersResponse } from '../../interfaces/get-customers-response';
+import { Subscription } from 'rxjs';
+import { ROUTES } from '@shared/config/constants';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs/operators';
 
-// Constants
-const SESSION_STORAGE_KEYS = {
-  CUSTOMER_ID: 'customerId',
-} as const;
+type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
 @Component({
   selector: 'app-customer-tabel',
@@ -22,13 +23,12 @@ export class CustomerTabel implements OnInit, OnDestroy {
   first: number = 0;
   rows: number = 4;
 
+  private readonly destroyRef = inject(DestroyRef);
   /**
-   * Get paginated data slice based on current page state
+   * Get customers for current view (already paginated from API)
    */
-  get paginatedCustomers(): Customer[] {
-    const start = this.first;
-    const end = this.first + this.rows;
-    return this.paginationData.slice(start, end);
+  get paginatedCustomers(): CustomerViewModel[] {
+    return this.customersTabelData();
   }
 
   /**
@@ -37,7 +37,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
   onPageChange(event: PaginatorState): void {
     this.first = event.first ?? 0;
     this.rows = event.rows ?? 10;
-    this.updateSelectAllState();
+    this.loadCustomersData();
   }
 
   // Table configuration
@@ -52,10 +52,9 @@ export class CustomerTabel implements OnInit, OnDestroy {
   ];
 
   // Data properties
-  private allCustomersData: Customer[] = [];
-  customersTabelData: Customer[] = [];
-  paginationData: Customer[] = [];
+  customersTabelData = signal<CustomerViewModel[]>([]);
   totalCustomersTabelData: number = 0;
+  loading = signal<boolean>(false);
 
   // Selection state
   isAllSelected: boolean = false;
@@ -63,33 +62,64 @@ export class CustomerTabel implements OnInit, OnDestroy {
   // Filter state
   search: string = '';
 
-  constructor(private readonly router: Router, private readonly allData: AllData) {}
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(
+    private readonly router: Router,
+    private readonly customersFacade: CustomersFacadeService
+  ) {}
 
   ngOnInit(): void {
     this.loadCustomersData();
   }
 
   ngOnDestroy(): void {
-    // Cleanup if needed
+    this.subscriptions.unsubscribe();
   }
 
   /**
-   * Load initial customers data from service
+   * Load customers data from API
    */
   private loadCustomersData(): void {
-    this.allCustomersData = this.allData.getCustomersTabelData().map((customer: Customer) => ({
-      ...customer,
-      selected: false,
-    }));
-    this.customersTabelData = [...this.allCustomersData];
-    this.applyFilters();
+    const pageNumber = this.first / this.rows + 1;
+    const pageSize = this.rows;
+
+    this.loading.set(true);
+    this.customersFacade
+      .getAllCustomers({
+        pageNumber,
+        pageSize,
+      })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe({
+        next: (response) => {
+          const data = response.items || [];
+          this.customersTabelData.set(
+            data.map((customer) => ({
+              ...customer,
+              selected: false,
+            }))
+          );
+          this.totalCustomersTabelData = response.totalCount;
+          this.updateSelectAllState();
+        },
+        error: (err) => {
+          console.error('Error loading customers', err);
+        },
+        complete: () => {
+          console.log('complete');
+        },
+      });
   }
 
   /**
    * Get count of selected customers
    */
   get selectedCustomersCount(): number {
-    return this.paginationData.filter((customer) => customer.selected).length;
+    return this.customersTabelData().filter((customer) => customer.selected).length;
   }
 
   /**
@@ -101,7 +131,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
     this.isAllSelected = checkbox.checked;
 
     // Update selection state for all visible customers on current page
-    this.paginatedCustomers.forEach((customer) => {
+    this.customersTabelData().forEach((customer) => {
       customer.selected = this.isAllSelected;
     });
   }
@@ -109,7 +139,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
   /**
    * Toggle individual customer selection
    */
-  toggleCustomerSelection(customer: Customer): void {
+  toggleCustomerSelection(customer: CustomerViewModel): void {
     customer.selected = !customer.selected;
 
     // Update "select all" state based on individual selections
@@ -121,7 +151,7 @@ export class CustomerTabel implements OnInit, OnDestroy {
    * Only checks invoices on the current page
    */
   private updateSelectAllState(): void {
-    const currentPageCustomers = this.paginatedCustomers;
+    const currentPageCustomers = this.customersTabelData();
     if (currentPageCustomers.length === 0) {
       this.isAllSelected = false;
       return;
@@ -136,72 +166,30 @@ export class CustomerTabel implements OnInit, OnDestroy {
   /**
    * Navigate to customer details page
    */
-  viewCustomer(id: number): void {
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.CUSTOMER_ID, id.toString());
-    this.router.navigate(['/main/customers/customer-details']);
+  viewCustomer(id: string): void {
+    this.router.navigate([ROUTES.customerDetails, id]);
+  }
+
+  onDeleteCustomer(id: string): void {
+    console.log('onDeleteCustomer', id);
+  }
+  editCustomer(id: string): void {
+    console.log('editCustomer', id);
   }
 
   /**
-   * Handle search input changes and filter customers data
+   * Handle search input changes
+   * Note: Search is currently disabled/ignored until API support is added
    */
   onSearchChange(value: string): void {
     this.search = value.toLowerCase().trim();
-    this.applyFilters();
-  }
-
-  /**
-   * Apply search filter to customers
-   */
-  private applySearchFilter(customers: Customer[]): Customer[] {
-    if (!this.search) {
-      return customers;
-    }
-
-    return customers.filter((customer) => this.matchesSearchTerm(customer, this.search));
-  }
-
-  /**
-   * Check if an customer matches the search term
-   */
-  private matchesSearchTerm(customer: Customer, searchTerm: string): boolean {
-    const searchableFields = [
-      customer.id?.toString(),
-      customer.customer,
-      customer.phoneNumber,
-      customer.customerName,
-      customer.noOfOrders?.toString(),
-      customer.status,
-      customer.assignedTo,
-    ];
-
-    return searchableFields.some((field) => field?.toLowerCase().includes(searchTerm));
-  }
-
-  /**
-   * Apply all active filters and update pagination data
-   */
-  private applyFilters(): void {
-    // Start with all customers data
-    let filteredData = [...this.allCustomersData];
-
-    // Apply search filter
-    filteredData = this.applySearchFilter(filteredData);
-
-    // Update pagination data and total count
-    this.paginationData = filteredData;
-    this.totalCustomersTabelData = filteredData.length;
-
-    // Reset to first page when filters change
-    this.first = 0;
-
-    // Update select all state for new filtered data
-    this.updateSelectAllState();
+    // Search not implemented yet
   }
 
   /**
    * TrackBy function for ngFor optimization
    */
-  trackByCustomerId(index: number, customer: Customer): number {
+  trackByCustomerId(index: number, customer: CustomerViewModel): string {
     return customer.id;
   }
 }
