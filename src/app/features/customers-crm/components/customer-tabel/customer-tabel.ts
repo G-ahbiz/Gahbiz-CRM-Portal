@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ROUTES } from '@shared/config/constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
+import { ToastService } from '@core/services/toast.service';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
@@ -18,15 +19,14 @@ type CustomerViewModel = GetCustomersResponse & { selected: boolean };
   templateUrl: './customer-tabel.html',
   styleUrl: './customer-tabel.css',
 })
-export class CustomerTabel implements OnInit, OnDestroy {
+export class CustomerTabel implements OnInit {
   // Pagination state
   first: number = 0;
   rows: number = 4;
 
   private readonly destroyRef = inject(DestroyRef);
-  /**
-   * Get customers for current view (already paginated from API)
-   */
+  private readonly toast = inject(ToastService);
+
   get paginatedCustomers(): CustomerViewModel[] {
     return this.customersTabelData();
   }
@@ -46,7 +46,6 @@ export class CustomerTabel implements OnInit, OnDestroy {
     'Phone Number',
     'Customer Name',
     'No of Orders',
-    'Status',
     'Assigned To',
     'Actions',
   ];
@@ -62,8 +61,6 @@ export class CustomerTabel implements OnInit, OnDestroy {
   // Filter state
   search: string = '';
 
-  private subscriptions: Subscription = new Subscription();
-
   constructor(
     private readonly router: Router,
     private readonly customersFacade: CustomersFacadeService
@@ -71,10 +68,6 @@ export class CustomerTabel implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadCustomersData();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   /**
@@ -171,7 +164,26 @@ export class CustomerTabel implements OnInit, OnDestroy {
   }
 
   onDeleteCustomer(id: string): void {
-    console.log('onDeleteCustomer', id);
+    this.customersFacade
+      .deleteCustomer(id)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded) {
+            this.toast.success('Customer deleted successfully');
+            this.loadCustomersData();
+          } else {
+            this.toast.error(response.message);
+          }
+        },
+        error: (err) => {
+          console.error('Error deleting customer', err);
+          this.toast.error('Error deleting customer');
+        },
+      });
   }
   editCustomer(id: string): void {
     console.log('editCustomer', id);

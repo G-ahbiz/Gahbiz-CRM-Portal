@@ -45,6 +45,11 @@ export class CustomersApiService {
     return this.http.get<ApiResponse<GetCustomerDetailsResponse>>(url);
   }
 
+  deleteCustomer(id: string): Observable<ApiResponse<string>> {
+    const url = `${this.baseUrl}${environment.customers.deleteCustomer(id)}`;
+    return this.http.delete<ApiResponse<string>>(url);
+  }
+
   getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {
     const url = `${this.baseUrl}${environment.customers.getSalesAgents}`;
     return this.http.get<ApiResponse<GetSalesAgentsResponse[]>>(url);
