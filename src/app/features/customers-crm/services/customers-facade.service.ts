@@ -33,6 +33,9 @@ export class CustomersFacadeService {
     return this.customerService.getCustomerDetails(id, customerName);
   }
 
+  deleteCustomer(id: string): Observable<ApiResponse<string>> {
+    return this.customerService.deleteCustomer(id);
+  }
   getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {
     return this.customerService.getSalesAgents();
   }
