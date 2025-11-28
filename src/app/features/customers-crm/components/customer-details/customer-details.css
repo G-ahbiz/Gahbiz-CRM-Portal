@@ -1,0 +1,206 @@
+/* Dialog Content Container */
+.customer-details-content {
+  padding: 0.5rem;
+}
+
+/* Loading State */
+.loading-container {
+  min-height: 300px;
+  width: 100%;
+}
+
+/* Error State */
+.error-container {
+  min-height: 200px;
+  width: 100%;
+  padding: 2rem;
+}
+
+/* Profile Section */
+.profile-section {
+  margin-bottom: 2rem;
+  padding-bottom: 0;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.profile-avatar i {
+  font-size: 2.5rem;
+  color: #888;
+}
+
+.profile-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.profile-location {
+  font-size: 0.9rem;
+  color: #00a3a3;
+  font-weight: 500;
+}
+
+.client-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #e6f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-icon i {
+  font-size: 1.25rem;
+  color: #00a3a3;
+}
+
+.badge-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* Section Styling */
+.details-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 2rem 0;
+}
+
+/* Form Rows */
+.form-row {
+  margin-bottom: 1.25rem;
+}
+
+.form-row.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  width: 100%;
+}
+
+.form-group.half-width {
+  width: 50%;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.required {
+  color: #e53935;
+}
+
+.form-value {
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #333;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.phone-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flag-icon {
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row.two-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.half-width {
+    width: 100%;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .client-badge {
+    flex-direction: row;
+  }
+}
+
+/* PrimeNG Dialog Overrides */
+:host ::ng-deep .customer-details-dialog {
+  border-radius: 16px;
+}
+
+:host ::ng-deep .customer-details-dialog .p-dialog-header {
+  padding: 1.5rem 2rem;
+  border-bottom: none;
+}
+
+:host ::ng-deep .customer-details-dialog .p-dialog-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+:host ::ng-deep .customer-details-dialog .p-dialog-content {
+  padding: 0 2rem 2rem;
+}
+
+:host ::ng-deep .customer-details-dialog .p-dialog-header-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+:host ::ng-deep .customer-details-dialog .p-dialog-header-close:hover {
+  background-color: #f0f0f0;
+}

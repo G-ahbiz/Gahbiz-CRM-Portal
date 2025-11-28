@@ -133,3 +133,10 @@
     </p-table>
   </div>
 </div>
+
+<!-- Customer Details Dialog -->
+<app-customer-details
+  [customerId]="selectedCustomerId()"
+  [(visible)]="showDetailsDialog"
+  (onClose)="closeDetailsDialog()"
+></app-customer-details>
