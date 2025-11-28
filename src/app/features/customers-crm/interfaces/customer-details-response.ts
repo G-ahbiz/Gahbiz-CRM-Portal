@@ -1,6 +1,6 @@
 import { LeadDetailsResponse } from '@features/sales-crm/interfaces/lead-details-response';
 
-export interface GetCustomerDetailsResponse {
+export interface CustomerDetailsResponse {
   id: string;
   firstName: string;
   lastName: string;

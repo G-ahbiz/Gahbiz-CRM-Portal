@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
-import { ROUTES } from '@shared/config/constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
 import { ToastService } from '@core/services/toast.service';
@@ -13,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { CustomerDetails } from '../customer-details/customer-details';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
@@ -29,6 +29,7 @@ const ALLOWED_SORT_FIELDS = ['Name'] as const;
     InputTextModule,
     IconFieldModule,
     InputIconModule,
+    CustomerDetails,
   ],
   templateUrl: './customer-tabel.html',
   styleUrl: './customer-tabel.css',
@@ -56,10 +57,11 @@ export class CustomerTabel implements OnInit {
   // Filter state
   search: string = '';
 
-  constructor(
-    private readonly router: Router,
-    private readonly customersFacade: CustomersFacadeService
-  ) {}
+  // Customer Details Dialog state
+  showDetailsDialog = signal<boolean>(false);
+  selectedCustomerId = signal<string | null>(null);
+
+  constructor(private readonly customersFacade: CustomersFacadeService) {}
 
   ngOnInit(): void {
     this.loadCustomersData();
@@ -171,10 +173,19 @@ export class CustomerTabel implements OnInit {
   }
 
   /**
-   * Navigate to customer details page
+   * Open customer details dialog
    */
   viewCustomer(id: string): void {
-    this.router.navigate([ROUTES.customerDetails, id]);
+    this.selectedCustomerId.set(id);
+    this.showDetailsDialog.set(true);
+  }
+
+  /**
+   * Close customer details dialog
+   */
+  closeDetailsDialog(): void {
+    this.showDetailsDialog.set(false);
+    this.selectedCustomerId.set(null);
   }
 
   onDeleteCustomer(id: string): void {

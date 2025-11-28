@@ -8,7 +8,7 @@ import { GetSalesAgentsResponse } from '../interfaces/get-sales-agents-response'
 import { GetCustomersFilters } from '../interfaces/get-customers-filters';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersResponse } from '../interfaces/get-customers-response';
-import { GetCustomerDetailsResponse } from '../interfaces/get-customer-details-response';
+import { CustomerDetailsResponse } from '../interfaces/customer-details-response';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,7 @@ export class CustomersFacadeService {
   getCustomerDetails(
     id?: string,
     customerName?: string
-  ): Observable<ApiResponse<GetCustomerDetailsResponse>> {
+  ): Observable<ApiResponse<CustomerDetailsResponse>> {
     return this.customerService.getCustomerDetails(id, customerName);
   }
 
