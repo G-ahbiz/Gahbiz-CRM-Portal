@@ -41,7 +41,7 @@ export class AddInvoice implements OnInit {
       dueDate: ['', Validators.required, this.dateValidator],
       notes: ['', Validators.maxLength(1000)],
       assignedSalesAgentId: ['', Validators.required],
-      invoiceNumber: ['', Validators.required],
+      invoiceNumber: ['', Validators.minLength(1)],
       items: ['', [Validators.required, Validators.minLength(1)]],
     });
   }
