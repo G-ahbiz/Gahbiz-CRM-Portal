@@ -6,6 +6,7 @@ import { GetAllInvoicesResponse } from '../interfaces/get-all-invoices-response'
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetInvoicesFilters } from '../interfaces/get-invoices-filters';
 import { GetInvoiceetails } from '../interfaces/get-invoice-details';
+import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +22,9 @@ export class InvoiceFacadeService {
 
   getInvoiceDetails(id: string): Observable<ApiResponse<GetInvoiceetails>> {
     return this.invoiceServiceApi.getInvoiceDetails(id);
+  }
+
+  addInvoice(invoice: AddInvoiceRequest): Observable<ApiResponse<string>> {
+    return this.invoiceServiceApi.addInvoice(invoice);
   }
 }

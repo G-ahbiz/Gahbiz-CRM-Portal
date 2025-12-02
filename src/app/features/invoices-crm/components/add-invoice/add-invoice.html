@@ -1,138 +1,213 @@
 <div class="container-fluid p-0 m-0">
   <div
-    class="add-invoice-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 overflow-y-auto">
-
+    class="add-invoice-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 overflow-y-auto"
+  >
     <div class="add-invoice-top w-100 d-flex justify-content-start align-items-center gap-3">
       <div class="add-invoice-back-btn-container">
         <button
           class="back-btn btn btn-sm p-2 border-0 bg-white shadow d-flex justify-content-center align-items-center"
-          (click)="back()">
+          (click)="back()"
+        >
           <i class="pi pi-chevron-left fs-875"></i>
         </button>
       </div>
       <div class="add-invoice-title-container">
         <h1 class="mb-0 fs-4 fw-bold">
-          {{'invoices-crm.add-invoice-page.title' | translate}}
+          {{ 'invoices-crm.add-invoice-page.title' | translate }}
         </h1>
       </div>
     </div>
 
-    <form [formGroup]="addInvoiceForm"
-      class="add-invoice-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white">
-
+    <form
+      [formGroup]="addInvoiceForm"
+      class="add-invoice-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white"
+    >
       <!-- Customer Container -->
       <div class="customer-container d-flex justify-content-between align-items-start gap-3 w-100">
         <div class="form-group w-100">
           <label for="customer">
-            {{'invoices-crm.add-invoice-page.customer' | translate}}
-            <span class="" [class]="checkValidity('customer')">*</span>
+            {{ 'invoices-crm.add-invoice-page.customer' | translate }}
+            <span [class]="checkValidity('customerId')">*</span>
           </label>
-          <input type="text" name="customer" id="customer" class="form-control"
-            placeholder="{{'invoices-crm.add-invoice-page.customer' | translate}}" formControlName="customer">
+          <select name="customer" id="customer" class="form-select" formControlName="customerId">
+            <option value="" selected disabled>
+              {{ 'invoices-crm.add-invoice-page.select-customer' | translate }}
+            </option>
+            @for(customer of customers(); track customer.id){
+            <option [value]="customer.id">{{ customer.fullName }}</option>
+            }
+          </select>
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('customerId')) {
+            <span class="text-danger">{{ getErrorMessage('customerId') }}</span>
+            }
+          </div>
         </div>
       </div>
 
-      <!-- Bill Date & Due Date Container -->
-      <div class="billDate-dueDate-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <div class="form-group w-100">
-          <label for="billDate">
-            {{'invoices-crm.add-invoice-page.bill-date' | translate}}
-            <span class="" [class]="checkValidity('billDate')">*</span>
-          </label>
-          <input type="date" name="billDate" id="billDate" class="form-control"
-            placeholder="{{'invoices-crm.add-invoice-page.bill-date' | translate}}" formControlName="billDate">
-        </div>
+      <!-- Due Date Container -->
+      <div
+        class="billDate-dueDate-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
         <div class="form-group w-100">
           <label for="dueDate">
-            {{'invoices-crm.add-invoice-page.due-date' | translate}}
-            <span class="" [class]="checkValidity('dueDate')">*</span>
+            {{ 'invoices-crm.add-invoice-page.due-date' | translate }}
+            <span [class]="checkValidity('dueDate')">*</span>
           </label>
-          <input type="date" name="dueDate" id="dueDate" class="form-control"
-            placeholder="{{'invoices-crm.add-invoice-page.due-date' | translate}}" formControlName="dueDate">
+          <input
+            type="date"
+            name="dueDate"
+            id="dueDate"
+            class="form-control"
+            placeholder="{{ 'invoices-crm.add-invoice-page.due-date' | translate }}"
+            formControlName="dueDate"
+          />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('dueDate')) {
+            <span class="text-danger">{{ getErrorMessage('dueDate') }}</span>
+            }
+          </div>
         </div>
       </div>
 
       <!-- Total & Services Select & Due Container -->
-      <div class="total-paymentReceived-due-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div
+        class="total-paymentReceived-due-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
         <!-- Total Container -->
         <div class="form-group w-100">
           <label for="total">
-            {{'invoices-crm.add-invoice-page.total' | translate}}
-            <span class="" [class]="checkValidity('total')">*</span>
+            {{ 'invoices-crm.add-invoice-page.total' | translate }}
+            <span [class]="checkValidity('total')">*</span>
           </label>
-          <input type="number" name="total" id="total" class="form-control"
-            placeholder="{{'invoices-crm.add-invoice-page.total' | translate}}" formControlName="total">
+          <input
+            type="number"
+            name="total"
+            id="total"
+            class="form-control"
+            placeholder="{{ 'invoices-crm.add-invoice-page.total' | translate }}"
+            formControlName="total"
+          />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (checkErrors('total')) {
+            <span class="text-danger">{{ getErrorMessage('total') }}</span>
+            }
+          </div>
         </div>
 
         <!-- Services Select Container -->
         <div class="form-group w-100">
-          <label for="services">
-            {{'invoices-crm.add-invoice-page.services' | translate}}
-            <span class="" [class]="checkValidity('services')">*</span>
+          <label for="servicesOfInterest">
+            {{ 'invoices-crm.add-invoice-page.services-of-interest' | translate }}
           </label>
-          <select name="services" id="services" class="form-select" placeholder="Services" formControlName="services">
-            <option selected disabled>{{'invoices-crm.add-invoice-page.select-services' | translate}}</option>
-            <option value="1">Service 1</option>
-            <option value="2">Service 2</option>
-            <option value="3">Service 3</option>
-          </select>
+          <p-multiselect
+            [options]="services()"
+            formControlName="servicesOfInterest"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="{{ 'invoices-crm.add-invoice-page.select-services' | translate }}"
+            [maxSelectedLabels]="3"
+            [filter]="true"
+            (onFilter)="onFilterServices($event)"
+            [showClear]="true"
+            class="w-100"
+          />
+          <small class="text-muted">{{
+            'invoices-crm.add-invoice-page.search-select-services' | translate
+          }}</small>
         </div>
       </div>
 
-      <!-- Payment Received & Due Container -->
-      <div class="paymentReceived-due-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Payment Received Container -->
-        <div class="form-group w-100">
-          <label for="paymentReceived">
-            {{'invoices-crm.add-invoice-page.payment-received' | translate}}
-            <span class="" [class]="checkValidity('paymentReceived')">*</span>
-          </label>
-          <input type="number" name="paymentReceived" id="paymentReceived" class="form-control"
-            placeholder="{{'invoices-crm.add-invoice-page.payment-received' | translate}}"
-            formControlName="paymentReceived">
-        </div>
-
-        <!-- Due Container -->
-        <div class="form-group w-100">
-          <label for="due">
-            {{'invoices-crm.add-invoice-page.due' | translate}}
-            <span class="" [class]="checkValidity('due')">*</span>
-          </label>
-          <input type="number" name="due" id="due" class="form-control"
-            placeholder="{{'invoices-crm.add-invoice-page.due' | translate}}" formControlName="due">
+      <!-- Notes Container -->
+      <div class="form-group w-100">
+        <label for="notes">
+          {{ 'invoices-crm.add-invoice-page.notes' | translate }}
+          <span [class]="checkValidity('notes')">*</span>
+        </label>
+        <textarea
+          name="notes"
+          id="notes"
+          class="form-control"
+          rows="4"
+          placeholder="{{ 'invoices-crm.add-invoice-page.notes-placeholder' | translate }}"
+          formControlName="notes"
+        ></textarea>
+        <div class="error-message d-flex justify-content-start align-items-start">
+          @if (checkErrors('notes')) {
+          <span class="text-danger">{{ getErrorMessage('notes') }}</span>
+          }
         </div>
       </div>
 
-      <!-- Status Container -->
-      <div class="status-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <div class="form-group w-100">
-          <label for="status">
-            {{'invoices-crm.add-invoice-page.status' | translate}}
-            <span class="" [class]="checkValidity('status')">*</span>
-          </label>
-          <select name="status" id="status" class="form-select" formControlName="status" #statusSelect>
-            <option selected disabled>{{'invoices-crm.add-invoice-page.select-status' | translate}}</option>
-            <option value="1">{{'invoices-crm.add-invoice-page.paid' | translate}}</option>
-            <option value="2">{{'invoices-crm.add-invoice-page.unpaid' | translate}}</option>
-            <option value="3">{{'invoices-crm.add-invoice-page.partially-paid' | translate}}</option>
-          </select>
+      <!-- Assigned Sales Agent Container -->
+      @if((currentUser$ | async)?.type === USER_TYPES.MANAGER || (currentUser$ | async)?.type ===
+      USER_TYPES.ADMIN){
+      <div class="form-group w-100">
+        <label for="assignedSalesAgent">
+          {{ 'invoices-crm.add-invoice-page.assigned-sales-agent' | translate }}
+          <span [class]="checkValidity('assignedSalesAgentId')">*</span>
+        </label>
+        <select
+          name="assignedSalesAgent"
+          id="assignedSalesAgent"
+          class="form-select"
+          formControlName="assignedSalesAgentId"
+        >
+          <option value="" selected disabled>
+            {{ 'invoices-crm.add-invoice-page.select-sales-agent' | translate }}
+          </option>
+          @for(salesAgent of salesAgents(); track salesAgent.id){
+          <option [value]="salesAgent.id">{{ salesAgent.name }}</option>
+          }
+        </select>
+        <div class="error-message d-flex justify-content-start align-items-start">
+          @if (checkErrors('assignedSalesAgentId')) {
+          <span class="text-danger">{{ getErrorMessage('assignedSalesAgentId') }}</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Invoice Number Container -->
+      <div class="form-group w-100">
+        <label for="invoiceNumber">
+          {{ 'invoices-crm.add-invoice-page.invoice-number' | translate }}
+          <span [class]="checkValidity('invoiceNumber')">*</span>
+        </label>
+        <input
+          type="text"
+          name="invoiceNumber"
+          id="invoiceNumber"
+          class="form-control"
+          placeholder="Invoice Number (ex. INV-123)"
+          formControlName="invoiceNumber"
+        />
+        <div class="error-message d-flex justify-content-start align-items-start">
+          @if (checkErrors('invoiceNumber')) {
+          <span class="text-danger">{{ getErrorMessage('invoiceNumber') }}</span>
+          }
         </div>
       </div>
 
       <!-- Buttons Container -->
-      <div class="buttons-container d-flex justify-content-center align-items-center gap-3 w-100 mt-4">
-        <button type="button"
+      <div
+        class="buttons-container d-flex justify-content-center align-items-center gap-3 w-100 mt-4"
+      >
+        <button
+          type="button"
           class="btn btn-sm outline-primary-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
-          (click)="cancelInvoice()">
-          {{'invoices-crm.add-invoice-page.cancel' | translate}}
+          (click)="cancelInvoice()"
+        >
+          {{ 'invoices-crm.add-invoice-page.cancel' | translate }}
         </button>
-        <button type="submit"
+        <button
+          type="submit"
           class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
-          (click)="addInvoice()">
-          {{'invoices-crm.add-invoice-page.save' | translate}}
+          (click)="addInvoice()"
+        >
+          {{ 'invoices-crm.add-invoice-page.save' | translate }}
         </button>
       </div>
     </form>
-
   </div>
 </div>

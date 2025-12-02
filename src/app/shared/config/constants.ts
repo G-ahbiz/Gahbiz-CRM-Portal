@@ -25,6 +25,7 @@ export const ROUTES = {
   allServices: '/all-services',
 
   // Invoices
+  invoiceMain: '/main/invoices/invoice-main',
   getInvoiceDeatils: '/main/invoices/invoice-details',
   updateInvoice: '/main/invoices/invoice-details',
   addInvoice: '/main/invoices/add-invoice',
