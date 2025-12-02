@@ -308,6 +308,22 @@
       "quantity": "Cantidad",
       "actions": "Acciones",
       "summary": "Resumen"
+    },
+    "update-invoice-page": {
+      "title": "Actualizar Factura",
+      "amount-paid": "Monto Pagado",
+      "status": "Estado",
+      "select-status": "Seleccionar Estado",
+      "paid": "Pagado",
+      "unpaid": "No Pagado",
+      "partially-paid": "Parcialmente Pagado",
+      "notes": "Notas",
+      "notes-placeholder": "Ingrese notas (opcional)",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "amount-paid-required": "El monto pagado es obligatorio",
+      "amount-paid-min": "El monto pagado debe ser al menos 0",
+      "status-required": "El estado es obligatorio"
     }
   },
   "customers-crm": {

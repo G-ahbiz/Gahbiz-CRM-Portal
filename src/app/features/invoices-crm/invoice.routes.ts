@@ -15,5 +15,10 @@ export const invoiceRoutes: Routes = [
     path: 'add-invoice',
     loadComponent: () => import('./components/add-invoice/add-invoice').then((m) => m.AddInvoice),
   },
+  {
+    path: 'update-invoice/:id',
+    loadComponent: () =>
+      import('./components/update-invoice/update-invoice').then((m) => m.UpdateInvoice),
+  },
   { path: '', redirectTo: 'invoice-main', pathMatch: 'full' },
 ];

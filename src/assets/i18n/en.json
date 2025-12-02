@@ -308,6 +308,22 @@
       "quantity": "Quantity",
       "actions": "Actions",
       "summary": "Summary"
+    },
+    "update-invoice-page": {
+      "title": "Update Invoice",
+      "amount-paid": "Amount Paid",
+      "status": "Status",
+      "select-status": "Select Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "partially-paid": "Partially Paid",
+      "notes": "Notes",
+      "notes-placeholder": "Enter notes (optional)",
+      "save": "Save",
+      "cancel": "Cancel",
+      "amount-paid-required": "Amount paid is required",
+      "amount-paid-min": "Amount paid must be at least 0",
+      "status-required": "Status is required"
     }
   },
   "customers-crm": {

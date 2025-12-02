@@ -8,6 +8,7 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetInvoicesFilters } from '../interfaces/get-invoices-filters';
 import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
+import { UpdateInvoiceRequest } from '../interfaces/update-invoice-request';
 
 @Injectable({
   providedIn: 'root',
@@ -57,5 +58,13 @@ export class InvoiceApiService {
   addInvoice(invoice: AddInvoiceRequest): Observable<ApiResponse<string>> {
     const url = `${this.baseUrl}${environment.invoices.addInvoice}`;
     return this.http.post<ApiResponse<string>>(url, invoice);
+  }
+
+  updateInvoiceDetails(
+    id: string,
+    request: UpdateInvoiceRequest
+  ): Observable<ApiResponse<GetInvoiceetails>> {
+    const url = `${this.baseUrl}${environment.invoices.updateInvoice(id)}`;
+    return this.http.patch<ApiResponse<GetInvoiceetails>>(url, request);
   }
 }

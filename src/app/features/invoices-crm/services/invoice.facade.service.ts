@@ -7,6 +7,7 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetInvoicesFilters } from '../interfaces/get-invoices-filters';
 import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
+import { UpdateInvoiceRequest } from '../interfaces/update-invoice-request';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,12 @@ export class InvoiceFacadeService {
 
   addInvoice(invoice: AddInvoiceRequest): Observable<ApiResponse<string>> {
     return this.invoiceServiceApi.addInvoice(invoice);
+  }
+
+  updateInvoiceDetails(
+    id: string,
+    request: UpdateInvoiceRequest
+  ): Observable<ApiResponse<GetInvoiceetails>> {
+    return this.invoiceServiceApi.updateInvoiceDetails(id, request);
   }
 }
