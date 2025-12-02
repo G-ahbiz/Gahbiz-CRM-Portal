@@ -250,11 +250,14 @@
     "add-invoice-page": {
       "title": "Invoice Details",
       "customer": "Customer",
+      "select-customer": "Select Customer",
       "bill-date": "Bill Date",
       "due-date": "Due Date",
       "total": "Total",
       "services": "Services",
+      "services-of-interest": "Services of Interest",
       "select-services": "Select Services",
+      "search-select-services": "Search and select multiple services",
       "payment-received": "Payment Received",
       "due": "Due",
       "status": "Status",
@@ -262,7 +265,13 @@
       "paid": "Paid",
       "unpaid": "Unpaid",
       "partially-paid": "Partially Paid",
+      "notes": "Notes",
+      "notes-placeholder": "Additional notes about the invoice",
+      "assigned-sales-agent": "Assigned Sales Agent",
+      "select-sales-agent": "Select Sales Agent",
+      "invoice-number": "Invoice Number",
       "save": "Save",
+      "saving": "Saving...",
       "cancel": "Cancel"
     },
     "invoice-details": {

@@ -309,11 +309,14 @@
     "add-invoice-page": {
       "title": "تفاصيل الفاتورة",
       "customer": "العميل",
+      "select-customer": "اختر العميل",
       "bill-date": "تاريخ الفاتورة",
       "due-date": "تاريخ الاستحقاق",
       "total": "الإجمالي",
       "services": "الخدمات",
+      "services-of-interest": "الخدمات المطلوبة",
       "select-services": "اختر الخدمات",
+      "search-select-services": "ابحث واختر خدمات متعددة",
       "payment-received": "المبلغ المدفوع",
       "due": "المستحق",
       "status": "الحالة",
@@ -321,7 +324,13 @@
       "paid": "مدفوع",
       "unpaid": "غير مدفوع",
       "partially-paid": "مدفوع جزئياً",
+      "notes": "ملاحظات",
+      "notes-placeholder": "ملاحظات إضافية حول الفاتورة",
+      "assigned-sales-agent": "مندوب المبيعات المعين",
+      "select-sales-agent": "اختر مندوب المبيعات",
+      "invoice-number": "رقم الفاتورة",
       "save": "حفظ",
+      "saving": "جاري الحفظ...",
       "cancel": "إلغاء"
     },
     "invoice-details": {
