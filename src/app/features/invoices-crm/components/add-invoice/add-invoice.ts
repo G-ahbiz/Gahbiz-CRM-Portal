@@ -1,12 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
 import { ToastService } from '@core/services/toast.service';
 import { GetCustomersResponse } from '@features/customers-crm/interfaces/get-customers-response';
 import { CustomersFacadeService } from '@features/customers-crm/services/customers-facade.service';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DatePicker } from 'primeng/datepicker';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -15,11 +23,12 @@ import { GetSalesAgentsResponse } from '@features/customers-crm/interfaces/get-s
 import { AuthService } from '@core/services/auth.service';
 import { ROUTES, USER_TYPES } from '@shared/config/constants';
 import { InvoiceFacadeService } from '@features/invoices-crm/services/invoice.facade.service';
+import { AddInvoiceRequest } from '@features/invoices-crm/interfaces/add-invoice-request';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-invoice',
-  imports: [TranslateModule, ReactiveFormsModule, CommonModule, MultiSelectModule],
+  imports: [TranslateModule, ReactiveFormsModule, CommonModule, MultiSelectModule, DatePicker],
   templateUrl: './add-invoice.html',
   styleUrl: './add-invoice.css',
 })
@@ -29,12 +38,27 @@ export class AddInvoice implements OnInit {
   constructor(private fb: FormBuilder) {
     this.addInvoiceForm = this.fb.group({
       customerId: ['', Validators.required, Validators.minLength(3), Validators.maxLength(100)],
-      dueDate: ['', Validators.required],
-      notes: ['', Validators.required],
+      dueDate: ['', Validators.required, this.dateValidator],
+      notes: ['', Validators.maxLength(1000)],
       assignedSalesAgentId: ['', Validators.required],
       invoiceNumber: ['', Validators.required],
-      servicesOfInterest: [],
+      items: ['', [Validators.required, Validators.minLength(1)]],
     });
+  }
+
+  dateValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+    const date = value instanceof Date ? value : new Date(value);
+    if (isNaN(date.getTime())) {
+      return { invalidDateFormat: 'Invalid date format. Use DD-MM-YYYY.' };
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (date < today) {
+      return { pastDate: 'Date must be in the future.' };
+    }
+    return null;
   }
 
   private serviceFilterSubject = new Subject<string>();
@@ -51,6 +75,7 @@ export class AddInvoice implements OnInit {
 
   //signals
   loading = signal<boolean>(true);
+  isSubmitting = signal<boolean>(false);
   currentUser$ = this.authService.currentUser$;
 
   customers = signal<GetCustomersResponse[] | undefined>(undefined);
@@ -221,11 +246,35 @@ export class AddInvoice implements OnInit {
   }
 
   addInvoice() {
+    if (this.addInvoiceForm.invalid) {
+      this.addInvoiceForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.addInvoiceForm.value;
+
+    // Map form values to AddInvoiceRequest interface
+    const request: AddInvoiceRequest = {
+      customerId: formValue.customerId,
+      dueDate: formValue.dueDate,
+      notes: formValue.notes || '',
+      assignedSalesAgentId: formValue.assignedSalesAgentId,
+      invoiceNumber: formValue.invoiceNumber,
+      items:
+        (formValue.items as string[])?.map((serviceId: string) => ({
+          serviceId,
+          quantity: 1,
+        })) || [],
+    };
+
+    this.isSubmitting.set(true);
+
     this.invoicesFacadeService
-      .addInvoice(this.addInvoiceForm.value)
+      .addInvoice(request)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
+          this.isSubmitting.set(false);
           if (response.succeeded) {
             this.toast.success('Invoice added successfully');
             this.router.navigate([ROUTES.invoiceMain]);
@@ -235,6 +284,7 @@ export class AddInvoice implements OnInit {
           }
         },
         error: (error) => {
+          this.isSubmitting.set(false);
           const errorMsg = this.errorFacadeService.handleHttpError(error);
           this.toast.error(errorMsg);
         },
@@ -252,7 +302,7 @@ export class AddInvoice implements OnInit {
     notes: 'Notes',
     assignedSalesAgentId: 'Assigned Sales Agent',
     invoiceNumber: 'Invoice Number',
-    servicesOfInterest: 'Services of Interest',
+    items: 'Services',
   };
 
   getErrorMessage(fieldName: string): string {

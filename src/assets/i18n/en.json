@@ -271,6 +271,7 @@
       "select-sales-agent": "Select Sales Agent",
       "invoice-number": "Invoice Number",
       "save": "Save",
+      "saving": "Saving...",
       "cancel": "Cancel"
     },
     "invoice-details": {

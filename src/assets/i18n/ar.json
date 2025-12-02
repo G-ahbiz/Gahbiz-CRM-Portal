@@ -330,6 +330,7 @@
       "select-sales-agent": "اختر مندوب المبيعات",
       "invoice-number": "رقم الفاتورة",
       "save": "حفظ",
+      "saving": "جاري الحفظ...",
       "cancel": "إلغاء"
     },
     "invoice-details": {

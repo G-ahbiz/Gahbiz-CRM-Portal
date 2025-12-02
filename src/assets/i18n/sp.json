@@ -271,6 +271,7 @@
       "select-sales-agent": "Seleccionar Agente de Ventas",
       "invoice-number": "Número de Factura",
       "save": "Guardar",
+      "saving": "Guardando...",
       "cancel": "Cancelar"
     },
     "invoice-details": {
@@ -397,4 +398,3 @@
     "save": "Guardar"
   }
 }
-

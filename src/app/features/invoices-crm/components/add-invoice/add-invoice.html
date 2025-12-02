@@ -46,21 +46,20 @@
       </div>
 
       <!-- Due Date Container -->
-      <div
-        class="billDate-dueDate-container d-flex justify-content-between align-items-start gap-3 w-100"
-      >
-        <div class="form-group w-100">
+      <div class="billDate-dueDate-container d-flex justify-content-start align-items-start gap-3">
+        <div class="form-group">
           <label for="dueDate">
             {{ 'invoices-crm.add-invoice-page.due-date' | translate }}
             <span [class]="checkValidity('dueDate')">*</span>
           </label>
-          <input
-            type="date"
-            name="dueDate"
-            id="dueDate"
-            class="form-control"
-            placeholder="{{ 'invoices-crm.add-invoice-page.due-date' | translate }}"
+          <p-datepicker
             formControlName="dueDate"
+            dateFormat="dd-mm-yy"
+            [showIcon]="true"
+            [iconDisplay]="'input'"
+            placeholder="{{ 'invoices-crm.add-invoice-page.due-date' | translate }}"
+            inputId="dueDate"
+            styleClass="w-100"
           />
           <div class="error-message d-flex justify-content-start align-items-start">
             @if (checkErrors('dueDate')) {
@@ -97,12 +96,12 @@
 
         <!-- Services Select Container -->
         <div class="form-group w-100">
-          <label for="servicesOfInterest">
+          <label for="items">
             {{ 'invoices-crm.add-invoice-page.services-of-interest' | translate }}
           </label>
           <p-multiselect
             [options]="services()"
-            formControlName="servicesOfInterest"
+            formControlName="items"
             optionLabel="name"
             optionValue="id"
             placeholder="{{ 'invoices-crm.add-invoice-page.select-services' | translate }}"
@@ -204,8 +203,14 @@
           type="submit"
           class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
           (click)="addInvoice()"
+          [disabled]="addInvoiceForm.invalid || isSubmitting()"
         >
-          {{ 'invoices-crm.add-invoice-page.save' | translate }}
+          @if (isSubmitting()) {
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>{{ 'invoices-crm.add-invoice-page.saving' | translate }}</span>
+          } @else {
+          <span>{{ 'invoices-crm.add-invoice-page.save' | translate }}</span>
+          }
         </button>
       </div>
     </form>
