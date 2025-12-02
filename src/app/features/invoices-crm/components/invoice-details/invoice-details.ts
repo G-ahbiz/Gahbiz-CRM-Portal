@@ -1,82 +1,75 @@
-import { Component, OnInit } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { customersDetailsInterface, Invoice } from 'app/services/interfaces/all-interfaces';
-import { AllData } from 'app/services/all-data';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs/operators';
+import { InvoiceFacadeService } from '../../services/invoice.facade.service';
+import { GetInvoiceetails } from '../../interfaces/get-invoice-details';
 
 @Component({
   selector: 'app-invoice-details',
-  imports: [DatePipe, TranslateModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './invoice-details.html',
   styleUrl: './invoice-details.css',
 })
 export class InvoiceDetails implements OnInit {
-  allInvoices: Invoice[] = [];
-  currentInvoice: Invoice | undefined;
-  statusSelect: HTMLSelectElement | null = null;
-  allCustomers: customersDetailsInterface[] = [];
-  currentCustomer: customersDetailsInterface | undefined;
-  servicesHistory: any[] = [];
-  servicesTotalQuantity: number = 0;
-  servicesTotalPrice: number = 0;
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly invoiceFacade = inject(InvoiceFacadeService);
 
-  constructor(private allData: AllData) {}
+  // State signals
+  invoice = signal<GetInvoiceetails | null>(null);
+  loading = signal<boolean>(false);
+  error = signal<string | null>(null);
+
+  // Computed values for services totals
+  servicesTotalQuantity = computed(() => {
+    const services = this.invoice()?.services || [];
+    return services.reduce((total, service) => total + service.quantity, 0);
+  });
+
+  servicesTotalPrice = computed(() => {
+    const services = this.invoice()?.services || [];
+    return services.reduce((total, service) => total + service.total, 0);
+  });
 
   ngOnInit(): void {
-    this.getInvoiceDetails();
-    this.getCustomersData();
-    this.getServicesHistory();
-  }
-
-  getInvoiceDetails() {
-    this.allInvoices = this.allData.getInvoicesTabelData();
-    let invoiceId = sessionStorage.getItem('invoiceId');
+    const invoiceId = this.route.snapshot.paramMap.get('id');
     if (invoiceId) {
-      this.currentInvoice = this.allInvoices.find((invoice) => invoice.id === parseInt(invoiceId));
-      this.setStatusSelect();
-    } else {
-      this.currentInvoice = undefined;
+      this.loadInvoiceDetails(invoiceId);
     }
   }
 
-  setStatusSelect() {
-    this.statusSelect = document.querySelector('#statusSelect') as HTMLSelectElement;
-    this.statusSelect.value = this.currentInvoice?.status || '';
+  private loadInvoiceDetails(id: string): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.invoiceFacade
+      .getInvoiceDetails(id)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.data) {
+            this.invoice.set(response.data);
+          }
+        },
+        error: (err) => {
+          console.error('Error loading invoice details', err);
+          this.error.set('Failed to load invoice details');
+        },
+      });
   }
 
-  // Customers Data
-  getCustomersData() {
-    this.allCustomers = this.allData.getCustomersDetailsData();
-    this.getCurrentCustomer();
-  }
-
-  getCurrentCustomer() {
-    let customerId = this.currentInvoice?.clientId;
-    if (customerId) {
-      this.currentCustomer = this.allCustomers.find((customer) => customer.id === customerId);
-    } else {
-      this.currentCustomer = undefined;
-    }
-  }
-
-  getServicesHistory() {
-    this.servicesHistory = this.allData.getServicesHistoryData();
-    this.servicesTotalQuantity = this.servicesHistory.reduce(
-      (total, service) => total + service.quantity,
-      0
-    );
-    this.servicesTotalPrice = this.servicesHistory.reduce(
-      (total, service) => total + service.total,
-      0
-    );
-  }
-
-  onStatusChange(event: Event) {
+  onStatusChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
-    console.log(target.value);
+    // handle status change
   }
 
-  goBack() {
+  goBack(): void {
     window.history.back();
   }
 }

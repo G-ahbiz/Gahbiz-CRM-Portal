@@ -23,6 +23,11 @@ export const ROUTES = {
   appointmentService: '/appointment-service',
   wishlist: '/wishlist',
   allServices: '/all-services',
+
+  // Invoices
+  getInvoiceDeatils: '/main/invoices/invoice-details',
+  updateInvoice: '/main/invoices/invoice-details',
+  addInvoice: '/main/invoices/add-invoice',
 };
 
 export const USER_TYPES = {

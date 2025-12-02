@@ -6,6 +6,7 @@ import { GetAllInvoicesResponse } from '../interfaces/get-all-invoices-response'
 import { Observable } from 'rxjs';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetInvoicesFilters } from '../interfaces/get-invoices-filters';
+import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +46,10 @@ export class InvoiceApiService {
     }
 
     return this.http.get<ApiResponse<PagenatedResponse<GetAllInvoicesResponse>>>(url, { params });
+  }
+
+  getInvoiceDetails(id: string): Observable<ApiResponse<GetInvoiceetails>> {
+    const url = `${this.baseUrl}${environment.invoices.getInvoice(id)}`;
+    return this.http.get<ApiResponse<GetInvoiceetails>>(url);
   }
 }

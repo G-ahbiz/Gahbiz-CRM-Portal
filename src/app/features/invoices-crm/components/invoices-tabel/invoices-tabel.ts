@@ -13,6 +13,7 @@ import { InvoiceFacadeService } from '../../services/invoice.facade.service';
 import { GetAllInvoicesResponse } from '../../interfaces/get-all-invoices-response';
 import { GetInvoicesFilters } from '../../interfaces/get-invoices-filters';
 import { Subject } from 'rxjs';
+import { ROUTES } from '@shared/config/constants';
 
 // Constants
 const SESSION_STORAGE_KEYS = {
@@ -60,8 +61,8 @@ export class InvoicesTabel implements OnInit {
   totalRecords: number = 0;
 
   // Sorting state
-  sortColumn = signal<string>('InvoiceDate');
-  sortDirection = signal<'ASC' | 'DESC'>('DESC');
+  sortColumn = signal<string>('');
+  sortDirection = signal<'ASC' | 'DESC'>('ASC');
 
   // Data properties
   invoicesTabelData = signal<InvoiceViewModel[]>([]);
@@ -73,6 +74,8 @@ export class InvoicesTabel implements OnInit {
   // Filter state
   searchValue = signal<string>('');
   filterValue: FilterValue = 'all';
+
+  Routes = ROUTES;
 
   ngOnInit(): void {
     this.setupSearchSubscription();
@@ -197,10 +200,23 @@ export class InvoicesTabel implements OnInit {
   /**
    * Navigate to invoice details page
    */
-  viewInvoice(id: number): void {
-    this.router.navigate(['/main/invoices/invoice-details']);
+  addInvoice(): void {
+    this.router.navigate([ROUTES.addInvoice]);
   }
 
+  /**
+   * Navigate to invoice details page
+   */
+  viewInvoice(id: number): void {
+    this.router.navigate([ROUTES.getInvoiceDeatils, id]);
+  }
+
+  /**
+   * Navigate to update invoice page
+   */
+  updateInvoice(id: string) {
+    this.router.navigate([ROUTES.updateInvoice, id]);
+  }
   /**
    * Handle search input changes
    */

@@ -336,7 +336,28 @@
       "unpaid": "غير مدفوع",
       "save": "حفظ",
       "download": "تحميل",
-      "print": "طباعة"
+      "print": "طباعة",
+      "customer": "العميل",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "amount": "المبلغ",
+      "total": "الإجمالي",
+      "payment-received": "المبلغ المدفوع",
+      "due": "المستحق",
+      "delivery": "التوصيل",
+      "address": "العنوان",
+      "state": "الولاية",
+      "postal-code": "الرمز البريدي",
+      "payment-info": "معلومات الدفع",
+      "payment-method": "طريقة الدفع",
+      "business-name": "اسم الشركة",
+      "expiration-date": "تاريخ الانتهاء",
+      "services": "الخدمات",
+      "price": "السعر",
+      "quantity": "الكمية",
+      "actions": "الإجراءات",
+      "summary": "الملخص"
     }
   }
 }
