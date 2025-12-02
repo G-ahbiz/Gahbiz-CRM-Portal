@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { AllData } from '../../../services/all-data';
-import { Invoice, customersDetailsInterface } from '../../../services/interfaces/all-interfaces';
+import { customersDetailsInterface, Invoice } from 'app/services/interfaces/all-interfaces';
+import { AllData } from 'app/services/all-data';
 
 @Component({
   selector: 'app-invoice-details',

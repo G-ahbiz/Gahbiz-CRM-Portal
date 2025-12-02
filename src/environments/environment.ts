@@ -37,4 +37,11 @@ export const environment = {
     deleteCustomer: (id: string) => `/Customers/${id}`,
     getSalesAgents: '/SalesManagement/agentsList',
   },
+
+  invoices: {
+    getAllInvoices: '/Invoices',
+    addInvoice: '/Invoices',
+    getInvoice: (id: string) => `/Invoices/${id}`,
+    updateInvoice: (id: string) => `/Invoices/${id}`,
+  },
 };

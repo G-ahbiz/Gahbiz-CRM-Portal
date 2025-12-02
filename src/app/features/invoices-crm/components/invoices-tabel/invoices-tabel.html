@@ -1,0 +1,194 @@
+<div class="container-fluid p-0 m-0">
+  <div class="card border-0 bg-transparent">
+    <p-table
+      #dt1
+      [value]="invoicesTabelData()"
+      dataKey="id"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [lazy]="true"
+      (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
+      [loading]="loading()"
+    >
+      <ng-template #caption>
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Export Button Container -->
+          <div class="export-btn-container">
+            <button
+              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+            >
+              <i class="pi pi-download fs-875"></i>
+              {{ 'invoices-crm.export' | translate }}
+            </button>
+          </div>
+          <!-- Filter and Search Container -->
+          <div class="d-flex justify-content-start align-items-center gap-3">
+            <p-iconfield iconPosition="left" class="fw-bold">
+              <p-inputicon>
+                <i class="pi pi-search"></i>
+              </p-inputicon>
+              <input
+                pInputText
+                type="text"
+                (input)="onSearchChange($any($event.target).value)"
+                #searchInput
+                placeholder="{{ 'invoices-crm.search' | translate }}"
+              />
+            </p-iconfield>
+
+            <!-- Filter Container -->
+            <div
+              class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3"
+            >
+              <select
+                name="filter"
+                id="filter"
+                class="form-select border-0 bg-transparent"
+                aria-label="Filter"
+                (change)="onFilterChange($any($event.target).value)"
+              >
+                <option value="all">{{ 'invoices-crm.all' | translate }}</option>
+                <option value="last-7-days" selected>
+                  {{ 'invoices-crm.last-7-days' | translate }}
+                </option>
+                <option value="last-30-days">{{ 'invoices-crm.last-30-days' | translate }}</option>
+                <option value="last-60-days">{{ 'invoices-crm.last-60-days' | translate }}</option>
+                <option value="last-90-days">{{ 'invoices-crm.last-90-days' | translate }}</option>
+                <option value="last-180-days">
+                  {{ 'invoices-crm.last-180-days' | translate }}
+                </option>
+                <option value="last-365-days">
+                  {{ 'invoices-crm.last-365-days' | translate }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Add Invoice Button Container -->
+          <div class="d-flex justify-content-start align-items-center gap-0">
+            <button
+              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
+              routerLink="/main/invoices/add-invoice"
+            >
+              <img src="assets/images/shared/plus.svg" alt="" class="" />
+              {{ 'invoices-crm.add-invoice' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="title-container my-4">
+          <h5 class="m-0 p-0">{{ 'invoices-crm.all-invoices' | translate }}</h5>
+        </div>
+      </ng-template>
+      <ng-template #header>
+        <tr>
+          <th style="width: 3rem" class="text-center">
+            <input
+              type="checkbox"
+              name="select-all"
+              id="select-all"
+              [checked]="isAllSelected"
+              (change)="onSelectAll($event)"
+            />
+          </th>
+          <th style="width: 8rem">
+            {{ 'invoices-crm.invoice-id' | translate }}
+          </th>
+          <th style="width: 12rem" [pSortableColumn]="'CustomerName'">
+            <div class="d-flex align-items-center gap-2">
+              {{ 'invoices-crm.customer' | translate }}
+              <p-sortIcon field="customerName" />
+            </div>
+          </th>
+          <th style="width: 10rem" [pSortableColumn]="'InvoiceDate'">
+            <div class="d-flex align-items-center gap-2">
+              {{ 'invoices-crm.bill-date' | translate }}
+              <p-sortIcon field="invoiceDate" />
+            </div>
+          </th>
+          <th style="width: 10rem" [pSortableColumn]="'DueDate'">
+            <div class="d-flex align-items-center gap-2">
+              {{ 'invoices-crm.due-date' | translate }}
+              <p-sortIcon field="dueDate" />
+            </div>
+          </th>
+          <th style="width: 7rem">
+            {{ 'invoices-crm.total' | translate }}
+          </th>
+          <th style="width: 9rem">
+            {{ 'invoices-crm.payment-received' | translate }}
+          </th>
+          <th style="width: 8rem">
+            {{ 'invoices-crm.due' | translate }}
+          </th>
+          <th style="width: 8rem">
+            {{ 'invoices-crm.status' | translate }}
+          </th>
+          <th style="width: 6rem" class="text-center">
+            {{ 'invoices-crm.actions' | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-invoice let-rowIndex="rowIndex">
+        <tr>
+          <td class="text-center">
+            <input
+              type="checkbox"
+              name="select-invoice"
+              id="invoice-{{ invoice.id }}"
+              [checked]="invoice.selected"
+              (change)="toggleInvoiceSelection(invoice)"
+            />
+          </td>
+          <td>{{ invoice.invoiceNumber }}</td>
+          <td>{{ invoice.customerName }}</td>
+          <td>{{ invoice.invoiceDate | date : 'EE, MMM dd, yyyy' }}</td>
+          <td>{{ invoice.dueDate | date : 'EE, MMM dd, yyyy' }}</td>
+          <td>$ {{ invoice.totalAmount | number : '1.2-2' }}</td>
+          <td>$ {{ invoice.amountPaid | number : '1.2-2' }}</td>
+          <td>$ {{ invoice.dueAmount | number : '1.2-2' }}</td>
+          <td class="text-center">
+            <span
+              class="py-1 px-2 rounded-3"
+              [class]="
+                invoice.status === 'Paid'
+                  ? 'text-success card-green'
+                  : invoice.status === 'PartiallyPaid'
+                  ? 'text-warning card-yellow'
+                  : invoice.status === 'Unpaid'
+                  ? 'text-danger card-red'
+                  : ''
+              "
+            >
+              {{
+                invoice.status === 'Paid'
+                  ? ('invoices-crm.paid' | translate)
+                  : invoice.status === 'PartiallyPaid'
+                  ? ('invoices-crm.partially-paid' | translate)
+                  : invoice.status === 'Unpaid'
+                  ? ('invoices-crm.unpaid' | translate)
+                  : invoice.status
+              }}
+            </span>
+          </td>
+          <td class="text-center">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              <button class="btn btn-sm p-1">
+                <img src="assets/images/shared/options.svg" alt="" />
+              </button>
+              <button
+                class="btn btn-sm p-1"
+                (click)="viewInvoice(invoice.id); $event.stopPropagation()"
+              >
+                <img src="assets/images/shared/eye.svg" alt="" />
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
