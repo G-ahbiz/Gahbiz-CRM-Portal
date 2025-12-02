@@ -27,7 +27,7 @@ export const ROUTES = {
   // Invoices
   invoiceMain: '/main/invoices/invoice-main',
   getInvoiceDeatils: '/main/invoices/invoice-details',
-  updateInvoice: '/main/invoices/invoice-details',
+  updateInvoice: '/main/invoices/update-invoice',
   addInvoice: '/main/invoices/add-invoice',
 };
 

@@ -367,6 +367,22 @@
       "quantity": "الكمية",
       "actions": "الإجراءات",
       "summary": "الملخص"
+    },
+    "update-invoice-page": {
+      "title": "تحديث الفاتورة",
+      "amount-paid": "المبلغ المدفوع",
+      "status": "الحالة",
+      "select-status": "اختر الحالة",
+      "paid": "مدفوع",
+      "unpaid": "غير مدفوع",
+      "partially-paid": "مدفوع جزئياً",
+      "notes": "الملاحظات",
+      "notes-placeholder": "أدخل الملاحظات (اختياري)",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "amount-paid-required": "المبلغ المدفوع مطلوب",
+      "amount-paid-min": "يجب أن يكون المبلغ المدفوع 0 على الأقل",
+      "status-required": "الحالة مطلوبة"
     }
   }
 }
