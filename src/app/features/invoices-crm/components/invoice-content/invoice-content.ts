@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { InvoicesTabel } from '../invoices-tabel/invoices-tabel';
-import { TabsHeader } from '../../../shared/components/tabs-header/tabs-header';
-import { AllData } from '../../../services/all-data';
-import { LogCard } from '../../../shared/interfaces/log-card';
+import { TabsHeader } from '@shared/components/tabs-header/tabs-header';
+import { LogCard } from '@shared/interfaces/log-card';
+import { AllData } from 'app/services/all-data';
 
 @Component({
   selector: 'app-invoice-content',

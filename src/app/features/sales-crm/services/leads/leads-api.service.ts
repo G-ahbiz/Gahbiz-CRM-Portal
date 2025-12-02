@@ -5,7 +5,7 @@ import { LeadSummary, LeadSummaryItem } from '../../interfaces/lead-summary';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { environment } from '@env/environment';
 import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request';
-import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-services';
+import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-response';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 
 @Injectable({
