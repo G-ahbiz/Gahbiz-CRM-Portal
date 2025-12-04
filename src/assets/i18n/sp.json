@@ -92,11 +92,11 @@
     "CREATED": "Creado",
     "UPDATED": "Actualizado",
     "DELETED": "Eliminado",
-    "TRY_AGAIN": "Intentar de Nuevo",
-    "READ_MORE": "Leer Más",
+    "TRY_AGAIN": "Intentar de nuevo",
+    "READ_MORE": "Leer más",
     "NOT_AVAILABLE": "N/A",
-    "drag-and-drop-or": "Arrastra y suelta o ",
-    "browse": "Navegar"
+    "drag-and-drop-or": "Arrastrar y soltar o ",
+    "browse": "Explorar"
   },
   "NEW_PASSWORD": {
     "ERRORS": {
@@ -384,9 +384,31 @@
       "addLead": "Agregar Prospecto"
     }
   },
-  "common": {
-    "cancel": "Cancelar",
-    "save": "Guardar"
+  "LEADS": {
+    "TITLE": "Clientes Potenciales",
+    "NOTES": "Notas",
+    "DETAILS": "Detalles",
+    "ACTIVITY_LOGS": "Registro de Actividades",
+    "CONTACT_INFORMATION": "Información de Contacto",
+    "SERVICES": "Servicios",
+    "LAST_CONTACT_ON": "Último Contacto el",
+    "COMMUNICATION_HISTORY": "Historial de Comunicación",
+    "LOADING_DETAILS": "Cargando detalles del cliente potencial...",
+    "LOADING_ACTIVITY_LOGS": "Cargando registro de actividades...",
+    "NO_COMMUNICATION_HISTORY": "No se encontró historial de comunicación para este cliente potencial.",
+    "ADD_ACTIVITY_SUGGESTION": "Agrega notas, llamadas o correos electrónicos para ver actividades aquí.",
+    "SUCCESS": {
+      "LOADED": "Detalles del cliente potencial cargados exitosamente"
+    },
+    "ERRORS": {
+      "FAILED_TO_LOAD_LEAD": "Error al cargar los detalles del cliente potencial. Por favor, intente nuevamente.",
+      "LEAD_NOT_FOUND": "Cliente potencial no encontrado o ha sido eliminado.",
+      "FAILED_TO_LOAD_ACTIVITY_LOGS": "No se pueden cargar los registros de actividades en este momento.",
+      "FAILED_TO_LOAD_LEAD_DETAILS": "Error al cargar los detalles del cliente potencial. Por favor, intente nuevamente."
+    },
+    "WARNINGS": {
+      "NO_ACTIVITY_LOGS": "No hay registros de actividades disponibles para este cliente potencial"
+    }
   }
 }
 

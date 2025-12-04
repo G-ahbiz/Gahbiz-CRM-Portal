@@ -11,11 +11,6 @@ export const salesRoutes: Routes = [
           import('./components/leads/leads-content/leads-content').then((m) => m.LeadsContent),
       },
       {
-        path: 'leads-details',
-        loadComponent: () =>
-          import('./components/leads/leads-details/leads-details').then((m) => m.LeadsDetails),
-      },
-      {
         path: 'add-lead',
         loadComponent: () =>
           import('./components/leads/leads-add/leads-add').then((m) => m.LeadsAdd),
