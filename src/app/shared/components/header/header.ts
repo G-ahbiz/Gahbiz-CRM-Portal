@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
@@ -14,6 +14,9 @@ import { User } from '@features/auth/interfaces/sign-in/user';
   styleUrl: './header.css',
 })
 export class Header implements OnInit {
+  @Input() isMobile: boolean = false;
+  @Output() mobileMenuToggled = new EventEmitter<void>();
+
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -38,23 +41,25 @@ export class Header implements OnInit {
     this.initializeTranslation();
   }
 
+  toggleMobileMenu() {
+    if (this.isMobile) {
+      this.mobileMenuToggled.emit();
+    }
+  }
+
   private initializeTranslation() {
-    // Set default language if not already set
     if (!localStorage.getItem('ServabestCRM-language')) {
       localStorage.setItem('ServabestCRM-language', 'en');
     }
 
-    // Get saved language and set it
     const savedLang = localStorage.getItem('ServabestCRM-language') || 'en';
     this.translateService.setDefaultLang('en');
     this.translateService.use(savedLang);
 
-    // Set initial language state
     this.isArabic.set(savedLang === 'ar');
     this.isEnglish.set(savedLang === 'en');
     this.isSpain.set(savedLang === 'es');
 
-    // Subscribe to language changes
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
       this.isArabic.set(event.lang === 'ar');
       this.isEnglish.set(event.lang === 'en');

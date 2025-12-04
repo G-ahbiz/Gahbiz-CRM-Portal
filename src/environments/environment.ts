@@ -18,8 +18,14 @@ export const environment = {
     searchLeads: '/leads/search',
     addLead: '/leads/add',
     deleteLead: (id: string) => `/leads/${id}`,
+    getLeadById: (id: string) => `/leads/${id}`,
     exportLeads: '/leads/export',
     importLeads: '/leads/import',
+  },
+  activityLog: {
+    getleadActivities: (id: string) => `/ActivityLog/leadActivities/${id}`,
+    createActivityLog: '/ActivityLog',
+    deleteActivityLog: (id: string) => `/ActivityLog/${id}`,
   },
   services: {
     getAllServices: '/Services',
@@ -37,7 +43,6 @@ export const environment = {
     deleteCustomer: (id: string) => `/Customers/${id}`,
     getSalesAgents: '/SalesManagement/agentsList',
   },
-
   invoices: {
     getAllInvoices: '/Invoices',
     addInvoice: '/Invoices',

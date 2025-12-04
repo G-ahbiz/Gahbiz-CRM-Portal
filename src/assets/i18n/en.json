@@ -408,5 +408,31 @@
       "import": "Import",
       "addLead": "Add Lead"
     }
+  },
+  "LEADS": {
+    "TITLE": "Leads",
+    "NOTES": "Notes",
+    "DETAILS": "Details",
+    "ACTIVITY_LOGS": "Activity Logs",
+    "CONTACT_INFORMATION": "Contact Information",
+    "SERVICES": "Services",
+    "LAST_CONTACT_ON": "Last Contact on",
+    "COMMUNICATION_HISTORY": "Communication History",
+    "LOADING_DETAILS": "Loading lead details...",
+    "LOADING_ACTIVITY_LOGS": "Loading activity logs...",
+    "NO_COMMUNICATION_HISTORY": "No communication history found for this lead.",
+    "ADD_ACTIVITY_SUGGESTION": "Add notes, calls, or emails to see activity here.",
+    "SUCCESS": {
+      "LOADED": "Lead details loaded successfully"
+    },
+    "ERRORS": {
+      "FAILED_TO_LOAD_LEAD": "Failed to load lead details. Please try again.",
+      "LEAD_NOT_FOUND": "Lead not found or has been removed.",
+      "FAILED_TO_LOAD_ACTIVITY_LOGS": "Unable to load activity logs at this time.",
+      "FAILED_TO_LOAD_LEAD_DETAILS": "Failed to load lead details. Please try again."
+    },
+    "WARNINGS": {
+      "NO_ACTIVITY_LOGS": "No activity logs available for this lead"
+    }
   }
 }

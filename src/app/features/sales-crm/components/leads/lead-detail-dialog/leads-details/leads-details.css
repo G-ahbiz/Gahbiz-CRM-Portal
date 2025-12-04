@@ -1,0 +1,79 @@
+.card {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  background-color: rgba(33, 85, 163, 0.16) !important;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.badge.rounded-pill {
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+}
+
+/* Header Buttons */
+.btn-primary {
+  background-color: #005DB5;
+  border-color: #005DB5;
+}
+
+.btn-outline-secondary {
+  border-color: #dbe0e6;
+  color: #005DB5 !important;
+  &:hover {
+    background-color: #f8f9fa;
+    border-color: #005DB5;
+  }
+}
+
+/* Tab Container */
+.tab-container {
+  background-color: #f8f9fa; /* Light grey background */
+  border: 1px solid #f0f0f0;
+}
+
+/* Tab Buttons */
+.tab-btn {
+  border: none;
+  font-size: 0.95rem;
+  padding: 10px 0;
+  color: #ABABAB;
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: #fff;
+    color: #005DB5 !important; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+  }
+}
+
+/* Typography specifics */
+.small-text {
+  font-size: 0.75rem;
+  color: #9aa0ac !important;
+  font-weight: 500;
+}
+
+i.bi {
+  font-size: 1.25rem !important;
+}
+
+/* Animation */
+.animate-fade {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
