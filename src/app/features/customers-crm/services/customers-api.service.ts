@@ -59,4 +59,9 @@ export class CustomersApiService {
     const url = `${this.baseUrl}${environment.customers.getSalesAgents}`;
     return this.http.get<ApiResponse<GetSalesAgentsResponse[]>>(url);
   }
+
+  exportCustomers(customerIds: string[]): Observable<Blob> {
+    const url = `${this.baseUrl}${environment.customers.exportCustomers}`;
+    return this.http.post<Blob>(url, { customerIds }, { responseType: 'blob' as 'json' });
+  }
 }
