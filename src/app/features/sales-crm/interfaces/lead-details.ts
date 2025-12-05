@@ -1,23 +1,29 @@
-import { AssignedTo } from './lead-summary'
+import { AssignedTo } from './lead-summary';
 
 export interface LeadDetails {
   id: string;
-  firstName?: string | null;
-  lastName?: string | null;
-
-  email?: string | null;
-  phoneNumber?: string | null;
-
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string; 
+  value: number;
+  servicesOfInterest: ServiceOfInterest[];
+  status: string;
+  sourceName: string;
   assignedTo: AssignedTo | null;
-
-  status?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-
-  value?: number | null;
-  sourceName?: string | null;
-
-  servicesOfInterest?: ServiceOfInterest[] | string[] | null;
+  createdAt: string;
+  updatedAt: string | null;
+  ssn: string;
+  currentCity: string;
+  fromCity: string;
+  dob: string;
+  zipCode: string;
+  city: string;
+  state: string;
+  county: string;
+  gender: string;
+  workAt: string;
+  parentId: string | null;
 }
 
 export interface ServiceOfInterest {

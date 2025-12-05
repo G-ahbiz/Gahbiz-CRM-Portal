@@ -7,10 +7,9 @@ export interface AddLeadRequest {
   ssn?: string;
   currentCity?: string;
   fromCity?: string;
-  userId?: string;
   dob?: string;
   status?: 'New' | 'Contacted' | 'Qualified' | 'Converted' | 'Lost';
-  source?: string;
+  source?: 'FacebookAds' | 'GoogleAds' | 'Referral' | 'WebsiteForm' | 'TradeShow' | 'Manual' | 'Provider';
   servicesOfInterest?: string[];
   zipCode?: string;
   city?: string;
@@ -18,6 +17,5 @@ export interface AddLeadRequest {
   county?: string;
   gender?: string;
   workAt?: string;
-  sourceName?: string;
   notes?: string;
 }

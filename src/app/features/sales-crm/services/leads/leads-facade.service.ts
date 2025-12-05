@@ -47,6 +47,10 @@ export class LeadsFacadeService {
     return this.leadsService.deleteLead(id);
   }
 
+  updateLead(id: string, addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
+    return this.leadsService.updateLead(id, addLeadRequest);
+  }
+
   getLeadById(id: string): Observable<ApiResponse<LeadDetails>> {
     return this.leadsService.getLeadById(id);
   }

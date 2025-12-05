@@ -60,6 +60,11 @@ export class LeadsApiService {
     return this.httpClient.delete<ApiResponse<any>>(deleteLeadUrl);
   }
 
+  updateLead(id: string ,addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
+    const updateLeadUrl = `${this.baseApi}${environment.leads.updateLead(id)}`;
+    return this.httpClient.put<ApiResponse<LeadSummaryItem>>(updateLeadUrl, addLeadRequest);
+  }
+
   getLeadById(id: string): Observable<ApiResponse<LeadDetails>> {
     const getLeadByIdUrl = `${this.baseApi}${environment.leads.getLeadById(id)}`;
     return this.httpClient.get<ApiResponse<LeadDetails>>(getLeadByIdUrl);
@@ -92,7 +97,7 @@ export class LeadsApiService {
 
   // ===================================================
 
-  getLeadActivities (id: string): Observable<ApiResponse<any>> {
+  getLeadActivities(id: string): Observable<ApiResponse<any>> {
     const url = `${this.baseApi}${environment.activityLog.getleadActivities(id)}`;
     return this.httpClient.get<ApiResponse<any>>(url);
   }

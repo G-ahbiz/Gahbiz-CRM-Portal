@@ -18,6 +18,7 @@ export const environment = {
     searchLeads: '/leads/search',
     addLead: '/leads/add',
     deleteLead: (id: string) => `/leads/${id}`,
+    updateLead: (id: string) => `/leads/${id}`,
     getLeadById: (id: string) => `/leads/${id}`,
     exportLeads: '/leads/export',
     importLeads: '/leads/import',

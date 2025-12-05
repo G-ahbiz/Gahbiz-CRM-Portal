@@ -20,6 +20,7 @@ import { ActivityLogItemComponent } from '../activity-log-item/activity-log-item
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
 import { ToastService } from '@core/services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-leads-details',
@@ -35,6 +36,7 @@ export class LeadsDetails implements OnInit {
 
   private readonly facade = inject(LeadsFacadeService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   private readonly toastService = inject(ToastService);
   private readonly translateService = inject(TranslateService);
 
@@ -56,8 +58,7 @@ export class LeadsDetails implements OnInit {
   });
 
   assignedToName = computed(
-    () =>
-      this.leadData()?.assignedTo?.fullName ?? this.translateService.instant('LEADS.UNASSIGNED')
+    () => this.leadData()?.assignedTo?.fullName ?? this.translateService.instant('LEADS.UNASSIGNED')
   );
 
   serviceNames = computed(() => {
@@ -149,7 +150,9 @@ export class LeadsDetails implements OnInit {
           }
         },
         error: (error) => {
-          const errorMsg = this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_ACTIVITY_LOGS');
+          const errorMsg = this.translateService.instant(
+            'LEADS.ERRORS.FAILED_TO_LOAD_ACTIVITY_LOGS'
+          );
           this.error.set(errorMsg);
           this.toastService.error(errorMsg);
           console.error('Error loading activity logs:', error);
@@ -185,6 +188,11 @@ export class LeadsDetails implements OnInit {
       default:
         return 'bg-secondary bg-opacity-10 text-secondary';
     }
+  }
+
+  editLead(id: string | undefined) {
+    if (!id) return;
+    this.router.navigate(['/main/sales/leads/edit-lead', id]);
   }
 
   onClose() {
