@@ -15,6 +15,11 @@ export const salesRoutes: Routes = [
         loadComponent: () =>
           import('./components/leads/leads-add/leads-add').then((m) => m.LeadsAdd),
       },
+      {
+        path: 'edit-lead/:id',
+        loadComponent: () =>
+          import('./components/leads/leads-add/leads-add').then((m) => m.LeadsAdd),
+      },
       { path: '', redirectTo: 'leads-main', pathMatch: 'full' },
     ],
   },

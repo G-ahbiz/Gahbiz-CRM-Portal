@@ -182,9 +182,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
-        this.toast.error(
-          this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
-        );
+        this.toast.error(this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS'));
         this.selectedLeadData.set(null);
         this.showLeadModal.set(false);
         this.loading.set(false);
@@ -273,9 +271,9 @@ export class LeadsTabel implements OnInit, OnDestroy {
   }
 
   editLead(id: number) {
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
-    this.router.navigate([ROUTES.addLead]);
+    this.router.navigate(['/main/sales/leads/edit-lead', id]);
   }
+
   exportLeads() {
     if (this.selectedLeads().length === 0) {
       this.toast.error('Please select at least one lead to export');

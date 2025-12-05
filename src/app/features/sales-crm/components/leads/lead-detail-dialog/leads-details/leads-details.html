@@ -21,8 +21,9 @@
           <i class="pi pi-file"></i> {{ 'LEADS.NOTES' | translate }}
         </button>
 
-        <button class="btn btn-outline-primary btn-custom-outline px-4 py-2 fw-medium d-flex align-items-center gap-2">
-          <i class="pi pi-pencil"></i> {{ 'COMMON.EDIT' | translate }}
+        <button class="btn btn-outline-primary btn-custom-outline px-4 py-2 fw-medium d-flex align-items-center gap-2"
+          (click)="editLead(leadData()?.id)">
+          <i class=" pi pi-pencil"></i> {{ 'COMMON.EDIT' | translate }}
         </button>
       </div>
     </div>

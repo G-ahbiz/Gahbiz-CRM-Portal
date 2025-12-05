@@ -10,10 +10,10 @@ import {
   ValidationErrors,
   AbstractControl,
 } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
 import { ToastService } from '@core/services/toast.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { REG_EXP, USER_TYPES } from '@shared/config/constants';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -23,6 +23,8 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
+import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
+
 @Component({
   selector: 'app-leads-add',
   imports: [
@@ -41,13 +43,18 @@ export class LeadsAdd implements OnInit {
   private leadsFacadeService = inject(LeadsFacadeService);
   private toastService = inject(ToastService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
+  private translate = inject(TranslateService);
 
   isSubmitting = signal<boolean>(false);
   visible = signal<boolean>(false);
   services = signal<ServiceDetails[]>([]);
   currentUser = signal<User | null>(null);
+
+  isEditMode = signal<boolean>(false);
+  leadId = signal<string | null>(null);
 
   // Import file state
   selectedFile = signal<File | null>(null);
@@ -60,65 +67,53 @@ export class LeadsAdd implements OnInit {
   private serviceFilterSubject = new Subject<string>();
 
   constructor(private fb: FormBuilder) {
-    this.addLeadForm = this.fb.group(
-      {
-        firstName: [
-          '',
-          [
-            Validators.required,
-            Validators.maxLength(100),
-            Validators.pattern(REG_EXP.NAME_PATTERN),
-          ],
-        ],
-        lastName: [
-          '',
-          [
-            Validators.required,
-            Validators.maxLength(100),
-            Validators.pattern(REG_EXP.NAME_PATTERN),
-          ],
-        ],
-        eMail: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-        phone: ['', [Validators.required, this.phoneFormatValidator]],
+    this.addLeadForm = this.fb.group({
+      firstName: [
+        '',
+        [Validators.required, Validators.maxLength(100), Validators.pattern(REG_EXP.NAME_PATTERN)],
+      ],
+      lastName: [
+        '',
+        [Validators.required, Validators.maxLength(100), Validators.pattern(REG_EXP.NAME_PATTERN)],
+      ],
+      eMail: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      phone: ['', [Validators.required, this.phoneFormatValidator]],
 
-        // Optional fields
-        userId: [''],
-        servicesOfInterest: [],
-        parentId: [''],
-        ssn: ['', [Validators.pattern(REG_EXP.SSN_PATTERN)]],
-        currentCity: ['', Validators.maxLength(100)],
-        fromCity: ['', Validators.maxLength(100)],
-        dob: ['', [this.dateFormatValidator, this.pastDateValidator]],
-        status: [null],
-        source: [null],
-        zipCode: ['', Validators.pattern(REG_EXP.ZIP_CODE_PATTERN)],
-        city: ['', Validators.maxLength(100)],
-        state: ['', Validators.maxLength(100)],
-        county: ['', Validators.maxLength(100)],
-        gender: ['', this.genderValidator],
-        workAt: ['', Validators.maxLength(200)],
-        sourceName: ['', Validators.maxLength(100)],
-        notes: ['', Validators.maxLength(1000)],
-      },
-      {
-        validators: [this.sourceConsistencyValidator],
-      }
-    );
+      // Optional fields
+      servicesOfInterest: [],
+      parentId: [''],
+      ssn: ['', [Validators.pattern(REG_EXP.SSN_PATTERN)]],
+      currentCity: ['', Validators.maxLength(100)],
+      fromCity: ['', Validators.maxLength(100)],
+      dob: ['', [this.dateFormatValidator, this.pastDateValidator]],
+      status: [null],
+      source: [null],
+      zipCode: ['', Validators.pattern(REG_EXP.ZIP_CODE_PATTERN)],
+      city: ['', Validators.maxLength(100)],
+      state: ['', Validators.maxLength(100)],
+      county: ['', Validators.maxLength(100)],
+      gender: ['', this.genderValidator],
+      workAt: ['', Validators.maxLength(200)],
+      notes: ['', Validators.maxLength(1000)],
+    });
   }
+
   ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.isEditMode.set(true);
+        this.leadId.set(id);
+        this.loadLeadData(id);
+      }
+    });
+
     this.authService.currentUser$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
       this.currentUser.set(user);
     });
 
     // Load initial services
-    this.leadsFacadeService
-      .getAllServices()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.services.set(response.data.items);
-        },
-      });
+    this.loadAllServices();
 
     // Setup service filter subscription with debounce
     this.serviceFilterSubject
@@ -130,6 +125,83 @@ export class LeadsAdd implements OnInit {
           this.getAllServices();
         }
       });
+  }
+
+  private loadLeadData(leadId: string): void {
+    this.isSubmitting.set(true);
+    this.leadsFacadeService
+      .getLeadById(leadId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded && response.data) {
+            this.populateForm(response.data);
+          } else {
+            this.toastService.error(
+              this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
+            );
+            this.router.navigate(['/main/sales/leads/leads-main']);
+          }
+          this.isSubmitting.set(false);
+        },
+        error: (error) => {
+          this.toastService.error(
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
+          );
+          this.router.navigate(['/main/sales/leads/leads-main']);
+          this.isSubmitting.set(false);
+        },
+      });
+  }
+
+  private populateForm(lead: LeadDetails): void {
+    const formattedDob = this.formatDateForInput(lead.dob);
+
+    const serviceIds =
+      lead.servicesOfInterest?.map((service) =>
+        typeof service === 'string' ? service : service.id
+      ) || [];
+
+    this.addLeadForm.patchValue({
+      firstName: lead.firstName || '',
+      lastName: lead.lastName || '',
+      eMail: lead.email || '',
+      phone: lead.phoneNumber || '',
+      servicesOfInterest: serviceIds,
+      parentId: lead.parentId || '',
+      ssn: lead.ssn || '',
+      currentCity: lead.currentCity || '',
+      fromCity: lead.fromCity || '',
+      dob: formattedDob,
+      status: lead.status || null,
+      source: lead.sourceName || null,
+      zipCode: lead.zipCode || '',
+      city: lead.city || '',
+      state: lead.state || '',
+      county: lead.county || '',
+      gender: lead.gender || '',
+      workAt: lead.workAt || '',
+      notes: '',
+    });
+  }
+
+  private formatDateForInput(dateString: string): string {
+    if (!dateString) return '';
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return '';
+
+      // Format as YYYY-MM-DD for input[type="date"]
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+
+      return `${year}-${month}-${day}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
   }
 
   searchServices(text: string) {
@@ -189,21 +261,6 @@ export class LeadsAdd implements OnInit {
     return null;
   }
 
-  sourceConsistencyValidator(formGroup: AbstractControl): ValidationErrors | null {
-    const form = formGroup as FormGroup;
-    const sourceName = form.get('sourceName')?.value;
-    const source = form.get('source')?.value;
-
-    if (sourceName && (source === null || source === undefined)) {
-      return { sourceRequired: 'If SourceName is provided, Source must also be specified.' };
-    }
-
-    if (source !== null && source !== undefined && !sourceName) {
-      return { sourceNameRequired: 'If Source is provided, SourceName must also be specified.' };
-    }
-
-    return null;
-  }
   private phoneFormatValidator(control: AbstractControl): ValidationErrors | null {
     const raw = control.value;
     if (!raw || raw.toString().trim() === '') return null;
@@ -230,6 +287,20 @@ export class LeadsAdd implements OnInit {
     return null;
   }
 
+  loadAllServices() {
+    this.leadsFacadeService
+      .getAllServices()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.services.set(response.data.items || []);
+        },
+        error: (error) => {
+          this.toastService.error(error?.error?.message || 'Failed to get services');
+        },
+      });
+  }
+
   getAllServices() {
     this.leadsFacadeService.getAllServices().subscribe({
       next: (response) => {
@@ -248,32 +319,63 @@ export class LeadsAdd implements OnInit {
 
     const errors = control.errors;
 
-    if (errors['required']) return `${fieldName} is required.`;
+    if (errors['required'])
+      return this.translate.instant('LEADS.leads-add-page.required-field', {
+        field: this.getFieldLabel(fieldName),
+      });
     if (errors['maxlength'])
-      return `${fieldName} must not exceed ${errors['maxlength'].requiredLength} characters.`;
+      return this.translate.instant('LEADS.leads-add-page.max-length-error', {
+        field: this.getFieldLabel(fieldName),
+        max: errors['maxlength'].requiredLength,
+      });
     if (errors['pattern']) return this.getPatternError(fieldName);
-    if (errors['eMail']) return 'Email must be a valid email address.';
-    if (errors['invalidDateFormat']) return errors['invalidDateFormat'];
-    if (errors['futureDate']) return errors['futureDate'];
-    if (errors['invalidGender']) return errors['invalidGender'];
-    if (errors['invalidGuid']) return errors['invalidGuid'];
+    if (errors['email']) return this.translate.instant('LEADS.leads-add-page.invalid-email');
+    if (errors['invalidDateFormat'])
+      return this.translate.instant('LEADS.leads-add-page.invalid-date-format');
+    if (errors['futureDate'])
+      return this.translate.instant('LEADS.leads-add-page.future-date-error');
+    if (errors['invalidGender'])
+      return this.translate.instant('LEADS.leads-add-page.invalid-gender');
+    if (errors['invalidUSPhone'] || errors['invalidPhone'])
+      return this.translate.instant('LEADS.leads-add-page.invalid-phone');
+    if (errors['invalidGuid']) return this.translate.instant('LEADS.leads-add-page.invalid-guid');
 
-    return 'Invalid value.';
+    return this.translate.instant('COMMON.ERROR');
+  }
+
+  private getFieldLabel(fieldName: string): string {
+    const fieldLabels: { [key: string]: string } = {
+      firstName: this.translate.instant('LEADS.leads-add-page.first-name'),
+      lastName: this.translate.instant('LEADS.leads-add-page.last-name'),
+      eMail: this.translate.instant('LEADS.leads-add-page.email'),
+      phone: this.translate.instant('LEADS.leads-add-page.phone'),
+      ssn: this.translate.instant('LEADS.leads-add-page.ssn'),
+      dob: this.translate.instant('LEADS.leads-add-page.dob'),
+      gender: this.translate.instant('LEADS.leads-add-page.gender'),
+      city: this.translate.instant('LEADS.leads-add-page.city'),
+      state: this.translate.instant('LEADS.leads-add-page.state'),
+      county: this.translate.instant('LEADS.leads-add-page.county'),
+      zipCode: this.translate.instant('LEADS.leads-add-page.zip-code'),
+      status: this.translate.instant('LEADS.leads-add-page.status'),
+      source: this.translate.instant('LEADS.leads-add-page.source'),
+    };
+
+    return fieldLabels[fieldName] || fieldName;
   }
 
   private getPatternError(fieldName: string): string {
     switch (fieldName) {
       case 'firstName':
       case 'lastName':
-        return `${fieldName} cannot contain special characters. Only letters, spaces, hyphens, and apostrophes are allowed.`;
+        return this.translate.instant('LEADS.leads-add-page.name-pattern-error');
       case 'phone':
-        return 'Phone number must be numeric and contain 8-15 digits.';
+        return this.translate.instant('LEADS.leads-add-page.phone-pattern-error');
       case 'ssn':
-        return 'SSN must be in format XXX-XX-XXXX or XXXXXXXXX.';
+        return this.translate.instant('LEADS.leads-add-page.ssn-pattern-error');
       case 'zipCode':
-        return 'Invalid ZIP code format. Use XXXXX or XXXXX-XXXX.';
+        return this.translate.instant('LEADS.leads-add-page.zip-code-pattern-error');
       default:
-        return 'Invalid format.';
+        return this.translate.instant('LEADS.leads-add-page.invalid-format');
     }
   }
 
@@ -295,28 +397,60 @@ export class LeadsAdd implements OnInit {
   saveLead() {
     if (this.addLeadForm.invalid) {
       this.addLeadForm.markAllAsTouched();
-      this.toastService.error('Please fill all required fields correctly');
+      this.toastService.error(this.translate.instant('LEADS.leads-add-page.fill-required-fields'));
       return;
     }
 
     this.isSubmitting.set(true);
     const formData = this.convertToFormData(this.addLeadForm.value);
 
-    this.leadsFacadeService.addLead(formData as any).subscribe({
-      next: (response) => {
-        this.isSubmitting.set(false);
-        if (response.succeeded) {
-          this.toastService.success('Lead added successfully');
-          this.router.navigate(['/main/sales/leads/leads-main']);
-        } else {
-          this.toastService.error(response.errors[0]);
-        }
-      },
-      error: (error) => {
-        this.isSubmitting.set(false);
-        this.toastService.error(error?.error?.message || 'Failed to add lead');
-      },
-    });
+    if (this.isEditMode() && this.leadId()) {
+      // Update existing lead
+      this.leadsFacadeService.updateLead(this.leadId()!, formData as any).subscribe({
+        next: (response) => {
+          this.isSubmitting.set(false);
+          if (response.succeeded) {
+            this.toastService.success(this.translate.instant('LEADS.SUCCESS.UPDATED'));
+            this.router.navigate(['/main/sales/leads/leads-main']);
+          } else {
+            this.toastService.error(
+              response.errors?.[0] ||
+                response.message ||
+                this.translate.instant('LEADS.ERRORS.UPDATE_FAILED')
+            );
+          }
+        },
+        error: (error) => {
+          this.isSubmitting.set(false);
+          this.toastService.error(
+            error?.error?.message || this.translate.instant('LEADS.ERRORS.UPDATE_FAILED')
+          );
+        },
+      });
+    } else {
+      // Create new lead
+      this.leadsFacadeService.addLead(formData as any).subscribe({
+        next: (response) => {
+          this.isSubmitting.set(false);
+          if (response.succeeded) {
+            this.toastService.success(this.translate.instant('LEADS.SUCCESS.ADDED'));
+            this.router.navigate(['/main/sales/leads/leads-main']);
+          } else {
+            this.toastService.error(
+              response.errors?.[0] ||
+                response.message ||
+                this.translate.instant('LEADS.ERRORS.ADD_FAILED')
+            );
+          }
+        },
+        error: (error) => {
+          this.isSubmitting.set(false);
+          this.toastService.error(
+            error?.error?.message || this.translate.instant('LEADS.ERRORS.ADD_FAILED')
+          );
+        },
+      });
+    }
   }
 
   onFileSelected(event: Event) {
@@ -331,7 +465,7 @@ export class LeadsAdd implements OnInit {
   importLeads() {
     const file = this.selectedFile();
     if (!file) {
-      this.toastService.error('Please select a file to import');
+      this.toastService.error(this.translate.instant('LEADS.import-dialog.select-file-error'));
       return;
     }
 
@@ -341,7 +475,7 @@ export class LeadsAdd implements OnInit {
     ];
 
     if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
-      this.toastService.error('Invalid file type. Please upload an Excel or CSV file');
+      this.toastService.error(this.translate.instant('LEADS.import-dialog.invalid-file-type'));
       return;
     }
 
@@ -355,17 +489,21 @@ export class LeadsAdd implements OnInit {
       next: (response) => {
         this.isImporting.set(false);
         if (response.succeeded) {
-          this.toastService.success(response.message || 'Leads imported successfully');
+          this.toastService.success(
+            response.message || this.translate.instant('LEADS.SUCCESS.IMPORTED')
+          );
           this.closeDialog();
-          // Optionally refresh the leads table or navigate
-          // this.router.navigate(['/main/sales/leads/leads-main']);
         } else {
-          this.toastService.error(response.message || 'Failed to import leads');
+          this.toastService.error(
+            response.message || this.translate.instant('LEADS.ERRORS.IMPORT_FAILED')
+          );
         }
       },
       error: (error) => {
         this.isImporting.set(false);
-        this.toastService.error(error?.error?.message || 'Failed to import leads');
+        this.toastService.error(
+          error?.error?.message || this.translate.instant('LEADS.ERRORS.IMPORT_FAILED')
+        );
         console.error('Import error:', error);
       },
     });
@@ -408,5 +546,9 @@ export class LeadsAdd implements OnInit {
 
   cancel() {
     window.history.back();
+  }
+
+  getPageTitle(): string {
+    return this.isEditMode() ? 'Edit Lead' : 'Add Lead';
   }
 }
