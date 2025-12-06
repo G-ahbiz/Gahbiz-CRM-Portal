@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -61,7 +61,7 @@ export class CustomerTabel implements OnInit {
   showDetailsDialog = signal<boolean>(false);
   selectedCustomerId = signal<string | null>(null);
 
-  constructor(private readonly customersFacade: CustomersFacadeService) {}
+  constructor(private readonly customersFacade: CustomersFacadeService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCustomersData();
@@ -212,8 +212,8 @@ export class CustomerTabel implements OnInit {
       });
   }
 
-  editCustomer(id: string): void {
-    console.log('editCustomer', id);
+  editCustomer(id: number) {
+    this.router.navigate(['/main/customers/edit-customer', id]);
   }
 
   /**

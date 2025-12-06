@@ -1,0 +1,100 @@
+@if (lead) {
+<div class="animate-fade">
+  <!-- Lead Name and ID -->
+  <div class="mb-5">
+    <div class="d-flex align-items-baseline gap-3 mb-2">
+      <h2 class="fw-bold mb-0 text-dark">
+        {{ lead.firstName }} {{ lead.lastName }}
+      </h2>
+      <span class="text-secondary fs-6 fw-medium opacity-50">#{{ lead.id }}</span>
+    </div>
+    @if (lead.assignedTo) {
+    <div class="d-flex align-items-center gap-2 mt-1">
+      <i class="pi pi-headphones text-primary fs-5"></i>
+      <span class="text-secondary fw-medium fs-6">{{ assignedToName }}</span>
+    </div>
+    }
+  </div>
+
+  <!-- Contact Information -->
+  <div class="mb-5">
+    <h6 class="fw-bold mb-3 fs-5">{{ 'LEADS.CONTACT_INFORMATION' | translate }}</h6>
+    <div class="d-flex flex-column gap-3">
+      @if (lead.email) {
+      <div class="d-flex align-items-center gap-3">
+        <div class="icon-wrapper">
+          <i class="pi pi-envelope text-primary"></i>
+        </div>
+        <span class="text-dark fw-medium">{{ lead.email }}</span>
+      </div>
+      }
+
+      @if (lead.phoneNumber) {
+      <div class="d-flex align-items-center gap-3">
+        <div class="icon-wrapper">
+          <i class="pi pi-phone text-primary"></i>
+        </div>
+        <div class="d-flex align-items-baseline gap-3">
+          <span class="text-dark fw-medium">{{ lead.phoneNumber }}</span>
+          @if (lead.updatedAt) {
+          <span class="text-muted small-text">
+            {{ 'LEADS.LAST_CONTACT_ON' | translate }} {{ formatDate(lead.updatedAt) }}
+          </span>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Details Grid -->
+  <div>
+    <h6 class="fw-bold mb-3 fs-5">{{ 'LEADS.DETAILS' | translate }}</h6>
+    <div class="row g-4">
+      @if (serviceNames.length) {
+      <div class="col-12">
+        <div class="d-flex align-items-center gap-3">
+          <div class="icon-wrapper">
+            <i class="pi pi-briefcase text-primary"></i>
+          </div>
+          <span class="text-dark fw-medium">{{ 'LEADS.SERVICES' | translate }}: {{ serviceNames.join(', ') }}</span>
+        </div>
+      </div>
+      }
+
+      @if (lead.value) {
+      <div class="col-6">
+        <div class="d-flex align-items-center gap-3">
+          <div class="icon-wrapper">
+            <i class="pi pi-money-bill text-primary"></i>
+          </div>
+          <span class="text-dark fw-medium">{{ lead.value | currency:'USD':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+      }
+
+      @if (lead.createdAt) {
+      <div class="col-6">
+        <div class="d-flex align-items-center gap-3">
+          <div class="icon-wrapper">
+            <i class="pi pi-calendar text-primary"></i>
+          </div>
+          <span class="text-dark fw-medium">{{ formatDate(lead.createdAt) }}</span>
+        </div>
+      </div>
+      }
+
+      @if (lead.sourceName) {
+      <div class="col-6">
+        <div class="d-flex align-items-center gap-3">
+          <div class="icon-wrapper">
+            <i class="pi pi-globe text-primary"></i>
+          </div>
+          <span class="text-dark fw-medium">{{ lead.sourceName }}</span>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}

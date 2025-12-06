@@ -97,7 +97,11 @@
     "NOT_AVAILABLE": "N/A",
     "drag-and-drop-or": "Drag and Drop or ",
     "browse": "Browse",
-    "IMPORT": "Import"
+    "IMPORT": "Import",
+    "CHARACTERS": "characters",
+    "INVALID_DATE": "Invalid date",
+    "INVALID_TIME": "Invalid time",
+    "SAVE_ACTIVITY": "Save Activity"
   },
   "NEW_PASSWORD": {
     "ERRORS": {
@@ -371,6 +375,10 @@
       "assign-user": "Assign User",
       "select-user": "Select User",
       "saving": "Saving..."
+    },
+    "edit-customer-page": {
+      "title": "Edit Customer",
+      "updating": "Updating..."
     }
   },
   "sales-crm": {
@@ -388,7 +396,7 @@
   },
   "LEADS": {
     "TITLE": "Leads",
-    "NOTES": "Notes",
+    "NEW_ACTIVITIES": "Add Activity",
     "DETAILS": "Details",
     "ACTIVITY_LOGS": "Activity Logs",
     "CONTACT_INFORMATION": "Contact Information",
@@ -399,6 +407,29 @@
     "LOADING_ACTIVITY_LOGS": "Loading activity logs...",
     "NO_COMMUNICATION_HISTORY": "No communication history found for this lead.",
     "ADD_ACTIVITY_SUGGESTION": "Add notes, calls, or emails to see activity here.",
+    "ADD_NEW_ACTIVITY": "Add New Activity",
+    "ADD_ACTIVITY": "Add Activity",
+    "ADD_FIRST_ACTIVITY": "Add First Activity",
+    "ACTIVITY_TYPE": "Activity Type",
+    "TRAFFIC_TYPE": "Traffic Type",
+    "STATUS": "Status",
+    "CALL_STATUS": "Call Status",
+    "DURATION": "Duration",
+    "FOLLOW_UP_DATE": "Follow-up Date",
+    "OPPORTUNITY_PERCENTAGE": "Opportunity Percentage",
+    "DURATION_HELP": "Duration in HH:MM:SS format",
+    "ACTIVITY_DETAILS_PLACEHOLDER": "Enter activity details...",
+    "SOURCE_PLACEHOLDER": "Enter source...",
+    "NEED_PLACEHOLDER": "Enter need...",
+    "SOURCE": "Source",
+    "NEED": "Need",
+    "UNASSIGNED": "Unassigned",
+    "FOLLOW_UP": "Follow-up",
+    "CREATED_AT": "Created",
+    "ACTIVITY_DETAILS": "Activity Details",
+    "USER": "User",
+    "TIME": "Time",
+    "METADATA": "Metadata",
     "import-dialog": {
       "title": "Import Leads",
       "description": "Import leads from an Excel or CSV file.",
@@ -492,11 +523,64 @@
       "update-lead": "Update Lead",
       "updating": "Updating..."
     },
+    "ACTIVITY_TYPES": {
+      "SELECT_TYPE": "Select Type",
+      "PHONE_CALL": "Phone Call",
+      "ONLINE_CHAT": "Online Chat",
+      "EMAIL": "Email",
+      "OTHER": "Other"
+    },
+    "TRAFFIC_TYPES": {
+      "SELECT_TRAFFIC": "Select Traffic",
+      "OUTGOING": "Outgoing",
+      "INCOMING": "Incoming"
+    },
+    "STATUS_TYPES": {
+      "SELECT_STATUS": "Select Status",
+      "POSITIVE": "Positive",
+      "NEGATIVE": "Negative",
+      "WRONG_DATA": "Wrong Data"
+    },
+    "CALL_STATUS_TYPES": {
+      "SELECT_CALL_STATUS": "Select Call Status",
+      "RESPONSE": "Response",
+      "NO_RESPONSE": "No Response"
+    },
+    "SOURCE_TYPES": {
+      "SELECT_SOURCE": "Select Source",
+      "FACEBOOK_ADS": "Facebook Ads",
+      "GOOGLE_ADS": "Google Ads",
+      "REFERRAL": "Referral",
+      "WEBSITE_FORM": "Website Form",
+      "TRADE_SHOW": "Trade Show",
+      "MANUAL": "Manual",
+      "PROVIDER": "Provider"
+    },
+    "VALIDATION": {
+      "FORM_HAS_ERRORS": "Please fix the errors in the form before submitting.",
+      "FIELDS_REQUIRED": "Fields marked with * are required",
+      "ACTIVITY_TYPE_REQUIRED": "Activity type is required",
+      "TRAFFIC_TYPE_REQUIRED": "Traffic type is required",
+      "STATUS_REQUIRED": "Status is required",
+      "CALL_STATUS_REQUIRED": "Call status is required",
+      "DETAILS_REQUIRED": "Activity details are required",
+      "DETAILS_MIN_LENGTH": "Details must be at least 10 characters",
+      "DETAILS_MAX_LENGTH": "Details must not exceed {{max}} characters",
+      "FOLLOW_UP_DATE_REQUIRED": "Follow-up date is required",
+      "FOLLOW_UP_DATE_FUTURE": "Follow-up date must be today or in the future",
+      "DURATION_HOUR_RANGE": "Hour must be between 0-23",
+      "DURATION_MINUTE_RANGE": "Minute must be between 0-59",
+      "DURATION_SECOND_RANGE": "Second must be between 0-59",
+      "NEED_MAX_LENGTH": "Need must not exceed {{max}} characters",
+      "OPPORTUNITY_MIN": "Opportunity percentage must be at least 0%",
+      "OPPORTUNITY_MAX": "Opportunity percentage must not exceed 100%"
+    },
     "SUCCESS": {
       "LOADED": "Lead details loaded successfully",
       "ADDED": "Lead added successfully",
       "UPDATED": "Lead updated successfully",
-      "IMPORTED": "Leads imported successfully"
+      "IMPORTED": "Leads imported successfully",
+      "ACTIVITY_ADDED": "Activity added successfully"
     },
     "WARNINGS": {
       "NO_ACTIVITY_LOGS": "No activity logs available for this lead"
@@ -509,7 +593,8 @@
       "ADD_FAILED": "Failed to add lead",
       "UPDATE_FAILED": "Failed to update lead",
       "IMPORT_FAILED": "Failed to import leads",
-      "LOAD_FAILED": "Failed to load lead data"
+      "LOAD_FAILED": "Failed to load lead data",
+      "FAILED_TO_ADD_ACTIVITY": "Failed to add activity. Please try again."
     }
   }
 }

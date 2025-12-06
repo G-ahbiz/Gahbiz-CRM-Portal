@@ -1,0 +1,193 @@
+<div class="activity-log-item border rounded-3 mb-3 shadow-sm bg-white">
+  <!-- Header Section - Always Visible -->
+  <div class="log-header p-3 cursor-pointer" (click)="toggleCollapse()">
+    <div class="d-flex align-items-start justify-content-between">
+      <!-- Left side: Type, details preview, and badges -->
+      <div class="flex-grow-1">
+        <div class="d-flex align-items-center mb-2">
+          <!-- Activity Icon -->
+          <div class="activity-icon me-3">
+            <i [class]="getActivityIcon() + ' fs-5 text-primary'"></i>
+          </div>
+          
+          <!-- Type and basic info -->
+          <div class="flex-grow-1">
+            <div class="d-flex align-items-center mb-1">
+              <h6 class="fw-bold mb-0 me-3 text-dark">{{ getDisplayType() }}</h6>
+              
+              <!-- Badges in header -->
+              <div class="d-flex gap-2">
+                @if (log.traffic && log.traffic !== 'None') {
+                <span class="badge py-1 px-2" [ngClass]="getTrafficBadgeClass()">
+                  {{ log.traffic }}
+                </span>
+                }
+                
+                @if (log.status && log.status !== 'None') {
+                <span class="badge py-1 px-2" [ngClass]="getStatusBadgeClass()">
+                  {{ log.status }}
+                </span>
+                }
+                
+                @if (log.callStatus && log.callStatus !== 'None') {
+                <span class="badge py-1 px-2" [ngClass]="getCallStatusBadgeClass()">
+                  {{ log.callStatus }}
+                </span>
+                }
+              </div>
+            </div>
+            
+            <!-- Truncated details preview -->
+            <div class="text-muted mb-2">
+              <i class="pi pi-align-left me-1"></i>
+              {{ getTruncatedDetails(50) }}
+            </div>
+            
+            <!-- User and timestamp -->
+            <div class="d-flex align-items-center text-muted small">
+              <div class="d-flex align-items-center me-3">
+                <i class="pi pi-user me-1"></i>
+                <span>{{ log.userName }}</span>
+              </div>
+              <div class="d-flex align-items-center me-3">
+                <i class="pi pi-clock me-1"></i>
+                <span>{{ getDisplayTime() }}</span>
+              </div>
+              @if (hasFollowUp()) {
+              <div class="d-flex align-items-center">
+                <i class="pi pi-calendar me-1"></i>
+                <span>{{ 'LEADS.FOLLOW_UP' | translate }}: {{ getDisplayFollowUpDate() }}</span>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right side: Date, duration, and toggle -->
+      <div class="d-flex flex-column align-items-end ms-3">
+        <!-- Date -->
+        <div class="text-end mb-2">
+          <div class="fw-medium text-dark">{{ getDisplayDate() }}</div>
+        </div>
+        
+        <!-- Duration -->
+        @if (log.duration) {
+        <div class="mb-2">
+          <span class="badge bg-light text-dark border py-1 px-2">
+            <i class="pi pi-stopwatch me-1"></i>
+            {{ log.duration }}
+          </span>
+        </div>
+        }
+        
+        <!-- Toggle icon -->
+        <div class="mt-auto">
+          <i class="pi fs-5" 
+             [class]="log.isCollapsed ? 'pi-chevron-down text-primary' : 'pi-chevron-up text-primary'"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expanded Content -->
+  @if (!log.isCollapsed) {
+  <div class="log-body p-3 pt-0 border-top">
+    <div class="row">
+      <!-- Left column: Main details -->
+      <div class="col-lg-8 pt-2">
+        <!-- Full details -->
+        @if (hasDetails()) {
+        <div class="mb-4">
+          <h6 class="fw-semibold mb-2 text-dark">
+            <i class="pi pi-align-left me-2 text-primary"></i>
+            {{ 'LEADS.DETAILS' | translate }}
+          </h6>
+          <p class="text-secondary mb-0" style="white-space: pre-line">{{ log.details }}</p>
+        </div>
+        }
+        
+        <!-- Need -->
+        @if (hasNeed()) {
+        <div class="mb-3">
+          <h6 class="fw-semibold mb-2 text-dark">
+            <i class="pi pi-bullseye me-2 text-primary"></i>
+            {{ 'LEADS.NEED' | translate }}
+          </h6>
+          <p class="text-secondary mb-0">{{ log.need }}</p>
+        </div>
+        }
+      </div>
+      
+      <!-- Right column: Metadata -->
+      <div class="col-lg-4">
+        <div class="bg-light rounded-3 p-3 h-100">
+          <!-- Source -->
+          @if (hasSource()) {
+          <div class="mb-3">
+            <h6 class="fw-semibold mb-2 text-dark small">
+              <i class="pi pi-tag me-2"></i>
+              {{ 'LEADS.SOURCE' | translate }}
+            </h6>
+            <span class="badge py-1 px-2 text-black" [ngClass]="getSourceBadgeClass()">
+              {{ log.source }}
+            </span>
+          </div>
+          }
+          
+          <!-- Opportunity Percentage -->
+          @if (hasOpportunity()) {
+          <div class="mb-3">
+            <h6 class="fw-semibold mb-2 text-dark small">
+              <i class="pi pi-chart-line me-2"></i>
+              {{ 'LEADS.OPPORTUNITY_PERCENTAGE' | translate }}
+            </h6>
+            <div class="d-flex align-items-center">
+              <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                <div class="progress-bar bg-success" 
+                     [ngClass]="{
+                       'bg-success': log.opportunityPercentage >= 80,
+                       'bg-warning': log.opportunityPercentage >= 50 && log.opportunityPercentage < 80,
+                       'bg-danger': log.opportunityPercentage < 50
+                     }"
+                     [style.width.%]="log.opportunityPercentage">
+                </div>
+              </div>
+              <span class="fw-bold" [ngClass]="getOpportunityClass()">
+                {{ log.opportunityPercentage }}%
+              </span>
+            </div>
+          </div>
+          }
+          
+          <!-- Follow-up Date (detailed) -->
+          @if (hasFollowUp()) {
+          <div class="mb-3">
+            <h6 class="fw-semibold mb-2 text-dark small">
+              <i class="pi pi-calendar-plus me-2"></i>
+              {{ 'LEADS.FOLLOW_UP_DATE' | translate }}
+            </h6>
+            <div class="d-flex align-items-center">
+              <i class="pi pi-calendar text-primary me-2"></i>
+              <span class="fw-medium">{{ getDisplayFollowUpDate() }}</span>
+            </div>
+          </div>
+          }
+          
+          <!-- Created date -->
+          <div class="mb-3">
+            <h6 class="fw-semibold mb-2 text-dark small">
+              <i class="pi pi-clock me-2"></i>
+              {{ 'LEADS.CREATED_AT' | translate }}
+            </h6>
+            <div class="text-muted small">
+              <div>{{ getDisplayDate() }}</div>
+              <div>{{ getDisplayTime() }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

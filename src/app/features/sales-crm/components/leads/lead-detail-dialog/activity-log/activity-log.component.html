@@ -1,0 +1,47 @@
+<div class="animate-fade">
+  <!-- Header with Add Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h6 class="fw-bold mb-0 fs-5">{{ 'LEADS.COMMUNICATION_HISTORY' | translate }}</h6>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+    <p class="mt-2 text-muted">{{ 'LEADS.LOADING_ACTIVITY_LOGS' | translate }}</p>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !loading()) {
+  <div class="alert alert-warning" role="alert">
+    <i class="pi pi-exclamation-triangle me-2"></i>
+    {{ error() }}
+  </div>
+  }
+
+  <!-- Activity Logs List -->
+  @if (!loading() && activityLogs().length > 0) {
+  <div class="activity-log-list">
+    @for (log of activityLogs(); track log.id) {
+    <app-activity-log-item [log]="log"></app-activity-log-item>
+    }
+  </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading() && !error() && activityLogs().length === 0) {
+  <div class="text-center py-5">
+    <div class="mb-3">
+      <i class="pi pi-history text-muted" style="font-size: 3rem;"></i>
+    </div>
+    <p class="text-muted">{{ 'LEADS.NO_COMMUNICATION_HISTORY' | translate }}</p>
+    <p class="text-muted small">{{ 'LEADS.ADD_ACTIVITY_SUGGESTION' | translate }}</p>
+    <button class="btn btn-primary mt-3" (click)="onAddActivity()">
+      <i class="pi pi-plus me-1"></i> {{ 'LEADS.ADD_FIRST_ACTIVITY' | translate }}
+    </button>
+  </div>
+  }
+</div>
