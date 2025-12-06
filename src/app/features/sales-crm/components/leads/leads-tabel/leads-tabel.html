@@ -103,12 +103,14 @@
               (change)="toggleLeadSelection(lead)" />
           </td>
           <td [title]="lead.id">
-            {{ lead.id | slice : 0 : 8 }}{{ lead.id.length > 8 ? '...' : '' }}
+            <div [title]="lead.id">
+              {{ lead.id | slice : 0 : 8 }}{{ lead.id.length > 8 ? '...' : '' }}
+            </div>
           </td>
           <td>{{ lead.firstName }} {{ lead.lastName }}</td>
           <td>
-            <div class="text-truncate" style="max-width: 150px" [title]="lead.servicesOfInterest?.join(', ')">
-              {{ lead.servicesOfInterest?.join(', ') }}
+            <div class="text-truncate" style="max-width: 150px" [title]="getServiceName(lead)">
+              {{ getServiceName(lead) }}
             </div>
           </td>
           <td>
