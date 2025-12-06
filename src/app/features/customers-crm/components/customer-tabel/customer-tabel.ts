@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { RouterLink } from '@angular/router';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
