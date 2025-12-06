@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { RouterLink } from '@angular/router';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -45,21 +47,24 @@ export class CustomerTabel implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   // Data properties
   customersTabelData = signal<CustomerViewModel[]>([]);
   totalRecords: number = 0;
   loading = signal<boolean>(false);
+  exportLoading = signal<boolean>(false); // Separate loading state for export
 
   // Selection state
   isAllSelected: boolean = false;
+  selectedCustomerIds = signal<Set<string>>(new Set()); // Store selected IDs in a Set
 
   // Filter state
   search: string = '';
 
   // Customer Details Dialog state
   showDetailsDialog = signal<boolean>(false);
-  selectedCustomerId = signal<string | null>(null);
+  selectedCustomerForDialog = signal<string | null>(null); // Renamed for clarity
 
   constructor(private readonly customersFacade: CustomersFacadeService, private router: Router) {}
 
@@ -89,7 +94,7 @@ export class CustomerTabel implements OnInit {
           this.customersTabelData.set(
             data.map((customer) => ({
               ...customer,
-              selected: false,
+              selected: this.selectedCustomerIds().has(customer.id),
             }))
           );
           this.totalRecords = response.totalCount;
@@ -97,6 +102,7 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error loading customers', err);
+          this.toast.error(this.translate.instant('customers-crm.error-loading-customers'));
         },
       });
   }
@@ -132,7 +138,7 @@ export class CustomerTabel implements OnInit {
    * Get count of selected customers
    */
   get selectedCustomersCount(): number {
-    return this.customersTabelData().filter((customer) => customer.selected).length;
+    return this.selectedCustomerIds().size;
   }
 
   /**
@@ -143,10 +149,19 @@ export class CustomerTabel implements OnInit {
     const checkbox = event.target as HTMLInputElement;
     this.isAllSelected = checkbox.checked;
 
+    const currentSelectedIds = new Set(this.selectedCustomerIds());
+
     // Update selection state for all visible customers on current page
     this.customersTabelData().forEach((customer) => {
       customer.selected = this.isAllSelected;
+      if (this.isAllSelected) {
+        currentSelectedIds.add(customer.id);
+      } else {
+        currentSelectedIds.delete(customer.id);
+      }
     });
+
+    this.selectedCustomerIds.set(currentSelectedIds);
   }
 
   /**
@@ -154,6 +169,14 @@ export class CustomerTabel implements OnInit {
    */
   toggleCustomerSelection(customer: CustomerViewModel): void {
     customer.selected = !customer.selected;
+
+    const currentSelectedIds = new Set(this.selectedCustomerIds());
+    if (customer.selected) {
+      currentSelectedIds.add(customer.id);
+    } else {
+      currentSelectedIds.delete(customer.id);
+    }
+    this.selectedCustomerIds.set(currentSelectedIds);
 
     // Update "select all" state based on individual selections
     this.updateSelectAllState();
@@ -176,7 +199,7 @@ export class CustomerTabel implements OnInit {
    * Open customer details dialog
    */
   viewCustomer(id: string): void {
-    this.selectedCustomerId.set(id);
+    this.selectedCustomerForDialog.set(id);
     this.showDetailsDialog.set(true);
   }
 
@@ -185,7 +208,7 @@ export class CustomerTabel implements OnInit {
    */
   closeDetailsDialog(): void {
     this.showDetailsDialog.set(false);
-    this.selectedCustomerId.set(null);
+    this.selectedCustomerForDialog.set(null);
   }
 
   onDeleteCustomer(id: string): void {
@@ -199,7 +222,15 @@ export class CustomerTabel implements OnInit {
       .subscribe({
         next: (response) => {
           if (response.succeeded) {
-            this.toast.success('Customer deleted successfully');
+            this.toast.success(
+              this.translate.instant('customers-crm.customer-deleted-successfully')
+            );
+
+            // Remove from selected IDs if it was selected
+            const currentSelectedIds = new Set(this.selectedCustomerIds());
+            currentSelectedIds.delete(id);
+            this.selectedCustomerIds.set(currentSelectedIds);
+
             this.loadCustomersData();
           } else {
             this.toast.error(response.message);
@@ -207,11 +238,11 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error deleting customer', err);
-          this.toast.error('Error deleting customer');
+          this.toast.error(this.translate.instant('customers-crm.error-deleting-customer'));
         },
       });
   }
-
+  
   editCustomer(id: number) {
     this.router.navigate(['/main/customers/edit-customer', id]);
   }
@@ -223,6 +254,70 @@ export class CustomerTabel implements OnInit {
   onSearchChange(value: string): void {
     this.search = value.toLowerCase().trim();
     // Search not implemented yet
+  }
+
+  /**
+   * Export selected customers
+   */
+  exportCustomers(): void {
+    const selectedIds = Array.from(this.selectedCustomerIds());
+
+    if (selectedIds.length === 0) {
+      this.toast.error(
+        this.translate.instant('customers-crm.select-at-least-one-customer-to-export')
+      );
+      return;
+    }
+
+    this.exportLoading.set(true);
+    this.customersFacade
+      .exportCustomers(selectedIds)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.exportLoading.set(false))
+      )
+      .subscribe({
+        next: (blob: Blob) => {
+          // Create a download link
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+
+          // Set filename with timestamp
+          const timestamp = new Date().toISOString().slice(0, 10);
+          link.download = `customers-export-${timestamp}.xlsx`;
+
+          // Trigger download
+          document.body.appendChild(link);
+          link.click();
+
+          // Cleanup
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+
+          // Show success message with count
+          const successMessage = this.translate.instant('customers-crm.export-success', {
+            count: selectedIds.length,
+          });
+          this.toast.success(successMessage);
+        },
+        error: (error) => {
+          console.error('Export error:', error);
+          this.toast.error(this.translate.instant('customers-crm.export-failed'));
+        },
+      });
+  }
+
+  /**
+   * Clear all selections
+   */
+  clearSelections(): void {
+    this.selectedCustomerIds.set(new Set());
+    this.customersTabelData().forEach((customer) => {
+      customer.selected = false;
+    });
+    this.isAllSelected = false;
+    this.toast.info(this.translate.instant('customers-crm.selection-cleared'));
   }
 
   /**

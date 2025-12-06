@@ -95,9 +95,10 @@
     "TRY_AGAIN": "حاول مرة أخرى",
     "READ_MORE": "قراءة المزيد",
     "NOT_AVAILABLE": "غير متوفر",
-    "drag-and-drop-or": "اسحب وأفلت أو ",
-    "browse": "تصفح",
-    "IMPORT": "استيراد"
+    "drag-and-drop-or": "اسحب وأفلت أو",
+    "browse": "استعراض",
+    "IMPORT": "استيراد",
+    "CLEAR": "مسح"
   },
   "NEW_PASSWORD": {
     "ERRORS": {
@@ -210,19 +211,32 @@
     "arabic": "العربية",
     "spanish": "الاسبانية"
   },
-  "customers-crm": {
+    "customers-crm": {
     "export": "تصدير",
     "add-customer": "إضافة عميل",
     "search": "بحث...",
-    "customer-id": "معرف العميل",
+    "search-placeholder": "ابحث عن العملاء...",
+    "customer-id": "رقم العميل",
     "phone-number": "رقم الهاتف",
     "customer-name": "اسم العميل",
     "no-of-orders": "عدد الطلبات",
     "status": "الحالة",
     "assigned-to": "مخصص لـ",
     "actions": "الإجراءات",
-    "lead": "الرصاص",
-    "user": "المستخدم",
+    "all-customers": "جميع العملاء",
+    "selected-customers-for-export": "عميل (عملاء) مختار للتصدير",
+    "select-all": "اختيار جميع العملاء في هذه الصفحة",
+    "select-customer": "اختيار هذا العميل",
+    "no-customers-found": "لم يتم العثور على عملاء",
+    "select-at-least-one-customer-to-export": "الرجاء اختيار عميل واحد على الأقل للتصدير",
+    "customer-deleted-successfully": "تم حذف العميل بنجاح",
+    "error-deleting-customer": "خطأ في حذف العميل",
+    "error-loading-customers": "خطأ في تحميل العملاء",
+    "export-success": "تم تصدير {{count}} عميل (عملاء) بنجاح",
+    "export-failed": "فشل تصدير العملاء. الرجاء المحاولة مرة أخرى.",
+    "selection-cleared": "تم مسح التحديد",
+    "lead": "عميل محتمل",
+    "user": "مستخدم",
     "inactive": "غير نشط",
     "client": "عميل",
     "add-customer-page": {
@@ -235,8 +249,8 @@
       "select-gender": "اختر الجنس",
       "male": "ذكر",
       "female": "أنثى",
-      "other": "آخر",
-      "prefer-not-to-say": "أفضل عدم القول",
+      "other": "أخرى",
+      "prefer-not-to-say": "أفضل عدم الإفصاح",
       "default-language": "اللغة الافتراضية",
       "select-language": "اختر اللغة",
       "phone": "رقم الهاتف",
@@ -258,6 +272,8 @@
     "edit-customer-page": {
       "title": "تعديل العميل",
       "updating": "جاري التحديث..."
+      "select-user": "اختر المستخدم",
+      "saving": "جاري الحفظ..."
     }
   },
   "sales-crm": {

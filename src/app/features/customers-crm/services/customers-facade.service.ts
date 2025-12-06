@@ -44,4 +44,8 @@ export class CustomersFacadeService {
   getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {
     return this.customerService.getSalesAgents();
   }
+
+  exportCustomers(customerIds: string[]): Observable<Blob> {
+    return this.customerService.exportCustomers(customerIds);
+  }
 }

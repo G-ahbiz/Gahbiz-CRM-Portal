@@ -1,14 +1,18 @@
 <div class="container-fluid p-0 m-0">
   <!-- Invoices CRM Container -->
-  <div class="invoices-crm-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
-
+  <div
+    class="invoices-crm-container p-3 d-flex flex-column justify-content-start align-items-start gap-3"
+  >
     <div class="invoices-top w-100">
-      <app-tabs-header [title]="'Invoices'" [cardsData]="cardsData" [folderName]="'invoices'"></app-tabs-header>
+      <app-tabs-header
+        [title]="'Invoices'"
+        [cardsData]="cardsData()"
+        [folderName]="'invoices'"
+      ></app-tabs-header>
     </div>
 
     <div class="invoices-table overflow-x-hidden overflow-y-auto w-100">
       <app-invoices-tabel></app-invoices-tabel>
     </div>
-
   </div>
 </div>

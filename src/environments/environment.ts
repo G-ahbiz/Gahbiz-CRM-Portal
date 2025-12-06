@@ -40,14 +40,16 @@ export const environment = {
     leadToCustomer: (leadId: string) => `/Customers/${leadId}/ConvertLeadToCustomer`,
     getCustomer: '/Customers', // provide id and/or name in query
     getAllCustomers: '/Customers/all',
-    updateCustomer: '/Customers/update', // provide id in query
+    updateCustomer: '/Customers/update',
     deleteCustomer: (id: string) => `/Customers/${id}`,
     getSalesAgents: '/SalesManagement/agentsList',
+    exportCustomers: '/Customers/export',
   },
   invoices: {
     getAllInvoices: '/Invoices',
     addInvoice: '/Invoices',
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
+    getStatistics: '/invoices/statistics',
   },
 };

@@ -312,6 +312,14 @@ export class LeadsTabel implements OnInit, OnDestroy {
     });
   }
 
+  getServiceName(lead: LeadSummaryItem) {
+    const serviceNames: string[] = [];
+    lead.servicesOfInterest?.forEach((service) => {
+      serviceNames.push(service.name);
+    });
+    return serviceNames.join(', ');
+  }
+
   onSortColumn(event: any) {
     // Only allow sorting on specific columns
     if (!ALLOWED_SORT_FIELDS.includes(event.field)) {

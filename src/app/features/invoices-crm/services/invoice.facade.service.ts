@@ -8,6 +8,7 @@ import { GetInvoicesFilters } from '../interfaces/get-invoices-filters';
 import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
 import { UpdateInvoiceRequest } from '../interfaces/update-invoice-request';
+import { InvoicesStatistics } from '../interfaces/statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +35,8 @@ export class InvoiceFacadeService {
     request: UpdateInvoiceRequest
   ): Observable<ApiResponse<GetInvoiceetails>> {
     return this.invoiceServiceApi.updateInvoiceDetails(id, request);
+  }
+  getStatistics(): Observable<ApiResponse<InvoicesStatistics>> {
+    return this.invoiceServiceApi.getStatistics();
   }
 }

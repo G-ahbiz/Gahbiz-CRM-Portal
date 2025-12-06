@@ -1,41 +1,44 @@
 <!-- Title -->
 <div class="title-container d-flex justify-content-start align-items-center gap-3 mb-4">
-  <img src="assets/images/sidebar/{{icon}}.svg" alt="" class="">
-  <h1 class="title fs-4 fw-bold m-0">{{title}}</h1>
+  <img src="assets/images/sidebar/{{ icon() }}.svg" alt="" class="" />
+  <h1 class="title fs-4 fw-bold m-0">{{ title() }}</h1>
 </div>
 <!-- Cards Container -->
 <div class="cards-container d-flex flex-row justify-content-between align-items-center gap-3 w-100">
-  @for (card of cardsData; track card.title) {
+  @for (card of cardsData(); track card.title) {
   <div class="card border-0 w-25">
     <div class="card-body d-flex justify-content-between align-items-center gap-3">
-
       <!-- Card Data -->
       <div class="card-data d-flex flex-column justify-content-start align-items-start gap-3">
         <!-- Card Title -->
-        <h6 class="card-title text-muted-clr">{{card.title}}</h6>
+        <h6 class="card-title text-muted-clr">{{ card.title }}</h6>
 
         <!-- Card Value -->
-        <p class="card-value m-0 fw-bold fs-4">{{card.value}}</p>
+        <p class="card-value m-0 fw-bold fs-4">{{ card.value }}</p>
 
         <!-- Card Rating -->
         <div class="card-rating d-flex justify-content-start align-items-center gap-2">
           <!-- Rating Status -->
           <div class="rating-statues">
-            <img src="assets/images/shared/{{card.ratingStatues === 'up' ? 'trendUp' : 'trendDown'}}.svg"
-              alt="{{card.ratingStatues}}" />
+            <img
+              src="assets/images/shared/{{
+                card.ratingStatues === 'up' ? 'trendUp' : 'trendDown'
+              }}.svg"
+              alt="{{ card.ratingStatues }}"
+            />
           </div>
           <!-- Rating Value -->
           <div class="rating-value">
-            <span [class]="card.ratingStatues === 'up' ? 'trend-up-clr' : 'trend-down-clr'">{{card.rating}}%
+            <span [class]="card.ratingStatues === 'up' ? 'trend-up-clr' : 'trend-down-clr'"
+              >{{ card.rating }}%
             </span>
             <span class=""> this month</span>
           </div>
         </div>
-
       </div>
       <!-- Card Icon -->
-      <div class="card-icon p-2 rounded-2 {{card.bgColor}}">
-        <img src="assets/images/{{folderName}}/{{card.icon}}.svg" alt="{{card.title}}" />
+      <div class="card-icon p-2 rounded-2 {{ card.bgColor }}">
+        <img src="assets/images/{{ folderName() }}/{{ card.icon }}.svg" alt="{{ card.title }}" />
       </div>
     </div>
   </div>

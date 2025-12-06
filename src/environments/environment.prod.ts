@@ -28,4 +28,20 @@ export const environment = {
     bestOffers: '/Services/best-offers',
     searchServices: (text: string) => `/Services/search/${text}`,
   },
+  customers: {
+    addCustomer: '/Customers/Customer',
+    leadToCustomer: (leadId: string) => `/Customers/${leadId}/ConvertLeadToCustomer`,
+    getCustomer: '/Customers', // provide id and/or name in query
+    getAllCustomers: '/Customers/all',
+    updateCustomer: '/Customers/update', // provide id in query
+    deleteCustomer: (id: string) => `/Customers/${id}`,
+    getSalesAgents: '/SalesManagement/agentsList',
+  },
+
+  invoices: {
+    getAllInvoices: '/Invoices',
+    addInvoice: '/Invoices',
+    getInvoice: (id: string) => `/Invoices/${id}`,
+    updateInvoice: (id: string) => `/Invoices/${id}`,
+  },
 };

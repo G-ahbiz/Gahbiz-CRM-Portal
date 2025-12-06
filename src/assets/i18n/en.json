@@ -102,6 +102,7 @@
     "INVALID_DATE": "Invalid date",
     "INVALID_TIME": "Invalid time",
     "SAVE_ACTIVITY": "Save Activity"
+    "CLEAR": "Clear"
   },
   "NEW_PASSWORD": {
     "ERRORS": {
@@ -335,6 +336,7 @@
     "export": "Export",
     "add-customer": "Add Customer",
     "search": "Search...",
+    "search-placeholder": "Search customers...",
     "customer-id": "Customer ID",
     "phone-number": "Phone Number",
     "customer-name": "Customer Name",
@@ -342,6 +344,18 @@
     "status": "Status",
     "assigned-to": "Assigned To",
     "actions": "Actions",
+    "all-customers": "All Customers",
+    "selected-customers-for-export": "customer(s) selected for export",
+    "select-all": "Select all customers on this page",
+    "select-customer": "Select this customer",
+    "no-customers-found": "No customers found",
+    "select-at-least-one-customer-to-export": "Please select at least one customer to export",
+    "customer-deleted-successfully": "Customer deleted successfully",
+    "error-deleting-customer": "Error deleting customer",
+    "error-loading-customers": "Error loading customers",
+    "export-success": "{{count}} customer(s) exported successfully",
+    "export-failed": "Failed to export customers. Please try again.",
+    "selection-cleared": "Selection cleared",
     "lead": "Lead",
     "user": "User",
     "inactive": "Inactive",

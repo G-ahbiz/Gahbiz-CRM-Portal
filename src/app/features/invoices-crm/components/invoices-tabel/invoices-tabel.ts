@@ -14,6 +14,8 @@ import { GetAllInvoicesResponse } from '../../interfaces/get-all-invoices-respon
 import { GetInvoicesFilters } from '../../interfaces/get-invoices-filters';
 import { Subject } from 'rxjs';
 import { ROUTES } from '@shared/config/constants';
+import { InvoicesStatistics } from '@features/invoices-crm/interfaces/statistics';
+import { ToastService } from '@core/services/toast.service';
 
 // Constants
 const SESSION_STORAGE_KEYS = {
@@ -52,6 +54,7 @@ export class InvoicesTabel implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly invoiceFacade = inject(InvoiceFacadeService);
+  private readonly toast = inject(ToastService);
 
   private searchSubject = new Subject<string>();
 
@@ -66,6 +69,7 @@ export class InvoicesTabel implements OnInit {
 
   // Data properties
   invoicesTabelData = signal<InvoiceViewModel[]>([]);
+  statistics = signal<InvoicesStatistics>({} as InvoicesStatistics);
   loading = signal<boolean>(false);
 
   // Selection state
