@@ -52,4 +52,10 @@ export const environment = {
     updateInvoice: (id: string) => `/Invoices/${id}`,
     getStatistics: '/invoices/statistics',
   },
+  crmOrder: {
+    getAllOrders: '/CRMOrders',
+    getOrder: (id: string) => `/CRMOrders/${id}`,
+    addOrder: '/CRMOrders/manual',
+    addOrderFromLead: '/CRMOrders/from-lead',
+  },
 };

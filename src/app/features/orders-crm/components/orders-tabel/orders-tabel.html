@@ -1,0 +1,149 @@
+<div class="container-fluid p-0 m-0">
+  <div class="card border-0 bg-transparent">
+    <p-table #dt [value]="ordersData()" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [paginator]="true"
+      [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true"
+      (onPage)="onPageChange($event)" (onSort)="onSortColumn($event)" [loading]="loading()"
+      [globalFilterFields]="['id', 'status', 'address']">
+
+      <ng-template #caption>
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Export Button Container -->
+          <div class="export-btn-container">
+            <button
+              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+              (click)="exportOrders()">
+              <i class="pi pi-download fs-875"></i>
+              {{ 'orders-crm.export' | translate }}
+            </button>
+          </div>
+
+          <!-- Filter and Search Container -->
+          <div class="d-flex justify-content-start align-items-center gap-3">
+            <button type="button" class="btn btn-sm btn-outline-primary outline-primary-clr p-2" (click)="clearFilters(dt)">
+              <i class="pi pi-filter-slash"></i>
+              Clear
+            </button>
+
+            <!-- Search Input -->
+            <p-iconfield iconPosition="left" class="fw-bold">
+              <p-inputicon>
+                <i class="pi pi-search"></i>
+              </p-inputicon>
+              <input pInputText type="text" (input)="onSearch($event)" #searchInput
+                placeholder="Search by ID, address..." />
+            </p-iconfield>
+          </div>
+
+          <!-- Add Order Button Container -->
+          <div class="d-flex justify-content-start align-items-center gap-0">
+            <button
+              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
+              routerLink="/main/orders/add-order">
+              <img src="assets/images/shared/plus.svg" alt="" />
+              {{ 'orders-crm.add-order' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="title-container my-4">
+          <h5 class="m-0 p-0">All Orders</h5>
+        </div>
+      </ng-template>
+
+      <ng-template #header>
+        <tr>
+          <th class="d-flex justify-content-center align-items-center gap-2">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+                (change)="onSelectAll($event)" />
+            </div>
+          </th>
+          <th [pSortableColumn]="'id'">
+            <div class="flex items-center gap-2">
+              Order ID
+              <p-sortIcon field="id" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">Customer</div>
+          </th>
+          <th [pSortableColumn]="'amount'">
+            <div class="flex items-center gap-2">
+              Amount
+              <p-sortIcon field="amount" />
+            </div>
+          </th>
+          <th [pSortableColumn]="'status'">
+            <div class="flex items-center gap-2">
+              Status
+              <p-sortIcon field="status" />
+            </div>
+          </th>
+          <th [pSortableColumn]="'createdDate'">
+            <div class="flex items-center gap-2">
+              Date
+              <p-sortIcon field="createdDate" />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">Address</div>
+          </th>
+          <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-order let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <input type="checkbox" name="select-order" id="order-{{ order.id }}" [checked]="order.selected || false"
+              (change)="toggleOrderSelection(order)" />
+          </td>
+          <td [title]="order.id">
+            <div>
+              {{ order.id | slice : 0 : 8 }}{{ order.id.length > 8 ? '...' : '' }}
+            </div>
+          </td>
+          <td [title]="order.userId">
+            <div>
+              {{ order.userId | slice : 0 : 6 }}{{ order.userId.length > 6 ? '...' : '' }}
+            </div>
+          </td>
+          <td>
+            <strong>${{ order.amount }}</strong>
+          </td>
+          <td>
+            <span class="py-1 px-2 rounded-3"
+              [ngClass]="[getStatusBgClass(order.status), getStatusClass(order.status)]">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>{{ order.createdDate | date : 'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <div class="text-truncate" style="max-width: 150px" [title]="order.address">
+              {{ order.address }}
+            </div>
+          </td>
+          <td class="d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-sm" (click)="viewOrder(order.id); $event.stopPropagation()">
+              <img src="assets/images/shared/eye.svg" alt="View" />
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="8" class="text-center py-4">
+            <div class="d-flex flex-column align-items-center">
+              <i class="pi pi-inbox text-muted" style="font-size: 3rem;"></i>
+              <p class="mt-3 mb-0 text-muted">No orders found</p>
+              <button class="btn btn-primary mt-3" routerLink="/main/orders/add-order">
+                <i class="pi pi-plus"></i> Create First Order
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

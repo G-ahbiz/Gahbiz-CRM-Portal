@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { TranslateModule, LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
-import { AllData } from '../../../services/all-data';
+import { AllData } from '../../../../services/all-data';
 import {
   ordersInterface,
   customersDetailsInterface,
   clientPaymentsInterface,
-} from '../../../services/interfaces/all-interfaces';
+} from '../../../../services/interfaces/all-interfaces';
 @Component({
   selector: 'app-order-details',
   imports: [TranslateModule, DatePipe],
