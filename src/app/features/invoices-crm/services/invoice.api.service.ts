@@ -9,6 +9,7 @@ import { GetInvoicesFilters } from '../interfaces/get-invoices-filters';
 import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
 import { UpdateInvoiceRequest } from '../interfaces/update-invoice-request';
+import { InvoicesStatistics } from '../interfaces/statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -66,5 +67,10 @@ export class InvoiceApiService {
   ): Observable<ApiResponse<GetInvoiceetails>> {
     const url = `${this.baseUrl}${environment.invoices.updateInvoice(id)}`;
     return this.http.patch<ApiResponse<GetInvoiceetails>>(url, request);
+  }
+
+  getStatistics(): Observable<ApiResponse<InvoicesStatistics>> {
+    const url = `https://serva-best.runasp.net${environment.invoices.getStatistics}`;
+    return this.http.get<ApiResponse<InvoicesStatistics>>(url);
   }
 }

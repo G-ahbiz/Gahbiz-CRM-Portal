@@ -43,5 +43,6 @@ export const environment = {
     addInvoice: '/Invoices',
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
+    getStatistics: '/invoices/statistics',
   },
 };

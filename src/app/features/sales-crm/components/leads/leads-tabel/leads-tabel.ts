@@ -6,8 +6,6 @@ import {
   OnDestroy,
   signal,
   ViewChild,
-  OnChanges,
-  SimpleChanges,
   DestroyRef,
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
@@ -21,10 +19,8 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { AllData } from '../../../../../services/all-data';
-import { Leads } from '../../../interfaces/leads';
 import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
-import { ApiResponse } from '@core/interfaces/api-response';
-import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
+import { LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { ToastService } from '@core/services/toast.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { ROUTES, USER_TYPES } from '@shared/config/constants';
@@ -274,6 +270,14 @@ export class LeadsTabel implements OnInit, OnDestroy {
         console.error('Export error:', error);
       },
     });
+  }
+
+  getServiceName(lead: LeadSummaryItem) {
+    const serviceNames: string[] = [];
+    lead.servicesOfInterest?.forEach((service) => {
+      serviceNames.push(service.name);
+    });
+    return serviceNames.join(', ');
   }
 
   onSortColumn(event: any) {

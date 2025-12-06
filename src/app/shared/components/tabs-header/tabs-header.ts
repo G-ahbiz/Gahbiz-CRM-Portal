@@ -1,21 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { AllServices } from '../../../services/all-services';
-import { CommonModule } from '@angular/common';
-import { LogCard } from '../../interfaces/log-card';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { LogCard } from '@shared/interfaces/log-card';
 
 @Component({
   selector: 'app-tabs-header',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './tabs-header.html',
   styleUrl: './tabs-header.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TabsHeader implements OnInit {
-  @Input() icon: string = '';
-  @Input() title: string = '';
-  @Input() cardsData: LogCard[] = [];
-  @Input() folderName: string = '';
-
-  constructor(private allServices: AllServices) {}
-
-  ngOnInit() {}
+export class TabsHeader {
+  icon = input<string>('');
+  title = input<string>('');
+  cardsData = input<LogCard[]>([]);
+  folderName = input<string>('');
 }

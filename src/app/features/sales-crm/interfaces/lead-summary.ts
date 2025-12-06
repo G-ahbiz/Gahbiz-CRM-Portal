@@ -11,12 +11,15 @@ export interface LeadSummaryItem {
   id: number;
   firstName: string;
   lastName: string;
-  servicesOfInterest: string[];
   status: string;
   sourceName: string;
   assignedTo?: AssignedTo;
   createdAt: string;
   updatedAt: string;
+  servicesOfInterest: {
+    id: string;
+    name: string;
+  }[];
   selected?: boolean;
 }
 
