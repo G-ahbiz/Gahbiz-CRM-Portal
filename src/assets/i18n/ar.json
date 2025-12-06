@@ -221,7 +221,7 @@
     "customer-name": "اسم العميل",
     "no-of-orders": "عدد الطلبات",
     "status": "الحالة",
-    "assigned-to": "مُسند إلى",
+    "assigned-to": "مخصص لـ",
     "actions": "الإجراءات",
     "all-customers": "جميع العملاء",
     "selected-customers-for-export": "عميل (عملاء) مختار للتصدير",
@@ -255,17 +255,23 @@
       "select-language": "اختر اللغة",
       "phone": "رقم الهاتف",
       "phone-placeholder": "أدخل رقم الهاتف",
-      "ssn": "الرقم الوطني",
-      "ssn-placeholder": "أدخل الرقم الوطني",
+      "ssn": "رقم الضمان الاجتماعي",
+      "ssn-placeholder": "أدخل رقم الضمان الاجتماعي",
       "country": "البلد",
       "country-placeholder": "أدخل البلد",
-      "state": "المدينة/المنطقة",
-      "state-placeholder": "أدخل المدينة أو المنطقة",
+      "state": "المدينة/الولاية",
+      "state-placeholder": "أدخل المدينة أو الولاية",
       "postal-code": "الرمز البريدي",
       "postal-code-placeholder": "أدخل الرمز البريدي",
       "address": "العنوان",
       "address-placeholder": "أدخل العنوان الكامل",
       "assign-user": "تعيين مستخدم",
+      "select-user": "اختر مستخدم",
+      "saving": "جاري الحفظ..."
+    },
+    "edit-customer-page": {
+      "title": "تعديل العميل",
+      "updating": "جاري التحديث..."
       "select-user": "اختر المستخدم",
       "saving": "جاري الحفظ..."
     }
@@ -378,7 +384,7 @@
   },
   "LEADS": {
     "TITLE": "العملاء المتوقعين",
-    "NOTES": "ملاحظات",
+    "NEW_ACTIVITIES": "انشاء نشاط جديد",
     "DETAILS": "تفاصيل",
     "ACTIVITY_LOGS": "سجلات النشاط",
     "CONTACT_INFORMATION": "معلومات الاتصال",

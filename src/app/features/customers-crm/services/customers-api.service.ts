@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment';
-import { AddCustomerRequest } from '../interfaces/add-customer-request';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { Observable } from 'rxjs';
 import { GetSalesAgentsResponse } from '../interfaces/get-sales-agents-response';
@@ -9,6 +8,7 @@ import { GetCustomersResponse } from '../interfaces/get-customers-response';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersFilters } from '../interfaces/get-customers-filters';
 import { CustomerDetailsResponse } from '../interfaces/customer-details-response';
+import { UpdateCustomerRequest } from '../interfaces/update-customer-request';
 
 @Injectable({
   providedIn: 'root',
@@ -53,6 +53,16 @@ export class CustomersApiService {
   deleteCustomer(id: string): Observable<ApiResponse<string>> {
     const url = `${this.baseUrl}${environment.customers.deleteCustomer(id)}`;
     return this.http.delete<ApiResponse<string>>(url);
+  }
+
+  updateCustomer(
+    id: string,
+    data: UpdateCustomerRequest
+  ): Observable<ApiResponse<string>> {
+    const url = `${this.baseUrl}${environment.customers.updateCustomer}`;
+    return this.http.put<ApiResponse<string>>(url, data, {
+      params: { customerId: id }
+    });
   }
 
   getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {

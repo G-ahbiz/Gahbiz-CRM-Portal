@@ -8,6 +8,7 @@ import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request'
 import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-response';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
+import { CreateActivityRequest } from '@features/sales-crm/interfaces/create-activity-request';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +61,10 @@ export class LeadsApiService {
     return this.httpClient.delete<ApiResponse<any>>(deleteLeadUrl);
   }
 
-  updateLead(id: string ,addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
+  updateLead(
+    id: string,
+    addLeadRequest: AddLeadRequest | FormData
+  ): Observable<ApiResponse<LeadSummaryItem>> {
     const updateLeadUrl = `${this.baseApi}${environment.leads.updateLead(id)}`;
     return this.httpClient.put<ApiResponse<LeadSummaryItem>>(updateLeadUrl, addLeadRequest);
   }
@@ -100,5 +104,10 @@ export class LeadsApiService {
   getLeadActivities(id: string): Observable<ApiResponse<any>> {
     const url = `${this.baseApi}${environment.activityLog.getleadActivities(id)}`;
     return this.httpClient.get<ApiResponse<any>>(url);
+  }
+
+  createActivity(activityDto: CreateActivityRequest): Observable<ApiResponse<any>> {
+    const url = `${this.baseApi}${environment.activityLog.createActivityLog}`;
+    return this.httpClient.post<ApiResponse<any>>(url, activityDto);
   }
 }

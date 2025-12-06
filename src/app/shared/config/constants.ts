@@ -122,3 +122,41 @@ export const REG_EXP = {
 export const CART_ITEMS = {
   APPOINTMENT_SERVICE: '9defe476-1fdb-4050-a15b-a1e04985d854',
 };
+
+export const ACTIVITY_TYPES = [
+  { value: 'None', label: 'Select Type' },
+  { value: 'PhoneCall', label: 'Phone Call' },
+  { value: 'OnlineChat', label: 'Online Chat' },
+  { value: 'Email', label: 'Email' },
+  { value: 'Other', label: 'Other' },
+];
+
+export const TRAFFIC_TYPES = [
+  { value: 'None', label: 'Select Traffic' },
+  { value: 'Outgoing', label: 'Outgoing' },
+  { value: 'Incoming', label: 'Incoming' },
+];
+
+export const STATUS_TYPES = [
+  { value: 'None', label: 'Select Status' },
+  { value: 'Positive', label: 'Positive' },
+  { value: 'Negative', label: 'Negative' },
+  { value: 'WrongData', label: 'Wrong Data' },
+];
+
+export const CALL_STATUS_TYPES = [
+  { value: 'None', label: 'Select Call Status' },
+  { value: 'Response', label: 'Response' },
+  { value: 'NoResponse', label: 'No Response' },
+];
+
+export const SOURCE_TYPES = [
+  { value: 'None', label: 'LEADS.SOURCE_TYPES.SELECT_SOURCE' },
+  { value: 'FacebookAds', label: 'LEADS.SOURCE_TYPES.FACEBOOK_ADS' },
+  { value: 'GoogleAds', label: 'LEADS.SOURCE_TYPES.GOOGLE_ADS' },
+  { value: 'Referral', label: 'LEADS.SOURCE_TYPES.REFERRAL' },
+  { value: 'WebsiteForm', label: 'LEADS.SOURCE_TYPES.WEBSITE_FORM' },
+  { value: 'TradeShow', label: 'LEADS.SOURCE_TYPES.TRADE_SHOW' },
+  { value: 'Manual', label: 'LEADS.SOURCE_TYPES.MANUAL' },
+  { value: 'Provider', label: 'LEADS.SOURCE_TYPES.PROVIDER' },
+];

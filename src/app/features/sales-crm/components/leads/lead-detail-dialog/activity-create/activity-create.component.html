@@ -1,0 +1,218 @@
+<!-- activity-create.component.html -->
+<div class="animate-fade">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h6 class="fw-bold mb-0 fs-5">{{ 'LEADS.ADD_NEW_ACTIVITY' | translate }}</h6>
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancel()">
+      <i class="pi pi-times me-1"></i> {{ 'COMMON.CANCEL' | translate }}
+    </button>
+  </div>
+
+  <!-- Form summary validation -->
+  @if (formSubmitted() && !isFormValid) {
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="d-flex align-items-center">
+      <i class="pi pi-exclamation-triangle me-2"></i>
+      <span>{{ 'LEADS.VALIDATION.FORM_HAS_ERRORS' | translate }}</span>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  }
+
+  <form [formGroup]="activityForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="row g-3">
+      <!-- Type -->
+      <div class="col-md-6">
+        <label class="form-label fw-medium">{{ 'LEADS.ACTIVITY_TYPE' | translate }} *</label>
+        <select class="form-select" [ngClass]="getFieldClasses('type')" formControlName="type">
+          @for (type of ACTIVITY_TYPES; track type.value) {
+          <option [value]="type.value">{{ type.label | translate }}</option>
+          }
+        </select>
+        @if (activityTypeErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ activityTypeErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Traffic -->
+      <div class="col-md-6">
+        <label class="form-label fw-medium">{{ 'LEADS.TRAFFIC_TYPE' | translate }} *</label>
+        <select class="form-select" [ngClass]="getFieldClasses('traffic')" formControlName="traffic">
+          @for (traffic of TRAFFIC_TYPES; track traffic.value) {
+          <option [value]="traffic.value">{{ traffic.label | translate }}</option>
+          }
+        </select>
+        @if (trafficErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ trafficErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-6">
+        <label class="form-label fw-medium">{{ 'LEADS.STATUS' | translate }} *</label>
+        <select class="form-select" [ngClass]="getFieldClasses('status')" formControlName="status">
+          @for (status of STATUS_TYPES; track status.value) {
+          <option [value]="status.value">{{ status.label | translate }}</option>
+          }
+        </select>
+        @if (statusErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ statusErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Call Status -->
+      <div class="col-md-6">
+        <label class="form-label fw-medium">{{ 'LEADS.CALL_STATUS' | translate }} *</label>
+        <select class="form-select" [ngClass]="getFieldClasses('callStatus')" formControlName="callStatus">
+          @for (callStatus of CALL_STATUS_TYPES; track callStatus.value) {
+          <option [value]="callStatus.value">{{ callStatus.label | translate }}</option>
+          }
+        </select>
+        @if (callStatusErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ callStatusErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Duration -->
+      <div class="col-12">
+        <label class="form-label fw-medium">{{ 'LEADS.DURATION' | translate }} *</label>
+        <div class="row g-2" formGroupName="duration">
+          <div class="col-4">
+            <input type="number" class="form-control" [ngClass]="durationErrors.hour ? 'is-invalid' : ''"
+              formControlName="hour" placeholder="HH" min="0" max="23">
+            @if (durationErrors.hour) {
+            <div class="invalid-feedback d-block small">
+              {{ durationErrors.hour }}
+            </div>
+            }
+          </div>
+          <div class="col-4">
+            <input type="number" class="form-control" [ngClass]="durationErrors.minute ? 'is-invalid' : ''"
+              formControlName="minute" placeholder="MM" min="0" max="59">
+            @if (durationErrors.minute) {
+            <div class="invalid-feedback d-block small">
+              {{ durationErrors.minute }}
+            </div>
+            }
+          </div>
+          <div class="col-4">
+            <input type="number" class="form-control" [ngClass]="durationErrors.second ? 'is-invalid' : ''"
+              formControlName="second" placeholder="SS" min="0" max="59">
+            @if (durationErrors.second) {
+            <div class="invalid-feedback d-block small">
+              {{ durationErrors.second }}
+            </div>
+            }
+          </div>
+        </div>
+        <div class="form-text text-muted small">
+          <i class="pi pi-info-circle me-1"></i> {{ 'LEADS.DURATION_HELP' | translate }}: {{ getDurationString() }}
+        </div>
+      </div>
+
+      <!-- Follow-up Date -->
+      <div class="col-md-6">
+        <label class="form-label fw-medium">{{ 'LEADS.FOLLOW_UP_DATE' | translate }} *</label>
+        <input type="date" class="form-control" [ngClass]="getFieldClasses('followUpDate')"
+          formControlName="followUpDate" [min]="today | date:'yyyy-MM-dd'">
+        @if (followUpDateErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ followUpDateErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Source -->
+      <div class="col-md-6">
+        <label class="form-label">{{ 'LEADS.SOURCE' | translate }}</label>
+        <select class="form-select" formControlName="source">
+          @for (source of SOURCE_TYPES; track source.value) {
+          <option [value]="source.value">{{ source.label | translate }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Opportunity Percentage -->
+      <div class="col-12">
+        <label class="form-label fw-medium">{{ 'LEADS.OPPORTUNITY_PERCENTAGE' | translate }} *</label>
+        <div class="d-flex align-items-center gap-3">
+          <input type="range" class="form-range flex-grow-1" formControlName="opportunityPercentage" min="0" max="100"
+            step="5">
+          <span class="badge bg-primary fs-6 min-width-60 text-center">
+            {{ activityForm.get('opportunityPercentage')?.value }}%
+          </span>
+        </div>
+        <div class="d-flex justify-content-between small text-muted mt-1">
+          <span>0%</span>
+          <span>100%</span>
+        </div>
+        @if (opportunityPercentageErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ opportunityPercentageErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Details -->
+      <div class="col-12">
+        <label class="form-label fw-medium">{{ 'LEADS.DETAILS' | translate }} *</label>
+        <textarea class="form-control" [ngClass]="getFieldClasses('details')" formControlName="details" rows="4"
+          placeholder="{{ 'LEADS.ACTIVITY_DETAILS_PLACEHOLDER' | translate }}"></textarea>
+        <div class="d-flex justify-content-between mt-1">
+          <div>
+            @if (detailsErrors) {
+            <div class="invalid-feedback d-block">
+              <i class="pi pi-exclamation-circle me-1"></i> {{ detailsErrors }}
+            </div>
+            }
+          </div>
+          <div class="form-text text-end" [class.text-danger]="activityForm.get('details')?.value?.length > 490">
+            {{ activityForm.get('details')?.value?.length || 0 }}/500 {{ 'COMMON.CHARACTERS' | translate }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Need -->
+      <div class="col-12">
+        <label class="form-label">{{ 'LEADS.NEED' | translate }}</label>
+        <input type="text" class="form-control" [ngClass]="getFieldClasses('need')" formControlName="need"
+          placeholder="{{ 'LEADS.NEED_PLACEHOLDER' | translate }}">
+        @if (needErrors) {
+        <div class="invalid-feedback d-block">
+          <i class="pi pi-exclamation-circle me-1"></i> {{ needErrors }}
+        </div>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <div class="col-12 mt-4 pt-3 border-top">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="text-muted small">
+            <i class="pi pi-info-circle me-1"></i> {{ 'LEADS.VALIDATION.FIELDS_REQUIRED' | translate }}
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="submitting()">
+              <i class="pi pi-times me-1"></i> {{ 'COMMON.CANCEL' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary"
+              [disabled]="submitting() || (!isFormValid && formSubmitted())">
+              @if (submitting()) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              {{ 'COMMON.SUBMITTING' | translate }}
+              } @else {
+              <i class="pi pi-check me-1"></i> {{ 'COMMON.SAVE_ACTIVITY' | translate }}
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

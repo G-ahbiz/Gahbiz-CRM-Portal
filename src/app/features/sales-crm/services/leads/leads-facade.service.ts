@@ -7,6 +7,7 @@ import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request'
 import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-response';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
+import { CreateActivityRequest } from '@features/sales-crm/interfaces/create-activity-request';
 
 @Injectable({
   providedIn: 'root',
@@ -73,5 +74,9 @@ export class LeadsFacadeService {
 
   getLeadActivities(id: string): Observable<ApiResponse<any>> {
     return this.leadsService.getLeadActivities(id);
+  }
+
+  createActivity(activityDto: CreateActivityRequest): Observable<ApiResponse<any>> {
+    return this.leadsService.createActivity(activityDto);
   }
 }

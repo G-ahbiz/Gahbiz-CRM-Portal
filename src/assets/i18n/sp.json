@@ -87,7 +87,7 @@
     "FILTER": "Filtrar",
     "SORT": "Ordenar",
     "VIEW": "Ver",
-    "ADD": "Agregar",
+    "ADD": "Añadir",
     "REMOVE": "Eliminar",
     "CREATED": "Creado",
     "UPDATED": "Actualizado",
@@ -363,17 +363,17 @@
       "email": "Correo Electrónico",
       "email-placeholder": "Ingrese la dirección de correo electrónico",
       "gender": "Género",
-      "select-gender": "Seleccionar Género",
+      "select-gender": "Seleccione Género",
       "male": "Masculino",
       "female": "Femenino",
       "other": "Otro",
       "prefer-not-to-say": "Prefiero no decirlo",
       "default-language": "Idioma Predeterminado",
-      "select-language": "Seleccionar Idioma",
+      "select-language": "Seleccione Idioma",
       "phone": "Número de Teléfono",
       "phone-placeholder": "Ingrese el número de teléfono",
-      "ssn": "Número de Seguro Social",
-      "ssn-placeholder": "Ingrese el NSS",
+      "ssn": "SSN",
+      "ssn-placeholder": "Ingrese SSN",
       "country": "País",
       "country-placeholder": "Ingrese el país",
       "state": "Ciudad/Estado",
@@ -385,6 +385,10 @@
       "assign-user": "Asignar Usuario",
       "select-user": "Seleccionar Usuario",
       "saving": "Guardando..."
+    },
+    "edit-customer-page": {
+      "title": "Editar Cliente",
+      "updating": "Actualizando..."
     }
   },
   "sales-crm": {
@@ -402,7 +406,7 @@
   },
   "LEADS": {
     "TITLE": "Clientes Potenciales",
-    "NOTES": "Notas",
+    "NEW_ACTIVITIES": "Agregar actividad",
     "DETAILS": "Detalles",
     "ACTIVITY_LOGS": "Registros de Actividad",
     "CONTACT_INFORMATION": "Información de Contacto",

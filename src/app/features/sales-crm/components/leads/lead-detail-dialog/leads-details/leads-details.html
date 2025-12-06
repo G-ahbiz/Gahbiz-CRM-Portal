@@ -6,6 +6,7 @@
 
 <div class="card">
   <div class="card-body">
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-start mb-4">
       <div class="d-flex align-items-center gap-3">
         <h4 class="mb-0 fw-bold text-dark fs-3">{{ 'LEADS.TITLE' | translate }}</h4>
@@ -17,8 +18,9 @@
       </div>
 
       <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-primary btn-custom-blue px-4 py-2 fw-medium d-flex align-items-center gap-2">
-          <i class="pi pi-file"></i> {{ 'LEADS.NOTES' | translate }}
+        <button class="btn btn-primary btn-custom-blue px-4 py-2 fw-medium d-flex align-items-center gap-2"
+          (click)="addNewActivity()">
+          <i class="pi pi-plus"></i> {{ 'LEADS.NEW_ACTIVITIES' | translate }}
         </button>
 
         <button class="btn btn-outline-primary btn-custom-outline px-4 py-2 fw-medium d-flex align-items-center gap-2"
@@ -40,7 +42,7 @@
       </button>
     </div>
 
-    <!-- Loading State for Lead Details -->
+    <!-- Loading State -->
     @if (loading() && !leadData()) {
     <div class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
@@ -57,161 +59,24 @@
     </div>
     }
 
-    <!-- Lead Details Content -->
+    <!-- Content -->
     @if (leadData() && !loading() && !error()) {
     <!-- Details Tab -->
     @if (activeTab() === 'details') {
-    <div class="animate-fade">
-
-      <!-- Lead Name and ID -->
-      <div class="mb-5">
-        <div class="d-flex align-items-baseline gap-3 mb-2">
-          <h2 class="fw-bold mb-0 text-dark">
-            {{ leadData()?.firstName }} {{ leadData()?.lastName }}
-          </h2>
-          <span class="text-secondary fs-6 fw-medium opacity-50">#{{ leadData()?.id }}</span>
-        </div>
-        @if (leadData()?.assignedTo) {
-        <div class="d-flex align-items-center gap-2 mt-1">
-          <i class="pi pi-headphones text-primary fs-5"></i>
-          <span class="text-secondary fw-medium fs-6">{{ assignedToName() }}</span>
-        </div>
-        }
-      </div>
-
-      <!-- Contact Information -->
-      <div class="mb-5">
-        <h6 class="fw-bold mb-3 fs-5">{{ 'LEADS.CONTACT_INFORMATION' | translate }}</h6>
-
-        <div class="d-flex flex-column gap-3">
-          @if (leadData()?.email) {
-          <div class="d-flex align-items-center gap-3">
-            <div class="icon-wrapper">
-              <i class="pi pi-envelope text-primary"></i>
-            </div>
-            <span class="text-dark fw-medium">{{ leadData()?.email }}</span>
-          </div>
-          }
-
-          @if (leadData()?.phoneNumber) {
-          <div class="d-flex align-items-center gap-3">
-            <div class="icon-wrapper">
-              <i class="pi pi-phone text-primary"></i>
-            </div>
-            <div class="d-flex align-items-baseline gap-3">
-              <span class="text-dark fw-medium">{{ leadData()?.phoneNumber }}</span>
-              @if (leadData()?.updatedAt) {
-              <span class="text-muted small-text">
-                {{ 'LEADS.LAST_CONTACT_ON' | translate }} {{ formatDate(leadData()?.updatedAt) }}
-              </span>
-              }
-            </div>
-          </div>
-          }
-        </div>
-      </div>
-
-      <!-- Details Grid -->
-      <div>
-        <h6 class="fw-bold mb-3 fs-5">{{ 'LEADS.DETAILS' | translate }}</h6>
-        <div class="row g-4">
-
-          @if (leadData()?.servicesOfInterest?.length) {
-          <div class="col-12">
-            <div class="d-flex align-items-center gap-3">
-              <div class="icon-wrapper">
-                <i class="pi pi-briefcase text-primary"></i>
-              </div>
-              <span class="text-dark fw-medium">{{ 'LEADS.SERVICES' | translate }}: {{ serviceNames().join(', ')
-                }}</span>
-            </div>
-          </div>
-          }
-
-          @if (leadData()?.value) {
-          <div class="col-6">
-            <div class="d-flex align-items-center gap-3">
-              <div class="icon-wrapper">
-                <i class="pi pi-money-bill text-primary"></i>
-              </div>
-              <span class="text-dark fw-medium">{{ leadData()?.value | currency:'USD':'symbol':'1.0-0' }}</span>
-            </div>
-          </div>
-          }
-
-          @if (leadData()?.createdAt) {
-          <div class="col-6">
-            <div class="d-flex align-items-center gap-3">
-              <div class="icon-wrapper">
-                <i class="pi pi-calendar text-primary"></i>
-              </div>
-              <span class="text-dark fw-medium">{{ formatDate(leadData()?.createdAt) }}</span>
-            </div>
-          </div>
-          }
-
-          @if (leadData()?.sourceName) {
-          <div class="col-6">
-            <div class="d-flex align-items-center gap-3">
-              <div class="icon-wrapper">
-                <i class="pi pi-globe text-primary"></i>
-              </div>
-              <span class="text-dark fw-medium">{{ leadData()?.sourceName }}</span>
-            </div>
-          </div>
-          }
-
-        </div>
-      </div>
-
-    </div>
+    <app-lead-info [lead]="leadData()" [fullName]="fullName()" [assignedToName]="assignedToName()"
+      [serviceNames]="serviceNames()"></app-lead-info>
     }
 
-    <!-- Activity Logs Tab -->
+    <!-- Activity Tab -->
     @if (activeTab() === 'activity') {
-    <div class="animate-fade">
-
-      <!-- Activity Logs Loading State -->
-      @if (loadingActivityLogs()) {
-      <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}</span>
-        </div>
-        <p class="mt-2 text-muted">{{ 'LEADS.LOADING_ACTIVITY_LOGS' | translate }}</p>
-      </div>
-      }
-
-      <!-- Activity Logs Content -->
-      @if (!loadingActivityLogs()) {
-      <div class="activity-logs-container">
-        <h6 class="fw-bold mb-3 fs-5">{{ 'LEADS.COMMUNICATION_HISTORY' | translate }}</h6>
-
-        <!-- Error message for activity logs -->
-        @if (error() && activeTab() === 'activity') {
-        <div class="alert alert-warning" role="alert">
-          <i class="pi pi-exclamation-triangle me-2"></i>
-          {{ error() }}
-        </div>
-        }
-
-        @if (activityLogs().length > 0) {
-        <div class="activity-log-list">
-          @for (log of activityLogs(); track log.id) {
-          <app-activity-log-item [log]="log"></app-activity-log-item>
-          }
-        </div>
-        } @else if (!error()) {
-        <div class="text-center py-5">
-          <div class="mb-3">
-            <i class="pi pi-history text-muted" style="font-size: 3rem;"></i>
-          </div>
-          <p class="text-muted">{{ 'LEADS.NO_COMMUNICATION_HISTORY' | translate }}</p>
-          <p class="text-muted small">{{ 'LEADS.ADD_ACTIVITY_SUGGESTION' | translate }}</p>
-        </div>
-        }
-      </div>
-      }
-    </div>
+    @if (activityTabMode() === 'view') {
+    <app-activity-log [leadId]="leadData()?.id" (addActivityClick)="addNewActivity()" #activityLogComponent>
+    </app-activity-log>
+    } @else if (activityTabMode() === 'add') {
+    <app-activity-create [leadId]="leadData()?.id" (activityCreated)="onActivityCreated()"
+      (refreshRequested)="onRefreshActivityLogs()" (cancelled)="onActivityCancelled()">
+    </app-activity-create>
+    }
     }
     }
   </div>

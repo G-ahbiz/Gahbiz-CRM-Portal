@@ -9,6 +9,7 @@ import { GetCustomersFilters } from '../interfaces/get-customers-filters';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersResponse } from '../interfaces/get-customers-response';
 import { CustomerDetailsResponse } from '../interfaces/customer-details-response';
+import { UpdateCustomerRequest } from '../interfaces/update-customer-request';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,10 @@ export class CustomersFacadeService {
     customerName?: string
   ): Observable<ApiResponse<CustomerDetailsResponse>> {
     return this.customerService.getCustomerDetails(id, customerName);
+  }
+
+  updateCustomer(id: string, data: UpdateCustomerRequest): Observable<ApiResponse<string>> {
+    return this.customerService.updateCustomer(id, data);
   }
 
   deleteCustomer(id: string): Observable<ApiResponse<string>> {
