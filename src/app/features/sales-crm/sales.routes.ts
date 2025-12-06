@@ -11,12 +11,12 @@ export const salesRoutes: Routes = [
           import('./components/leads/leads-content/leads-content').then((m) => m.LeadsContent),
       },
       {
-        path: 'leads-details',
+        path: 'add-lead',
         loadComponent: () =>
-          import('./components/leads/leads-details/leads-details').then((m) => m.LeadsDetails),
+          import('./components/leads/leads-add/leads-add').then((m) => m.LeadsAdd),
       },
       {
-        path: 'add-lead',
+        path: 'edit-lead/:id',
         loadComponent: () =>
           import('./components/leads/leads-add/leads-add').then((m) => m.LeadsAdd),
       },

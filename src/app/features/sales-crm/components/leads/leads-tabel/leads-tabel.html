@@ -1,19 +1,8 @@
 <div class="container-fluid p-0 m-0">
   <div class="card border-0 bg-transparent">
-    <p-table
-      #dt1
-      [value]="leadsData()"
-      dataKey="id"
-      [tableStyle]="{ 'min-width': '60rem' }"
-      [paginator]="true"
-      [rows]="pageSize"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [lazy]="true"
-      (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)"
-      [loading]="loading()"
-      [globalFilterFields]="[
+    <p-table #dt1 [value]="leadsData()" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [paginator]="true"
+      [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true"
+      (onPage)="onPageChange($event)" (onSort)="onSortColumn($event)" [loading]="loading()" [globalFilterFields]="[
         'firstName',
         'lasttName',
         'servicesOfInterest',
@@ -21,27 +10,21 @@
         'sourceName',
         'assignedTo',
         'creadtedAt'
-      ]"
-    >
+      ]">
       <ng-template #caption>
         <div class="d-flex justify-content-between align-items-center">
           <!-- Export Button Container -->
           <div class="export-btn-container">
             <button
               class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-              (click)="exportLeads()"
-            >
+              (click)="exportLeads()">
               <i class="pi pi-download fs-875"></i>
               {{ 'sales-crm.leads-tabel.export' | translate }}
             </button>
           </div>
           <!-- Filter and Search Container -->
           <div class="d-flex justify-content-start align-items-center gap-0">
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-primary outline-primary-clr p-2"
-              (click)="clear(dt1)"
-            >
+            <button type="button" class="btn btn-sm btn-outline-primary outline-primary-clr p-2" (click)="clear(dt1)">
               <i class="pi pi-filter-slash"></i>
               Clear
             </button>
@@ -49,13 +32,7 @@
               <p-inputicon>
                 <i class="pi pi-search"></i>
               </p-inputicon>
-              <input
-                pInputText
-                type="text"
-                (input)="onSearch($event)"
-                #searchInput
-                placeholder="Search keyword"
-              />
+              <input pInputText type="text" (input)="onSearch($event)" #searchInput placeholder="Search keyword" />
             </p-iconfield>
           </div>
 
@@ -63,8 +40,7 @@
           <div class="d-flex justify-content-start align-items-center gap-0">
             <button
               class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              routerLink="/main/sales/leads/add-lead"
-            >
+              routerLink="/main/sales/leads/add-lead">
               <img src="assets/images/shared/plus.svg" alt="" class="" />
               Add Lead
             </button>
@@ -78,13 +54,8 @@
         <tr>
           <th class="d-flex justify-content-center align-items-center gap-2">
             <div class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="select-all"
-                id="select-all"
-                [checked]="isAllSelected"
-                (change)="onSelectAll($event)"
-              />
+              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+                (change)="onSelectAll($event)" />
             </div>
           </th>
           <th>
@@ -128,13 +99,8 @@
       <ng-template #body let-lead let-rowIndex="rowIndex">
         <tr>
           <td>
-            <input
-              type="checkbox"
-              name="select-lead"
-              id="lead-{{ lead.id }}"
-              [checked]="lead.selected"
-              (change)="toggleLeadSelection(lead)"
-            />
+            <input type="checkbox" name="select-lead" id="lead-{{ lead.id }}" [checked]="lead.selected"
+              (change)="toggleLeadSelection(lead)" />
           </td>
           <td [title]="lead.id">
             <div [title]="lead.id">
@@ -148,9 +114,7 @@
             </div>
           </td>
           <td>
-            <span
-              class="py-1 px-2 rounded-3"
-              [class]="
+            <span class="py-1 px-2 rounded-3" [class]="
                 lead.status === 'New'
                   ? 'text-white bg-primary'
                   : lead.status === 'Qualified'
@@ -160,9 +124,7 @@
                   : lead.status === 'Lost'
                   ? 'text-danger card-red'
                   : ''
-              "
-              >{{ lead.status }}</span
-            >
+              ">{{ lead.status }}</span>
           </td>
           <td>{{ lead.sourceName }}</td>
           @if(currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER){
@@ -172,7 +134,7 @@
           <td>{{ lead.createdAt | date : 'dd/MM/yyyy' }}</td>
           <td class="d-flex justify-content-center align-items-center gap-2">
             <button class="btn btn-sm" (click)="viewLead(lead.id); $event.stopPropagation()">
-              <img src="assets/images/shared/eye.svg" alt="" class="" />
+              <img src="assets/images/shared/eye.svg" alt="View" />
             </button>
             <button class="btn btn-sm" (click)="editLead(lead.id); $event.stopPropagation()">
               <i class="pi pi-pencil"></i>
@@ -186,3 +148,22 @@
     </p-table>
   </div>
 </div>
+
+<p-dialog
+  [visible]="showLeadModal()"
+  modal="true"
+  (onHide)="closeLeadModal()"
+  [style]="{width: '700px'}"
+  styleClass="lead-details-dialog"
+  [closable]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [showHeader]="false"
+>
+  <app-leads-details
+    *ngIf="selectedLeadData()"
+    [lead]="selectedLeadData()"
+    (closed)="closeLeadModal()">
+  </app-leads-details>
+</p-dialog>

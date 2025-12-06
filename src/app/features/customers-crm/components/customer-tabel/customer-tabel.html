@@ -1,43 +1,37 @@
 <div class="container-fluid p-0 m-0">
   <div class="card border-0 bg-transparent">
-    <p-table
-      #dt1
-      [value]="customersTabelData()"
-      dataKey="id"
-      [tableStyle]="{ 'min-width': '60rem' }"
-      [paginator]="true"
-      [rows]="pageSize"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [lazy]="true"
-      (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)"
-      [loading]="loading()"
-    >
+    <p-table #dt1 [value]="customersTabelData()" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [paginator]="true"
+      [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true"
+      (onPage)="onPageChange($event)" (onSort)="onSortColumn($event)" [loading]="loading()">
       <ng-template #caption>
         <div class="d-flex justify-content-between align-items-center">
           <!-- Export Button Container -->
-          <div class="export-btn-container">
+          <div class="export-btn-container d-flex align-items-center gap-2">
             <button
               class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-            >
-              <i class="pi pi-download fs-875"></i>
+              (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
+              <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
               {{ 'customers-crm.export' | translate }}
+              <span *ngIf="selectedCustomersCount > 0" class="ms-1">
+                ({{ selectedCustomersCount }})
+              </span>
+            </button>
+
+            <!-- Clear Selection Button -->
+            <button *ngIf="selectedCustomersCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
+              (click)="clearSelections()" [disabled]="exportLoading()">
+              {{ 'COMMON.CLEAR' | translate }}
             </button>
           </div>
+
           <!-- Filter and Search Container -->
           <div class="d-flex justify-content-start align-items-center gap-0">
             <p-iconfield iconPosition="left" class="fw-bold">
               <p-inputicon>
                 <i class="pi pi-search"></i>
               </p-inputicon>
-              <input
-                pInputText
-                type="text"
-                (input)="onSearchChange($any($event.target).value)"
-                #searchInput
-                placeholder="{{ 'invoices-crm.search' | translate }}"
-              />
+              <input pInputText type="text" (input)="onSearchChange($any($event.target).value)" #searchInput
+                [placeholder]="'customers-crm.search' | translate" />
             </p-iconfield>
           </div>
 
@@ -45,61 +39,63 @@
           <div class="d-flex justify-content-start align-items-center gap-0">
             <button
               class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              routerLink="/main/customers/add-customer"
-            >
+              routerLink="/main/customers/add-customer">
               <img src="assets/images/shared/plus.svg" alt="" class="" />
               {{ 'customers-crm.add-customer' | translate }}
             </button>
           </div>
         </div>
         <div class="title-container my-4">
-          <h5 class="m-0 p-0">All Customers</h5>
+          <h5 class="m-0 p-0">{{ 'customers-crm.all-customers' | translate }}</h5>
+          <small class="text-muted" *ngIf="selectedCustomersCount > 0">
+            {{ selectedCustomersCount }} {{ 'customers-crm.selected-customers-for-export' | translate }}
+          </small>
         </div>
       </ng-template>
       <ng-template #header>
         <tr>
           <th class="d-flex justify-content-center align-items-center gap-2">
             <div class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="select-all"
-                id="select-all"
-                [checked]="isAllSelected"
-                (change)="onSelectAll($event)"
-              />
+              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+                (change)="onSelectAll($event)" [title]="'customers-crm.select-all' | translate" />
             </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">ID</div>
+            <div class="flex items-center gap-2">
+              {{ 'customers-crm.customer-id' | translate }}
+            </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">Phone Number</div>
+            <div class="flex items-center gap-2">
+              {{ 'customers-crm.phone-number' | translate }}
+            </div>
           </th>
           <th [pSortableColumn]="'fullName'">
             <div class="flex items-center gap-2">
-              Customer Name
+              {{ 'customers-crm.customer-name' | translate }}
               <p-sortIcon field="fullName" />
             </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">No of Orders</div>
+            <div class="flex items-center gap-2">
+              {{ 'customers-crm.no-of-orders' | translate }}
+            </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">Assigned To</div>
+            <div class="flex items-center gap-2">
+              {{ 'customers-crm.assigned-to' | translate }}
+            </div>
           </th>
-          <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
+          <th class="d-flex justify-content-center align-items-center gap-2">
+            {{ 'customers-crm.actions' | translate }}
+          </th>
         </tr>
       </ng-template>
       <ng-template #body let-customer let-rowIndex="rowIndex">
         <tr>
           <td>
-            <input
-              type="checkbox"
-              name="select-customer"
-              id="customer-{{ customer.id }}"
-              [checked]="customer.selected"
-              (change)="toggleCustomerSelection(customer)"
-            />
+            <input type="checkbox" name="select-customer" id="customer-{{ customer.id }}" [checked]="customer.selected"
+              (change)="toggleCustomerSelection(customer)" [title]="'customers-crm.select-customer' | translate" />
           </td>
           <td [title]="customer.id">
             {{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
@@ -109,24 +105,25 @@
           <td>{{ customer.noOrders }}</td>
           <td>{{ customer.assignedTo }}</td>
           <td class="d-flex justify-content-center align-items-center gap-2">
-            <button
-              class="btn btn-sm"
-              (click)="viewCustomer(customer.id); $event.stopPropagation()"
-            >
+            <button class="btn btn-sm" (click)="viewCustomer(customer.id); $event.stopPropagation()"
+              [title]="'COMMON.VIEW' | translate">
               <img src="assets/images/shared/eye.svg" alt="" class="" />
             </button>
-            <button
-              class="btn btn-sm"
-              (click)="editCustomer(customer.id); $event.stopPropagation()"
-            >
+            <button class="btn btn-sm" (click)="editCustomer(customer.id); $event.stopPropagation()"
+              [title]="'COMMON.EDIT' | translate">
               <i class="pi pi-pencil"></i>
             </button>
-            <button
-              class="btn btn-sm"
-              (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
-            >
+            <button class="btn btn-sm" (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
+              [title]="'COMMON.DELETE' | translate">
               <i class="pi pi-trash"></i>
             </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="7" class="text-center py-4">
+            {{ 'customers-crm.no-customers-found' | translate }}
           </td>
         </tr>
       </ng-template>
@@ -135,8 +132,5 @@
 </div>
 
 <!-- Customer Details Dialog -->
-<app-customer-details
-  [customerId]="selectedCustomerId()"
-  [(visible)]="showDetailsDialog"
-  (onClose)="closeDetailsDialog()"
-></app-customer-details>
+<app-customer-details [customerId]="selectedCustomerForDialog()" [(visible)]="showDetailsDialog"
+  (onClose)="closeDetailsDialog()"></app-customer-details>

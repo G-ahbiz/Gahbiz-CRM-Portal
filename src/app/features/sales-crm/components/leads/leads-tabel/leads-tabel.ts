@@ -22,11 +22,14 @@ import { AllData } from '../../../../../services/all-data';
 import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
 import { LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { ToastService } from '@core/services/toast.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ROUTES, USER_TYPES } from '@shared/config/constants';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LeadsDetails } from '../lead-detail-dialog/leads-details/leads-details';
+import { DialogModule } from 'primeng/dialog';
+import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
@@ -44,6 +47,7 @@ export const leadsTabelHeader: readonly string[] = [
   'Value',
   'Created Date',
 ];
+
 @Component({
   selector: 'app-leads-tabel',
   imports: [
@@ -54,6 +58,8 @@ export const leadsTabelHeader: readonly string[] = [
     IconFieldModule,
     InputIconModule,
     RouterLink,
+    LeadsDetails,
+    DialogModule,
     TranslateModule,
   ],
   templateUrl: './leads-tabel.html',
@@ -62,6 +68,8 @@ export const leadsTabelHeader: readonly string[] = [
 })
 export class LeadsTabel implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
   loading = signal<boolean>(true);
   leadsData = signal<LeadSummaryItem[]>([]);
   selectedLeads = signal<string[]>([]);
@@ -69,19 +77,21 @@ export class LeadsTabel implements OnInit, OnDestroy {
   activityValues: number[] = [0, 100];
   userTypes = USER_TYPES;
 
+  showLeadModal = signal<boolean>(false);
+  selectedLeadId = signal<string | null>(null);
+  selectedLeadData = signal<LeadDetails | null>(null);
+
   private readonly leadsFacadeService = inject(LeadsFacadeService);
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly translateService = inject(TranslateService);
 
   currentUser = signal<User | null>(null);
-
   searchValue = signal<string>('');
   sortColumn = signal<string>('');
   sortDirection = signal<string>('ASC');
-
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   // Selection state
   isAllSelected: boolean = false;
@@ -149,6 +159,41 @@ export class LeadsTabel implements OnInit, OnDestroy {
           console.error(error.message || 'An error occurred while fetching leads');
         },
       });
+  }
+
+  viewLead(id: string | number) {
+    const leadId = id.toString();
+    this.selectedLeadId.set(leadId);
+
+    this.loading.set(true);
+    this.leadsFacadeService.getLeadById(leadId).subscribe({
+      next: (response) => {
+        if (response.succeeded && response.data) {
+          this.selectedLeadData.set(response.data);
+          this.showLeadModal.set(true);
+        } else {
+          this.toast.error(
+            this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
+          );
+          this.selectedLeadData.set(null);
+          this.showLeadModal.set(false);
+        }
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error(error);
+        this.toast.error(this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS'));
+        this.selectedLeadData.set(null);
+        this.showLeadModal.set(false);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  closeLeadModal() {
+    this.showLeadModal.set(false);
+    this.selectedLeadId.set(null);
+    this.selectedLeadData.set(null);
   }
 
   onDeleteLead(id: string) {
@@ -225,15 +270,10 @@ export class LeadsTabel implements OnInit, OnDestroy {
     this.isAllSelected = currentPageLeads.every((lead) => lead.selected);
   }
 
-  viewLead(id: number) {
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
-    this.router.navigate([ROUTES.leadsDetails]);
+  editLead(id: number) {
+    this.router.navigate(['/main/sales/leads/edit-lead', id]);
   }
 
-  editLead(id: number) {
-    sessionStorage.setItem(SESSION_STORAGE_KEYS.LEAD_ID, id.toString());
-    this.router.navigate([ROUTES.addLead]);
-  }
   exportLeads() {
     if (this.selectedLeads().length === 0) {
       this.toast.error('Please select at least one lead to export');
@@ -297,6 +337,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
       this.sortDirection()
     );
   }
+
   ngOnDestroy() {
     this.searchSubject.complete();
   }

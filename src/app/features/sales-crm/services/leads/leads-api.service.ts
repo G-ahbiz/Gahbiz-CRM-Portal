@@ -7,6 +7,7 @@ import { environment } from '@env/environment';
 import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request';
 import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-response';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
+import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 export class LeadsApiService {
   private readonly httpClient = inject(HttpClient);
   private readonly baseApi = `${environment.baseApi}`;
+
   getAllLeads(
     pageNumber: number = 1,
     pageSize: number = 10,
@@ -32,10 +34,12 @@ export class LeadsApiService {
       },
     });
   }
+
   addLead(addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
     const addLeadUrl = `${this.baseApi}${environment.leads.addLead}`;
     return this.httpClient.post<ApiResponse<LeadSummaryItem>>(addLeadUrl, addLeadRequest);
   }
+
   searchLeads(
     pageNumber: number = 1,
     pageSize: number = 10,
@@ -50,9 +54,20 @@ export class LeadsApiService {
       },
     });
   }
+
   deleteLead(id: string): Observable<ApiResponse<any>> {
     const deleteLeadUrl = `${this.baseApi}${environment.leads.deleteLead(id)}`;
     return this.httpClient.delete<ApiResponse<any>>(deleteLeadUrl);
+  }
+
+  updateLead(id: string ,addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
+    const updateLeadUrl = `${this.baseApi}${environment.leads.updateLead(id)}`;
+    return this.httpClient.put<ApiResponse<LeadSummaryItem>>(updateLeadUrl, addLeadRequest);
+  }
+
+  getLeadById(id: string): Observable<ApiResponse<LeadDetails>> {
+    const getLeadByIdUrl = `${this.baseApi}${environment.leads.getLeadById(id)}`;
+    return this.httpClient.get<ApiResponse<LeadDetails>>(getLeadByIdUrl);
   }
 
   exportLeads(leadIds: string[]): Observable<Blob> {
@@ -78,5 +93,12 @@ export class LeadsApiService {
   searchServices(text: string): Observable<ApiResponse<ServiceDetails[]>> {
     const searchServicesUrl = `${this.baseApi}${environment.services.searchServices(text)}`;
     return this.httpClient.get<ApiResponse<ServiceDetails[]>>(searchServicesUrl);
+  }
+
+  // ===================================================
+
+  getLeadActivities(id: string): Observable<ApiResponse<any>> {
+    const url = `${this.baseApi}${environment.activityLog.getleadActivities(id)}`;
+    return this.httpClient.get<ApiResponse<any>>(url);
   }
 }
