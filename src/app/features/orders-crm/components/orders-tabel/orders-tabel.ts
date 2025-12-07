@@ -25,9 +25,10 @@ import { OrdersFacadeService } from '@features/orders-crm/services/orders-facade
 import { ToastService } from '@core/services/toast.service';
 import { AuthService } from '@core/services/auth.service';
 
-import { OrderItem, CRMOrderRequestParams } from '@features/orders-crm/interfaces/order';
+import { OrderListItem } from '@features/orders-crm/interfaces/order-list-item';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { User } from '@features/auth/interfaces/sign-in/user';
+import { CRMOrderRequestParams } from '@features/orders-crm/interfaces/CRM-order-request-params';
 
 // ------------------------------
 // Constants
@@ -82,7 +83,7 @@ export class OrdersTabel implements OnInit, OnDestroy {
   // Signals
   // ------------------------------
   loading = signal(true);
-  ordersData = signal<OrderItem[]>([]);
+  ordersData = signal<OrderListItem[]>([]);
   selectedOrders = signal<string[]>([]);
   searchValue = signal('');
 
@@ -156,7 +157,7 @@ export class OrdersTabel implements OnInit, OnDestroy {
       .getAllOrders(params)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (res: PagenatedResponse<OrderItem>) => {
+        next: (res: PagenatedResponse<OrderListItem>) => {
           this.ordersData.set(res.items ?? []);
           this.totalRecords = res.totalCount ?? 0;
           this.pageNumber = res.pageNumber ?? 1;
@@ -221,7 +222,7 @@ export class OrdersTabel implements OnInit, OnDestroy {
   // SELECTION LOGIC
   // ===========================================
 
-  toggleOrderSelection(order: OrderItem): void {
+  toggleOrderSelection(order: OrderListItem): void {
     order.selected = !order.selected;
 
     const updated = order.selected
@@ -260,8 +261,8 @@ export class OrdersTabel implements OnInit, OnDestroy {
 
   private sortClientSide(field: string, order: number): void {
     const sorted = [...this.ordersData()].sort((a, b) => {
-      let v1 = a[field as keyof OrderItem];
-      let v2 = b[field as keyof OrderItem];
+      let v1 = a[field as keyof OrderListItem];
+      let v2 = b[field as keyof OrderListItem];
 
       if (field === 'createdDate') {
         v1 = new Date(v1 as string).getTime();

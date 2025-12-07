@@ -58,4 +58,7 @@ export const environment = {
     addOrder: '/CRMOrders/manual',
     addOrderFromLead: '/CRMOrders/from-lead',
   },
+  statistics: {
+    getOrderStatistics: '/Statistics/orders',
+  },
 };

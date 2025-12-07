@@ -1,19 +1,35 @@
-.orders-table {
-  /* height: calc(72vh - 100px) !important; */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
 }
 
-.orders-table {
-  animation: fadeIn 0.5s linear;
+.skeleton-title {
+  width: 80px;
+  height: 16px;
 }
 
-@keyframes fadeIn {
+.skeleton-value {
+  width: 60px;
+  height: 32px;
+}
+
+.skeleton-rating {
+  width: 100px;
+  height: 20px;
+}
+
+.skeleton-icon {
+  width: 48px;
+  height: 48px;
+}
+
+@keyframes loading {
   0% {
-    transform: translateY(15px);
-    opacity: 0;
+    background-position: 200% 0;
   }
-
   100% {
-    transform: translateY(0);
-    opacity: 1;
+    background-position: -200% 0;
   }
 }

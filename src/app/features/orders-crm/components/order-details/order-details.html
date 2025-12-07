@@ -1,234 +1,372 @@
-<div class="container-fluid p-0 m-0 overflow-x-hidden overflow-y-auto">
+<div class="container-fluid p-0 m-0 bg-gray-50 min-vh-100">
   <div class="order-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
 
-    <div class="order-details-top w-100 d-flex justify-content-start align-items-center gap-3">
-
-      <!-- Back Button -->
-      <div class="order-details-back-btn-container">
-        <button class="back-btn btn btn-sm p-2 border-0 d-flex justify-content-center align-items-center"
+    <!-- Top Header -->
+    <header
+      class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 w-100 gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <!-- Back Button -->
+        <button
+          class="back-btn btn btn-sm p-2 bg-white border border-gray-200 rounded-lg d-flex justify-content-center align-items-center"
           (click)="goBack()">
-          <i class="pi pi-chevron-left fs-875"></i>
+          <i class="pi pi-chevron-left text-gray-600"></i>
         </button>
-      </div>
-
-      <!-- Title -->
-      <div class="order-details-title-container">
-        <h1 class="mb-0 fs-4 fw-bold">
-          {{'orders-crm.order-details.title' | translate}}
+        <h1 class="mb-0 fs-4 fw-bold text-gray-900">
+          {{ 'orders-crm.order-details.title' | translate }}
         </h1>
       </div>
+    </header>
 
-    </div>
+    <!-- Order ID & Actions Bar -->
+    <div class="bg-white rounded-3 p-4 shadow-sm border border-gray-100 mb-4 w-100">
+      <div class="d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center gap-4">
 
-    <!-- Order Details -->
-    <div class="order-details-content w-100 d-flex flex-column justify-content-start align-items-start gap-3 mt-4">
-      <!-- Order Details Top -->
-      <div class="order-details-top-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <div class="orderId-container d-flex flex-column justify-content-center align-items-start gap-2">
-          <h6 class="fs-6 fw-semibold">
-            Order ID : #{{ currentOrder?.orderId }}
-          </h6>
-          <p class="m-0 p-0 text-muted-clr fs-875">
-            {{ currentOrder?.date | date:'EE, MMM dd,yyyy' }}
-          </p>
-          <p
-            class="statues fs-875 px-3 py-2 rounded-4 fw-medium {{ currentOrder?.status === 'Pending' ? 'card-yellow text-warning' : currentOrder?.status === 'Confirmed' ? 'card-green trend-up-clr' : currentOrder?.status === 'Cancelled' ? 'card-red trend-down-clr' : '' }}">
-            {{ currentOrder?.status }}
-          </p>
+        <!-- Left: ID, Date, Status -->
+        <div class="d-flex flex-column gap-2">
+          <div class="d-flex align-items-center gap-3">
+            <span class="fs-5 fw-bold text-gray-900">
+              {{ 'orders-crm.order-details.order-id' | translate }}<span class="fs-6 text-muted"> #{{ order()?.id ||
+                'N/A' }}</span>
+            </span>
+          </div>
+          <div class="mt-2">
+            <span [class]="getStatusClass(order()?.status || '')"
+              class="badge px-3 py-2 rounded-pill text-xs fw-medium">
+              {{ getStatusTranslation(order()?.status || '') }}
+            </span>
+          </div>
         </div>
 
-        <div class="order-details-actions-container d-flex justify-content-center align-items-center gap-3">
-          <!-- Status Select -->
-          <div class="status-select-container">
-            <select class="form-select" aria-label="Default select" #statusSelect>
-              <option selected disabled>Update Status</option>
-              <option value="Pending">Pending</option>
-              <option value="Confirmed">Confirmed</option>
-              <option value="Cancelled">Cancelled</option>
+        <!-- Right: Actions -->
+        <div class="d-flex flex-wrap align-items-center gap-3 w-100 w-xl-auto">
+
+          <!-- Status Dropdown -->
+          <div class="position-relative" style="min-width: 160px;">
+            <select
+              class="form-select bg-gray-50 border border-gray-200 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 pe-4"
+              (change)="onStatusChange($event)">
+              <option selected disabled>
+                {{ 'orders-crm.order-details.change-status' | translate }}
+              </option>
+              <option value="Pending">{{ 'orders-crm.order-details.pending' | translate }}</option>
+              <option value="Processing">{{ 'orders-crm.order-details.processing' | translate }}</option>
+              <option value="Completed">{{ 'orders-crm.order-details.completed' | translate }}</option>
+              <option value="Cancelled">{{ 'orders-crm.order-details.cancelled' | translate }}</option>
             </select>
           </div>
 
-          <!-- Save Button -->
-          <button type="button" class="btn btn-md save-btn d-flex justify-content-center align-items-center">
-            {{'orders-crm.order-details.save' | translate}}
+          <button
+            class="btn btn-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover-bg-gray-100 px-4 py-2"
+            (click)="saveOrder()" [disabled]="saving()">
+            @if (saving()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            {{ 'orders-crm.order-details.save' | translate }}
           </button>
 
-          <!-- Download Button -->
-          <button type="button"
-            class="btn btn-md download-btn px-3 text-white d-flex justify-content-center align-items-center gap-2">
+          <button
+            class="btn btn-sm text-blue-600 bg-white border border-blue-100 rounded-lg hover-bg-blue-50 px-4 py-2 d-flex align-items-center gap-2"
+            (click)="downloadInvoice()" [disabled]="loading()">
+            @if (loading()) {
+            <span class="spinner-border spinner-border-sm"></span>
+            } @else {
             <i class="pi pi-download"></i>
-            {{'orders-crm.order-details.download' | translate}}
+            }
+            {{ 'orders-crm.order-details.download' | translate }}
           </button>
 
-          <!-- Print Button -->
-          <button type="button"
-            class="btn btn-md d-flex print-btn justify-content-center align-items-center gap-2 px-3 py-2">
-            <!-- <i class="pi pi-print primary-clr fs-5"></i> -->
-            <img src="assets/images/orders/print.svg" alt="" class="">
+          <button class="btn btn-sm p-2 text-gray-600 bg-white border border-gray-200 rounded-lg hover-bg-gray-50"
+            (click)="printOrder()">
+            <i class="pi pi-print"></i>
+            <span class="d-none d-sm-inline ms-1">{{ 'orders-crm.order-details.print' | translate }}</span>
           </button>
+        </div>
+      </div>
+    </div>
 
+    <!-- Loading State -->
+    @if (loading()) {
+    <div class="w-100 d-flex justify-content-center align-items-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}</span>
+      </div>
+      <span class="ms-3 text-gray-600">{{ 'COMMON.LOADING' | translate }}</span>
+    </div>
+    }
+
+    <!-- Error State -->
+    @if (error()) {
+    <div class="w-100 alert alert-danger">
+      {{ error() }}
+    </div>
+    }
+
+    <!-- Order Details Content -->
+    @if (order() && !loading()) {
+    <div class="row g-4 mb-4">
+
+      <!-- Customer Card -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="bg-transparent p-0">
+          <div class="d-flex align-items-start gap-3">
+            <div class="rounded-circle bg-gray-100 d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 48px; height: 48px;">
+              <i class="pi pi-user text-gray-600"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold text-gray-900 fs-6 mb-2">
+                {{ 'orders-crm.order-details.customer-info' | translate }}
+              </h3>
+              <div class="space-y-1">
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 60px;">
+                    {{ 'orders-crm.order-details.name' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ order()?.customerName }}</span>
+                </p>
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 60px;">
+                    {{ 'orders-crm.order-details.email' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ order()?.customerEmail }}</span>
+                </p>
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 60px;">
+                    {{ 'orders-crm.order-details.phone' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ order()?.customerPhone }}</span>
+                </p>
+                @if (order()?.buyerName) {
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 60px;">
+                    {{ 'orders-crm.order-details.buyer-name' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ order()?.buyerName }}</span>
+                </p>
+                }
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Order Details Body -->
-      <div class="order-details-body w-100 d-flex flex-column justify-content-start align-items-start gap-3 w-100">
-        <div class="cards-container w-100">
-          <!-- Cards Container Top -->
-          <div class="cards-container-top d-flex flex-wrap justify-content-start align-items-start gap-3 w-100">
-            <!-- Customer Card -->
-            <div class="card border-0">
-              <div class="card-body d-flex justify-content-start align-items-start gap-3">
-                <!-- Card Icon -->
-                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                  <img src="assets/images/orders/cutomer.svg" alt="Customer Icon" class="">
-                </div>
-                <!-- Card Info -->
-                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                  <h5 class="card-title m-0 fw-semibold">Customer</h5>
-                  <p class="customer-name m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Name: </span>
-                    <span>{{ cardsData[0].customerName }}</span>
-                  </p>
-                  <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Email: </span>
-                    <span>{{ cardsData[0].customerEmail }}</span>
-                  </p>
-                  <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Phone: </span>
-                    <span>{{ cardsData[0].customerPhone }}</span>
-                  </p>
-                </div>
-              </div>
+      <!-- Order Info Card -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="bg-transparent p-0">
+          <div class="d-flex align-items-start gap-3">
+            <div class="rounded-circle bg-gray-100 d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 48px; height: 48px;">
+              <i class="pi pi-shopping-cart text-gray-600"></i>
             </div>
-            <!-- Order Info Card -->
-            <div class="card border-0">
-              <div class="card-body d-flex justify-content-start align-items-start gap-3">
-                <!-- Card Icon -->
-                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                  <img src="assets/images/orders/cart.svg" alt="Cart Icon" class="">
-                </div>
-                <!-- Card Info -->
-                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                  <h5 class="card-title m-0 fw-semibold">Order Info</h5>
-                  <p class="shipping-address m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Shipping: </span>
-                    <span>{{ cardsData[0].cutomerAddress }}</span>
-                  </p>
-                  <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Pay: </span>
-                    <span>{{ cardsData[0].customerPaymentMethod }}</span>
-                  </p>
-                  <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Status: </span>
-                    <span>{{ cardsData[0].orderStatus }}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!-- Delivery Card -->
-            <div class="card border-0">
-              <div class="card-body d-flex justify-content-start align-items-start gap-3">
-                <!-- Card Icon -->
-                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                  <img src="assets/images/orders/delivery.svg" alt="" class="">
-                </div>
-                <!-- Card Info -->
-                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                  <h5 class="card-title m-0 fw-semibold">Delivery</h5>
-                  <p class="customer-name m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Address: </span>
-                    <span>{{ cardsData[0].cutomerAddress }}</span>
-                  </p>
-                  <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">State: </span>
-                    <span>{{ cardsData[0].cutomerAddress }}</span>
-                  </p>
-                  <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Postal Code: </span>
-                    <span>{{ cardsData[0].customerPostalCode }}</span>
-                  </p>
-                </div>
+            <div>
+              <h3 class="fw-bold text-gray-900 fs-6 mb-2">
+                {{ 'orders-crm.order-details.payment-info' | translate }}
+              </h3>
+              <div class="space-y-1">
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 80px;">
+                    {{ 'orders-crm.order-details.total-amount' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">$ {{ order()?.amount | number: '1.2-2' }}</span>
+                </p>
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 80px;">
+                    {{ 'orders-crm.order-details.payment-method' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ getPaymentMethodTranslation(order()?.paymentMethod || '')
+                    }}</span>
+                </p>
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 80px;">
+                    {{ 'orders-crm.order-details.payment-status' | translate }}:
+                  </span>
+                  <span [class]="getPaymentStatusClass(order()?.paymentStatus || '')" class="badge">
+                    {{ getPaymentStatusTranslation(order()?.paymentStatus || '') }}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Order Details Bottom -->
-          <div class="cards-container-bottom d-flex flex-wrap justify-content-start align-items-start gap-3 w-100 mt-4">
-            <!-- Payment Info Card -->
-            <div class="card border-0">
-              <div class="card-body d-flex justify-content-start align-items-start gap-3">
-                <!-- Card Icon -->
-                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
-                  <img src="assets/images/orders/payment.svg" alt="" class="">
+      <!-- Delivery Card -->
+      <div class="col-12 col-md-6 col-xl-4">
+        <div class="bg-transparent p-0">
+          <div class="d-flex align-items-start gap-3">
+            <div class="rounded-circle bg-gray-100 d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 48px; height: 48px;">
+              <i class="pi pi-truck text-gray-600"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold text-gray-900 fs-6 mb-2">
+                {{ 'orders-crm.order-details.shipping-info' | translate }}
+              </h3>
+              <div class="space-y-1">
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 70px;">
+                    {{ 'orders-crm.order-details.address' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ order()?.address }}</span>
+                </p>
+                <div class="d-flex gap-3 mb-2">
+                  <p class="text-sm mb-0">
+                    <span class="text-gray-400 d-inline-block" style="width: 70px;">
+                      {{ 'orders-crm.order-details.state' | translate }}:
+                    </span>
+                    <span class="fw-medium text-gray-700">{{ order()?.state }}</span>
+                  </p>
+                  <p class="text-sm mb-0">
+                    <span class="text-gray-400 d-inline-block" style="width: 70px;">
+                      {{ 'orders-crm.order-details.country' | translate }}:
+                    </span>
+                    <span class="fw-medium text-gray-700">{{ order()?.country }}</span>
+                  </p>
                 </div>
-                <!-- Card Info -->
-                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
-                  <h5 class="card-title m-0 fw-semibold">Payment Info</h5>
-                  <p class="customer-name m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Payment Method: </span>
-                    <span>{{ cardsData[0].customerPaymentMethod }}</span>
-                  </p>
-                  <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Business Name: </span>
-                    <span>{{ cardsData[0].customerName }}</span>
-                  </p>
-                  <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr">Expiration Date: </span>
-                    <span>{{ cardsData[0].customerPaymentExpirationDate }}</span>
-                  </p>
+                <p class="text-sm mb-2">
+                  <span class="text-gray-400 d-inline-block" style="width: 70px;">
+                    {{ 'orders-crm.order-details.zip-code' | translate }}:
+                  </span>
+                  <span class="fw-medium text-gray-700">{{ order()?.zipCode }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes Card (Spans 2 columns on large screens) -->
+      <div class="col-12 col-xl-8">
+        <div class="bg-transparent p-0 mt-3">
+          <div class="d-flex align-items-start gap-3 w-100">
+            <div class="rounded-circle bg-gray-100 d-flex align-items-center justify-content-center flex-shrink-0"
+              style="width: 48px; height: 48px;">
+              <i class="pi pi-pencil text-gray-600"></i>
+            </div>
+            <div class="w-100">
+              <h3 class="fw-bold text-gray-900 fs-6 mb-2">{{ 'orders-crm.order-details.notes' | translate }}</h3>
+              <div class="position-relative">
+                <textarea [(ngModel)]="currentNote"
+                  class="form-control w-100 p-3 text-sm border border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 min-h-20 bg-white resize-none"
+                  [placeholder]="'orders-crm.order-details.type-note-placeholder' | translate" rows="3"></textarea>
+                <div class="d-flex justify-content-end mt-2">
+                  <button
+                    class="btn btn-sm px-3 py-1 text-xs fw-semibold text-blue-600 bg-white border border-gray-200 rounded hover-bg-gray-50"
+                    (click)="saveNote()">
+                    {{ 'COMMON.SAVE' | translate }}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <div class="services-history-container w-100 h-100">
-          <h4 class="fs-5 fw-semibold">Services</h4>
+    <div class="bg-white rounded-3 p-4 shadow-sm border border-gray-100">
+      <h3 class="fw-bold text-gray-900 fs-5 mb-4">
+        {{ 'orders-crm.order-details.order-items' | translate }}
+      </h3>
 
-          <table class="table table-hover w-100">
-            <thead>
+      <div class="orders-table overflow-x-auto overflow-y-auto w-100">
+        <div class="table-responsive w-100">
+          <table class="table table-hover align-middle mb-0 w-100">
+            <thead class="table-light">
               <tr>
-                <th>
-                  <input type="checkbox" name="" id="">
-                </th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Actions</th>
+                <th scope="col" style="width: 40px;" class="ps-3"></th>
+                <th scope="col" class="text-start">{{ 'orders-crm.order-details.item-name' | translate }}</th>
+                <th scope="col" class="text-center">{{ 'orders-crm.order-details.price' | translate }}</th>
+                <th scope="col" class="text-center">{{ 'orders-crm.order-details.quantity' | translate }}</th>
+                <th scope="col" class="text-end pe-3">{{ 'orders-crm.order-details.total' | translate }}</th>
               </tr>
             </thead>
             <tbody>
-              @for (service of servicesHistory; track service.id ; let i = $index) {
+              @for (item of order()?.orderItems; track item.id) {
               <tr>
-                <td scope="col"><input type="checkbox" name="select-service" id="service-{{ service.id }}"></td>
-                <td scope="col">{{ servicesData[i].name }}</td>
-                <td scope="col">$ {{ service?.total / service?.quantity }}</td>
-                <td scope="col">{{ service.quantity }}</td>
-                <td scope="col">$ {{ service.total }}</td>
-                <td>
-                  <button class="btn btn-sm bg-transparent border-0">
-                    <i class="pi pi-ellipsis-v"></i>
-                  </button>
-                  <button class="btn btn-sm bg-transparent border-0">
-                    <i class="pi pi-trash"></i>
-                  </button>
+                <td class="ps-3">
+                  <input type="checkbox" class="form-check-input" [checked]="isItemSelected(item.id)"
+                    (change)="toggleItemSelection(item.id)">
+                </td>
+                <td class="text-start">
+                  <div class="d-flex align-items-center gap-3">
+                    <div
+                      class="bg-primary bg-opacity-10 rounded-2 d-flex align-items-center justify-content-center p-2">
+                      <i class="pi pi-box text-primary fs-6"></i>
+                    </div>
+                    <div>
+                      <div class="fw-medium text-gray-800">{{ item.name }}</div>
+                      <small class="text-muted">{{ 'orders-crm.order-details.id' | translate }}: {{ item.id | slice: -8
+                        }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <span class="fw-medium text-gray-800">${{ item.price | number:'1.2-2' }}</span>
+                </td>
+                <td class="text-center">
+                  <div class="d-inline-flex align-items-center gap-2">
+                    <span class="fw-medium" style="min-width: 24px;">{{ item.quantity }}</span>
+                  </div>
+                </td>
+                <td class="text-end pe-3">
+                  <span class="fw-bold text-gray-900">${{ item.total | number:'1.2-2' }}</span>
+                  @if (item.quantity > 1) {
+                  <div class="text-muted small">${{ item.price | number:'1.2-2' }} × {{ item.quantity }}</div>
+                  }
                 </td>
               </tr>
               }
-              <tr class="">
-                <td scope="col"> </td>
-                <td scope="col"> </td>
-                <td scope="col"> </td>
-                <td scope="col">{{servicesTotalQuantity}}</td>
-                <td scope="col">$ {{servicesTotalPrice}}</td>
-                <td scope="col"> </td>
+
+              <!-- Summary Footer -->
+              <tr class="table-active">
+                <td colspan="3" class="pt-3 ps-3 border-top">
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="pi pi-chart-bar text-primary"></i>
+                    <span class="fw-medium text-gray-700">{{ 'orders-crm.order-details.summary' | translate }}</span>
+                    @if (selectedItems().length > 0) {
+                    <span class="badge bg-primary rounded-pill ms-2">{{ selectedItems().length }} {{
+                      'orders-crm.order-details.selected' | translate }}</span>
+                    }
+                  </div>
+                </td>
+                <td class="pt-3 text-center border-top">
+                  <div class="fw-bold text-gray-800">{{ itemsTotalQuantity() }}</div>
+                  <small class="text-muted">{{ 'orders-crm.order-details.items' | translate }}</small>
+                </td>
+                <td class="pt-3 pe-3 text-end border-top">
+                  <div class="fw-bold text-primary fs-5">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
+                  <small class="text-muted">{{ 'orders-crm.order-details.order-total' | translate }}</small>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-
       </div>
 
+      <!-- Footer with totals -->
+      <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mt-4 pt-3 border-top">
+        <div class="text-muted small">
+          <i class="pi pi-info-circle me-1"></i>
+          {{ 'orders-crm.order-details.showing' | translate: { count: order()?.orderItems?.length || 0, selected:
+          selectedItems().length } }}
+        </div>
+        <div class="d-flex flex-wrap gap-4">
+          <div class="text-end">
+            <div class="text-muted small">{{ 'orders-crm.order-details.subtotal' | translate }}</div>
+            <div class="fw-medium">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
+          </div>
+          <div class="text-end">
+            <div class="text-muted small">{{ 'orders-crm.order-details.tax' | translate }}</div>
+            <div class="fw-medium">${{ (itemsTotalPrice() * 0.1) | number:'1.2-2' }}</div>
+          </div>
+          <div class="text-end">
+            <div class="text-gray-700 fw-semibold">{{ 'orders-crm.order-details.grand-total' | translate }}</div>
+            <div class="fw-bold text-primary fs-5">${{ (itemsTotalPrice() * 1.1) | number:'1.2-2' }}</div>
+          </div>
+        </div>
+      </div>
     </div>
+    }
   </div>
+</div>
