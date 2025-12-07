@@ -1,68 +1,507 @@
+:host {
+  display: block;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
 .order-details-container {
-  height: calc(100vh - 100px) !important;
+  min-height: calc(100vh - 100px);
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
+/* Background colors */
+.bg-gray-50 {
+  background-color: #f9fafb !important;
+}
 
+.bg-gray-100 {
+  background-color: #f3f4f6 !important;
+}
+
+.bg-gray-200 {
+  background-color: #e5e7eb !important;
+}
+
+/* Text colors */
+.text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+.text-yellow-800 {
+  color: #92400e !important;
+}
+
+.text-green-800 {
+  color: #065f46 !important;
+}
+
+.text-red-800 {
+  color: #991b1b !important;
+}
+
+.text-blue-800 {
+  color: #1e40af !important;
+}
+
+/* Background colors for badges */
+.bg-yellow-100 {
+  background-color: #fef3c7 !important;
+}
+
+.bg-green-100 {
+  background-color: #d1fae5 !important;
+}
+
+.bg-red-100 {
+  background-color: #fee2e2 !important;
+}
+
+.bg-blue-100 {
+  background-color: #dbeafe !important;
+}
+
+/* Border colors */
+.border-gray-100 {
+  border-color: #f3f4f6 !important;
+}
+
+.border-gray-200 {
+  border-color: #e5e7eb !important;
+}
+
+.border-blue-100 {
+  border-color: #dbeafe !important;
+}
+
+/* Hover states */
+.hover-bg-gray-50:hover {
+  background-color: #f9fafb !important;
+}
+
+.hover-bg-gray-100:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.hover-bg-blue-50:hover {
+  background-color: #eff6ff !important;
+}
+
+.hover-border-blue-400:hover {
+  border-color: #60a5fa !important;
+}
+
+/* Shadows */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Border radius */
+.rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+.rounded-3 {
+  border-radius: 1rem !important;
+}
+
+/* Border utilities */
+.last-border-0:last-child {
+  border-bottom: 0 !important;
+}
+
+/* Custom spacing utilities */
+.space-y-1 > * + * {
+  margin-top: 0.25rem;
+}
+
+.min-h-20 {
+  min-height: 5rem !important;
+}
+
+/* Back button styling */
 .back-btn {
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-
-  &:active, &:focus {
-    outline: none;
-    border: none;
-  }
-
-  &:active {
-    scale: 0.95;
-  }
+  width: 40px;
+  height: 40px;
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb;
+  background: white;
 }
 
-.order-details-content {
-  background-color: #F9F9F9 !important;
+.back-btn:hover {
+  background-color: #f9fafb;
+  transform: translateX(-2px);
 }
 
+/* Form select custom arrow */
 .form-select {
-  border-color: #E3E1E1 !important;
-  color: var(--primary-color) !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
 
-  &:focus, &:active {
-    box-shadow: none;
-    outline: none;
-    /* border: none; */
+/* Table hover effect */
+.table tbody tr {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(243, 244, 246, 0.5) !important;
+}
+
+/* Checkbox styling */
+.table td:first-child .rounded {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.table td:first-child .rounded:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+/* Custom scrollbar for table */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Badge styling */
+.badge {
+  padding: 0.35rem 0.75rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  text-transform: capitalize;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .order-details-container {
+    padding: 1rem !important;
   }
 
-  &:hover {
-    background-color: transparent !important;
+  .table-responsive {
+    margin: 0 -1rem;
+    padding: 0 1rem;
   }
 
-  >option {
-    color: var(--primary-color) !important;
-
-    &:hover {
-      background-color: var(--primary-color) !important;
-      color: var(--sidebar-active-text-color) !important;
-    }
+  .btn-sm {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.875rem !important;
   }
 }
 
-.btn {
-  background-color: #ffffff;
-  color: var(--primary-color) !important;
-  border-color: #E3E1E1 !important;
+@media (max-width: 576px) {
+  .d-flex.flex-wrap {
+    gap: 0.5rem !important;
+  }
+
+  .form-select {
+    min-width: 100% !important;
+  }
+
+  .btn {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
-.card {
-  width: 30%;
-  background: transparent !important;
+/* Print styles */
+@media print {
+  .order-details-container {
+    background: white !important;
+    padding: 0 !important;
+    min-height: auto !important;
+  }
+
+  .back-btn,
+  .form-select,
+  .btn:not(.print-only) {
+    display: none !important;
+  }
+
+  .bg-white {
+    background: white !important;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .table {
+    border: 1px solid #ddd !important;
+  }
+
+  .text-gray-400 {
+    color: #666 !important;
+  }
 }
 
-.card-icon {
-  background-color: #E3E1E1;
+.table-hover tbody tr {
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.form-control {
-  height: 10rem;
+.table-hover tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.05) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-th,tr,td {
-  background: transparent !important;
+.table-hover tbody tr.table-active {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+  border-left: 3px solid #0d6efd;
+}
+
+/* Checkbox styling */
+.form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.bg-primary-subtle {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.2s ease;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+  color: #0d6efd;
+}
+
+/* Quantity controls */
+.btn-outline-secondary {
+  border-color: #dee2e6;
+  color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* Table header */
+.table-light th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c757d;
+  background-color: #f8f9fa !important;
+  border-bottom: 2px solid #e9ecef;
+  padding: 0.75rem 1rem;
+}
+
+/* Table cells */
+.table td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-color: #e9ecef;
+}
+
+/* Summary row */
+.table-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Responsive table improvements */
+@media (max-width: 768px) {
+  .table-responsive {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+  }
+
+  .table {
+    margin-bottom: 0;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+  }
+
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6c757d;
+    margin-right: 1rem;
+  }
+
+  .table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  /* Hide actions dropdown on mobile, show inline buttons */
+  .table tbody td:nth-child(6) .dropdown {
+    display: none;
+  }
+
+  .table tbody td:nth-child(6)::before {
+    content: 'Actions';
+  }
+
+  .table tbody td:nth-child(6) {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .table tbody td:nth-child(6) button {
+    width: auto;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scrollbar styling for table */
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Status indicators */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.status-active {
+  background-color: #198754;
+}
+
+.status-inactive {
+  background-color: #dc3545;
+}
+
+/* Hover effects for interactive elements */
+.btn-link {
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* Print styles for table */
+@media print {
+  .table {
+    border: 1px solid #ddd;
+  }
+
+  .table thead {
+    background-color: #f8f9fa !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  .btn,
+  .dropdown,
+  .form-check {
+    display: none !important;
+  }
+}
+
+.orders-table table {
+  width: 100% !important;
+  table-layout: fixed; /* or remove if you prefer auto */
+}
+
+/* make long text wrap instead of expanding column */
+.orders-table td,
+.orders-table th {
+  white-space: normal;
+  overflow-wrap: break-word;
 }
