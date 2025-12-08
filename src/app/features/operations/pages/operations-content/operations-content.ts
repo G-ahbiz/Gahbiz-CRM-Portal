@@ -20,6 +20,6 @@ export class OperationsContent {
   }
 
   getCardsData() {
-    this.cardsData = this.allData.getCustomersCardsData();
+    this.cardsData = this.allData.getOperationsCardsData();
   }
 }
