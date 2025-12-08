@@ -1,28 +1,43 @@
 <div class="container-fluid p-0 m-0 h-100">
   <div
     class="sidebar-container h-100 d-flex flex-column justify-content-start align-items-start px-3 py-4 overflow-hidden"
-    [class.collapsed]="isSidebarCollapsed"> <!-- Use input property -->
+    [class.collapsed]="isSidebarCollapsed"
+  >
+    <!-- Use input property -->
 
     <!-- Mobile Close Button (top right) -->
     <div *ngIf="isMobile" class="mobile-close-btn position-absolute top-0 end-0 p-3">
-      <button type="button" class="btn btn-light rounded-circle p-1" (click)="toggleSidebar()"
-        aria-label="Close Sidebar">
+      <button
+        type="button"
+        class="btn btn-light rounded-circle p-1"
+        (click)="toggleSidebar()"
+        aria-label="Close Sidebar"
+      >
         <i class="pi pi-times"></i>
       </button>
     </div>
 
     <!-- Sidebar Header -->
-    <div class="sidebar-header-container d-flex justify-content-between align-items-center w-100 mb-4">
+    <div
+      class="sidebar-header-container d-flex justify-content-between align-items-center w-100 mb-4"
+    >
       <!-- Logo Container -->
-      <div class="logo-container w-100" [class.fadeout]="isSidebarCollapsed"> <!-- Use input property -->
+      <div class="logo-container w-100" [class.fadeout]="isSidebarCollapsed">
+        <!-- Use input property -->
         <img src="assets/images/logo/logo.png" alt="logo" class="logo w-50" />
       </div>
 
       <!-- Sidebar Collapse Icon - Hide on mobile -->
       <div class="sidebar-collapse-icon-container" *ngIf="!isMobile">
-        <button type="button" class="btn p-0 m-0" title="Collapse Sidebar" (click)="toggleSidebar()"
-          aria-label="Collapse Sidebar">
-          <i class="pi pi-angle-double-{{ isSidebarCollapsed ? 'right' : 'left' }}"></i> <!-- Use input property -->
+        <button
+          type="button"
+          class="btn p-0 m-0"
+          title="Collapse Sidebar"
+          (click)="toggleSidebar()"
+          aria-label="Collapse Sidebar"
+        >
+          <i class="pi pi-angle-double-{{ isSidebarCollapsed ? 'right' : 'left' }}"></i>
+          <!-- Use input property -->
         </button>
       </div>
     </div>
@@ -32,8 +47,11 @@
       <ul class="list-unstyled">
         <!-- Dashboard -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/dashboard" routerLinkActive="active">
-          <button type="button" (click)="handleNavigationClick()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
             <img src="assets/images/sidebar/dashboard.svg" alt="Dashboard" class="sidebar-icon" />
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.dashboard' | translate }}</span>
           </button>
@@ -41,8 +59,11 @@
 
         <!-- Customers -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/customers" routerLinkActive="active">
-          <button type="button" (click)="handleNavigationClick()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
             <img src="assets/images/sidebar/customers.svg" alt="customers" class="sidebar-icon" />
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.customers' | translate }}</span>
           </button>
@@ -50,8 +71,11 @@
 
         <!-- Sales -->
         <li class="sales w-100 p-75 rounded-3 d-grid overflow-hidden">
-          <button type="button" (click)="toggleSalesActive()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-between align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="toggleSalesActive()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-between align-items-center gap-3 sidebar-text-color"
+          >
             <div class="d-flex align-items-center gap-3">
               <img src="assets/images/sidebar/sales.svg" alt="sales" class="sidebar-icon" />
               <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.sales' | translate }}</span>
@@ -61,34 +85,70 @@
         </li>
 
         <li class="sales-content-container overflow-hidden">
-          <ul class="list-unstyled" [class]="isSalesActive() ? 'px-75' : 'hide'" [class.px-75]="!isSidebarCollapsed">
+          <ul
+            class="list-unstyled"
+            [class]="isSalesActive() ? 'px-75' : 'hide'"
+            [class.px-75]="!isSidebarCollapsed"
+          >
             <!-- Use input property -->
             <!-- Leads -->
-            <li class="sales-leads w-100 p-75 rounded-3" routerLink="{{ Routes.leadsTable }}" routerLinkActive="active">
-              <button type="button" (click)="toggleLeadsActive(); onLinkClick()"
-                class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color">
+            <li
+              class="sales-leads w-100 p-75 rounded-3"
+              routerLink="{{ Routes.leadsTable }}"
+              routerLinkActive="active"
+            >
+              <button
+                type="button"
+                (click)="toggleLeadsActive(); onLinkClick()"
+                class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color"
+              >
                 <img src="assets/images/sidebar/leads.svg" alt="leads" class="sidebar-icon" />
                 <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.leads' | translate }}</span>
               </button>
             </li>
             <!-- Sales Agents -->
-            <li class="sales-agents w-100 p-75 rounded-3" routerLink="/main/sales/sales-agents"
-              routerLinkActive="active">
-              <button type="button" (click)="toggleSalesAgentsActive(); onLinkClick()"
-                class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color">
-                <img src="assets/images/sidebar/salesAgent.svg" alt="sales-agents" class="sidebar-icon" />
+            <li
+              class="sales-agents w-100 p-75 rounded-3"
+              routerLink="/main/sales/sales-agents"
+              routerLinkActive="active"
+            >
+              <button
+                type="button"
+                (click)="toggleSalesAgentsActive(); onLinkClick()"
+                class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-4 sidebar-text-color"
+              >
+                <img
+                  src="assets/images/sidebar/salesAgent.svg"
+                  alt="sales-agents"
+                  class="sidebar-icon"
+                />
                 <span class="text-nowrap fs-6 fw-medium">{{
                   'sidebar.sales-agents' | translate
-                  }}</span>
+                }}</span>
               </button>
             </li>
           </ul>
         </li>
 
+        <!-- Operations -->
+        <li class="w-100 p-75 rounded-3" routerLink="/main/operations" routerLinkActive="active">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
+            <img src="assets/images/sidebar/invoices.svg" alt="operations" class="sidebar-icon" />
+            <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.operations' | translate }}</span>
+          </button>
+        </li>
+
         <!-- Invoices -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/invoices" routerLinkActive="active">
-          <button type="button" (click)="handleNavigationClick()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
             <img src="assets/images/sidebar/invoices.svg" alt="invoices" class="sidebar-icon" />
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.invoices' | translate }}</span>
           </button>
@@ -96,8 +156,11 @@
 
         <!-- Orders -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/orders" routerLinkActive="active">
-          <button type="button" (click)="handleNavigationClick()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
             <img src="assets/images/sidebar/orders.svg" alt="orders" class="sidebar-icon" />
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.orders' | translate }}</span>
           </button>
@@ -105,8 +168,11 @@
 
         <!-- Reports -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/reports" routerLinkActive="active">
-          <button type="button" (click)="handleNavigationClick()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
             <img src="assets/images/sidebar/reports.svg" alt="reports" class="sidebar-icon" />
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.reports' | translate }}</span>
           </button>
@@ -114,8 +180,11 @@
 
         <!-- Settings -->
         <li class="w-100 p-75 rounded-3" routerLink="/main/settings" routerLinkActive="active">
-          <button type="button" (click)="handleNavigationClick()"
-            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color">
+          <button
+            type="button"
+            (click)="handleNavigationClick()"
+            class="btn p-0 m-0 w-100 d-flex justify-content-start align-items-center gap-3 sidebar-text-color"
+          >
             <img src="assets/images/sidebar/settings.svg" alt="settings" class="sidebar-icon" />
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.settings' | translate }}</span>
           </button>

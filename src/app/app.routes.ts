@@ -30,6 +30,11 @@ export const routes: Routes = [
         loadChildren: () => import('./features/sales-crm/sales.routes').then((m) => m.salesRoutes),
       },
       {
+        path: 'operations',
+        loadChildren: () =>
+          import('./features/operations/operations.routes').then((m) => m.OPERATIONS_ROUTES),
+      },
+      {
         path: 'invoices',
         loadChildren: () =>
           import('./features/invoices-crm/invoice.routes').then((m) => m.invoiceRoutes),

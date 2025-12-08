@@ -70,7 +70,7 @@ export class InvoiceApiService {
   }
 
   getStatistics(): Observable<ApiResponse<InvoicesStatistics>> {
-    const url = `https://serva-best.runasp.net${environment.invoices.getStatistics}`;
+    const url = `${this.baseUrl}${environment.invoices.getStatistics}`;
     return this.http.get<ApiResponse<InvoicesStatistics>>(url);
   }
 }

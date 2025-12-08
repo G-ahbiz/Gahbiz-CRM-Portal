@@ -1,0 +1,221 @@
+<div class="container-fluid p-0 m-0">
+  <div class="card border-0 bg-transparent">
+    <p-table
+      #dt1
+      [value]="submissionsData()"
+      dataKey="id"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [lazy]="true"
+      (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
+      [loading]="loading()"
+    >
+      <ng-template #caption>
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Export Button Container -->
+          <div class="export-btn-container d-flex align-items-center gap-2">
+            <button
+              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+              (click)="exportSubmissions()"
+              [disabled]="selectedSubmissionsCount === 0"
+            >
+              <i class="pi fs-875 pi-download"></i>
+              {{ 'operations.export' | translate }}
+              @if (selectedSubmissionsCount > 0) {
+              <span class="ms-1">({{ selectedSubmissionsCount }})</span>
+              }
+            </button>
+
+            <!-- Clear Selection Button -->
+            @if (selectedSubmissionsCount > 0) {
+            <button class="btn btn-sm btn-outline-secondary px-3 py-2" (click)="clearSelections()">
+              {{ 'COMMON.CLEAR' | translate }}
+            </button>
+            }
+          </div>
+
+          <!-- Filter and Search Container -->
+          <div class="d-flex justify-content-start align-items-center gap-3">
+            <p-iconfield iconPosition="left" class="fw-bold">
+              <p-inputicon>
+                <i class="pi pi-search"></i>
+              </p-inputicon>
+              <input
+                pInputText
+                type="text"
+                (input)="onSearchChange($any($event.target).value)"
+                #searchInput
+                [placeholder]="'operations.search' | translate"
+              />
+            </p-iconfield>
+
+            <!-- Date Range Inputs -->
+            <div class="d-flex align-items-center gap-2">
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="createdDateFrom"
+                (change)="onDateFilterChange()"
+                [max]="maxDateFrom"
+                [title]="'operations.from-date' | translate"
+              />
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="createdDateTo"
+                (change)="onDateFilterChange()"
+                [min]="minDateTo"
+                [max]="todayDate"
+                [title]="'operations.to-date' | translate"
+              />
+            </div>
+
+            <!-- Status Filter Dropdown -->
+            <p-select
+              [options]="statusOptions"
+              [(ngModel)]="selectedStatus"
+              (onChange)="onStatusFilterChange()"
+              [placeholder]="'operations.filter-by-status' | translate"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              class="status-filter"
+            ></p-select>
+          </div>
+
+          <!-- Add Request Button Container -->
+          <div class="d-flex justify-content-start align-items-center gap-0">
+            <button
+              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
+              (click)="addRequest()"
+            >
+              <img src="assets/images/shared/plus.svg" alt="" class="" />
+              {{ 'operations.add-request' | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="title-container my-4">
+          <h5 class="m-0 p-0">{{ 'operations.all-requests' | translate }}</h5>
+          @if (selectedSubmissionsCount > 0) {
+          <small class="text-muted">
+            {{ selectedSubmissionsCount }} {{ 'operations.selected-for-export' | translate }}
+          </small>
+          }
+        </div>
+      </ng-template>
+      <ng-template #header>
+        <tr>
+          <th class="d-flex justify-content-center align-items-center gap-2">
+            <div class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="select-all"
+                id="select-all"
+                [checked]="isAllSelected"
+                (change)="onSelectAll($event)"
+                [title]="'operations.select-all' | translate"
+              />
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              {{ 'operations.request-id' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              {{ 'operations.customer' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              {{ 'operations.service-type' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              {{ 'operations.sla-deadline' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              {{ 'operations.last-updated' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="flex items-center gap-2">
+              {{ 'operations.documents' | translate }}
+            </div>
+          </th>
+          <th [pSortableColumn]="'status'">
+            <div class="flex items-center gap-2">
+              {{ 'operations.status' | translate }}
+              <p-sortIcon field="status" />
+            </div>
+          </th>
+          <th class="d-flex justify-content-center align-items-center gap-2">
+            {{ 'operations.actions' | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-submission let-rowIndex="rowIndex">
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              name="select-submission"
+              id="submission-{{ submission.id }}"
+              [checked]="submission.selected"
+              (change)="toggleSubmissionSelection(submission)"
+              [title]="'operations.select-request' | translate"
+            />
+          </td>
+          <td [title]="submission.id">
+            {{ submission.id | slice : 0 : 8 }}{{ submission.id.length > 8 ? '...' : '' }}
+          </td>
+          <td>{{ submission.userName }}</td>
+          <td>{{ submission.serviceName }}</td>
+          <td>{{ submission.fulfillmentDate | date : 'mediumDate' }}</td>
+          <td>{{ submission.lastUpdatedDate | date : 'mediumDate' }}</td>
+          <td>
+            <button class="btn btn-sm" [title]="'operations.documents' | translate">
+              <img src="assets/images/operations/folder.svg" alt="Documents" />
+            </button>
+          </td>
+          <td>
+            <span class="badge" [class]="getStatusClass(submission.status)">
+              {{ submission.status }}
+            </span>
+          </td>
+          <td class="d-flex justify-content-center align-items-center gap-2">
+            <button
+              class="btn btn-sm"
+              (click)="viewSubmission(submission.id); $event.stopPropagation()"
+              [title]="'COMMON.VIEW' | translate"
+            >
+              <img src="assets/images/shared/eye.svg" alt="" class="" />
+            </button>
+            <button
+              class="btn btn-sm"
+              (click)="editSubmission(submission.id); $event.stopPropagation()"
+              [title]="'COMMON.EDIT' | translate"
+            >
+              <i class="pi pi-pencil"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="9" class="text-center py-4">
+            {{ 'operations.no-requests-found' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

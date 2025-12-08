@@ -200,6 +200,7 @@
     "LOG_OUT": "Log Out"
   },
   "sidebar": {
+    "operations": "Operations",
     "dashboard": "Dashboard",
     "customers": "Customers",
     "sales": "Sales",
@@ -667,5 +668,27 @@
       "LOAD_FAILED": "Failed to load lead data",
       "FAILED_TO_ADD_ACTIVITY": "Failed to add activity. Please try again."
     }
+  },
+  "operations": {
+    "export": "Export",
+    "add-request": "Add Request",
+    "search": "Search...",
+    "all-requests": "All Requests",
+    "request-id": "Request ID",
+    "customer": "Customer",
+    "service-type": "Service Type",
+    "sla-deadline": "SLA Deadline",
+    "last-updated": "Last Updated",
+    "documents": "Documents",
+    "status": "Status",
+    "actions": "Actions",
+    "no-requests-found": "No requests found",
+    "from-date": "From Date",
+    "to-date": "To Date",
+    "select-all": "Select all requests on this page",
+    "select-request": "Select this request",
+    "selected-for-export": "request(s) selected for export",
+    "filter-by-status": "Filter by Status",
+    "all-statuses": "All Statuses"
   }
 }
