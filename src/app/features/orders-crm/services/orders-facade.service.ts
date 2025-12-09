@@ -2,12 +2,13 @@ import { Injectable, signal, computed } from '@angular/core';
 import { OrdersApiService } from './orders-api.service';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { ApiResponse } from '@core/interfaces/api-response';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError, tap } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { ToastService } from '@core/services/toast.service';
 import { CRMOrderRequestParams } from '../interfaces/CRM-order-request-params';
 import { OrderListItem } from '../interfaces/order-list-item';
 import { StatisticsResponse } from '../interfaces/statistics-response';
+import { CreateOrderRequest } from '../interfaces/create-order-request';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,10 @@ import { StatisticsResponse } from '../interfaces/statistics-response';
 export class OrdersFacadeService {
   private _orders = signal<PagenatedResponse<OrderListItem> | null>(null);
   readonly orders = computed(() => this._orders());
+
+  // Track loading state
+  private _isCreatingOrder = signal(false);
+  readonly isCreatingOrder = computed(() => this._isCreatingOrder());
 
   constructor(private ordersApiService: OrdersApiService, private toastService: ToastService) {}
 
@@ -43,6 +48,59 @@ export class OrdersFacadeService {
 
   getOrderById(id: string) {
     return this.ordersApiService.getOrderById(id);
+  }
+
+  /**
+   * Create a new order with proper error handling and state management
+   */
+  createOrder(orderData: CreateOrderRequest): Observable<string> {
+    this._isCreatingOrder.set(true);
+
+    return this.ordersApiService.createOrder(orderData).pipe(
+      map((res: ApiResponse<string>) => {
+        if (!res?.succeeded) {
+          throw new Error(res?.message ?? 'Failed to create order');
+        }
+        this.toastService.success('Order created successfully!');
+        return res.data; // Returns the order ID
+      }),
+      catchError((err) => {
+        console.error('OrdersFacadeService.createOrder error', err);
+        const errorMessage = this.getErrorMessage(err);
+        this.toastService.error(errorMessage);
+        return throwError(() => new Error(errorMessage));
+      }),
+      tap({
+        next: (orderId) => {
+          console.log('Order created with ID:', orderId);
+          this._isCreatingOrder.set(false);
+        },
+        error: () => this._isCreatingOrder.set(false),
+        finalize: () => this._isCreatingOrder.set(false),
+      })
+    );
+  }
+
+  importOrder(file: File) {
+    return this.ordersApiService.importOrders(file);
+  }
+
+  /**
+   * Get user-friendly error messages
+   */
+  private getErrorMessage(error: any): string {
+    if (error.status === 400) {
+      return 'Invalid data. Please check your information.';
+    } else if (error.status === 401) {
+      return 'Session expired. Please login again.';
+    } else if (error.status === 403) {
+      return 'You do not have permission to create orders.';
+    } else if (error.status === 409) {
+      return 'A similar order already exists.';
+    } else if (error.status >= 500) {
+      return 'Server error. Please try again later.';
+    }
+    return error.message || 'Failed to create order. Please try again.';
   }
 
   /**
