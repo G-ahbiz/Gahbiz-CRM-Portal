@@ -50,7 +50,6 @@ export const environment = {
     addInvoice: '/Invoices',
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
-    getStatistics: '/Statistics/invoices',
   },
   crmOrder: {
     getAllOrders: '/CRMOrders',
@@ -61,6 +60,9 @@ export const environment = {
   },
   statistics: {
     getOrderStatistics: '/Statistics/orders',
+    geInvoicestStatistics: '/Statistics/invoices',
+    getCustomerStatistics: '/Statistics/customers',
+    getLeadsStatistics: '/Statistics/leads',
   },
   operations: {
     getAllServiceSubmissions: '/ServiceSubmissions',

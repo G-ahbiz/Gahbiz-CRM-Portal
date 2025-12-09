@@ -8,6 +8,7 @@ import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-resp
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
 import { CreateActivityRequest } from '@features/sales-crm/interfaces/create-activity-request';
+import { LeadsStatistics } from '@features/sales-crm/interfaces/leads-statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -48,7 +49,10 @@ export class LeadsFacadeService {
     return this.leadsService.deleteLead(id);
   }
 
-  updateLead(id: string, addLeadRequest: AddLeadRequest | FormData): Observable<ApiResponse<LeadSummaryItem>> {
+  updateLead(
+    id: string,
+    addLeadRequest: AddLeadRequest | FormData
+  ): Observable<ApiResponse<LeadSummaryItem>> {
     return this.leadsService.updateLead(id, addLeadRequest);
   }
 
@@ -68,6 +72,10 @@ export class LeadsFacadeService {
   }
   searchServices(text: string): Observable<ApiResponse<ServiceDetails[]>> {
     return this.leadsService.searchServices(text);
+  }
+
+  getStatistics(): Observable<ApiResponse<LeadsStatistics>> {
+    return this.leadsService.getStatistics();
   }
 
   // ===================================================

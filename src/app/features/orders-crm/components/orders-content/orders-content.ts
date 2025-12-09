@@ -1,4 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabsHeader } from '../../../../shared/components/tabs-header/tabs-header';
 import { OrdersTabel } from '../orders-tabel/orders-tabel';
@@ -11,13 +17,14 @@ import { OrdersFacadeService } from '@features/orders-crm/services/orders-facade
   imports: [CommonModule, TabsHeader, OrdersTabel],
   templateUrl: './orders-content.html',
   styleUrl: './orders-content.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersContent implements OnInit {
   cardsData: LogCard[] = [];
   isLoading = true;
 
   private ordersFacadeService = inject(OrdersFacadeService);
-
+  private cdr = inject(ChangeDetectorRef);
   ngOnInit() {
     this.loadStatistics();
   }
@@ -28,11 +35,13 @@ export class OrdersContent implements OnInit {
       next: (statistics: StatisticsResponse) => {
         this.cardsData = this.mapStatisticsToCards(statistics);
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Failed to load statistics:', error);
         this.isLoading = false;
         this.cardsData = this.getFallbackCardsData();
+        this.cdr.markForCheck();
       },
     });
   }

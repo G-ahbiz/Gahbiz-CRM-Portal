@@ -10,7 +10,6 @@ import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
 import { UpdateInvoiceRequest } from '../interfaces/update-invoice-request';
 import { InvoicesStatistics } from '../interfaces/statistics';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -70,7 +69,7 @@ export class InvoiceApiService {
   }
 
   getStatistics(): Observable<ApiResponse<InvoicesStatistics>> {
-    const url = `${this.baseUrl}${environment.invoices.getStatistics}`;
+    const url = `${this.baseUrl}${environment.statistics.geInvoicestStatistics}`;
     return this.http.get<ApiResponse<InvoicesStatistics>>(url);
   }
 }

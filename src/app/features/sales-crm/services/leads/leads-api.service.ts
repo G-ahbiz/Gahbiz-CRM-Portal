@@ -9,6 +9,7 @@ import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-resp
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
 import { CreateActivityRequest } from '@features/sales-crm/interfaces/create-activity-request';
+import { LeadsStatistics } from '@features/sales-crm/interfaces/leads-statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -97,6 +98,11 @@ export class LeadsApiService {
   searchServices(text: string): Observable<ApiResponse<ServiceDetails[]>> {
     const searchServicesUrl = `${this.baseApi}${environment.services.searchServices(text)}`;
     return this.httpClient.get<ApiResponse<ServiceDetails[]>>(searchServicesUrl);
+  }
+
+  getStatistics(): Observable<ApiResponse<LeadsStatistics>> {
+    const url = `${this.baseApi}${environment.statistics.getLeadsStatistics}`;
+    return this.httpClient.get<ApiResponse<LeadsStatistics>>(url);
   }
 
   // ===================================================
