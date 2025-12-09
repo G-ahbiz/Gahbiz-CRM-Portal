@@ -132,7 +132,7 @@ export class OperationsTable implements OnInit {
             this.submissionsData.set(
               data.map((submission) => ({
                 ...submission,
-                selected: this.selectedSubmissionIds().has(submission.id),
+                selected: this.selectedSubmissionIds().has(submission.submissionId),
               }))
             );
             this.totalRecords = response.data.totalCount;
@@ -210,9 +210,9 @@ export class OperationsTable implements OnInit {
     this.submissionsData().forEach((submission) => {
       submission.selected = this.isAllSelected;
       if (this.isAllSelected) {
-        currentSelectedIds.add(submission.id);
+        currentSelectedIds.add(submission.submissionId);
       } else {
-        currentSelectedIds.delete(submission.id);
+        currentSelectedIds.delete(submission.submissionId);
       }
     });
 
@@ -227,9 +227,9 @@ export class OperationsTable implements OnInit {
 
     const currentSelectedIds = new Set(this.selectedSubmissionIds());
     if (submission.selected) {
-      currentSelectedIds.add(submission.id);
+      currentSelectedIds.add(submission.submissionId);
     } else {
-      currentSelectedIds.delete(submission.id);
+      currentSelectedIds.delete(submission.submissionId);
     }
     this.selectedSubmissionIds.set(currentSelectedIds);
 

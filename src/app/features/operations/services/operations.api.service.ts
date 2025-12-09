@@ -38,7 +38,7 @@ export class OperationsApiService {
     }
 
     return this.http.get<ApiResponse<PagenatedResponse<ServiceSubmission>>>(
-      `${this.baseUrl}/ServiceSubmissions`,
+      `${this.baseUrl}${environment.operations.getAllServiceSubmissions}`,
       { params }
     );
   }

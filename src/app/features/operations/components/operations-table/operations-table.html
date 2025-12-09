@@ -3,7 +3,7 @@
     <p-table
       #dt1
       [value]="submissionsData()"
-      dataKey="id"
+      dataKey="submissionId"
       [tableStyle]="{ 'min-width': '60rem' }"
       [paginator]="true"
       [rows]="pageSize"
@@ -62,6 +62,7 @@
                 (change)="onDateFilterChange()"
                 [max]="maxDateFrom"
                 [title]="'operations.from-date' | translate"
+                aria-label="From Date"
               />
               <input
                 type="date"
@@ -71,6 +72,7 @@
                 [min]="minDateTo"
                 [max]="todayDate"
                 [title]="'operations.to-date' | translate"
+                aria-label="To Date"
               />
             </div>
 
@@ -168,40 +170,61 @@
             <input
               type="checkbox"
               name="select-submission"
-              id="submission-{{ submission.id }}"
+              id="submission-{{ submission.submissionId }}"
               [checked]="submission.selected"
               (change)="toggleSubmissionSelection(submission)"
               [title]="'operations.select-request' | translate"
             />
           </td>
-          <td [title]="submission.id">
-            {{ submission.id | slice : 0 : 8 }}{{ submission.id.length > 8 ? '...' : '' }}
+          <td [title]="submission.submissionId">
+            {{ submission.submissionId | slice : 0 : 8
+            }}{{ submission.submissionId.length > 8 ? '...' : '' }}
           </td>
-          <td>{{ submission.userName }}</td>
+          <td>{{ submission.customerName }}</td>
           <td>{{ submission.serviceName }}</td>
-          <td>{{ submission.fulfillmentDate | date : 'mediumDate' }}</td>
-          <td>{{ submission.lastUpdatedDate | date : 'mediumDate' }}</td>
+          <td>{{ submission.slaDeadline | date : 'mediumDate' }}</td>
+          <td>{{ submission.lastUpdated | date : 'mediumDate' }}</td>
           <td>
             <button class="btn btn-sm" [title]="'operations.documents' | translate">
-              <img src="assets/images/operations/folder.svg" alt="Documents" />
+              <img
+                src="assets/images/operations/folder.svg"
+                alt="Documents"
+                style="width: 20px; height: 18px"
+              />
             </button>
           </td>
-          <td>
-            <span class="badge" [class]="getStatusClass(submission.status)">
+          <td class="text-center">
+            <span
+              class="py-1 px-2 rounded-3"
+              [class]="
+                submission.status === 'Completed' || submission.status === 'Verified'
+                  ? 'text-success card-green'
+                  : submission.status === 'Cancelled'
+                  ? 'text-danger card-red'
+                  : submission.status === 'Created' || submission.status === 'Submitted'
+                  ? 'text-info card-blue'
+                  : submission.status === 'UnderReview' ||
+                    submission.status === 'PendingClientAction'
+                  ? 'text-warning card-yellow'
+                  : submission.status === 'InProgress'
+                  ? 'text-primary card-blue'
+                  : 'text-secondary card-gray'
+              "
+            >
               {{ submission.status }}
             </span>
           </td>
           <td class="d-flex justify-content-center align-items-center gap-2">
             <button
               class="btn btn-sm"
-              (click)="viewSubmission(submission.id); $event.stopPropagation()"
+              (click)="viewSubmission(submission.submissionId); $event.stopPropagation()"
               [title]="'COMMON.VIEW' | translate"
             >
               <img src="assets/images/shared/eye.svg" alt="" class="" />
             </button>
             <button
               class="btn btn-sm"
-              (click)="editSubmission(submission.id); $event.stopPropagation()"
+              (click)="editSubmission(submission.submissionId); $event.stopPropagation()"
               [title]="'COMMON.EDIT' | translate"
             >
               <i class="pi pi-pencil"></i>

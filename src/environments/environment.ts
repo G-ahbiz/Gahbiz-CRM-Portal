@@ -63,10 +63,10 @@ export const environment = {
   },
   operations: {
     getAllServiceSubmissions: '/ServiceSubmissions',
-    getServiceSubmission: (id: string) => `/Operations/${id}`,
+    getServiceSubmission: (id: string) => `/ServiceSubmissions/${id}`,
     updateServiceSubmission: (clientServiceId: string) =>
       `/ServiceSubmissions/${clientServiceId}/status`,
-    rejectServiceSubmission: (serviceSubmitionId: string) =>
-      `/ServiceSubmissions/${serviceSubmitionId}/reject`,
+    rejectServiceSubmission: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/${serviceSubmissionId}/reject`,
   },
 };

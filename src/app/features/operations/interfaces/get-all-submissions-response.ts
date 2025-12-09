@@ -10,20 +10,10 @@ export type SubmissionStatus =
   | 'Completed'
   | 'Cancelled';
 
-export interface ServiceTransaction {
-  id: string;
-  serviceId: string;
-  clientServiceId: string;
-  userId: string;
-  note: string;
-  date: string;
-  status: SubmissionStatus;
-  files: ApiImage[];
-}
-
 export interface ServiceFileGroup {
   id: string;
   serviceFileId: string;
+  serviceFileName: string;
   userId: string;
   serviceSubmissionId: string;
   files: ApiImage[];
@@ -32,22 +22,20 @@ export interface ServiceFileGroup {
 }
 
 export interface ServiceSubmission {
-  // table columns
-  id: string;
-  userName: string;
+  submissionId: string;
+  customerName: string;
   serviceName: string;
-  fulfillmentDate: string;
-  lastUpdatedDate: string;
+  slaDeadline: string;
+  lastUpdated: string;
+  uploadedDocumentsCount: number;
   status: SubmissionStatus;
-
-  operationAgentId: string;
-  providerId: string;
+  serviceId: string;
   orderId: string;
+  userId: string;
   branchId: string;
   jsonData: string;
   createdDate: string;
+  fulfillmentDate: string;
   fulfillmentDuration: string;
-  serviceTransactions: ServiceTransaction[];
-  files: ApiImage[];
   serviceFiles: ServiceFileGroup[];
 }
