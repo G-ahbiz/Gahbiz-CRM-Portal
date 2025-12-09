@@ -59,7 +59,7 @@
       [id]="id"
       [type]="variant === 'password' ? (showPassword ? 'text' : 'password') : 'text'"
       class="form-control"
-      [class.ps-5]="variant === 'phone'"
+      [style.paddingLeft]="variant === 'phone' ? '100px' : ''" 
       [ngModel]="variant === 'phone' ? phoneNumber : value"
       (ngModelChange)="onInputChange($event)"
       (blur)="handleBlur()"

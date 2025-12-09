@@ -10,6 +10,7 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersResponse } from '../interfaces/get-customers-response';
 import { CustomerDetailsResponse } from '../interfaces/customer-details-response';
 import { UpdateCustomerRequest } from '../interfaces/update-customer-request';
+import { CustomersStatistics } from '../interfaces/customers-statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -47,5 +48,9 @@ export class CustomersFacadeService {
 
   exportCustomers(customerIds: string[]): Observable<Blob> {
     return this.customerService.exportCustomers(customerIds);
+  }
+
+  getStatistics(): Observable<ApiResponse<CustomersStatistics>> {
+    return this.customerService.getStatistics();
   }
 }

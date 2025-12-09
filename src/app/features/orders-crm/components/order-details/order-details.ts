@@ -328,12 +328,12 @@ ${order.orderItems
 
 ${this.translate.instant('orders-crm.order-details.totals')}
 ${this.translate.instant('orders-crm.order-details.items')}: ${this.itemsTotalQuantity()}
-${this.translate.instant('orders-crm.order-details.amount')}: $${this.itemsTotalPrice()}
+${this.translate.instant('orders-crm.order-details.subtotal')}: $${this.itemsTotalPrice()}
+${this.translate.instant('orders-crm.order-details.grand-total')}: $${this.itemsTotalPrice()}
 
 ${this.translate.instant(
   'orders-crm.order-details.payment-method'
 )}: ${this.getPaymentMethodTranslation(order.paymentMethod)}
-${this.translate.instant('orders-crm.order-details.amount')}: $${order.amount}
     `.trim();
   }
 }

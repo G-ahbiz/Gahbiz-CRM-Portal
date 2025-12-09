@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,12 @@ import { ApiResponse } from '@core/interfaces/api-response';
 import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-response';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { DialogModule } from 'primeng/dialog';
+import { CustomersFacadeService } from '@features/customers-crm/services/customers-facade.service';
+import { GetCustomersResponse } from '@features/customers-crm/interfaces/get-customers-response';
+import { InputComponent } from '@shared/components/input/input.component';
+import { PagenatedResponse } from '@core/interfaces/pagenated-response';
+import { GetCustomersFilters } from '@features/customers-crm/interfaces/get-customers-filters';
+import { ToastService } from '@core/services/toast.service';
 
 interface ServiceOption {
   id: string;
@@ -21,21 +27,22 @@ interface ServiceOption {
   currency?: string;
 }
 
+interface CustomerOption {
+  id: string;
+  name: string;
+  firstName: string;
+  lastName: string;
+}
+
 interface PaymentMethod {
   value: string;
   label: string;
   apiValue: 'CreditCard' | 'CashOnDelivery' | 'PayPal' | 'BankTransfer';
 }
 
-interface CountryCode {
-  code: string;
-  name: string;
-  flag: string;
-}
-
 @Component({
   selector: 'app-add-order',
-  imports: [TranslateModule, DialogModule, ReactiveFormsModule, CommonModule],
+  imports: [TranslateModule, DialogModule, InputComponent, ReactiveFormsModule, CommonModule],
   templateUrl: './add-order.html',
   styleUrl: './add-order.css',
 })
@@ -49,6 +56,8 @@ export class AddOrder implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private leadsService = inject(LeadsFacadeService);
   private cdr = inject(ChangeDetectorRef);
+  private customersFacade = inject(CustomersFacadeService);
+  private toastService = inject(ToastService);
 
   private formSubscriptions: Subscription = new Subscription();
 
@@ -68,40 +77,30 @@ export class AddOrder implements OnInit, OnDestroy {
 
   // Data for dropdowns
   readonly paymentMethods: PaymentMethod[] = [
-    { value: 'credit_card', label: 'Credit Card', apiValue: 'CreditCard' },
     { value: 'cash', label: 'Cash on Delivery', apiValue: 'CashOnDelivery' },
-    { value: 'paypal', label: 'PayPal', apiValue: 'PayPal' },
-    { value: 'bank_transfer', label: 'Bank Transfer', apiValue: 'BankTransfer' },
   ];
 
   serviceOptions: ServiceOption[] = []; // Will be populated from API
   isLoadingServices = false;
   serviceError: string | null = null;
+  customerOptions: CustomerOption[] = []; // New property for customer options
+  isLoadingCustomers = false; // New loading state for customers
+  customerError: string | null = null;
 
-  readonly countryCodes: CountryCode[] = [
-    { code: '+1', name: 'United States', flag: '🇺🇸' },
-    { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
-    { code: '+61', name: 'Australia', flag: '🇦🇺' },
-    { code: '+91', name: 'India', flag: '🇮🇳' },
-  ];
-
-  // Validation patterns
   private readonly patterns = {
-    phone: /^[0-9]{10,15}$/,
-    cardNumber: /^[0-9]{4}\s?[0-9]{4}\s?[0-9]{4}\s?[0-9]{4}$/,
-    securityCode: /^[0-9]{3,4}$/,
+    phone: /^(?=.*\d.*\d.*\d.*\d.*\d.*\d.*\d.*\d.*\d.*\d)[\d\s\-\(\)]{10,20}$/,
     postalCode: /^[A-Z0-9\s-]{3,10}$/i,
   };
 
   constructor() {
     this.addOrderForm = this.createForm();
     this.servicesFormArray = this.addOrderForm.get('services') as FormArray;
-    this.setupConditionalValidation();
   }
 
   ngOnInit(): void {
     this.subscribeToFormChanges();
-    this.loadServices(); // Load services from API
+    this.loadServices();
+    this.loadCustomers();
   }
 
   ngOnDestroy(): void {
@@ -110,8 +109,7 @@ export class AddOrder implements OnInit, OnDestroy {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      // Customer Information - Customer ID is now required
-      customerId: ['', [Validators.required, Validators.maxLength(50)]],
+      customerId: ['', Validators.required],
       firstName: [
         '',
         [Validators.required, Validators.maxLength(50), Validators.pattern(/^[a-zA-Z\s]*$/)],
@@ -123,8 +121,7 @@ export class AddOrder implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
 
       // Phone
-      phoneCode: ['+1', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(this.patterns.phone)]],
+      phone: ['', [Validators.required, this.phoneValidator.bind(this)]],
 
       // Address
       address: ['', [Validators.required, Validators.maxLength(200)]],
@@ -134,10 +131,7 @@ export class AddOrder implements OnInit, OnDestroy {
       country: ['United States', Validators.required],
 
       // Payment
-      paymentMethod: ['', Validators.required],
-      cardNumber: ['', [Validators.pattern(this.patterns.cardNumber)]],
-      cardSecurityCode: ['', [Validators.pattern(this.patterns.securityCode)]],
-      cardExpiry: ['', [Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
+      paymentMethod: ['cash', Validators.required],
 
       // Services (using FormArray for multiple services)
       services: this.fb.array([this.createServiceControl()]),
@@ -147,6 +141,20 @@ export class AddOrder implements OnInit, OnDestroy {
     });
   }
 
+  private phoneValidator(control: any): { [key: string]: any } | null {
+    if (!control.value) {
+      return null;
+    }
+
+    const digitsOnly = control.value.replace(/\D/g, '');
+
+    if (digitsOnly.length >= 10 && digitsOnly.length <= 15) {
+      return null;
+    }
+
+    return { phone: true };
+  }
+
   private loadServices(): void {
     this.isLoadingServices = true;
     this.serviceError = null;
@@ -154,7 +162,6 @@ export class AddOrder implements OnInit, OnDestroy {
     this.leadsService.getAllServices().subscribe({
       next: (response: ApiResponse<PaginatedServices>) => {
         if (response?.succeeded && response.data?.items) {
-          // Map ServiceDetails to ServiceOption format
           this.serviceOptions = response.data.items
             .filter((service) => service.active)
             .map((service: ServiceDetails) => ({
@@ -166,7 +173,7 @@ export class AddOrder implements OnInit, OnDestroy {
             }));
         } else {
           this.serviceError = 'Failed to load services';
-          this.serviceOptions = this.getDefaultServiceOptions();
+          this.toastService.error('Failed to load services. Please try again.');
         }
         this.isLoadingServices = false;
         this.cdr.detectChanges();
@@ -174,19 +181,98 @@ export class AddOrder implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Failed to load services:', error);
         this.serviceError = 'Failed to load services. Please try again.';
-        this.serviceOptions = this.getDefaultServiceOptions();
+        this.toastService.error('Failed to load services. Please try again.');
         this.isLoadingServices = false;
         this.cdr.detectChanges();
       },
     });
   }
 
-  private getDefaultServiceOptions(): ServiceOption[] {
-    return [
-      { id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', name: 'Consultation' },
-      { id: '3fa85f64-5717-4562-b3fc-2c963f66afa7', name: 'Maintenance' },
-      { id: '3fa85f64-5717-4562-b3fc-2c963f66afa8', name: 'Installation' },
-    ];
+  getCustomerName(customerId: string): string {
+    const customer = this.customerOptions.find((c) => c.id === customerId);
+    return customer ? customer.name : 'Unknown Customer';
+  }
+
+  private loadCustomers(): void {
+    this.isLoadingCustomers = true;
+    this.customerError = null;
+
+    const filters: GetCustomersFilters = {
+      pageNumber: 1,
+      pageSize: 1000000000,
+      sortColumn: '',
+      sortDirection: 'ASC',
+    };
+
+    this.customersFacade.getAllCustomers(filters).subscribe({
+      next: (response: PagenatedResponse<GetCustomersResponse>) => {
+        if (response?.items) {
+          this.customerOptions = response.items.map((customer: GetCustomersResponse) => {
+            const { firstName, lastName } = this.parseFullName(customer.fullName);
+
+            return {
+              id: customer.id,
+              name: customer.fullName || 'Unknown Customer',
+              firstName: firstName,
+              lastName: lastName,
+            };
+          });
+        } else {
+          this.customerError = 'No customers found';
+          this.customerOptions = [];
+        }
+        this.isLoadingCustomers = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Failed to load customers:', error);
+        this.customerError = 'Failed to load customers. Please try again.';
+        this.customerOptions = [];
+        this.toastService.error('Failed to load customers. Please try again.');
+        this.isLoadingCustomers = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  private parseFullName(fullName: string): { firstName: string; lastName: string } {
+    if (!fullName) return { firstName: '', lastName: '' };
+
+    const parts = fullName.trim().split(/\s+/);
+
+    if (parts.length === 1) {
+      return { firstName: parts[0], lastName: '' };
+    }
+
+    // For names with 2+ parts, take first word as first name, rest as last name
+    return {
+      firstName: parts[0],
+      lastName: parts.slice(1).join(' '),
+    };
+  }
+
+  // Add this method to handle customer selection
+  onCustomerSelect(event: any): void {
+    const customerId = event.target.value;
+
+    if (!customerId) {
+      this.addOrderForm.patchValue({
+        firstName: '',
+        lastName: '',
+        email: '',
+      });
+      return;
+    }
+
+    const selectedCustomer = this.customerOptions.find((customer) => customer.id === customerId);
+
+    if (selectedCustomer) {
+      this.addOrderForm.patchValue({
+        firstName: selectedCustomer.firstName || '',
+        lastName: selectedCustomer.lastName || '',
+        email: '',
+      });
+    }
   }
 
   private createServiceControl(): FormGroup {
@@ -208,32 +294,6 @@ export class AddOrder implements OnInit, OnDestroy {
 
   get servicesControls() {
     return (this.addOrderForm.get('services') as FormArray).controls;
-  }
-
-  private setupConditionalValidation(): void {
-    const cardControls = ['cardNumber', 'cardSecurityCode', 'cardExpiry'];
-
-    this.formSubscriptions.add(
-      this.addOrderForm.get('paymentMethod')?.valueChanges.subscribe((method: string) => {
-        cardControls.forEach((controlName) => {
-          const control = this.addOrderForm.get(controlName);
-          if (method === 'credit_card') {
-            const validators = [Validators.required];
-            if (controlName === 'cardNumber')
-              validators.push(Validators.pattern(this.patterns.cardNumber));
-            if (controlName === 'cardSecurityCode')
-              validators.push(Validators.pattern(this.patterns.securityCode));
-            if (controlName === 'cardExpiry')
-              validators.push(Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/));
-            control?.setValidators(validators);
-          } else {
-            control?.clearValidators();
-            control?.setValue(''); // Clear values when not needed
-          }
-          control?.updateValueAndValidity();
-        });
-      }) ?? new Subscription()
-    );
   }
 
   private subscribeToFormChanges(): void {
@@ -278,6 +338,20 @@ export class AddOrder implements OnInit, OnDestroy {
     const code = this.addOrderForm.get('phoneCode')?.value || '';
     const number = this.addOrderForm.get('phone')?.value || '';
     return `${code}${number}`;
+  }
+
+  getPhoneErrorMessage(): string {
+    const phoneControl = this.getFormControl('phone');
+
+    if (phoneControl?.errors?.['required']) {
+      return 'Phone number is required';
+    }
+
+    if (phoneControl?.errors?.['pattern']) {
+      return 'Please enter a valid phone number (10-20 digits with optional spaces, dashes, or parentheses)';
+    }
+
+    return 'Please enter a valid phone number';
   }
 
   getFormControl(controlName: string) {
@@ -333,16 +407,17 @@ export class AddOrder implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (orderId) => {
-          this.successMessage = 'Order created successfully!';
           this.createdOrderId = orderId;
+          this.toastService.success('Order created successfully!');
 
           // Auto-redirect after 2 seconds
           setTimeout(() => {
-            this.router.navigate(['/orders', orderId]);
-          }, 2000);
+            this.router.navigate(['/main/orders/orders-main']);
+          }, 1000);
         },
         error: (error) => {
-          this.errorMessage = error.message || 'Failed to create order. Please try again.';
+          const errorMessage = error.message || 'Failed to create order. Please try again.';
+          this.toastService.error(errorMessage);
         },
       });
   }
@@ -424,7 +499,7 @@ export class AddOrder implements OnInit, OnDestroy {
   }
 
   // Import Dialog Methods
-  showImportDialog(): void {
+  /*showImportDialog(): void {
     this.importDialogVisible = true;
     this.resetImportState();
   }
@@ -524,5 +599,5 @@ export class AddOrder implements OnInit, OnDestroy {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
+  }*/
 }

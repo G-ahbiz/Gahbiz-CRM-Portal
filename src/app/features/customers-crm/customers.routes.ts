@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
-import { AddCustomers } from './components/add-customers/add-customers';
 
 export const customersRoutes: Routes = [
   {
     path: 'customers-main',
     loadComponent: () =>
-      import('./components/customers-content/customers-content').then((m) => m.CustomersContent),
+      import('./components/customers-content/customers-content').then((m) => m.CustomerContent),
   },
   {
     path: 'add-customer',

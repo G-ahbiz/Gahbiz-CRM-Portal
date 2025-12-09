@@ -356,13 +356,10 @@
             <div class="text-muted small">{{ 'orders-crm.order-details.subtotal' | translate }}</div>
             <div class="fw-medium">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
           </div>
-          <div class="text-end">
-            <div class="text-muted small">{{ 'orders-crm.order-details.tax' | translate }}</div>
-            <div class="fw-medium">${{ (itemsTotalPrice() * 0.1) | number:'1.2-2' }}</div>
-          </div>
+          <!-- Removed tax section -->
           <div class="text-end">
             <div class="text-gray-700 fw-semibold">{{ 'orders-crm.order-details.grand-total' | translate }}</div>
-            <div class="fw-bold text-primary fs-5">${{ (itemsTotalPrice() * 1.1) | number:'1.2-2' }}</div>
+            <div class="fw-bold text-primary fs-5">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
           </div>
         </div>
       </div>

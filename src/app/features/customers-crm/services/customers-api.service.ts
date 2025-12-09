@@ -9,6 +9,7 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersFilters } from '../interfaces/get-customers-filters';
 import { CustomerDetailsResponse } from '../interfaces/customer-details-response';
 import { UpdateCustomerRequest } from '../interfaces/update-customer-request';
+import { CustomersStatistics } from '../interfaces/customers-statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -55,13 +56,10 @@ export class CustomersApiService {
     return this.http.delete<ApiResponse<string>>(url);
   }
 
-  updateCustomer(
-    id: string,
-    data: UpdateCustomerRequest
-  ): Observable<ApiResponse<string>> {
+  updateCustomer(id: string, data: UpdateCustomerRequest): Observable<ApiResponse<string>> {
     const url = `${this.baseUrl}${environment.customers.updateCustomer}`;
     return this.http.put<ApiResponse<string>>(url, data, {
-      params: { customerId: id }
+      params: { customerId: id },
     });
   }
 
@@ -73,5 +71,10 @@ export class CustomersApiService {
   exportCustomers(customerIds: string[]): Observable<Blob> {
     const url = `${this.baseUrl}${environment.customers.exportCustomers}`;
     return this.http.post<Blob>(url, { customerIds }, { responseType: 'blob' as 'json' });
+  }
+
+  getStatistics(): Observable<ApiResponse<CustomersStatistics>> {
+    const url = `${this.baseUrl}${environment.statistics.getCustomerStatistics}`;
+    return this.http.get<ApiResponse<CustomersStatistics>>(url);
   }
 }
