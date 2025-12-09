@@ -57,6 +57,7 @@ export const environment = {
     getOrder: (id: string) => `/CRMOrders/${id}`,
     addOrder: '/CRMOrders/manual',
     addOrderFromLead: '/CRMOrders/from-lead',
+    importOrders: '/CRMOrders/import',
   },
   statistics: {
     getOrderStatistics: '/Statistics/orders',

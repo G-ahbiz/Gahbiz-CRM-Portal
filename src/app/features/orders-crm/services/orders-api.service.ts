@@ -6,6 +6,8 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { OrderListItem } from '../interfaces/order-list-item';
 import { OrderDetails } from '../interfaces/order-details';
 import { StatisticsResponse } from '../interfaces/statistics-response';
+import { catchError, Observable } from 'rxjs';
+import { CreateOrderRequest } from '../interfaces/create-order-request';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +27,19 @@ export class OrdersApiService {
   getOrderById(id: string) {
     const url = `${this.apiUrl}${environment.crmOrder.getOrder(id)}`;
     return this.http.get<ApiResponse<OrderDetails>>(url);
+  }
+
+  createOrder(orderData: CreateOrderRequest): Observable<ApiResponse<string>> {
+    const url = `${this.apiUrl}${environment.crmOrder.addOrder}`;
+    return this.http.post<ApiResponse<string>>(url, orderData);
+  }
+
+  importOrders(file: File): Observable<ApiResponse<any>> {
+    const formData = new FormData();
+    formData.append('ExcelFile', file, file.name);
+
+    const url = `${this.apiUrl}${environment.crmOrder.importOrders}`;
+    return this.http.post<ApiResponse<any>>(url, formData);
   }
 
   getOrderStatistics() {

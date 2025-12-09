@@ -1,132 +1,628 @@
 <div class="container-fluid p-0 m-0">
-  <div class="order-details-top w-100 d-flex justify-content-start align-items-center gap-3">
-
-    <!-- Back Button -->
-    <div class="order-details-back-btn-container">
-      <button class="back-btn btn btn-sm p-2 border-0 d-flex justify-content-center align-items-center"
-        (click)="goBack()">
-        <i class="pi pi-chevron-left fs-875"></i>
+  <!-- Top Container -->
+  <div class="leads-add-top-container w-100 d-flex justify-content-start align-items-center gap-3 mb-4">
+    <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
+      <div class="leads-add-back-btn-container">
+        <button
+          class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
+          (click)="goBack()" [disabled]="isSubmitting">
+          <i class="pi pi-chevron-left fs-875"></i>
+        </button>
+      </div>
+      <div class="leads-add-title-container">
+        <h1 class="mb-0 fs-4 fw-bold">Add Order</h1>
+      </div>
+    </div>
+    <div class="export-btn-container">
+      <button
+        class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+        (click)="showImportDialog()">
+        <i class="pi pi-upload fs-875"></i>
+        Import Orders
       </button>
     </div>
-
-    <!-- Title -->
-    <div class="order-details-title-container">
-      <h1 class="mb-0 fs-4 fw-bold">
-        {{'orders-crm.add-order-page.title' | translate}}
-      </h1>
-    </div>
-
   </div>
 
-  <form [formGroup]="addOrderForm"
-    class="add-order-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white">
-
-    <!-- Full Name Container -->
-    <div class="fullName-container d-flex justify-content-between align-items-start gap-3 w-100">
-      <div class="form-group w-100">
-        <label for="firstName">First Name</label>
-        <input type="text" name="firstName" id="firstName" class="form-control" placeholder="First Name"
-          formControlName="firstName">
+  <!-- Import Dialog -->
+  <p-dialog 
+    header="Import Orders" 
+    [(visible)]="importDialogVisible" 
+    [modal]="true" 
+    [style]="{ width: '30rem' }"
+    [closable]="!isImporting"
+    [closeOnEscape]="!isImporting">
+    
+    <div class="d-flex flex-column gap-3">
+      <!-- Instructions -->
+      <span class="text-secondary">
+        Upload an Excel file (.xlsx, .xls, .csv) to import multiple orders at once.
+      </span>
+      
+      <!-- File Selection -->
+      <div class="form-group">
+        <label for="fileInput" class="form-label">Select Excel File</label>
+        <input 
+          type="file" 
+          #fileInput 
+          id="fileInput" 
+          class="form-control" 
+          accept=".xlsx,.xls,.csv"
+          (change)="onFileSelected($event)"
+          [disabled]="isImporting" />
+        <small class="text-muted">Supported formats: .xlsx, .xls, .csv (Max 10MB)</small>
       </div>
-      <div class="form-group w-100">
-        <label for="lastName">Last Name</label>
-        <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Last Name"
-          formControlName="lastName">
-      </div>
+      
+      <!-- Selected File Info -->
+      @if (selectedFileName) {
+        <div class="alert alert-info py-2 d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <i class="pi pi-file me-2"></i>
+            <div>
+              <div class="fw-bold">{{ selectedFileName }}</div>
+              @if (selectedFile) {
+                <small class="text-muted">{{ formatFileSize(selectedFile.size) }}</small>
+              }
+            </div>
+          </div>
+          <button 
+            type="button" 
+            class="btn btn-sm btn-outline-danger"
+            (click)="selectedFile = null; selectedFileName = null"
+            [disabled]="isImporting">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+      }
+      
+      <!-- Import Error Message -->
+      @if (importErrorMessage) {
+        <div class="alert alert-danger py-2 d-flex align-items-center gap-2">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ importErrorMessage }}</span>
+        </div>
+      }
+      
+      <!-- Import Success Message -->
+      @if (importSuccessMessage) {
+        <div class="alert alert-success py-2 d-flex align-items-center gap-2">
+          <i class="pi pi-check-circle"></i>
+          <span>{{ importSuccessMessage }}</span>
+        </div>
+      }
     </div>
+    
+    <!-- Dialog Footer -->
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="closeImportDialog()" 
+        [disabled]="isImporting">
+        Cancel
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        (click)="importOrders()"
+        [disabled]="!selectedFile || isImporting">
+        @if (!isImporting) {
+          <span>
+            <i class="pi pi-upload me-2"></i>
+            Import
+          </span>
+        } @else {
+          <span>
+            <i class="pi pi-spin pi-spinner me-2"></i>
+            Importing...
+          </span>
+        }
+      </button>
+    </div>
+  </p-dialog>
 
-    <!-- Email & Phone Container -->
-    <div class="emailPhone-container d-flex justify-content-between align-items-start gap-3 w-100">
-      <!-- Email Container -->
-      <div class="form-group w-100">
-        <label for="email">Email
-          <span class="" [class]="checkValidity('email')">*</span>
-        </label>
-        <input type="email" name="email" id="email" class="form-control" placeholder="Email" formControlName="email">
+  <!-- Loading State -->
+  <div *ngIf="isSubmitting" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error/Success Messages -->
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = null"></button>
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+    {{ successMessage }}
+    <button type="button" class="btn-close" (click)="successMessage = null"></button>
+    <div *ngIf="createdOrderId" class="mt-2">
+      <small>Order ID: {{ createdOrderId }}</small>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <form [formGroup]="addOrderForm" (ngSubmit)="onSubmit()" novalidate
+    class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-5 mt-4 p-5 bg-white">
+
+    <!-- Customer Information Section -->
+    <div class="w-100">
+      <h5 class="mb-3 fw-bold">Customer Information</h5>
+
+      <!-- Customer ID & First Name Container -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <!-- Customer ID Container -->
+        <div class="form-group w-100">
+          <label for="customerId">
+            Customer ID
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="customerId" id="customerId" class="form-control" placeholder="Enter customer ID"
+            formControlName="customerId" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('customerId')?.invalid && getFormControl('customerId')?.touched) {
+            <span class="text-danger">Customer ID is required</span>
+            }
+          </div>
+        </div>
+
+        <!-- First Name Container -->
+        <div class="form-group w-100">
+          <label for="firstName">
+            First Name
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="firstName" id="firstName" class="form-control" placeholder="Enter first name"
+            formControlName="firstName" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('firstName')?.invalid && getFormControl('firstName')?.touched) {
+            <span class="text-danger">First name is required</span>
+            }
+          </div>
+        </div>
       </div>
+
+      <!-- Last Name & Email Container -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <!-- Last Name Container -->
+        <div class="form-group w-100">
+          <label for="lastName">
+            Last Name
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="lastName" id="lastName" class="form-control" placeholder="Enter last name"
+            formControlName="lastName" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('lastName')?.invalid && getFormControl('lastName')?.touched) {
+            <span class="text-danger">Last name is required</span>
+            }
+          </div>
+        </div>
+
+        <!-- Email Container -->
+        <div class="form-group w-100">
+          <label for="email">
+            Email Address
+            <span class="text-danger">*</span>
+          </label>
+          <input type="email" name="email" id="email" class="form-control" placeholder="customer@example.com"
+            formControlName="email" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('email')?.invalid && getFormControl('email')?.touched) {
+            @if (getFormControl('email')?.errors?.['required']) {
+            <span class="text-danger">Email is required</span>
+            }
+            @if (getFormControl('email')?.errors?.['email']) {
+            <span class="text-danger">Please enter a valid email</span>
+            }
+            }
+          </div>
+        </div>
+      </div>
+
       <!-- Phone Container -->
-      <div class="form-group w-100">
-        <label for="phone">Phone
-          <span class="" [class]="checkValidity('phone')">*</span>
-        </label>
-        <div class="d-flex justify-content-between align-items-center gap-0">
-          <select name="phone-code" id="phone-code" class="form-select w-25" formControlName="phoneCode">
-            <option selected value="+1">+1</option>
-            <option value="+20">+20</option>
-            <option value="+34">+34</option>
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <!-- Phone Code Container -->
+        <div class="form-group w-100">
+          <label for="phoneCode">
+            Country Code
+            <span class="text-danger">*</span>
+          </label>
+          <select name="phoneCode" id="phoneCode" class="form-select" formControlName="phoneCode"
+            [attr.disabled]="isSubmitting ? true : null">
+            <option *ngFor="let country of countryCodes" [value]="country.code">
+              {{ country.flag }} {{ country.code }}
+            </option>
           </select>
-          <input type="tel" name="phone" id="phone" class="form-control w-75" placeholder="Phone"
-            formControlName="phone">
+        </div>
+
+        <!-- Phone Number Container -->
+        <div class="form-group w-100">
+          <label for="phone">
+            Phone Number
+            <span class="text-danger">*</span>
+          </label>
+          <input type="tel" name="phone" id="phone" class="form-control" placeholder="1234567890"
+            formControlName="phone" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('phone')?.invalid && getFormControl('phone')?.touched) {
+            @if (getFormControl('phone')?.errors?.['required']) {
+            <span class="text-danger">Phone number is required</span>
+            }
+            @if (getFormControl('phone')?.errors?.['pattern']) {
+            <span class="text-danger">Please enter 10-15 digits</span>
+            }
+            }
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Address & Postal Code Container -->
-    <div class="address-postalCode-container d-flex justify-content-between align-items-start gap-3 w-100">
-      <div class="form-group w-100">
-        <label for="address">Address
-          <span class="" [class]="checkValidity('address')">*</span>
-        </label>
-        <input type="text" name="address" id="address" class="form-control" placeholder="Address"
-          formControlName="address">
+    <!-- Address Information Section -->
+    <div class="w-100">
+      <h5 class="mb-3 fw-bold">Address Information</h5>
+
+      <!-- Street Address Container -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <!-- Address Container -->
+        <div class="form-group w-100">
+          <label for="address">
+            Street Address
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="address" id="address" class="form-control" placeholder="Enter street address"
+            formControlName="address" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('address')?.invalid && getFormControl('address')?.touched) {
+            <span class="text-danger">Address is required</span>
+            }
+          </div>
+        </div>
       </div>
-      <div class="form-group w-100">
-        <label for="postalCode">Postal Code
-          <span class="" [class]="checkValidity('postalCode')">*</span>
-        </label>
-        <input type="text" name="postalCode" id="postalCode" class="form-control" placeholder="Postal Code"
-          formControlName="postalCode">
+
+      <!-- City & State Container -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <!-- City Container -->
+        <div class="form-group w-100">
+          <label for="city">
+            City
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="city" id="city" class="form-control" placeholder="Enter city" formControlName="city"
+            [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('city')?.invalid && getFormControl('city')?.touched) {
+            <span class="text-danger">City is required</span>
+            }
+          </div>
+        </div>
+
+        <!-- State Container -->
+        <div class="form-group w-100">
+          <label for="state">
+            State
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="state" id="state" class="form-control" placeholder="Enter state"
+            formControlName="state" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('state')?.invalid && getFormControl('state')?.touched) {
+            <span class="text-danger">State is required</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Postal Code & Country Container -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <!-- Postal Code Container -->
+        <div class="form-group w-100">
+          <label for="postalCode">
+            Postal Code
+            <span class="text-danger">*</span>
+          </label>
+          <input type="text" name="postalCode" id="postalCode" class="form-control" placeholder="12345"
+            formControlName="postalCode" [attr.disabled]="isSubmitting ? true : null" />
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('postalCode')?.invalid && getFormControl('postalCode')?.touched) {
+            <span class="text-danger">Postal code is required</span>
+            }
+          </div>
+        </div>
+
+        <!-- Country Container -->
+        <div class="form-group w-100">
+          <label for="country">
+            Country
+            <span class="text-danger">*</span>
+          </label>
+          <select name="country" id="country" class="form-select" formControlName="country"
+            [attr.disabled]="isSubmitting ? true : null">
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Canada">Canada</option>
+            <option value="Australia">Australia</option>
+            <option value="India">India</option>
+          </select>
+          <div class="error-message d-flex justify-content-start align-items-start">
+            @if (getFormControl('country')?.invalid && getFormControl('country')?.touched) {
+            <span class="text-danger">Country is required</span>
+            }
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Country & State Container -->
-    <div class="country-State-container d-flex justify-content-between align-items-start gap-3 w-100">
-      <div class="form-group w-100">
-        <label for="country">Country
-          <span class="" [class]="checkValidity('country')">*</span>
-        </label>
-        <input type="text" name="country" id="country" class="form-control" placeholder="Country"
-          formControlName="country">
+    <!-- Payment Method Section -->
+    <div class="w-100">
+      <h5 class="mb-3 fw-bold">Payment Method</h5>
+
+      <!-- Payment Method Label -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <div class="form-group w-100">
+          <label for="paymentMethod">
+            Select Payment Method
+            <span class="text-danger">*</span>
+          </label>
+
+          <!-- Payment Options Row (Original UI - side by side on large screens) -->
+          <div class="row g-3">
+            <!-- Credit Card Option Column -->
+            <div class="col-lg-6">
+              <div class="payment-option h-100" [class.selected]="paymentMethodValue === 'credit_card'"
+                (click)="!isSubmitting && setPaymentMethod('credit_card')">
+                <div
+                  class="d-flex align-items-center justify-content-between p-3 border rounded bg-white cursor-pointer h-100"
+                  [class.border-primary]="paymentMethodValue === 'credit_card'">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="radio-circle" [class.active]="paymentMethodValue === 'credit_card'">
+                      <div *ngIf="paymentMethodValue === 'credit_card'" class="inner-dot"></div>
+                    </div>
+                    <span class="fw-500">Credit Card</span>
+                  </div>
+                  <div class="d-flex gap-1">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" height="14"
+                      alt="Visa">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" height="14"
+                      alt="Mastercard">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cash Option Column -->
+            <div class="col-lg-6">
+              <div class="payment-option h-100" [class.selected]="paymentMethodValue === 'cash'"
+                (click)="!isSubmitting && setPaymentMethod('cash')">
+                <div
+                  class="d-flex align-items-center justify-content-between p-3 border rounded bg-white cursor-pointer h-100"
+                  [class.border-primary]="paymentMethodValue === 'cash'">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="radio-circle" [class.active]="paymentMethodValue === 'cash'">
+                      <div *ngIf="paymentMethodValue === 'cash'" class="inner-dot"></div>
+                    </div>
+                    <span class="fw-500">Cash on Delivery</span>
+                  </div>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <circle cx="12" cy="12" r="2" />
+                    <path d="M6 12h.01M18 12h.01" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method Error -->
+          <div class="error-message d-flex justify-content-start align-items-start mt-2">
+            @if (getFormControl('paymentMethod')?.invalid && getFormControl('paymentMethod')?.touched) {
+            <span class="text-danger">Payment method is required</span>
+            }
+          </div>
+        </div>
       </div>
-      <div class="form-group w-100">
-        <label for="state">State
-          <span class="" [class]="checkValidity('state')">*</span>
-        </label>
-        <input type="text" name="state" id="state" class="form-control" placeholder="State" formControlName="state">
+
+      <!-- Credit Card Details (only for Credit Card) -->
+      <div *ngIf="paymentMethodValue === 'credit_card'" class="w-100 mt-3">
+        <div class="p-4 bg-light border rounded">
+          <!-- Card Number -->
+          <div class="mb-3">
+            <label for="cardNumber" class="form-label">
+              Card Number
+              <span class="text-danger">*</span>
+            </label>
+            <input type="text" name="cardNumber" id="cardNumber" class="form-control" placeholder="1234 5678 9101 3456"
+              formControlName="cardNumber" [attr.disabled]="isSubmitting ? true : null" />
+            <div class="error-message d-flex justify-content-start align-items-start">
+              @if (getFormControl('cardNumber')?.invalid && getFormControl('cardNumber')?.touched) {
+              @if (getFormControl('cardNumber')?.errors?.['required']) {
+              <span class="text-danger">Card number is required</span>
+              }
+              @if (getFormControl('cardNumber')?.errors?.['pattern']) {
+              <span class="text-danger">Please enter a valid card number (16 digits)</span>
+              }
+              }
+            </div>
+          </div>
+
+          <!-- Security Code & Expiration Date Container -->
+          <div class="d-flex justify-content-between align-items-start gap-3 w-100">
+            <!-- Security Code Container -->
+            <div class="form-group w-100">
+              <label for="cardSecurityCode">
+                Security Code
+                <span class="text-danger">*</span>
+              </label>
+              <input type="text" name="cardSecurityCode" id="cardSecurityCode" class="form-control" placeholder="***"
+                formControlName="cardSecurityCode" [attr.disabled]="isSubmitting ? true : null" />
+              <div class="error-message d-flex justify-content-start align-items-start">
+                @if (getFormControl('cardSecurityCode')?.invalid && getFormControl('cardSecurityCode')?.touched) {
+                @if (getFormControl('cardSecurityCode')?.errors?.['required']) {
+                <span class="text-danger">Security code is required</span>
+                }
+                @if (getFormControl('cardSecurityCode')?.errors?.['pattern']) {
+                <span class="text-danger">Please enter a valid security code (3-4 digits)</span>
+                }
+                }
+              </div>
+            </div>
+
+            <!-- Expiration Date Container -->
+            <div class="form-group w-100">
+              <label for="cardExpiry">
+                Expiration Date
+                <span class="text-danger">*</span>
+              </label>
+              <input type="text" name="cardExpiry" id="cardExpiry" class="form-control" placeholder="MM/YY"
+                formControlName="cardExpiry" [attr.disabled]="isSubmitting ? true : null" />
+              <div class="error-message d-flex justify-content-start align-items-start">
+                @if (getFormControl('cardExpiry')?.invalid && getFormControl('cardExpiry')?.touched) {
+                @if (getFormControl('cardExpiry')?.errors?.['required']) {
+                <span class="text-danger">Expiration date is required</span>
+                }
+                @if (getFormControl('cardExpiry')?.errors?.['pattern']) {
+                <span class="text-danger">Please enter a valid expiration date (MM/YY)</span>
+                }
+                }
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Payment Method & Services Container -->
-    <div class="paymentMethod-services-container d-flex justify-content-between align-items-start gap-3 w-100">
-      <!-- Payment Method Container -->
-      <div class="form-group w-100">
-        <label for="paymentMethod">Payment Method
-          <span class="" [class]="checkValidity('paymentMethod')">*</span>
-        </label>
-        <select name="paymentMethod" id="paymentMethod" class="form-select" placeholder="Payment Method"
-          formControlName="paymentMethod">
-          <option selected disabled>Select Payment Method</option>
-          <option value="1">cash</option>
-          <option value="2">credit card</option>
-          <option value="3">debit card</option>
-          <option value="4">bank transfer</option>
-          <option value="5">other</option>
-        </select>
+    <!-- Services Section -->
+    <div class="w-100">
+      <h5 class="mb-3 fw-bold">Services</h5>
+
+      <div formArrayName="services">
+        <div *ngFor="let service of servicesControls; let i = index" class="mb-4">
+          <div [formGroupName]="i" class="d-flex justify-content-between align-items-start gap-3 w-100">
+            <!-- Service Container -->
+            <div class="form-group w-100">
+              <label for="service{{i}}">
+                Service
+                <span class="text-danger">*</span>
+              </label>
+              <select name="service{{i}}" id="service{{i}}" class="form-select" formControlName="serviceId"
+                [attr.disabled]="isSubmitting || isLoadingServices ? true : null">
+                <option value="" disabled>Choose a service</option>
+
+                <!-- Loading state -->
+                @if (isLoadingServices) {
+                <option disabled>Loading services...</option>
+                }
+
+                <!-- Error state -->
+                @if (serviceError && !isLoadingServices) {
+                <option disabled>{{ serviceError }}</option>
+                }
+
+                <!-- Services list -->
+                @if (!isLoadingServices && !serviceError) {
+                @for (serviceOpt of serviceOptions; track serviceOpt.id) {
+                <option [value]="serviceOpt.id">
+                  {{ serviceOpt.name }}
+                  @if (serviceOpt.price && serviceOpt.currency) {
+                  <span class="text-muted"> - {{ serviceOpt.price }} {{ serviceOpt.currency }}</span>
+                  }
+                </option>
+                }
+                }
+
+                <!-- Fallback if no services loaded -->
+                @if (!isLoadingServices && !serviceError && serviceOptions.length === 0) {
+                <option disabled>No services available</option>
+                }
+              </select>
+              <div class="error-message d-flex justify-content-start align-items-start">
+                @if (service.get('serviceId')?.invalid && service.get('serviceId')?.touched) {
+                <span class="text-danger">Please select a service</span>
+                }
+              </div>
+            </div>
+
+            <!-- Quantity Container -->
+            <div class="form-group w-100">
+              <label for="quantity{{i}}">
+                Quantity
+                <span class="text-danger">*</span>
+              </label>
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-outline-secondary border py-2 px-3" (click)="updateQuantity(-1, i)"
+                  [disabled]="isSubmitting || isLoadingServices">-</button>
+                <input type="text" name="quantity{{i}}" id="quantity{{i}}"
+                  class="form-control text-center border-top border-bottom border-start-0 border-end-0 rounded-0"
+                  style="width: 50px; height: 42px;" formControlName="quantity" readonly>
+                <button type="button" class="btn btn-outline-secondary border py-2 px-3" (click)="updateQuantity(1, i)"
+                  [disabled]="isSubmitting || isLoadingServices">+</button>
+              </div>
+            </div>
+
+            <!-- Remove Button Container -->
+            <div class="form-group" style="width: 80px; margin-top: 28px;">
+              <button *ngIf="i > 0" type="button" class="btn btn-danger btn-sm w-100" (click)="removeService(i)"
+                [disabled]="isSubmitting || isLoadingServices">
+                Remove
+              </button>
+            </div>
+          </div>
+
+          <!-- Service description display -->
+          @if (service.get('serviceId')?.value) {
+          @if (getServiceDescription(service.get('serviceId')?.value)) {
+          <div class="mt-2 text-muted small">
+            <i>{{ getServiceDescription(service.get('serviceId')?.value) }}</i>
+          </div>
+          }
+          }
+        </div>
       </div>
 
-      <!-- Services Container -->
-      <div class="form-group w-100">
-        <label for="services">Services</label>
-        <select name="services" id="services" class="form-select" placeholder="Choose Services"
-          formControlName="services">
-          <option selected value="1">Service 1</option>
-          <option value="2">Service 2</option>
-          <option value="3">Service 3</option>
-        </select>
+      <!-- Add Service Button -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <div class="form-group w-100">
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addService()"
+            [disabled]="isSubmitting || isLoadingServices">
+            <span class="fs-5 lh-1">+</span> Add Another Service
+          </button>
+        </div>
       </div>
     </div>
 
+    <!-- Additional Information Section -->
+    <div class="w-100">
+      <h5 class="mb-3 fw-bold">Additional Information</h5>
 
+      <!-- Notes Container -->
+      <div class="d-flex justify-content-between align-items-start gap-3 w-100 mb-3">
+        <div class="form-group w-100">
+          <label for="note">Notes (Optional)</label>
+          <textarea name="note" id="note" class="form-control" rows="4" placeholder="Any additional information..."
+            formControlName="note" [attr.disabled]="isSubmitting ? true : null"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button Container -->
+    <div class="buttons-container w-100 d-flex justify-content-between align-items-center gap-3">
+      <!-- Cancel Button -->
+      <button type="button"
+        class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+        (click)="goBack()" [disabled]="isSubmitting">
+        Cancel
+      </button>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+        [disabled]="isSubmitting || addOrderForm.invalid">
+        @if (!isSubmitting) {
+        <span>Create Order</span>
+        } @else {
+        <span>Creating...</span>
+        }
+      </button>
+    </div>
   </form>
-
 </div>

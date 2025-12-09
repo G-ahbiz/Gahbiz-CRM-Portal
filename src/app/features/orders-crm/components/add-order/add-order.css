@@ -1,18 +1,226 @@
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Form styles to match leads form */
+.leads-add-form {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leads-add-top-container {
+  padding: 20px 0;
+}
+
 .back-btn {
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+}
 
-  &:active, &:focus {
-    outline: none;
-    border: none;
+.back-btn:hover {
+  background-color: #f8f9fa;
+}
+
+.fs-875 {
+  font-size: 0.875rem;
+}
+
+/* Form group styling */
+.form-group {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #495057;
+}
+
+.form-control,
+.form-select {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 10px 12px;
+  height: 40px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  background-color: #e9ecef;
+  opacity: 0.7;
+}
+
+/* Error message styling */
+.error-message {
+  min-height: 24px;
+  margin-top: 4px;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 0.875rem;
+}
+
+/* Original Payment Method UI Styling (kept from previous version) */
+.payment-option {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-option .border {
+  transition: border-color 0.2s ease;
+}
+
+.payment-option.selected .border {
+  border-color: #0d6efd !important;
+  border-width: 2px;
+}
+
+/* Radio circle */
+.radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #adb5bd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease;
+}
+
+.radio-circle.active {
+  border-color: #0d6efd;
+}
+
+.inner-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #0d6efd;
+  border-radius: 50%;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
   }
-
-  &:active {
-    scale: 0.95;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-label {
-  color: var(--text-clr) !important;
-  font-weight: 600 !important;
-  margin-bottom: 0.5rem !important;
+/* Credit card form styling */
+.bg-light {
+  background-color: #DCE8F3 !important;
+  border-color: #005DB5 !important;
+}
+
+.bg-light input {
+  background-color: #DCE8F3 !important;
+}
+
+.border-primary {
+  border-color: #0d6efd !important;
+}
+
+/* Button styling */
+.btn-outline-primary {
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.primary-bg-clr {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.primary-bg-clr:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.outline-primary-clr {
+  color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* Quantity buttons */
+.btn-outline-secondary {
+  border-color: #dee2e6;
+  color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+}
+
+/* Alert styling */
+.alert {
+  border-radius: 6px;
+  border: none;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.btn-close {
+  padding: 1.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .leads-add-form {
+    padding: 1.5rem !important;
+  }
+
+  .d-flex.justify-content-between.align-items-start.gap-3.w-100 {
+    flex-direction: column;
+    gap: 1rem !important;
+  }
+
+  .form-group {
+    width: 100% !important;
+  }
+
+  /* Stack payment options on mobile */
+  .payment-option .col-lg-6 {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
