@@ -443,17 +443,87 @@ export class AllData {
   }
 
   salesAgentTabel: any[] = [
-    { leadId: 67821, customer: 'Karin Daniel', phoneNumber: '(555)123-4567', DateAdded: '20/06/2025', source: 'Website', status: 'Contacted' },
-    { leadId: 67822, customer: 'Jenna Will', phoneNumber: '(555)123-4567', DateAdded: '15/09/2025', source: 'Referral', status: 'Assigned' },
-    { leadId: 67851, customer: 'Ashley Rio ', phoneNumber: '(555)123-4567', DateAdded: '15/11/2025', source: 'Social Media', status: 'Successful' },
-    { leadId: 87821, customer: 'Laura John', phoneNumber: '(555)123-4567', DateAdded: '15/10/2025', source: 'Website', status: 'Contacted' },
-    { leadId: 65321, customer: 'Julia Harry', phoneNumber: '(555)123-4567', DateAdded: '16/11/2025', source: 'Website', status: 'Lost' },
-    { leadId: 12521, customer: 'Maria Michael', phoneNumber: '(555)123-4567', DateAdded: '13/11/2025', source: 'Referral', status: 'Contacted' },
-    { leadId: 45621, customer: 'Emma Jack', phoneNumber: '(555)123-4567', DateAdded: '12/06/2025', source: 'Website', status: 'Contacted' },
-    { leadId: 56421, customer: 'Jamie Danny', phoneNumber: '(555)123-4567', DateAdded: '10/10/2025', source: 'Website', status: 'Contacted' },
-    { leadId: 67222, customer: 'Charlie Riki', phoneNumber: '(555)123-4567', DateAdded: '18/11/2025', source: 'Social Media', status: 'Contacted' },
-    { leadId: 67894, customer: 'Olivia Brown', phoneNumber: '(555)123-4567', DateAdded: '17/10/2025', source: 'Website', status: 'Contacted' },
-  ]
+    {
+      leadId: 67821,
+      customer: 'Karin Daniel',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '20/06/2025',
+      source: 'Website',
+      status: 'Contacted',
+    },
+    {
+      leadId: 67822,
+      customer: 'Jenna Will',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '15/09/2025',
+      source: 'Referral',
+      status: 'Assigned',
+    },
+    {
+      leadId: 67851,
+      customer: 'Ashley Rio ',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '15/11/2025',
+      source: 'Social Media',
+      status: 'Successful',
+    },
+    {
+      leadId: 87821,
+      customer: 'Laura John',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '15/10/2025',
+      source: 'Website',
+      status: 'Contacted',
+    },
+    {
+      leadId: 65321,
+      customer: 'Julia Harry',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '16/11/2025',
+      source: 'Website',
+      status: 'Lost',
+    },
+    {
+      leadId: 12521,
+      customer: 'Maria Michael',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '13/11/2025',
+      source: 'Referral',
+      status: 'Contacted',
+    },
+    {
+      leadId: 45621,
+      customer: 'Emma Jack',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '12/06/2025',
+      source: 'Website',
+      status: 'Contacted',
+    },
+    {
+      leadId: 56421,
+      customer: 'Jamie Danny',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '10/10/2025',
+      source: 'Website',
+      status: 'Contacted',
+    },
+    {
+      leadId: 67222,
+      customer: 'Charlie Riki',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '18/11/2025',
+      source: 'Social Media',
+      status: 'Contacted',
+    },
+    {
+      leadId: 67894,
+      customer: 'Olivia Brown',
+      phoneNumber: '(555)123-4567',
+      DateAdded: '17/10/2025',
+      source: 'Website',
+      status: 'Contacted',
+    },
+  ];
 
   getSalesAgentTabel() {
     return this.salesAgentTabel;
@@ -1070,6 +1140,46 @@ export class AllData {
 
   getCustomersCardsData() {
     return this.customersCardsData;
+  }
+
+  // Operations Cards Data
+  operationsCardsData: LogCard[] = [
+    {
+      title: 'Assigned Requests',
+      value: 250,
+      icon: 'requests',
+      bgColor: 'card-blue',
+      rating: 2,
+      ratingStatues: 'up',
+    },
+    {
+      title: 'Completed Requests',
+      value: 180,
+      icon: 'completed',
+      bgColor: 'card-green',
+      rating: 4,
+      ratingStatues: 'up',
+    },
+    {
+      title: 'Pending Requests',
+      value: 40,
+      icon: 'pending',
+      bgColor: 'card-yellow',
+      rating: 1,
+      ratingStatues: 'down',
+    },
+    {
+      title: 'Avg. Processing Time',
+      value: 3,
+      icon: 'processing',
+      bgColor: 'card-red',
+      rating: 3,
+      ratingStatues: 'down',
+    },
+  ];
+
+  getOperationsCardsData() {
+    return this.operationsCardsData;
   }
 
   // Client Payment

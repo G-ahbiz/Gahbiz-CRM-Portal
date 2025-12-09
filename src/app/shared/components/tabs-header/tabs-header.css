@@ -1,3 +1,8 @@
 .rating-value {
   color: #616161;
 }
+
+.card-icon img {
+  width: 40px;
+  height: 40px;
+}

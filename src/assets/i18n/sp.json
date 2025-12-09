@@ -196,6 +196,7 @@
     "LOG_OUT": "Cerrar Sesión"
   },
   "sidebar": {
+    "operations": "Operaciones",
     "dashboard": "Panel",
     "customers": "Clientes",
     "sales": "Ventas",
@@ -526,5 +527,27 @@
       "update-lead": "Actualizar Cliente Potencial",
       "updating": "Actualizando..."
     }
+  },
+  "operations": {
+    "export": "Exportar",
+    "add-request": "Agregar Solicitud",
+    "search": "Buscar...",
+    "all-requests": "Todas las Solicitudes",
+    "request-id": "ID de Solicitud",
+    "customer": "Cliente",
+    "service-type": "Tipo de Servicio",
+    "sla-deadline": "Fecha Límite SLA",
+    "last-updated": "Última Actualización",
+    "documents": "Documentos",
+    "status": "Estado",
+    "actions": "Acciones",
+    "no-requests-found": "No se encontraron solicitudes",
+    "from-date": "Desde Fecha",
+    "to-date": "Hasta Fecha",
+    "select-all": "Seleccionar todas las solicitudes en esta página",
+    "select-request": "Seleccionar esta solicitud",
+    "selected-for-export": "solicitud(es) seleccionada(s) para exportar",
+    "filter-by-status": "Filtrar por Estado",
+    "all-statuses": "Todos los Estados"
   }
 }

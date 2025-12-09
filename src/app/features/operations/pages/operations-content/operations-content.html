@@ -1,0 +1,18 @@
+<div class="container-fluid p-0 m-0">
+  <!-- Operations CRM Container -->
+  <div
+    class="invoices-crm-container p-3 d-flex flex-column justify-content-start align-items-start gap-3"
+  >
+    <div class="invoices-top w-100">
+      <app-tabs-header
+        [title]="'Operations'"
+        [cardsData]="cardsData"
+        [folderName]="'operations'"
+      ></app-tabs-header>
+    </div>
+
+    <div class="invoices-table overflow-x-hidden overflow-y-auto w-100">
+      <app-operations-table></app-operations-table>
+    </div>
+  </div>
+</div>

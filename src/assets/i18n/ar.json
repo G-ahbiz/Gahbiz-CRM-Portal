@@ -196,6 +196,7 @@
     "LOG_OUT": "تسجيل الخروج"
   },
   "sidebar": {
+    "operations": "العمليات",
     "dashboard": "الرئيسية",
     "customers": "العملاء",
     "sales": "المبيعات",
@@ -211,7 +212,7 @@
     "arabic": "العربية",
     "spanish": "الاسبانية"
   },
-    "customers-crm": {
+  "customers-crm": {
     "export": "تصدير",
     "add-customer": "إضافة عميل",
     "search": "بحث...",
@@ -271,13 +272,12 @@
     },
     "edit-customer-page": {
       "title": "تعديل العميل",
-      "updating": "جاري التحديث..."
+      "updating": "جاري التحديث...",
       "select-user": "اختر المستخدم",
       "saving": "جاري الحفظ..."
     }
   },
-  "sales-crm": {
-  },
+  "sales-crm": {},
   "invoices-crm": {
     "export": "تصدير",
     "add-invoice": "إضافة فاتورة",
@@ -504,5 +504,27 @@
       "update-lead": "تحديث العميل المتوقع",
       "updating": "جاري التحديث..."
     }
+  },
+  "operations": {
+    "export": "تصدير",
+    "add-request": "إضافة طلب",
+    "search": "بحث...",
+    "all-requests": "جميع الطلبات",
+    "request-id": "رقم الطلب",
+    "customer": "العميل",
+    "service-type": "نوع الخدمة",
+    "sla-deadline": "موعد التسليم",
+    "last-updated": "آخر تحديث",
+    "documents": "المستندات",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "no-requests-found": "لم يتم العثور على طلبات",
+    "from-date": "من تاريخ",
+    "to-date": "إلى تاريخ",
+    "select-all": "اختيار جميع الطلبات في هذه الصفحة",
+    "select-request": "اختيار هذا الطلب",
+    "selected-for-export": "طلب (طلبات) مختارة للتصدير",
+    "filter-by-status": "تصفية حسب الحالة",
+    "all-statuses": "جميع الحالات"
   }
 }
