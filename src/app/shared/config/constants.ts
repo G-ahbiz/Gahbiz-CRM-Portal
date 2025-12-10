@@ -160,3 +160,13 @@ export const SOURCE_TYPES = [
   { value: 'Manual', label: 'LEADS.SOURCE_TYPES.MANUAL' },
   { value: 'Provider', label: 'LEADS.SOURCE_TYPES.PROVIDER' },
 ];
+
+export const ORDER_STATUS_OPTION = [
+  { value: 'Created', label: 'orders-crm.order-details.created' },
+  { value: 'Paid', label: 'orders-crm.order-details.paid' },
+  { value: 'Pending', label: 'orders-crm.order-details.pending' },
+  { value: 'Processing', label: 'orders-crm.order-details.processing' },
+  { value: 'Completed', label: 'orders-crm.order-details.completed' },
+  { value: 'Cancelled', label: 'orders-crm.order-details.cancelled' },
+  { value: 'Refunded', label: 'orders-crm.order-details.refunded' },
+];

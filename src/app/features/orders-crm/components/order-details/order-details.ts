@@ -1,13 +1,22 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs/operators';
+import {
+  finalize,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  tap,
+} from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
+import { Observable, of, Subject } from 'rxjs';
 import { OrderDetails } from '../../interfaces/order-details';
 import { OrdersFacadeService } from '@features/orders-crm/services/orders-facade.service';
 import { ToastService } from '@core/services/toast.service';
+import { UpdateStatusRequest } from '@features/orders-crm/interfaces/update-status-request';
+import { OrderStatus } from '@features/orders-crm/type/order-status.enum';
 
 @Component({
   selector: 'app-order-details',
@@ -17,6 +26,7 @@ import { ToastService } from '@core/services/toast.service';
 })
 export class OrderDetailsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly orderFacade = inject(OrdersFacadeService);
   private readonly toast = inject(ToastService);
@@ -27,11 +37,90 @@ export class OrderDetailsComponent implements OnInit {
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
   saving = signal<boolean>(false);
+  updatingStatus = signal<boolean>(false);
+  savingNote = signal<boolean>(false);
   currentNote = signal<string>('');
   selectedItems = signal<string[]>([]);
   allItemsSelected = signal<boolean>(false);
+  showStatusConfirmation = signal<boolean>(false);
+  pendingStatusChange = signal<OrderStatus | null>(null);
 
-  // Computed values for order totals
+  // Make this public for template access
+  noteChanged = signal<boolean>(false);
+
+  // Auto-save note
+  private noteSaveSubject = new Subject<string>();
+
+  // Status options with their properties
+  statusOptions = signal<
+    Array<{
+      value: OrderStatus;
+      label: string;
+      icon: string;
+      color: string;
+      requiresConfirmation: boolean;
+      confirmationMessage: string;
+    }>
+  >([
+    {
+      value: 'Created',
+      label: 'orders-crm.order-details.created',
+      icon: 'pi pi-plus-circle',
+      color: 'bg-gray-100 text-gray-800',
+      requiresConfirmation: false,
+      confirmationMessage: '',
+    },
+    {
+      value: 'Paid',
+      label: 'orders-crm.order-details.paid',
+      icon: 'pi pi-check-circle',
+      color: 'bg-green-100 text-green-800',
+      requiresConfirmation: true,
+      confirmationMessage: 'orders-crm.order-details.confirm-paid',
+    },
+    {
+      value: 'Pending',
+      label: 'orders-crm.order-details.pending',
+      icon: 'pi pi-clock',
+      color: 'bg-yellow-100 text-yellow-800',
+      requiresConfirmation: false,
+      confirmationMessage: '',
+    },
+    {
+      value: 'Processing',
+      label: 'orders-crm.order-details.processing',
+      icon: 'pi pi-cog',
+      color: 'bg-blue-100 text-blue-800',
+      requiresConfirmation: false,
+      confirmationMessage: '',
+    },
+    {
+      value: 'Completed',
+      label: 'orders-crm.order-details.completed',
+      icon: 'pi pi-check',
+      color: 'bg-green-100 text-green-800',
+      requiresConfirmation: true,
+      confirmationMessage: 'orders-crm.order-details.confirm-completed',
+    },
+    {
+      value: 'Cancelled',
+      label: 'orders-crm.order-details.cancelled',
+      icon: 'pi pi-times-circle',
+      color: 'bg-red-100 text-red-800',
+      requiresConfirmation: true,
+      confirmationMessage: 'orders-crm.order-details.confirm-cancelled',
+    },
+    {
+      value: 'Refunded',
+      label: 'orders-crm.order-details.refunded',
+      icon: 'pi pi-dollar',
+      color: 'bg-purple-100 text-purple-800',
+      requiresConfirmation: true,
+      confirmationMessage: 'orders-crm.order-details.confirm-refunded',
+    },
+  ]);
+
+  // Computed values
   itemsTotalQuantity = computed(() => {
     const items = this.order()?.orderItems || [];
     return items.reduce((total, item) => total + item.quantity, 0);
@@ -42,9 +131,60 @@ export class OrderDetailsComponent implements OnInit {
     return items.reduce((total, item) => total + item.total, 0);
   });
 
-  // Helper method to get status class
-  getStatusClass(status: string): string {
-    switch (status?.toLowerCase()) {
+  canEditOrder = computed(() => {
+    const status = this.order()?.status;
+    const nonEditableStatuses: OrderStatus[] = ['Cancelled', 'Refunded', 'Completed'];
+    return !nonEditableStatuses.includes(status as OrderStatus);
+  });
+
+  // Initialize auto-save for notes
+  constructor() {
+    // Auto-save note with debounce
+    this.noteSaveSubject
+      .pipe(
+        debounceTime(2000),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+        tap(() => this.savingNote.set(true)),
+        switchMap((note) =>
+          this.saveNoteInternal(note).pipe(finalize(() => this.savingNote.set(false)))
+        )
+      )
+      .subscribe({
+        error: (err) => {
+          console.error('Auto-save note error', err);
+          this.toast.error(this.translate.instant('orders-crm.order-details.note-save-error'));
+        },
+      });
+  }
+
+  private toOrderStatus(status: string): OrderStatus {
+    const validStatuses: OrderStatus[] = [
+      'Created',
+      'Paid',
+      'Pending',
+      'Processing',
+      'Completed',
+      'Cancelled',
+      'Refunded',
+    ];
+
+    return validStatuses.includes(status as OrderStatus) ? (status as OrderStatus) : 'Created';
+  }
+
+  // Fix: Make this method accept string and return the status option
+  getStatusOption(status: string | OrderStatus | null | undefined) {
+    if (!status) return null;
+    const statusEnum = this.toOrderStatus(status);
+    return this.statusOptions().find((opt) => opt.value === statusEnum);
+  }
+
+  // Fix: Accept string parameter instead of OrderStatus
+  getStatusClass(status: string | OrderStatus | null | undefined): string {
+    if (!status) return 'bg-gray-100 text-gray-800';
+
+    const statusLower = status.toString().toLowerCase();
+    switch (statusLower) {
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'completed':
@@ -56,19 +196,26 @@ export class OrderDetailsComponent implements OnInit {
         return 'bg-blue-100 text-blue-800';
       case 'paid':
         return 'bg-green-100 text-green-800';
+      case 'refunded':
+        return 'bg-purple-100 text-purple-800';
+      case 'created':
+        return 'bg-gray-100 text-gray-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   }
 
-  // Get translated status
-  getStatusTranslation(status: string): string {
-    const statusMap: { [key: string]: string } = {
+  getStatusTranslation(status: string | null | undefined): string {
+    if (!status) return '';
+
+    const statusMap: Record<string, string> = {
+      created: 'orders-crm.order-details.created',
       pending: 'orders-crm.order-details.pending',
       processing: 'orders-crm.order-details.processing',
       completed: 'orders-crm.order-details.completed',
       cancelled: 'orders-crm.order-details.cancelled',
       paid: 'orders-crm.order-details.paid',
+      refunded: 'orders-crm.order-details.refunded',
       unpaid: 'orders-crm.order-details.unpaid',
       failed: 'orders-crm.order-details.failed',
     };
@@ -77,9 +224,11 @@ export class OrderDetailsComponent implements OnInit {
     return this.translate.instant(key);
   }
 
-  // Helper method to get payment status class
-  getPaymentStatusClass(status: string): string {
-    switch (status?.toLowerCase()) {
+  getPaymentStatusClass(status: string | null | undefined): string {
+    if (!status) return 'bg-gray-100 text-gray-800';
+
+    const statusLower = status.toLowerCase();
+    switch (statusLower) {
       case 'paid':
         return 'bg-green-100 text-green-800';
       case 'pending':
@@ -91,43 +240,35 @@ export class OrderDetailsComponent implements OnInit {
     }
   }
 
-  // Get translated payment status
-  getPaymentStatusTranslation(status: string): string {
-    const statusMap: { [key: string]: string } = {
+  getPaymentStatusTranslation(status: string | null | undefined): string {
+    if (!status) return '';
+
+    const statusMap: Record<string, string> = {
       paid: 'orders-crm.order-details.paid',
       pending: 'orders-crm.order-details.pending',
       failed: 'orders-crm.order-details.failed',
     };
-
-    const key = statusMap[status.toLowerCase()] || status;
-    return this.translate.instant(key);
+    return this.translate.instant(statusMap[status.toLowerCase()] || status);
   }
 
-  // Get translated payment method
-  getPaymentMethodTranslation(method: string): string {
-    const methodMap: { [key: string]: string } = {
+  getPaymentMethodTranslation(method: string | null | undefined): string {
+    if (!method) return '';
+
+    const methodMap: Record<string, string> = {
       creditcard: 'orders-crm.order-details.credit-card',
       debitcard: 'orders-crm.order-details.debit-card',
       paypal: 'orders-crm.order-details.paypal',
       banktransfer: 'orders-crm.order-details.bank-transfer',
       cash: 'orders-crm.order-details.cash',
     };
-
-    const key = methodMap[method.toLowerCase()] || method;
-    return this.translate.instant(key);
+    return this.translate.instant(methodMap[method.toLowerCase()] || method);
   }
 
-  // Table selection methods
   toggleSelectAll(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.allItemsSelected.set(checked);
-
-    if (checked && this.order()?.orderItems) {
-      const allIds = this.order()!.orderItems.map((item) => item.id);
-      this.selectedItems.set(allIds);
-    } else {
-      this.selectedItems.set([]);
-    }
+    const items = this.order()?.orderItems || [];
+    this.selectedItems.set(checked ? items.map((item) => item.id) : []);
   }
 
   isItemSelected(itemId: string): boolean {
@@ -135,45 +276,34 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   toggleItemSelection(itemId: string): void {
-    if (this.isItemSelected(itemId)) {
-      this.selectedItems.set(this.selectedItems().filter((id) => id !== itemId));
-    } else {
-      this.selectedItems.set([...this.selectedItems(), itemId]);
-    }
-
-    // Update "select all" checkbox state
-    if (this.order()?.orderItems) {
-      const allSelected = this.order()!.orderItems.length === this.selectedItems().length;
-      this.allItemsSelected.set(allSelected);
-    }
+    const items = this.selectedItems();
+    this.selectedItems.set(
+      items.includes(itemId) ? items.filter((id) => id !== itemId) : [...items, itemId]
+    );
   }
 
   updateQuantity(itemId: string, change: number): void {
-    if (!this.order()?.orderItems) return;
+    if (!this.order()?.orderItems || !this.canEditOrder()) return;
 
-    const updatedItems = this.order()!.orderItems.map((item) => {
-      if (item.id === itemId) {
-        const newQuantity = Math.max(1, item.quantity + change);
-        return {
-          ...item,
-          quantity: newQuantity,
-          total: item.price * newQuantity,
-        };
-      }
-      return item;
-    });
+    const updatedItems = this.order()!.orderItems.map((item) =>
+      item.id === itemId
+        ? {
+            ...item,
+            quantity: Math.max(1, item.quantity + change),
+            total: item.price * Math.max(1, item.quantity + change),
+          }
+        : item
+    );
 
-    this.order.set({
-      ...this.order()!,
-      orderItems: updatedItems,
-    });
-
-    // Update the order amount
-    const totalAmount = updatedItems.reduce((sum, item) => sum + item.total, 0);
-    this.order.set({
-      ...this.order()!,
-      amount: totalAmount,
-    });
+    this.order.update((order) =>
+      order
+        ? {
+            ...order,
+            orderItems: updatedItems,
+            amount: updatedItems.reduce((sum, item) => sum + item.total, 0),
+          }
+        : order
+    );
 
     this.toast.success(this.translate.instant('orders-crm.order-details.quantity-updated'));
   }
@@ -199,7 +329,6 @@ export class OrderDetailsComponent implements OnInit {
         next: (response) => {
           if (response.data) {
             this.order.set({ ...response.data, id });
-
             this.loadNote(id);
           } else {
             this.error.set(this.translate.instant('orders-crm.order-details.order-not-found'));
@@ -217,41 +346,141 @@ export class OrderDetailsComponent implements OnInit {
     const savedNote = localStorage.getItem(`order-note-${orderId}`);
     if (savedNote) {
       this.currentNote.set(savedNote);
+      this.noteChanged.set(false);
     }
   }
 
-  saveNote(): void {
-    if (!this.order()) return;
+  onNoteChange(note: string): void {
+    this.currentNote.set(note);
+    this.noteChanged.set(true);
+    // Trigger auto-save
+    this.noteSaveSubject.next(note);
+  }
 
-    const orderId = this.order()?.id || '';
-    localStorage.setItem(`order-note-${orderId}`, this.currentNote());
-    this.toast.success(this.translate.instant('orders-crm.order-details.note-saved'));
+  saveNoteManual(): void {
+    if (!this.order() || !this.currentNote().trim()) return;
+
+    this.savingNote.set(true);
+    this.saveNoteInternal(this.currentNote())
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.savingNote.set(false))
+      )
+      .subscribe({
+        next: () => {
+          // Success handled in saveNoteInternal via tap
+        },
+        error: (err) => {
+          console.error('Error saving note manually', err);
+          this.toast.error(this.translate.instant('orders-crm.order-details.note-save-error'));
+        },
+      });
+  }
+
+  saveNoteToServer(): void {
+    this.saveNoteManual();
+  }
+
+  private saveNoteInternal(note: string): Observable<string> {
+    if (!this.order()) return of('');
+
+    const orderId = this.order()!.id;
+    const currentStatus = this.toOrderStatus(this.order()!.status);
+
+    const statusRequest: UpdateStatusRequest = {
+      status: currentStatus,
+      note: note.trim(),
+    };
+
+    // Save to localStorage first for immediate feedback
+    localStorage.setItem(`order-note-${orderId}`, note.trim());
+
+    return this.orderFacade.updateOrderStatus(orderId, statusRequest).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      tap(() => {
+        this.noteChanged.set(false);
+        this.toast.success(this.translate.instant('orders-crm.order-details.note-saved-server'));
+      })
+    );
   }
 
   onStatusChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
-    const newStatus = target.value;
+    const newStatus = this.toOrderStatus(target.value);
+    const currentStatus = this.toOrderStatus(this.order()?.status || 'Created');
 
-    if (this.order()) {
-      const updatedOrder = { ...this.order()!, status: newStatus };
-      this.order.set(updatedOrder);
+    if (newStatus === currentStatus) return;
 
-      this.toast.success(
-        this.translate.instant('orders-crm.order-details.status-changed', {
-          status: this.getStatusTranslation(newStatus),
-        })
-      );
+    const option = this.getStatusOption(newStatus);
+
+    if (option?.requiresConfirmation) {
+      this.pendingStatusChange.set(newStatus);
+      this.showStatusConfirmation.set(true);
+      return;
+    }
+
+    this.updateStatus(newStatus);
+  }
+
+  updateStatus(newStatus: OrderStatus): void {
+    if (!this.order()) return;
+
+    this.updatingStatus.set(true);
+    const orderId = this.order()!.id;
+    const note = this.currentNote().trim();
+
+    const statusRequest: UpdateStatusRequest = {
+      status: newStatus,
+      note: note,
+    };
+
+    this.orderFacade
+      .updateOrderStatus(orderId, statusRequest)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.updatingStatus.set(false))
+      )
+      .subscribe({
+        next: () => {
+          this.order.update((order) => (order ? { ...order, status: newStatus } : order));
+          this.showStatusConfirmation.set(false);
+          this.pendingStatusChange.set(null);
+
+          this.toast.success(
+            this.translate.instant('orders-crm.order-details.status-updated', {
+              status: this.getStatusTranslation(newStatus),
+            })
+          );
+        },
+        error: (err) => {
+          console.error('Error updating order status', err);
+          this.toast.error(this.translate.instant('orders-crm.order-details.status-update-error'));
+          // Reset the select dropdown to current status
+          this.order.update((order) => order);
+        },
+      });
+  }
+
+  confirmStatusChange(): void {
+    const status = this.pendingStatusChange();
+    if (status) {
+      this.updateStatus(status);
     }
   }
 
+  cancelStatusChange(): void {
+    this.showStatusConfirmation.set(false);
+    this.pendingStatusChange.set(null);
+  }
+
   saveOrder(): void {
-    if (!this.order()) {
-      this.toast.error(this.translate.instant('orders-crm.order-details.no-data'));
+    if (!this.order() || !this.canEditOrder()) {
+      this.toast.error(this.translate.instant('orders-crm.order-details.cannot-edit-order'));
       return;
     }
 
     this.saving.set(true);
-
+    // TODO: Implement actual save functionality
     setTimeout(() => {
       this.saving.set(false);
       this.toast.success(this.translate.instant('orders-crm.order-details.order-saved'));
@@ -259,7 +488,7 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    window.history.back();
+    this.router.navigate(['/main/orders/orders-main'], { relativeTo: this.route });
   }
 
   printOrder(): void {
@@ -273,10 +502,9 @@ export class OrderDetailsComponent implements OnInit {
     }
 
     this.loading.set(true);
-
+    // TODO: Implement actual invoice download
     setTimeout(() => {
       this.loading.set(false);
-
       const invoiceContent = this.generateInvoiceContent();
       const blob = new Blob([invoiceContent], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -285,7 +513,6 @@ export class OrderDetailsComponent implements OnInit {
       a.download = `invoice-${this.order()?.id?.slice(0, 8)}.txt`;
       a.click();
       window.URL.revokeObjectURL(url);
-
       this.toast.success(this.translate.instant('orders-crm.order-details.invoice-downloaded'));
     }, 1500);
   }

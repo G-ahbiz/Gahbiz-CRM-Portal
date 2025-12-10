@@ -18,20 +18,25 @@
     </header>
 
     <!-- Order ID & Actions Bar -->
-    <div class="bg-white rounded-3 p-4 shadow-sm border border-gray-100 mb-4 w-100">
+    <div class="bg-white rounded-3 p-4 shadow-sm border border-gray-100 mb-4">
       <div class="d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center gap-4">
-
         <!-- Left: ID, Date, Status -->
         <div class="d-flex flex-column gap-2">
           <div class="d-flex align-items-center gap-3">
-            <span class="fs-5 fw-bold text-gray-900">
-              {{ 'orders-crm.order-details.order-id' | translate }}<span class="fs-6 text-muted"> #{{ order()?.id ||
-                'N/A' }}</span>
-            </span>
+            <i class="pi pi-shopping-bag text-primary fs-4"></i>
+            <div>
+              <span class="fs-5 fw-bold text-gray-900">
+                {{ 'orders-crm.order-details.order-id' | translate }}
+                <span class="fs-6 text-muted">#{{ order()?.id?.slice(0, 8) || 'N/A' }}</span>
+              </span>
+            </div>
           </div>
           <div class="mt-2">
             <span [class]="getStatusClass(order()?.status || '')"
-              class="badge px-3 py-2 rounded-pill text-xs fw-medium">
+              class="badge px-3 py-2 rounded-pill text-xs fw-medium d-flex align-items-center gap-2">
+              @if (getStatusOption(order()?.status || 'Created')) {
+              <i [class]="getStatusOption(order()?.status || 'Created')?.icon"></i>
+              }
               {{ getStatusTranslation(order()?.status || '') }}
             </span>
           </div>
@@ -39,50 +44,154 @@
 
         <!-- Right: Actions -->
         <div class="d-flex flex-wrap align-items-center gap-3 w-100 w-xl-auto">
-
           <!-- Status Dropdown -->
-          <div class="position-relative" style="min-width: 160px;">
-            <select
-              class="form-select bg-gray-50 border border-gray-200 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 pe-4"
-              (change)="onStatusChange($event)">
-              <option selected disabled>
-                {{ 'orders-crm.order-details.change-status' | translate }}
-              </option>
-              <option value="Pending">{{ 'orders-crm.order-details.pending' | translate }}</option>
-              <option value="Processing">{{ 'orders-crm.order-details.processing' | translate }}</option>
-              <option value="Completed">{{ 'orders-crm.order-details.completed' | translate }}</option>
-              <option value="Cancelled">{{ 'orders-crm.order-details.cancelled' | translate }}</option>
-            </select>
+          <div class="position-relative" style="min-width: 180px;">
+            <div class="input-group">
+              <span class="input-group-text bg-gray-50 border-end-0">
+                <i class="pi pi-flag-fill"></i>
+              </span>
+              <select [value]="order()?.status" (change)="onStatusChange($event)"
+                [disabled]="updatingStatus() || !order() || !canEditOrder()"
+                class="form-select border-start-0 bg-gray-50 border-gray-200 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 pe-4"
+                title="{{ !canEditOrder() ? ('orders-crm.order-details.cannot-change-status' | translate) : '' }}">
+                <option value="" disabled>
+                  {{ 'orders-crm.order-details.change-status' | translate }}
+                </option>
+                @for (status of statusOptions(); track status.value) {
+                <option [value]="status.value" [disabled]="!canEditOrder() && status.value !== order()?.status">
+                  {{ status.label | translate }}
+                </option>
+                }
+              </select>
+              @if (updatingStatus()) {
+              <span class="input-group-text bg-gray-50 border-start-0">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </span>
+              }
+            </div>
           </div>
 
-          <button
-            class="btn btn-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover-bg-gray-100 px-4 py-2"
-            (click)="saveOrder()" [disabled]="saving()">
-            @if (saving()) {
-            <span class="spinner-border spinner-border-sm me-2"></span>
+          <!-- Note Input -->
+          <div class="position-relative flex-grow-1" style="max-width: 300px;">
+            <div class="input-group">
+              <span class="input-group-text bg-gray-50 border-end-0">
+                <i class="pi pi-comment"></i>
+              </span>
+              <input type="text" [ngModel]="currentNote()" (ngModelChange)="onNoteChange($event)"
+                placeholder="{{ 'orders-crm.order-details.add-note' | translate }}"
+                class="form-control border-start-0 bg-gray-50 border-gray-200 text-sm rounded-lg py-2"
+                [disabled]="savingNote() || updatingStatus()" />
+              <span class="input-group-text bg-gray-50 border-start-0">
+                @if (savingNote()) {
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                } @else if (noteChanged()) {
+                <i class="pi pi-circle text-warning" title="Unsaved changes"></i>
+                } @else {
+                <i class="pi pi-check-circle text-success" title="Note saved"></i>
+                }
+              </span>
+            </div>
+            @if (noteChanged()) {
+            <button (click)="saveNoteManual()"
+              class="btn btn-link btn-sm position-absolute end-0 mt-1 text-decoration-none" style="font-size: 0.75rem;">
+              <i class="pi pi-save me-1"></i>
+              {{ 'orders-crm.order-details.save' | translate }}
+            </button>
             }
-            {{ 'orders-crm.order-details.save' | translate }}
-          </button>
+          </div>
 
-          <button
-            class="btn btn-sm text-blue-600 bg-white border border-blue-100 rounded-lg hover-bg-blue-50 px-4 py-2 d-flex align-items-center gap-2"
-            (click)="downloadInvoice()" [disabled]="loading()">
-            @if (loading()) {
-            <span class="spinner-border spinner-border-sm"></span>
-            } @else {
-            <i class="pi pi-download"></i>
-            }
-            {{ 'orders-crm.order-details.download' | translate }}
-          </button>
+          <!-- Action Buttons -->
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2 px-3" (click)="saveOrder()"
+              [disabled]="saving() || !canEditOrder()"
+              title="{{ !canEditOrder() ? ('orders-crm.order-details.cannot-edit-order' | translate) : '' }}">
+              @if (saving()) {
+              <span class="spinner-border spinner-border-sm"></span>
+              } @else {
+              <i class="pi pi-save"></i>
+              }
+              <span class="d-none d-sm-inline">{{ 'orders-crm.order-details.save-order' | translate }}</span>
+            </button>
 
-          <button class="btn btn-sm p-2 text-gray-600 bg-white border border-gray-200 rounded-lg hover-bg-gray-50"
-            (click)="printOrder()">
-            <i class="pi pi-print"></i>
-            <span class="d-none d-sm-inline ms-1">{{ 'orders-crm.order-details.print' | translate }}</span>
-          </button>
+            <button class="btn btn-outline-success btn-sm d-flex align-items-center gap-2 px-3"
+              (click)="downloadInvoice()" [disabled]="loading()">
+              @if (loading()) {
+              <span class="spinner-border spinner-border-sm"></span>
+              } @else {
+              <i class="pi pi-download"></i>
+              }
+              <span class="d-none d-sm-inline">{{ 'orders-crm.order-details.download' | translate }}</span>
+            </button>
+
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3"
+              (click)="printOrder()">
+              <i class="pi pi-print"></i>
+              <span class="d-none d-sm-inline">{{ 'orders-crm.order-details.print' | translate }}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Status Change Confirmation Modal -->
+    @if (showStatusConfirmation() && pendingStatusChange()) {
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal fade show d-block" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title text-gray-900">
+              <i class="pi pi-exclamation-triangle text-warning me-2"></i>
+              {{ 'orders-crm.order-details.confirm-status-change-title' | translate }}
+            </h5>
+            <button type="button" class="btn-close" (click)="cancelStatusChange()"></button>
+          </div>
+          <div class="modal-body py-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div [class]="getStatusClass(order()?.status || '')"
+                class="badge px-3 py-2 rounded-pill text-xs fw-medium d-flex align-items-center gap-2">
+                @if (getStatusOption(order()?.status || 'Created')) {
+                <i [class]="getStatusOption(order()?.status || 'Created')?.icon"></i>
+                }
+                {{ getStatusTranslation(order()?.status || '') }}
+              </div>
+
+              <i class="pi pi-arrow-right text-muted"></i>
+
+              <div [class]="getStatusClass(pendingStatusChange()!)"
+                class="badge px-3 py-2 rounded-pill text-xs fw-medium d-flex align-items-center gap-2">
+                @if (getStatusOption(pendingStatusChange()!)) {
+                <i [class]="getStatusOption(pendingStatusChange()!)?.icon"></i>
+                }
+                {{ getStatusTranslation(pendingStatusChange()!) }}
+              </div>
+            </div>
+            <p class="text-muted mb-0">
+              {{ 'orders-crm.order-details.confirm-status-change-message' | translate }}
+            </p>
+            @if (pendingStatusChange() && getStatusOption(pendingStatusChange()!)?.confirmationMessage) {
+            <p class="alert alert-warning mt-3 mb-0 py-2">
+              <i class="pi pi-info-circle me-2"></i>
+              {{ getStatusOption(pendingStatusChange()!)?.confirmationMessage | translate }}
+            </p>
+            }
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-light" (click)="cancelStatusChange()">
+              {{ 'COMMON.CANCEL' | translate }}
+            </button>
+            <button type="button" class="btn btn-primary" (click)="confirmStatusChange()">
+              {{ 'COMMON.CONFIRM' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
 
     <!-- Loading State -->
     @if (loading()) {
@@ -252,7 +361,7 @@
                 <div class="d-flex justify-content-end mt-2">
                   <button
                     class="btn btn-sm px-3 py-1 text-xs fw-semibold text-blue-600 bg-white border border-gray-200 rounded hover-bg-gray-50"
-                    (click)="saveNote()">
+                    (click)="saveNoteToServer()">
                     {{ 'COMMON.SAVE' | translate }}
                   </button>
                 </div>

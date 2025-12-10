@@ -280,7 +280,24 @@
       "debit-card": "Debit Card",
       "paypal": "PayPal",
       "bank-transfer": "Bank Transfer",
-      "cash": "Cash"
+      "cash": "Cash",
+      "created": "Created",
+      "refunded": "Refunded",
+      "add-note": "Add a note...",
+      "save-note": "Save Note",
+      "save-order": "Save Order",
+      "cannot-change-status": "Cannot change status for completed/cancelled/refunded orders",
+      "cannot-edit-order": "This order cannot be edited",
+      "confirm-status-change-title": "Confirm Status Change",
+      "confirm-status-change-message": "Are you sure you want to change the order status?",
+      "confirm-paid": "Marking as paid will notify the customer",
+      "confirm-completed": "Marking as completed will finalize this order",
+      "confirm-cancelled": "Cancelling this order cannot be undone",
+      "confirm-refunded": "Refunding will process a refund to the customer",
+      "note-saved-server": "Note saved to server",
+      "note-save-error": "Failed to save note",
+      "status-updated": "Status updated to: {{status}}",
+      "status-update-error": "Failed to update status"
     },
     "add-order-page": {
       "title": "Add Order"
