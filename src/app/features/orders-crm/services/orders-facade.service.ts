@@ -9,6 +9,7 @@ import { CRMOrderRequestParams } from '../interfaces/CRM-order-request-params';
 import { OrderListItem } from '../interfaces/order-list-item';
 import { StatisticsResponse } from '../interfaces/statistics-response';
 import { CreateOrderRequest } from '../interfaces/create-order-request';
+import { UpdateStatusRequest } from '../interfaces/update-status-request';
 
 @Injectable({
   providedIn: 'root',
@@ -134,6 +135,17 @@ export class OrdersFacadeService {
       catchError((err) => {
         console.error('OrdersFacadeService.getStatistics error', err);
         this.toastService.error(err.message || 'Failed to load statistics');
+        return throwError(() => err);
+      })
+    );
+  }
+
+  updateOrderStatus(id: string, statusRequest: UpdateStatusRequest) {
+    return this.ordersApiService.updateOrderStatus(id, statusRequest).pipe(
+      map((res: ApiResponse<string>) => res.data),
+      catchError((err) => {
+        console.error('OrdersFacadeService.updateOrderStatus error', err);
+        this.toastService.error(err.message || 'Failed to update order status');
         return throwError(() => err);
       })
     );

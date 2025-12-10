@@ -8,6 +8,7 @@ import { OrderDetails } from '../interfaces/order-details';
 import { StatisticsResponse } from '../interfaces/statistics-response';
 import { catchError, Observable } from 'rxjs';
 import { CreateOrderRequest } from '../interfaces/create-order-request';
+import { UpdateStatusRequest } from '../interfaces/update-status-request';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +46,10 @@ export class OrdersApiService {
   getOrderStatistics() {
     const url = `${this.apiUrl}${environment.statistics.getOrderStatistics}`;
     return this.http.get<ApiResponse<StatisticsResponse>>(url);
+  }
+
+  updateOrderStatus(id: string, statusRequest: UpdateStatusRequest){
+    const url = `${this.apiUrl}${environment.crmOrder.updateOrderStatus(id)}`;
+    return this.http.patch<ApiResponse<string>>(url, statusRequest);
   }
 }

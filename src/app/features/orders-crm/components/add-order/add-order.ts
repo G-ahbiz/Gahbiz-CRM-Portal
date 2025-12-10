@@ -378,9 +378,9 @@ export class AddOrder implements OnInit, OnDestroy {
 
   goBack(): void {
     if (this.createdOrderId) {
-      this.router.navigate(['/orders', this.createdOrderId]);
+      this.router.navigate(['/main/orders/orders-main', this.createdOrderId]);
     } else {
-      this.router.navigate(['/orders']);
+      this.router.navigate(['/main/orders/orders-main']);
     }
   }
 
