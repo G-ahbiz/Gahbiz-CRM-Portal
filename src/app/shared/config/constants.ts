@@ -29,6 +29,10 @@ export const ROUTES = {
   getInvoiceDeatils: '/main/invoices/invoice-details',
   updateInvoice: '/main/invoices/update-invoice',
   addInvoice: '/main/invoices/add-invoice',
+
+  //Operations
+  getOperationFiles: (id: string) => `main/operations/operation-files/${id}`,
+  operations: '/main/operations',
 };
 
 export const USER_TYPES = {

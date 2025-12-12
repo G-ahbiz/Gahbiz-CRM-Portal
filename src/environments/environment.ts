@@ -71,5 +71,11 @@ export const environment = {
       `/ServiceSubmissions/${clientServiceId}/status`,
     rejectServiceSubmission: (serviceSubmissionId: string) =>
       `/ServiceSubmissions/${serviceSubmissionId}/reject`,
+    requestEdit: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/request-edit/${serviceSubmissionId}`,
+    acceptSubmission: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/accept-files/${serviceSubmissionId}`,
+    rejectSubmission: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/${serviceSubmissionId}/reject`,
   },
 };
