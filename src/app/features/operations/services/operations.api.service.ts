@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { GetSubmissionsFilters } from '../interfaces/get-submissions-filters';
+import { GetSubmissionDetails } from '../interfaces/get-submission-details';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,36 @@ export class OperationsApiService {
     return this.http.get<ApiResponse<PagenatedResponse<ServiceSubmission>>>(
       `${this.baseUrl}${environment.operations.getAllServiceSubmissions}`,
       { params }
+    );
+  }
+
+  getSubmissionDetails(id: string): Observable<ApiResponse<GetSubmissionDetails>> {
+    return this.http.get<ApiResponse<GetSubmissionDetails>>(
+      `${this.baseUrl}${environment.operations.getServiceSubmission(id)}`
+    );
+  }
+
+  requestEdit(
+    clientServiceId: string,
+    requests: { editRequests: { serviceFileId: string; comment: string }[] }
+  ): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(
+      `${this.baseUrl}${environment.operations.requestEdit(clientServiceId)}`,
+      requests
+    );
+  }
+
+  acceptSubmission(submissionId: string): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(
+      `${this.baseUrl}${environment.operations.acceptSubmission(submissionId)}`,
+      null
+    );
+  }
+
+  rejectSubmission(submissionId: string, rejectionReason: string): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(
+      `${this.baseUrl}${environment.operations.rejectServiceSubmission(submissionId)}`,
+      { rejectionReason: rejectionReason }
     );
   }
 }

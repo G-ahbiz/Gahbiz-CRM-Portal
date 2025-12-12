@@ -88,17 +88,6 @@
               class="status-filter"
             ></p-select>
           </div>
-
-          <!-- Add Request Button Container -->
-          <div class="d-flex justify-content-start align-items-center gap-0">
-            <button
-              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              (click)="addRequest()"
-            >
-              <img src="assets/images/shared/plus.svg" alt="" class="" />
-              {{ 'operations.add-request' | translate }}
-            </button>
-          </div>
         </div>
         <div class="title-container my-4">
           <h5 class="m-0 p-0">{{ 'operations.all-requests' | translate }}</h5>
@@ -185,7 +174,11 @@
           <td>{{ submission.slaDeadline | date : 'mediumDate' }}</td>
           <td>{{ submission.lastUpdated | date : 'mediumDate' }}</td>
           <td>
-            <button class="btn btn-sm" [title]="'operations.documents' | translate">
+            <button
+              class="btn btn-sm"
+              [title]="'operations.documents' | translate"
+              (click)="navigateOperationFiles(submission.submissionId)"
+            >
               <img
                 src="assets/images/operations/folder.svg"
                 alt="Documents"

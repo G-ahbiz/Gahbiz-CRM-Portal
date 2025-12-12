@@ -50,15 +50,32 @@ export const environment = {
     addInvoice: '/Invoices',
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
-    getStatistics: '/Statistics/invoices',
   },
   crmOrder: {
     getAllOrders: '/CRMOrders',
     getOrder: (id: string) => `/CRMOrders/${id}`,
     addOrder: '/CRMOrders/manual',
     addOrderFromLead: '/CRMOrders/from-lead',
+    importOrders: '/CRMOrders/import',
   },
   statistics: {
     getOrderStatistics: '/Statistics/orders',
+    geInvoicestStatistics: '/Statistics/invoices',
+    getCustomerStatistics: '/Statistics/customers',
+    getLeadsStatistics: '/Statistics/leads',
+  },
+  operations: {
+    getAllServiceSubmissions: '/ServiceSubmissions',
+    getServiceSubmission: (id: string) => `/ServiceSubmissions/${id}`,
+    updateServiceSubmission: (clientServiceId: string) =>
+      `/ServiceSubmissions/${clientServiceId}/status`,
+    rejectServiceSubmission: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/${serviceSubmissionId}/reject`,
+    requestEdit: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/request-edit/${serviceSubmissionId}`,
+    acceptSubmission: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/accept-files/${serviceSubmissionId}`,
+    rejectSubmission: (serviceSubmissionId: string) =>
+      `/ServiceSubmissions/${serviceSubmissionId}/reject`,
   },
 };
