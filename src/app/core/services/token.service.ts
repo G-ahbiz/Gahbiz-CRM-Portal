@@ -38,6 +38,11 @@ export class TokenService {
   }
 
   setAccessToken(token: string): void {
+    if (!this.validateToken(token)) {
+      console.warn('Invalid token format');
+      return;
+    }
+
     if (!token || !isPlatformBrowser(this.platformId)) {
       console.warn('Cannot set access token - invalid token or not in browser');
       return;
@@ -177,6 +182,57 @@ export class TokenService {
   hasRefreshToken(): boolean {
     const token = this.getRefreshToken();
     return token !== null && token.trim() !== '';
+  }
+
+  extractRolesFromToken(tokenData?: TokenData | null): string[] | null {
+    try {
+      const token = tokenData?.accessToken ?? this.getAccessToken();
+      if (!token) return null;
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return (
+        payload?.roles ??
+        payload?.role ??
+        payload?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ??
+        null
+      );
+    } catch {
+      return null;
+    }
+  }
+
+  isTokenExpired(token?: string): boolean {
+    try {
+      const tokenToCheck = token || this.getAccessToken();
+      if (!tokenToCheck) return true;
+
+      const payload = JSON.parse(atob(tokenToCheck.split('.')[1]));
+      const expiry = payload.exp;
+      if (!expiry) return false;
+
+      return Date.now() >= expiry * 1000;
+    } catch {
+      return true;
+    }
+  }
+
+  validateToken(token: string): boolean {
+    try {
+      if (!token || token.trim() === '') return false;
+
+      // Check if it's a valid JWT format
+      const parts = token.split('.');
+      if (parts.length !== 3) return false;
+
+      // Try to decode
+      const payload = JSON.parse(atob(parts[1]));
+
+      // Check for required fields
+      if (!payload || typeof payload !== 'object') return false;
+
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   clearAllTokens(): void {

@@ -1,97 +1,297 @@
+/* Base Grid Layout */
 .sign-in-page {
-  position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-areas: 'signin' 'branding';
   min-height: 100vh;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-areas: 'signin branding';
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 10%;
-      bottom: 10%;
-      left: 50%;
-      width: 1px;
-      background-color: theme('colors.white');
-      transform: translateX(-0.5px);
-      z-index: 10;
-    }
-  }
 }
 
+/* Left Side - Sign In Form */
 .signin-container {
-  grid-area: signin;
-  min-height: 100vh;
-
-  @media (max-width: 640px) {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: white;
+  overflow-y: auto;
 }
 
-/* Scrollbar (same as sign-up) */
+.signin-content {
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Logo */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.logo-img {
+  height: 4rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.05);
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  color: #171717;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Welcome Text */
+.welcome-text {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.welcome-message {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+  width: 100%;
+}
+
+/* Right Side - Branding */
+.branding-side {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: #005db5;
+}
+
+.branding-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.branding-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/images/auth/sign-in.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.branding-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 93, 181, 0.7);
+}
+
+.branding-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  font-family: 'Libre Franklin', sans-serif;
+}
+
+.branding-content.rtl {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.branding-title {
+  color: white;
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 1.25;
+  max-width: 36rem;
+  margin: 0;
+}
+
+.branding-text {
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 1.5rem;
+  font-size: 1.125rem;
+  max-width: 36rem;
+  line-height: 1.5;
+}
+
+/* Scrollbar */
 .signin-container::-webkit-scrollbar {
   width: 6px;
 }
+
 .signin-container::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.03);
   border-radius: 3px;
 }
+
 .signin-container::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 }
+
 .signin-container::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.25);
 }
 
-/* Responsive adjustments */
-@media (max-height: 760px) {
+/* Tablet & Desktop Layout (1024px and up) */
+@media (min-width: 1024px) {
   .sign-in-page {
-    .signin-container {
-      padding: var(--space-sm);
+    grid-template-columns: 1fr 1fr;
+  }
 
-      h1,
-      h2 {
-        font-size: var(--font-lg);
-      }
+  .signin-container {
+    order: 1;
+    min-height: 100vh;
+  }
 
-      form {
-        gap: var(--space-sm);
-      }
+  .branding-side {
+    display: block;
+    order: 2;
+  }
 
-      input,
-      button {
-        height: calc(var(--input-height) - 0.5rem);
-        font-size: var(--font-sm);
-      }
-    }
+  /* Vertical white line separator */
+  .sign-in-page::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 50%;
+    width: 1px;
+    background-color: white;
+    transform: translateX(-0.5px);
+    z-index: 10;
+  }
+
+  /* Fixed positioning for branding on large screens */
+  .branding-wrapper {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    z-index: 20;
+    right: 0;
+    width: 50%;
+  }
+
+  .branding-content:not(.rtl) {
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+/* Small Screens (max-width: 640px) */
+@media (max-width: 640px) {
+  .signin-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .logo-img {
+    height: 4rem;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 639px) {
+  .logo-img {
+    height: 4rem;
+  }
+}
+
+/* Height-based adjustments */
+@media (max-height: 760px) {
+  .signin-container {
+    padding: 0.5rem;
+  }
+
+  .logo-container {
+    margin-bottom: 1rem;
+  }
+
+  .logo-img {
+    height: 3rem;
+  }
+
+  .header {
+    margin-bottom: 0.25rem;
+  }
+
+  .title {
+    font-size: 1.125rem;
+  }
+
+  .welcome-text {
+    margin-bottom: 1.5rem;
+  }
+
+  .welcome-message {
+    font-size: 0.75rem;
   }
 }
 
 @media (min-height: 1000px) {
-  .sign-in-page {
-    .signin-container {
-      padding: var(--space-lg);
+  .signin-container {
+    padding: 2rem;
+  }
 
-      h1,
-      h2 {
-        font-size: var(--font-lg);
-      }
+  .logo-container {
+    margin-bottom: 2rem;
+  }
 
-      form {
-        gap: var(--space-md);
-      }
+  .logo-img {
+    height: 6rem;
+  }
 
-      input,
-      button {
-        height: calc(var(--input-height) + 0.5rem);
-        font-size: var(--font-md);
-      }
-    }
+  .title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .welcome-text {
+    margin-bottom: 2.5rem;
+  }
+
+  .welcome-message {
+    font-size: 1rem;
+  }
+
+  .branding-title {
+    font-size: 4rem;
+  }
+
+  .branding-text {
+    font-size: 1.25rem;
   }
 }

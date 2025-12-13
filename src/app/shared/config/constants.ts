@@ -30,6 +30,7 @@ export const ROUTES = {
   updateInvoice: '/main/invoices/update-invoice',
   addInvoice: '/main/invoices/add-invoice',
 
+  unauthorized: '/unauthorized',
   //Operations
   getOperationFiles: (id: string) => `main/operations/operation-files/${id}`,
   operations: '/main/operations',

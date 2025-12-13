@@ -65,7 +65,7 @@
 @media (max-height: 760px) {
   .verify-otp-page {
     .verify-otp-container {
-      padding: var(--space-sm);
+      padding: clamp(0.5rem, 0.8vh + 0.4vw, 0.75rem);
 
       h1,
       h2 {
@@ -73,7 +73,7 @@
       }
 
       form {
-        gap: var(--space-sm);
+        gap: clamp(0.5rem, 0.8vh + 0.4vw, 0.75rem);
       }
 
       input,
@@ -100,13 +100,13 @@
       }
 
       form {
-        gap: var(--space-sm);
+        gap: clamp(0.5rem, 0.8vh + 0.4vw, 0.75rem);
       }
 
       input,
       button {
         height: calc(var(--input-height) + 1.4rem);
-        font-size: var(--font-md);
+        font-size: clamp(1rem, 1.6vw + 0.8vh, 1.2rem);
       }
     }
   }
