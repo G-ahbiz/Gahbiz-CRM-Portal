@@ -1,4 +1,4 @@
-import { ApiImage } from '@core/interfaces/api-image';
+import { ServiceFileGroup } from './service-file';
 
 export type SubmissionStatus =
   | 'Created'
@@ -9,17 +9,6 @@ export type SubmissionStatus =
   | 'Verified'
   | 'Completed'
   | 'Cancelled';
-
-export interface ServiceFileGroup {
-  id: string;
-  serviceFileId: string;
-  serviceFileName: string;
-  userId: string;
-  serviceSubmissionId: string;
-  files: ApiImage[];
-  createdDate: string;
-  note: string;
-}
 
 export interface ServiceSubmission {
   submissionId: string;

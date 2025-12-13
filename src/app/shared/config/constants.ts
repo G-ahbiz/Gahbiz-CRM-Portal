@@ -31,6 +31,9 @@ export const ROUTES = {
   addInvoice: '/main/invoices/add-invoice',
 
   unauthorized: '/unauthorized',
+  //Operations
+  getOperationFiles: (id: string) => `main/operations/operation-files/${id}`,
+  operations: '/main/operations',
 };
 
 export const USER_TYPES = {

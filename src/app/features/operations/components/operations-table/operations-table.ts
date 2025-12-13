@@ -20,6 +20,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { SelectModule } from 'primeng/select';
 import { OperationsFacadeService } from '../../services/operations.facade.service';
 import { ServiceSubmission, SubmissionStatus } from '../../interfaces/get-all-submissions-response';
+import { ROUTES } from '@shared/config/constants';
 
 type SubmissionViewModel = ServiceSubmission & { selected: boolean };
 
@@ -59,6 +60,9 @@ export class OperationsTable implements OnInit {
 
   // Date validation - max date is today
   todayDate = new Date().toISOString().split('T')[0];
+
+  //constants
+  readonly Routes = ROUTES;
 
   /**
    * Get max date for "from" input (minimum of todayDate and createdDateTo)
@@ -299,7 +303,9 @@ export class OperationsTable implements OnInit {
     // Navigate to edit submission (route to be implemented)
     console.log('Edit submission:', id);
   }
-
+  navigateOperationFiles(id: string) {
+    this.router.navigate([this.Routes.getOperationFiles(id)]);
+  }
   /**
    * Get CSS class for status badge
    */
