@@ -1,36 +1,47 @@
-<div
-  class="sign-in-page vh-100 d-flex flex-column align-items-center justify-content-center p-4 bg-white"
-  [attr.dir]="dir()"
->
-  <div
-    class="signin-container w-100 mx-auto bg-light rounded-4 shadow-sm p-5 d-flex flex-column justify-content-center"
-    style="max-width: 576px; min-height: auto"
-  >
-    <!-- Your existing content remains the same -->
-    <!-- Logo -->
-    <div class="d-flex justify-content-center mb-5">
-      <img
-        src="assets/images/logo/logo.png"
-        alt="Logo"
-        class="cursor-pointer transition-all"
-        style="height: 5rem; transition: transform 0.2s ease"
-        (click)="navigateToHome()"
-        (mouseenter)="$event.target.style.transform = 'scale(1.05)'"
-        (mouseleave)="$event.target.style.transform = 'scale(1)'"
-      />
+<div class="sign-in-page" [attr.dir]="dir()">
+  <!-- Left: Sign-in form -->
+  <div class="signin-container">
+    <div class="signin-content">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="assets/images/logo/logo.png" alt="Logo" class="logo-img" (click)="navigateToHome()" />
+      </div>
+
+      <!-- Title -->
+      <header class="header">
+        <h1 class="title">
+          {{ 'AUTH.WELCOME_TO_CRM' | translate }}
+        </h1>
+      </header>
+
+      <!-- Welcome Text -->
+      <div class="welcome-text">
+        <p class="welcome-message">
+          {{ 'AUTH.SIGN_IN_TO_CONTINUE' | translate }}
+        </p>
+      </div>
+
+      <!-- Form -->
+      <div class="form-wrapper">
+        <app-sign-in-form (signInValues)="onSignInValues($event)" [isLoading]="isLoading()">
+        </app-sign-in-form>
+      </div>
     </div>
+  </div>
 
-    <!-- Title -->
-    <header class="text-center mb-5">
-      <h1 class="text-dark fs-1 fw-bold mb-3">
-        {{ 'AUTH.WELCOME_TO_CRM' | translate }}
-      </h1>
-    </header>
-
-    <!-- Form -->
-    <div class="mb-4">
-      <app-sign-in-form (signInValues)="onSignInValues($event)" [isLoading]="isLoading()">
-      </app-sign-in-form>
+  <!-- Right: Branding image -->
+  <div class="branding-side">
+    <div class="branding-wrapper">
+      <div class="branding-image"></div>
+      <div class="branding-overlay"></div>
+      <div class="branding-content" [class.rtl]="dir() === 'rtl'">
+        <h2 class="branding-title">
+          {{ 'AUTH.BRANDING_TITLE' | translate }}
+        </h2>
+        <p class="branding-text">
+          {{ 'AUTH.BRANDING_TEXT' | translate }}
+        </p>
+      </div>
     </div>
   </div>
 </div>

@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { CrmLayout } from './shared/pages/crm-layout/crm-layout';
 import { NoAuthGuard } from '@core/guards/no-auth.guard';
 import { AuthGuard } from '@core/guards/auth.guard';
+import { ALLOWED_ROLES } from '@core/constants/auth.constants';
+import { RoleGuard } from '@core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -12,8 +14,9 @@ export const routes: Routes = [
   {
     path: 'main',
     component: CrmLayout,
-    canActivateChild: [AuthGuard],
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
+    canActivateChild: [AuthGuard, RoleGuard],
+    data: { roles: [...ALLOWED_ROLES] },
     children: [
       {
         path: 'dashboard',
@@ -56,4 +59,5 @@ export const routes: Routes = [
     ],
   },
   { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
+  { path: 'unauthorized', loadComponent: () => import('@shared/components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
 ];

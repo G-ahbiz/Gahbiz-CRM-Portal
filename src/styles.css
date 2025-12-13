@@ -107,3 +107,23 @@ body {
 .card-red {
   background-color: var(--card-red-bg-clr) !important;
 }
+
+/* Remove the default password reveal button */
+/* Hide in Edge / IE */
+input[type='password']::-ms-reveal,
+input[type='password']::-ms-clear {
+  display: none;
+}
+
+/* Hide in Chrome, Safari, and most WebKit browsers */
+input[type='password']::-webkit-credentials-auto-fill-button,
+input[type='password']::-webkit-clear-button,
+input[type='password']::-webkit-reveal {
+  display: none;
+}
+
+/* Optional: just to be safe */
+input[type='password']::-webkit-inner-spin-button,
+input[type='password']::-webkit-outer-spin-button {
+  display: none;
+}

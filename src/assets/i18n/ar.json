@@ -5,6 +5,7 @@
   "AUTH": {
     "WELCOME_BACK": "مرحباً بعودتك!",
     "WELCOME_TO_CRM": "مرحبا بك في CRM",
+    "SIGN_IN_TO_CONTINUE": "سجل الدخول للوصول إلى لوحة التحكم",
     "DONT_HAVE_ACCOUNT": "ليس لديك حساب؟",
     "SIGN_UP_NOW": "سجل الآن",
     "EMAIL_ADDRESS": "البريد الإلكتروني",

@@ -10,6 +10,7 @@ import { LoginResponse } from '@features/auth/interfaces/sign-in/login-response'
 import { ResetPasswordRequest } from '@features/auth/interfaces/sign-in/reset-password-request';
 import { ResetPasswordResponse } from '@features/auth/interfaces/sign-in/reset-password-response';
 import { TokenData } from '@core/interfaces/token-data';
+import { ALLOWED_ROLES, isAnyAllowedRole } from '@core/constants/auth.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,10 @@ export class AuthService {
   private tokenService = inject(TokenService);
 
   constructor() {
-    setTimeout(() => this.initializeAuthState(), 0);
+    // Initialize immediately in browser context
+    if (typeof window !== 'undefined') {
+      this.initializeAuthState();
+    }
   }
 
   private initializeAuthState(): void {
@@ -65,7 +69,24 @@ export class AuthService {
       .pipe(
         map((response) => {
           if (response.succeeded && response.data) {
-            this.setAuthData(response.data.token, response.data.user);
+            const { user, token } = response.data;
+
+            const userRoles =
+              (user as any)?.roles ??
+              (user as any)?.role ??
+              this.tokenService.extractRolesFromToken(token);
+
+            if (!isAnyAllowedRole(userRoles)) {
+              this.tokenService.clearAllTokens();
+              // Throw a structured error that handleError can process
+              throw {
+                key: 'NOT_AUTHORIZED',
+                message: 'You are not authorized to use this application.',
+                isCustomError: true,
+              };
+            }
+
+            this.setAuthData(token, user);
             return response.data;
           } else {
             throw new Error(response.message || 'Login failed');
@@ -160,6 +181,7 @@ export class AuthService {
     }
 
     const tokensValid = this.tokenService.hasAccessToken() && this.tokenService.hasRefreshToken();
+
     const hasUser = this.currentUserSubject.value !== null;
     const result = tokensValid && hasUser;
 
@@ -200,33 +222,86 @@ export class AuthService {
     this.isLoggedInSubject.next(false);
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError = (error: any): Observable<never> => {
+    let errorKey = 'UNKNOWN_ERROR';
     let errorMessage = 'An unexpected error occurred';
 
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Client Error: ${error.error.message}`;
-    } else {
-      switch (error.status) {
-        case 400:
-          errorMessage = error.error?.message || 'Invalid request data';
-          break;
-        case 401:
-          errorMessage = 'Invalid credentials';
-          break;
-        case 403:
-          errorMessage = 'Access forbidden';
-          break;
-        case 404:
-          errorMessage = 'Service not found';
-          break;
-        case 500:
-          errorMessage = 'Server error occurred';
-          break;
-        default:
-          errorMessage = error.error?.message || `Error Code: ${error.status}`;
-      }
+    // Handle custom errors (like NotAuthorized)
+    if (error?.isCustomError) {
+      errorKey = error.key || 'CUSTOM_ERROR';
+      errorMessage = error.message || 'An error occurred';
+
+      return throwError(() => ({
+        key: errorKey,
+        message: errorMessage,
+        originalError: error,
+        timestamp: new Date().toISOString(),
+      }));
     }
 
-    return throwError(() => new Error(errorMessage));
-  }
+    // Handle HttpErrorResponse
+    if (error instanceof HttpErrorResponse) {
+      if (error.error instanceof ErrorEvent) {
+        errorKey = 'NETWORK_ERROR';
+        errorMessage = `Network error: ${error.error.message}`;
+      } else {
+        switch (error.status) {
+          case 0:
+            errorKey = 'NETWORK_ERROR';
+            errorMessage = 'Cannot connect to server';
+            break;
+          case 400:
+            errorKey = 'BAD_REQUEST';
+            errorMessage = error.error?.message || 'Invalid request data';
+            break;
+          case 401:
+            errorKey = 'UNAUTHORIZED';
+            errorMessage = 'Session expired. Please login again';
+            this.logout(); // Now 'this' will work correctly
+            break;
+          case 403:
+            errorKey = 'FORBIDDEN';
+            errorMessage = 'Access forbidden';
+            break;
+          case 404:
+            errorKey = 'NOT_FOUND';
+            errorMessage = 'Service not found';
+            break;
+          case 429:
+            errorKey = 'TOO_MANY_REQUESTS';
+            errorMessage = 'Too many requests. Please try again later';
+            break;
+          case 500:
+            errorKey = 'SERVER_ERROR';
+            errorMessage = 'Server error occurred';
+            break;
+          default:
+            errorKey = 'UNKNOWN_ERROR';
+            errorMessage = error.error?.message || `Error Code: ${error.status}`;
+        }
+      }
+    }
+    // Handle plain Error objects
+    else if (error instanceof Error) {
+      if (error.message === 'NotAuthorized') {
+        errorKey = 'NOT_AUTHORIZED';
+        errorMessage = 'You are not authorized to use this application.';
+      } else {
+        errorKey = 'CLIENT_ERROR';
+        errorMessage = error.message || 'An error occurred';
+      }
+    }
+    // Handle any other error type
+    else {
+      errorKey = error?.key || 'UNKNOWN_ERROR';
+      errorMessage = error?.message || 'An unexpected error occurred';
+    }
+
+    return throwError(() => ({
+      key: errorKey,
+      message: errorMessage,
+      originalError: error,
+      timestamp: new Date().toISOString(),
+    }));
+  };
 }

@@ -1,12 +1,8 @@
-<button
-  [attr.type]="type()"
-  [disabled]="disabled() || loading()"
-  class="btn btn-primary d-flex align-items-center justify-content-center gap-2"
-  [class.w-100]="fullWidth()"
-  [class.w-auto]="!fullWidth()"
->
+<button [attr.type]="type()" [disabled]="disabled() || loading()"
+  class="btn btn-primary py-1 d-flex align-items-center justify-content-center gap-2" [class.w-100]="fullWidth()"
+  [class.w-auto]="!fullWidth()" (click)="onClick()">
   @if (loading()) {
-  <i class="pi pi-spin pi-spinner"></i>
+  <div class="custom-spinner"></div>
   <span>{{ loadingText() }}</span>
   } @else {
   <span>{{ label() }}</span>

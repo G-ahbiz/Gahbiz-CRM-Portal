@@ -5,6 +5,7 @@
   "AUTH": {
     "WELCOME_BACK": "¡Bienvenido de nuevo!",
     "WELCOME_TO_CRM": "Bienvenido a CRM",
+    "AUTH.SIGN_IN_TO_CONTINUE": "Inicia sesión para acceder a tu panel de control",
     "DONT_HAVE_ACCOUNT": "¿No tienes una cuenta?",
     "SIGN_UP_NOW": "Regístrate ahora",
     "EMAIL_ADDRESS": "Correo Electrónico",
