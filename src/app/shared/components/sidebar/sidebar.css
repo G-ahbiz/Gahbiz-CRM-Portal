@@ -1,128 +1,153 @@
-* {
-  transition: 0.5s all ease-in-out;
-}
-
-.sidebar-container {
+/* Sidebar container */
+.sidebar-wrapper .sidebar-container {
   width: 20rem;
-  max-width: 100vw;
-  position: relative;
-}
-
-.collapsed {
-  width: 3.5rem !important;
-  padding-inline: 0rem !important;
-}
-
-/* Fix text visibility in collapsed state */
-.collapsed .sidebar-content-container span.text-nowrap {
-  opacity: 0 !important;
-  width: 0 !important;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* Ensure logo is properly hidden in collapsed state */
-.collapsed .logo-container {
-  opacity: 0 !important;
-  width: 0 !important;
-  overflow: hidden !important;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  transition: width 0.3s ease;
 }
 
 /* Desktop collapsed state */
-@media (min-width: 769px) {
-  .sidebar-container.collapsed {
-    width: 3.5rem !important;
-  }
-
-  /* Make sure content doesn't shift when sidebar collapses */
-  .crm-layout-content {
-    margin-left: 3.5rem !important;
-  }
+.desktop-collapsed .sidebar-container {
+  width: 3.5rem;
+  padding: 0.5rem;
 }
 
-/* Tablet responsiveness */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .sidebar-container {
-    width: 16rem;
-  }
-
-  .sidebar-container.collapsed {
-    width: 3.5rem;
-  }
-}
-
-.fadeout {
+/* Hide text and logo when collapsed */
+.desktop-collapsed .sidebar-content-container span {
   opacity: 0;
+  width: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-.sidebar-text-color {
-  color: var(--sidebar-text-color);
+.desktop-collapsed .logo-container {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
 
-.active {
+ul {
+  padding-inline-start: 0 !important;
+}
+
+/* Collapse button - only show on desktop */
+.sidebar-collapse-icon-container {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .sidebar-collapse-icon-container {
+    display: block;
+  }
+}
+
+/* Mobile close button - only show on mobile/tablet */
+.mobile-close-btn {
+  display: none;
+  z-index: 1101;
+}
+
+@media (max-width: 1023.98px) {
+  .mobile-close-btn {
+    display: block !important;
+    position: absolute !important;
+    top: 2rem !important; /* Changed from 1rem to 2rem to move it down */
+    z-index: 1101 !important;
+  }
+
+  /* Position for LTR (right side) */
+  .mobile-close-btn.end-0 {
+    right: 1rem !important;
+    left: auto !important;
+  }
+
+  /* Position for RTL (left side) */
+  .mobile-close-btn.start-0 {
+    left: 1rem !important;
+    right: auto !important;
+  }
+}
+
+/* Sidebar content */
+.sidebar-content-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Sidebar items */
+.sidebar-content-container li {
+  margin-bottom: 0.5rem;
+}
+
+/* Active tab styles - Make text white */
+.sidebar-content-container li.active {
   background-color: var(--sidebar-active-color);
 }
 
-.active > button {
-  color: var(--sidebar-active-text-color) !important;
+/* Make active tab text white */
+.sidebar-content-container li.active button {
+  color: white !important;
 }
 
-.active > button > img {
-  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(288deg)
-    brightness(100%) contrast(100%);
+/* Make active tab icon white using filter */
+.sidebar-content-container li.active button img {
+  filter: brightness(0) invert(1) !important;
 }
 
-.hide {
-  transform: translateY(-100%) !important;
-  animation: hideSales 1s ease-in-out forwards alternate;
+/* Sales dropdown styles */
+.sales-dropdown-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
 }
 
-@keyframes hideSales {
-  from {
-    height: auto;
-  }
-  to {
-    height: 0;
-  }
+.sales-dropdown-container.show {
+  max-height: 200px; /* Adjust based on your content height */
+  transition: max-height 0.3s ease-in;
 }
 
-@media (max-width: 480px) {
-  .logo {
-    max-width: 150px;
-  }
-
-  .sidebar-content-container {
-    font-size: 0.9rem;
-  }
+/* Sales dropdown items */
+.sales-dropdown-container li {
+  margin-bottom: 0.25rem;
 }
 
-.sidebar-icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  flex-shrink: 0;
+/* RTL adjustments for sales dropdown */
+[dir='rtl'] .sales-dropdown-container ul {
+  padding-right: 1.5rem;
+  padding-left: 0;
 }
 
-@media (max-width: 768px) {
-  .sidebar-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  /* Hide collapse button on mobile since we have hamburger menu */
-  .sidebar-collapse-icon-container {
-    display: none !important;
-  }
+[dir='ltr'] .sales-dropdown-container ul {
+  padding-left: 1.5rem;
+  padding-right: 0;
 }
 
-/* Mobile close button */
-.mobile-close-btn {
-  display: none;
-  z-index: 1051;
+/* RTL adjustments for sidebar */
+[dir='rtl'] .sidebar-content-container button {
+  flex-direction: row-reverse;
 }
 
-@media (max-width: 1024px) {
-  .mobile-close-btn {
-    display: block !important;
-  }
+[dir='rtl'] .sidebar-header-container {
+  flex-direction: row-reverse;
+}
+
+/* Sales item active state */
+.sales.active {
+  background-color: var(--sidebar-active-color);
+}
+
+.sales.active > button {
+  color: white !important;
+}
+
+.sales.active > button img {
+  filter: brightness(0) invert(1) !important;
+}
+
+.collapsed .sales-dropdown-container {
+  display: none !important;
 }

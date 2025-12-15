@@ -35,6 +35,10 @@ export const environment = {
     bestOffers: '/Services/best-offers',
     searchServices: (text: string) => `/Services/search/${text}`,
   },
+  locations: {
+    getAllCountries: '/countries/All/Countries',
+    getAllStates: (countryId: string) => `/states/country/${countryId}`,
+  },
   customers: {
     addCustomer: '/Customers/Customer',
     leadToCustomer: (leadId: string) => `/Customers/${leadId}/ConvertLeadToCustomer`,

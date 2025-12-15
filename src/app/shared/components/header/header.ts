@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, signal, Output, EventEmitter, Input } from '@angular/core';
+import { Component, inject, Input, Output, EventEmitter, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AuthService } from '@core/services/auth.service';
+import { LanguageService } from '@core/services/language.service';
 import { ROUTES } from '@shared/config/constants';
 import { User } from '@features/auth/interfaces/sign-in/user';
 
@@ -13,18 +14,25 @@ import { User } from '@features/auth/interfaces/sign-in/user';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header implements OnInit {
+export class Header {
   @Input() isMobile: boolean = false;
   @Output() mobileMenuToggled = new EventEmitter<void>();
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private languageService = inject(LanguageService);
 
   readonly ROUTES = ROUTES;
 
-  isArabic = signal<boolean>(false);
-  isEnglish = signal<boolean>(false);
-  isSpain = signal<boolean>(false);
+  // Language related signals
+  currentLanguage = this.languageService.currentLanguage;
+  languages = this.languageService.getLanguages();
+
+  // Computed signals for language checks
+  isArabic = () => this.currentLanguage().code === 'ar';
+  isEnglish = () => this.currentLanguage().code === 'en';
+  isSpanish = () => this.currentLanguage().code === 'es';
+
   isMenuOpen = signal(false);
 
   isLoggedIn = toSignal(this.authService.isLoggedIn$, {
@@ -35,39 +43,16 @@ export class Header implements OnInit {
     initialValue: null,
   });
 
-  constructor(private translateService: TranslateService) {}
-
-  ngOnInit() {
-    this.initializeTranslation();
-  }
-
   toggleMobileMenu() {
     if (this.isMobile) {
       this.mobileMenuToggled.emit();
     }
   }
 
-  private initializeTranslation() {
-    if (!localStorage.getItem('ServabestCRM-language')) {
-      localStorage.setItem('ServabestCRM-language', 'en');
-    }
-
-    const savedLang = localStorage.getItem('ServabestCRM-language') || 'en';
-    this.translateService.setDefaultLang('en');
-    this.translateService.use(savedLang);
-
-    this.isArabic.set(savedLang === 'ar');
-    this.isEnglish.set(savedLang === 'en');
-    this.isSpain.set(savedLang === 'es');
-
-    this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-      this.isArabic.set(event.lang === 'ar');
-      this.isEnglish.set(event.lang === 'en');
-      this.isSpain.set(event.lang === 'es');
-    });
+  setLanguage(langCode: string): void {
+    this.languageService.setLanguage(langCode);
+    this.closeMenu();
   }
-
-  setLanguage(lang: string) {}
 
   toggleMenu() {
     this.isMenuOpen.update((open) => !open);

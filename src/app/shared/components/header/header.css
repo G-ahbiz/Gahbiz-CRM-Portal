@@ -245,38 +245,79 @@
   }
 }
 
-@media (max-width: 399.98px) {
+@media (max-width: 462px) {
   .header-container {
-    height: 3.75rem;
+    height: 3.5rem;
+    padding: 0.25rem 0.5rem !important;
+    flex-wrap: nowrap;
+    overflow: visible;
+  }
+
+  .search-container {
+    flex: 1;
+    min-width: 0;
+    max-width: calc(100% - 150px);
   }
 
   .search-form-group {
     max-width: 10rem;
-    min-width: 6rem;
+    min-width: 5rem;
   }
 
-  .search-input::placeholder {
+  .search-input {
     font-size: 0.75rem;
   }
 
-  .profile-container .btn span {
-    max-width: 40px;
-    font-size: 0.55rem !important;
+  .search-input::placeholder {
+    font-size: 0.7rem;
   }
 
-  .profile-container .btn .pi-chevron-down {
-    font-size: 0.7rem !important;
+  .icon-profile-container {
+    gap: 0.5rem !important;
+    flex-shrink: 0;
   }
 
-  .icons-container button .icon {
+  .icons-container {
+    gap: 0.5rem !important;
+  }
+
+  /* Hide language text on very small screens */
+  .language-btn-group .btn span {
+    display: none;
+  }
+
+  /* Reduce icon sizes */
+  .icons-container .icon {
     width: 1rem !important;
     height: 1rem !important;
   }
 
-  .flag-icon {
-    width: 1.25rem;
-    height: 1.25rem;
+  /* Adjust profile button */
+  .profile-container .btn {
+    padding: 0.125rem 0.25rem !important;
   }
+
+  .profile-container .btn img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .profile-container .btn span {
+    font-size: 0.5rem !important;
+    max-width: 40px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .profile-container .btn .pi-chevron-down {
+    font-size: 0.6rem !important;
+  }
+
+  .profile-container .btn span {
+    display: none;
+  } 
 }
 
 .text-nowrap {

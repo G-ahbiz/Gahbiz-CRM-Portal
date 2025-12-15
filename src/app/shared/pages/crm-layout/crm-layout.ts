@@ -1,7 +1,8 @@
-import { Component, signal, HostListener } from '@angular/core';
+import { Component, signal, HostListener, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from '../../components/header/header';
 import { Sidebar } from '../../components/sidebar/sidebar';
+import { LanguageService } from '@core/services/language.service';
 
 @Component({
   selector: 'app-crm-layout',
@@ -10,10 +11,14 @@ import { Sidebar } from '../../components/sidebar/sidebar';
   styleUrl: './crm-layout.css',
 })
 export class CrmLayout {
-  isMobileScreen = signal<boolean>(false);
+  private languageService = inject(LanguageService);
+
+  isMobileView = signal<boolean>(false);
   showMobileBackdrop = signal<boolean>(false);
-  isMobileSidebarOpen = signal<boolean>(false);
+  isSidebarOpen = signal<boolean>(false);
   isSidebarCollapsed = signal<boolean>(false);
+
+  isRTL = this.languageService.isRTL;
 
   ngOnInit() {
     this.checkScreenSize();
@@ -25,39 +30,44 @@ export class CrmLayout {
   }
 
   private checkScreenSize() {
-    const isMobile = window.innerWidth <= 1024;
-    this.isMobileScreen.set(isMobile);
+    const isMobile = window.innerWidth < 1024; // 1024px is our breakpoint
+    this.isMobileView.set(isMobile);
 
     if (!isMobile) {
+      // Desktop: always show sidebar, no backdrop
       this.showMobileBackdrop.set(false);
-      this.isMobileSidebarOpen.set(false);
+      this.isSidebarOpen.set(true);
     } else {
+      // Mobile/Tablet: hide sidebar by default
       this.showMobileBackdrop.set(false);
-      this.isMobileSidebarOpen.set(false);
+      this.isSidebarOpen.set(false);
     }
   }
 
-  isMobile(): boolean {
-    return this.isMobileScreen();
-  }
-
   toggleMobileSidebar() {
-    this.isMobileSidebarOpen.set(!this.isMobileSidebarOpen());
-    this.showMobileBackdrop.set(this.isMobileSidebarOpen());
+    if (this.isMobileView()) {
+      this.isSidebarOpen.set(!this.isSidebarOpen());
+      this.showMobileBackdrop.set(this.isSidebarOpen());
+    }
   }
 
   closeMobileSidebar() {
-    this.isMobileSidebarOpen.set(false);
-    this.showMobileBackdrop.set(false);
+    if (this.isMobileView()) {
+      this.isSidebarOpen.set(false);
+      this.showMobileBackdrop.set(false);
+    }
   }
 
   onSidebarToggled() {
-    if (this.isMobileScreen() && this.isMobileSidebarOpen()) {
+    if (this.isMobileView() && this.isSidebarOpen()) {
       this.closeMobileSidebar();
     }
   }
 
   toggleSidebarCollapsed() {
-    this.isSidebarCollapsed.set(!this.isSidebarCollapsed());
+    // Only allow collapsing on desktop
+    if (!this.isMobileView()) {
+      this.isSidebarCollapsed.set(!this.isSidebarCollapsed());
+    }
   }
 }

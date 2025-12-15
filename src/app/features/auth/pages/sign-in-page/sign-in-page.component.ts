@@ -31,7 +31,7 @@ export class SignInPageComponent implements OnDestroy {
   private translate = inject(TranslateService);
   private languageService = inject(LanguageService);
 
-  dir = computed(() => (this.languageService.currentLang() === 'ar' ? 'rtl' : 'ltr'));
+  dir = computed(() => this.languageService.direction());
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {

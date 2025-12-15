@@ -34,7 +34,7 @@ export class NewPasswordComponent {
   showPassword = signal<boolean>(false);
   showConfirmPassword = signal<boolean>(false);
 
-  dir = computed(() => (this.languageService.currentLang() === 'ar' ? 'rtl' : 'ltr'));
+  dir = computed(() => this.languageService.direction());
 
   //Services
   private translate = inject(TranslateService);
