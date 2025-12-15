@@ -1,125 +1,210 @@
 <div class="container-fluid p-0 m-0">
+  <!-- Add PrimeNG ConfirmDialog -->
+  <p-confirmDialog [style]="{width: '350px'}" acceptLabel="{{ 'COMMON.YES' | translate }}"
+    rejectLabel="{{ 'COMMON.NO' | translate }}" acceptIcon="pi pi-check red" rejectIcon="pi pi-times"></p-confirmDialog>
+
   <div class="card border-0 bg-transparent">
-    <p-table #dt1 [value]="customersTabelData()" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [paginator]="true"
-      [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true"
-      (onPage)="onPageChange($event)" (onSort)="onSortColumn($event)" [loading]="loading()">
+    <p-table #dt1 [value]="customersTabelData()" dataKey="id"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }" [paginator]="true" [rows]="pageSize"
+      [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true" (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll">
+
       <ng-template #caption>
-        <div class="d-flex justify-content-between align-items-center">
-          <!-- Export Button Container -->
-          <div class="export-btn-container d-flex align-items-center gap-2">
-            <button
-              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-              (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
-              <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
-              {{ 'customers-crm.export' | translate }}
-              <span *ngIf="selectedCustomersCount > 0" class="ms-1">
-                ({{ selectedCustomersCount }})
-              </span>
-            </button>
+        <!-- Responsive Header Container -->
+        <div class="responsive-header">
 
-            <!-- Clear Selection Button -->
-            <button *ngIf="selectedCustomersCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
-              (click)="clearSelections()" [disabled]="exportLoading()">
-              {{ 'COMMON.CLEAR' | translate }}
-            </button>
+          <!-- Desktop Layout (default) -->
+          <div class="d-none d-md-flex w-100 align-items-center">
+            <!-- Left Section: Action Buttons -->
+            <div class="desktop-action-btns d-flex gap-2">
+              <!-- Bulk Delete Button -->
+              <button
+                class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
+                [title]="'customers-crm.delete-selected' | translate">
+                <i class="pi fs-875" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
+                <span>{{ 'customers-crm.delete' | translate }}</span>
+                <span *ngIf="selectedCustomersCount > 0" class="ms-1">
+                  ({{ selectedCustomersCount }})
+                </span>
+              </button>
+
+              <!-- Export Button -->
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
+                <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span>{{ 'customers-crm.export' | translate }}</span>
+                <span *ngIf="selectedCustomersCount > 0" class="ms-1">
+                  ({{ selectedCustomersCount }})
+                </span>
+              </button>
+
+              <!-- Clear Selection Button -->
+              <button *ngIf="selectedCustomersCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
+                (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
+                {{ 'COMMON.CLEAR' | translate }}
+              </button>
+            </div>
+
+            <!-- Center Section: Search -->
+            <div class="desktop-search flex-grow-1 mx-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
+                  #searchInput [placeholder]="'customers-crm.search' | translate" />
+              </p-iconfield>
+            </div>
+
+            <!-- Right Section: Add Customer -->
+            <div class="desktop-add-btn">
+              <button
+                class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
+                routerLink="/main/customers/add-customer">
+                <span>{{ 'customers-crm.add-customer' | translate }}</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Filter and Search Container -->
-          <div class="d-flex justify-content-start align-items-center gap-0">
-            <p-iconfield iconPosition="left" class="fw-bold">
-              <p-inputicon>
-                <i class="pi pi-search"></i>
-              </p-inputicon>
-              <input pInputText type="text" (input)="onSearchChange($any($event.target).value)" #searchInput
-                [placeholder]="'customers-crm.search' | translate" />
-            </p-iconfield>
-          </div>
+          <!-- Mobile Layout -->
+          <div class="d-md-none">
+            <!-- Search at the top -->
+            <div class="mobile-search mb-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
+                  #searchInput [placeholder]="'customers-crm.search' | translate" />
+              </p-iconfield>
+            </div>
 
-          <!-- Add Customer Button Container -->
-          <div class="d-flex justify-content-start align-items-center gap-0">
-            <button
-              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              routerLink="/main/customers/add-customer">
-              <img src="assets/images/shared/plus.svg" alt="" class="" />
-              {{ 'customers-crm.add-customer' | translate }}
-            </button>
+            <!-- Action buttons in a single row -->
+            <div class="mobile-action-btns d-flex gap-2 mb-3">
+              <!-- Delete Button (Icon only) -->
+              <button
+                class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
+                [title]="'customers-crm.delete-selected' | translate">
+                <i class="pi" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
+                <span class="ms-1 d-none d-sm-inline">{{ 'customers-crm.delete' | translate }}</span>
+                <span *ngIf="selectedCustomersCount > 0" class="ms-1">
+                  ({{ selectedCustomersCount }})
+                </span>
+              </button>
+
+              <!-- Export Button (Icon + Text) -->
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
+                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span class="ms-1 d-none d-sm-inline">{{ 'customers-crm.export' | translate }}</span>
+              </button>
+
+              <!-- Clear Button (Icon only when text doesn't fit) -->
+              <button *ngIf="selectedCustomersCount > 0"
+                class="btn btn-sm btn-outline-secondary px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
+                <i class="pi pi-times d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR' | translate }}</span>
+              </button>
+
+              <!-- Add Button (Icon + Text) -->
+              <button
+                class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                routerLink="/main/customers/add-customer">
+                <i class="pi pi-plus d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'customers-crm.add-customer' | translate }}</span>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="title-container my-4">
+
+        <!-- Title Section -->
+        <div class="title-container my-3 my-md-4" [attr.dir]="languageService.direction()" [ngClass]="{
+          'text-center': true,
+          'text-md-start': !languageService.isRTL(),
+          'text-md-end': languageService.isRTL()
+        }">
           <h5 class="m-0 p-0">{{ 'customers-crm.all-customers' | translate }}</h5>
           <small class="text-muted" *ngIf="selectedCustomersCount > 0">
-            {{ selectedCustomersCount }} {{ 'customers-crm.selected-customers-for-export' | translate }}
+            {{ selectedCustomersCount }} {{ 'customers-crm.selected-customers-for-action' | translate }}
           </small>
+          <div class="mt-2 d-block d-md-none">
+            <small class="text-muted">{{ 'customers-crm.swipe-to-scroll' | translate }}</small>
+          </div>
         </div>
+
       </ng-template>
+
       <ng-template #header>
         <tr>
-          <th class="d-flex justify-content-center align-items-center gap-2">
-            <div class="flex items-center gap-2">
+          <th class="text-center" style="width: 60px;">
+            <div class="d-flex justify-content-center align-items-center">
               <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
                 (change)="onSelectAll($event)" [title]="'customers-crm.select-all' | translate" />
             </div>
           </th>
-          <th>
-            <div class="flex items-center gap-2">
-              {{ 'customers-crm.customer-id' | translate }}
-            </div>
+          <th class="d-none d-md-table-cell">
+            {{ 'customers-crm.customer-id' | translate }}
           </th>
           <th>
-            <div class="flex items-center gap-2">
-              {{ 'customers-crm.phone-number' | translate }}
-            </div>
+            {{ 'customers-crm.phone-number' | translate }}
           </th>
           <th [pSortableColumn]="'fullName'">
-            <div class="flex items-center gap-2">
+            <div class="d-flex justify-content-center align-items-center gap-1">
               {{ 'customers-crm.customer-name' | translate }}
               <p-sortIcon field="fullName" />
             </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">
-              {{ 'customers-crm.no-of-orders' | translate }}
-            </div>
+            {{ 'customers-crm.no-of-orders' | translate }}
           </th>
-          <th>
-            <div class="flex items-center gap-2">
-              {{ 'customers-crm.assigned-to' | translate }}
-            </div>
+          <th class="d-none d-md-table-cell">
+            {{ 'customers-crm.assigned-to' | translate }}
           </th>
-          <th class="d-flex justify-content-center align-items-center gap-2">
+          <th style="width: 150px;">
             {{ 'customers-crm.actions' | translate }}
           </th>
         </tr>
       </ng-template>
+
       <ng-template #body let-customer let-rowIndex="rowIndex">
         <tr>
-          <td>
+          <td class="text-center">
             <input type="checkbox" name="select-customer" id="customer-{{ customer.id }}" [checked]="customer.selected"
               (change)="toggleCustomerSelection(customer)" [title]="'customers-crm.select-customer' | translate" />
           </td>
-          <td [title]="customer.id">
+          <td class="d-none d-md-table-cell" [title]="customer.id">
             {{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
           </td>
           <td>{{ customer.phoneNumber }}</td>
-          <td>{{ customer.fullName }}</td>
+          <td>
+            <span class="d-none d-md-inline">{{ customer.fullName }}</span>
+            <span class="d-md-none">{{ customer.fullName | slice:0:12 }}{{ customer.fullName.length > 12 ? '...' : ''
+              }}</span>
+          </td>
           <td>{{ customer.noOrders }}</td>
-          <td>{{ customer.assignedTo }}</td>
-          <td class="d-flex justify-content-center align-items-center gap-2">
-            <button class="btn btn-sm" (click)="viewCustomer(customer.id); $event.stopPropagation()"
+          <td class="d-none d-md-table-cell">{{ customer.assignedTo }}</td>
+          <td class="action-buttons">
+            <button class="btn btn-sm btn-outline-primary" (click)="viewCustomer(customer.id); $event.stopPropagation()"
               [title]="'COMMON.VIEW' | translate">
-              <img src="assets/images/shared/eye.svg" alt="" class="" />
+              <i class="pi pi-eye"></i>
             </button>
-            <button class="btn btn-sm" (click)="editCustomer(customer.id); $event.stopPropagation()"
-              [title]="'COMMON.EDIT' | translate">
+            <button class="btn btn-sm btn-outline-secondary"
+              (click)="editCustomer(customer.id); $event.stopPropagation()" [title]="'COMMON.EDIT' | translate">
               <i class="pi pi-pencil"></i>
             </button>
-            <button class="btn btn-sm" (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
-              [title]="'COMMON.DELETE' | translate">
+            <button class="btn btn-sm btn-outline-danger"
+              (click)="onDeleteCustomer(customer.id); $event.stopPropagation()" [title]="'COMMON.DELETE' | translate">
               <i class="pi pi-trash"></i>
             </button>
           </td>
         </tr>
       </ng-template>
+
       <ng-template #emptymessage>
         <tr>
           <td colspan="7" class="text-center py-4">
@@ -133,4 +218,5 @@
 
 <!-- Customer Details Dialog -->
 <app-customer-details [customerId]="selectedCustomerForDialog()" [(visible)]="showDetailsDialog"
-  (onClose)="closeDetailsDialog()"></app-customer-details>
+  (onClose)="closeDetailsDialog()">
+</app-customer-details>

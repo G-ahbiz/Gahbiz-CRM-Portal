@@ -1,8 +1,9 @@
-import { Component, EventEmitter, forwardRef, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, HostListener, inject, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LockPasswordComponent } from '../lock-password/lock-password.component';
 import { COUNTRIES } from '../../config/constants';
+import { LanguageService } from '@core/services/language.service';
 
 let uniqueCounter = 0;
 
@@ -50,6 +51,9 @@ export class InputComponent implements ControlValueAccessor {
   phoneNumber = '';
   isOpen = false;
   errorId = '';
+
+  private languageService = inject(LanguageService);
+  dir = this.languageService.direction;
 
   constructor() {
     if (!this.id) {

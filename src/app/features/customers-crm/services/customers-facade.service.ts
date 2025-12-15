@@ -3,7 +3,7 @@ import { AddCustomerRequest } from '../interfaces/add-customer-request';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { CustomersApiService } from './customers-api.service';
 import { environment } from '@env/environment';
-import { Observable } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { GetSalesAgentsResponse } from '../interfaces/get-sales-agents-response';
 import { GetCustomersFilters } from '../interfaces/get-customers-filters';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
@@ -42,6 +42,54 @@ export class CustomersFacadeService {
   deleteCustomer(id: string): Observable<ApiResponse<string>> {
     return this.customerService.deleteCustomer(id);
   }
+
+  deleteMultipleCustomers(
+    ids: string[]
+  ): Observable<{ succeeded: string[]; failed: { id: string; error: any }[] }> {
+    if (ids.length === 0) {
+      return of({ succeeded: [], failed: [] });
+    }
+
+    const deleteRequests = ids.map((id) =>
+      this.deleteCustomer(id).pipe(
+        map((response) => ({
+          id,
+          response,
+          success: true,
+          error: null,
+        })),
+        catchError((error) =>
+          of({
+            id,
+            response: null,
+            success: false,
+            error,
+          })
+        )
+      )
+    );
+
+    return forkJoin(deleteRequests).pipe(
+      map((results) => {
+        const succeeded: string[] = [];
+        const failed: { id: string; error: any }[] = [];
+
+        results.forEach((result) => {
+          if (result.success && result.response?.succeeded) {
+            succeeded.push(result.id);
+          } else {
+            failed.push({
+              id: result.id,
+              error: result.error || result.response?.message || 'Unknown error',
+            });
+          }
+        });
+
+        return { succeeded, failed };
+      })
+    );
+  }
+
   getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {
     return this.customerService.getSalesAgents();
   }

@@ -1,4 +1,4 @@
-<div class="container-fluid p-0 m-0">
+<div class="container-fluid p-0 m-0" [dir]="languageService.direction()">
   <div class="add-customers-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
     <!-- Top Container -->
     <div class="add-customers-top w-100 d-flex justify-content-start align-items-center gap-3">
@@ -7,7 +7,7 @@
         <button
           class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
           (click)="goBack()">
-          <i class="pi pi-chevron-left fs-875"></i>
+          <i [class]="languageService.isRTL() ? 'pi pi-chevron-right fs-875' : 'pi pi-chevron-left fs-875'"></i>
         </button>
       </div>
       <!-- Title -->
@@ -21,7 +21,8 @@
 
     <!-- Form Container -->
     <form [formGroup]="addCustomerForm"
-      class="add-customers-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white">
+      class="add-customers-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white rounded-3 shadow-sm">
+
       <!-- Loading Indicator -->
       @if (loading()) {
       <div class="w-100 text-center">
@@ -30,122 +31,145 @@
         </div>
       </div>
       } @else {
-      <!-- Full Name Container -->
-      <div class="fullName-container d-flex justify-content-between align-items-start gap-3 w-100">
+
+      <!-- Full Name Container - Full Width -->
+      <div class="w-100 mb-4">
         <div class="form-group w-100">
-          <label for="fullName" class="form-label">
+          <label for="fullName" class="form-label d-flex align-items-center "
+            [class.flex-row-reverse]="languageService.isRTL()">
             <span>{{ 'customers-crm.add-customer-page.full-name' | translate }}</span>
-            <span [class]="checkValidity('fullName')">*</span>
+            <span [class]="checkValidity('fullName')" [class.ms-2]="!languageService.isRTL()"
+              [class.me-2]="languageService.isRTL()">*</span>
           </label>
           <input type="text" name="fullName" id="fullName" class="form-control"
             [placeholder]="'customers-crm.add-customer-page.full-name-placeholder' | translate"
-            formControlName="fullName" [readonly]="false" />
+            formControlName="fullName" />
           @if(addCustomerForm.get('fullName')?.invalid && addCustomerForm.get('fullName')?.touched)
           {
-          <div class="text-danger small mt-1">{{ getErrorMessage('fullName') }}</div>
+          <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+            getErrorMessage('fullName') }}</div>
           }
         </div>
       </div>
 
-      <!-- Email & Gender Container -->
-      <div class="emailGender-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Email Container -->
-        <div class="form-group w-100">
-          <label for="email" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.email' | translate }}</span>
-            <span [class]="checkValidity('email')">*</span>
-          </label>
-          <input type="email" name="email" id="email" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.email-placeholder' | translate" formControlName="email"
-            [readonly]="false" />
-          @if(addCustomerForm.get('email')?.invalid && addCustomerForm.get('email')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('email') }}</div>
-          }
-        </div>
-
-        <!-- Gender Container -->
-        <div class="form-group w-100">
-          <label for="gender" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.gender' | translate }}</span>
-            <span [class]="checkValidity('gender')">*</span>
-          </label>
-          <select name="gender" id="gender" class="form-select" formControlName="gender">
-            <option value="" disabled selected>
-              {{ 'customers-crm.add-customer-page.select-gender' | translate }}
-            </option>
-            @for(gender of genders; track gender) {
-            <option [value]="gender">{{ gender }}</option>
+      <!-- Email & Gender Container - Using custom flex layout -->
+      <div class="two-column-container w-100 mb-4">
+        <div class="d-flex flex-column flex-md-row gap-3 w-100">
+          <!-- Email Container -->
+          <div class="form-group flex-fill">
+            <label for="email" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.email' | translate }}</span>
+              <span [class]="checkValidity('email')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <input type="email" name="email" id="email" class="form-control"
+              [placeholder]="'customers-crm.add-customer-page.email-placeholder' | translate" formControlName="email" />
+            @if(addCustomerForm.get('email')?.invalid && addCustomerForm.get('email')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+              getErrorMessage('email') }}</div>
             }
-          </select>
-          @if(addCustomerForm.get('gender')?.invalid && addCustomerForm.get('gender')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('gender') }}</div>
-          }
+          </div>
+
+          <!-- Gender Container -->
+          <div class="form-group flex-fill">
+            <label for="gender" class="form-label d-flex align-items-center"
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.gender' | translate }}</span>
+              <span [class]="checkValidity('gender')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <select name="gender" id="gender" class="form-select" formControlName="gender">
+              <option value="" disabled selected>
+                {{ 'customers-crm.add-customer-page.select-gender' | translate }}
+              </option>
+              @for(gender of genders; track gender.value) {
+              <!-- Bind to gender.value for the value and display the translated label -->
+              <option [value]="gender.value">{{ gender.label | translate }}</option>
+              }
+            </select>
+            @if(addCustomerForm.get('gender')?.invalid && addCustomerForm.get('gender')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+              getErrorMessage('gender') }}</div>
+            }
+          </div>
         </div>
       </div>
 
       <!-- Default Language Container - Only show in add mode -->
       @if (!isEditMode()) {
-      <div class="defaultLanguage-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div class="w-100 mb-4">
         <div class="form-group w-100">
-          <label for="defaultLanguage" class="form-label">
+          <label for="defaultLanguage" class="form-label d-flex align-items-center "
+            [class.flex-row-reverse]="languageService.isRTL()">
             <span>{{ 'customers-crm.add-customer-page.default-language' | translate }}</span>
-            <span [class]="checkValidity('defaultLanguage')"> *</span>
+            <span [class]="checkValidity('defaultLanguage')" [class.ms-2]="!languageService.isRTL()"
+              [class.me-2]="languageService.isRTL()">*</span>
           </label>
           <select name="defaultLanguage" id="defaultLanguage" class="form-select" formControlName="defaultLanguage">
             <option value="" disabled selected>
               {{ 'customers-crm.add-customer-page.select-language' | translate }}
             </option>
-            @for(language of languages; track language) {
-            <option [value]="language">{{ language }}</option>
+            @for(language of languages; track language.code) {
+            <option [value]="language.code">{{ language.label | translate }}</option>
             }
           </select>
           @if(addCustomerForm.get('defaultLanguage')?.invalid &&
           addCustomerForm.get('defaultLanguage')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('defaultLanguage') }}</div>
+          <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+            getErrorMessage('defaultLanguage') }}</div>
           }
         </div>
       </div>
       }
 
       <!-- Phone Number & SSN Container -->
-      <div class="phoneNumberSSN-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Phone Number Container -->
-        <div class="form-group w-100">
-          <label for="phone" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.phone' | translate }}</span>
-            <span [class]="checkValidity('phone')"> *</span>
-          </label>
-          <input type="tel" name="phone" id="phone" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.phone-placeholder' | translate" formControlName="phone"
-            [readonly]="false" />
-          @if(addCustomerForm.get('phone')?.invalid && addCustomerForm.get('phone')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('phone') }}</div>
-          }
-        </div>
+      <div class="two-column-container w-100 mb-4">
+        <div class="d-flex flex-column flex-md-row gap-3 w-100">
+          <!-- Phone Number Container -->
+          <div class="form-group flex-fill">
+            <label for="phone" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.phone' | translate }}</span>
+              <span [class]="checkValidity('phone')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <input type="tel" name="phone" id="phone" class="form-control"
+              [placeholder]="'customers-crm.add-customer-page.phone-placeholder' | translate" formControlName="phone" />
+            @if(addCustomerForm.get('phone')?.invalid && addCustomerForm.get('phone')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+              getErrorMessage('phone') }}</div>
+            }
+          </div>
 
-        <!-- SSN Container -->
-        <div class="form-group w-100">
-          <label for="ssn" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.ssn' | translate }}</span>
-            <span [class]="checkValidity('ssn')"> *</span>
-          </label>
-          <input type="text" name="ssn" id="ssn" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.ssn-placeholder' | translate" formControlName="ssn"
-            [readonly]="false" />
-          @if(addCustomerForm.get('ssn')?.invalid && addCustomerForm.get('ssn')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('ssn') }}</div>
-          }
+          <!-- SSN Container -->
+          <div class="form-group flex-fill">
+            <label for="ssn" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.ssn' | translate }}</span>
+              <span [class]="checkValidity('ssn')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <input type="text" name="ssn" id="ssn" class="form-control"
+              [placeholder]="'customers-crm.add-customer-page.ssn-placeholder' | translate" formControlName="ssn" />
+            @if(addCustomerForm.get('ssn')?.invalid && addCustomerForm.get('ssn')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+              getErrorMessage('ssn') }}</div>
+            }
+          </div>
         </div>
       </div>
 
       <!-- Assign User Container - Only show in add mode -->
       @if (!isEditMode() && ((currentUser$ | async)?.type === USER_TYPES.MANAGER || (currentUser$ | async)?.type ===
       USER_TYPES.ADMIN)) {
-      <div class="assignedAgentId-container d-flex justify-content-start align-items-start gap-3 w-100">
+      <div class="w-100 mb-4">
         <div class="form-group w-100">
-          <label for="assignedAgentId" class="form-label">
+          <label for="assignedAgentId" class="form-label d-flex align-items-center "
+            [class.flex-row-reverse]="languageService.isRTL()">
             <span>{{ 'customers-crm.add-customer-page.assign-user' | translate }}</span>
-            <span [class]="checkValidity('assignedAgentId')"> *</span>
+            <span [class]="checkValidity('assignedAgentId')" [class.ms-2]="!languageService.isRTL()"
+              [class.me-2]="languageService.isRTL()">*</span>
           </label>
           <select name="assignedAgentId" id="assignedAgentId" class="form-select" formControlName="assignedAgentId">
             <option value="" disabled selected>
@@ -157,89 +181,135 @@
           </select>
           @if(addCustomerForm.get('assignedAgentId')?.invalid &&
           addCustomerForm.get('assignedAgentId')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('assignedAgentId') }}</div>
+          <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+            getErrorMessage('assignedAgentId') }}</div>
           }
         </div>
       </div>
       }
 
-      <hr class="w-100" />
+      <hr class="w-100 my-4" />
 
       <!-- Country & State Container -->
-      <div class="countryState-container d-flex justify-content-between align-items-start gap-3 w-100">
-        <!-- Country Container -->
-        <div class="form-group w-100">
-          <label for="country" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.country' | translate }}</span>
-            <span [class]="checkValidity('country')"> *</span>
-          </label>
-          <input type="text" name="country" id="country" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.country-placeholder' | translate" formControlName="country"
-            [readonly]="false" />
-          @if(addCustomerForm.get('country')?.invalid && addCustomerForm.get('country')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('country') }}</div>
-          }
-        </div>
-        <!-- State Container -->
-        <div class="form-group w-100">
-          <label for="state" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.state' | translate }}</span>
-            <span [class]="checkValidity('state')"> *</span>
-          </label>
-          <input type="text" name="state" id="state" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.state-placeholder' | translate" formControlName="state"
-            [readonly]="false" />
-          @if(addCustomerForm.get('state')?.invalid && addCustomerForm.get('state')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('state') }}</div>
-          }
+      <div class="two-column-container w-100 mb-4">
+        <div class="d-flex flex-column flex-md-row gap-3 w-100">
+          <!-- Country Container -->
+          <div class="form-group flex-fill">
+            <label for="country" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.country' | translate }}</span>
+              <span [class]="checkValidity('country')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <select name="country" id="country" class="form-select" formControlName="country">
+              <option [ngValue]="null" disabled selected>
+                {{ 'customers-crm.add-customer-page.select-country' | translate }}
+              </option>
+              @for(country of countries(); track country.id) {
+              <option [ngValue]="country.id">{{ country.name }}</option> <!-- Changed to [ngValue] -->
+              }
+            </select>
+            @if(addCustomerForm.get('country')?.invalid && addCustomerForm.get('country')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              {{ getErrorMessage('country') }}
+            </div>
+            }
+          </div>
+
+          <!-- State Container -->
+          <div class="form-group flex-fill">
+            <label for="state" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.state' | translate }}</span>
+              <span [class]="checkValidity('state')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+
+            @if(loadingStates()) {
+            <div class="form-control d-flex align-items-center">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ 'customers-crm.add-customer-page.loading-states' | translate }}
+            </div>
+            } @else {
+            <select name="state" id="state" class="form-select" formControlName="state"
+              [disabled]="!addCustomerForm.get('country')?.value || loadingStates()">
+              <option [ngValue]="null" disabled selected>
+                {{ 'customers-crm.add-customer-page.select-state' | translate }}
+              </option>
+              @for(state of states(); track state.id) {
+              <option [ngValue]="state.id">{{ state.name }}</option> <!-- Changed to [ngValue] -->
+              }
+            </select>
+            }
+
+            @if(addCustomerForm.get('state')?.invalid && addCustomerForm.get('state')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              {{ getErrorMessage('state') }}
+            </div>
+            }
+
+            @if(addCustomerForm.get('country')?.value && states().length === 0 && !loadingStates()) {
+            <div class="text-warning small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              {{ 'customers-crm.add-customer-page.no-states-available' | translate }}
+            </div>
+            }
+          </div>
         </div>
       </div>
 
-      <!-- Postal Code Container -->
-      <div class="postalCode-container d-flex justify-content-start align-items-start gap-3 w-100">
-        <div class="form-group w-100">
-          <label for="postalCode" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.postal-code' | translate }}</span>
-            <span [class]="checkValidity('postalCode')"> *</span>
-          </label>
-          <input type="text" name="postalCode" id="postalCode" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.postal-code-placeholder' | translate"
-            formControlName="postalCode" [readonly]="false" />
-          @if(addCustomerForm.get('postalCode')?.invalid &&
-          addCustomerForm.get('postalCode')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('postalCode') }}</div>
-          }
-        </div>
-      </div>
+      <!-- Postal Code & Address Container -->
+      <div class="two-column-container w-100 mb-4">
+        <div class="d-flex flex-column flex-md-row gap-3 w-100">
+          <!-- Postal Code Container -->
+          <div class="form-group flex-fill">
+            <label for="postalCode" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.postal-code' | translate }}</span>
+              <span [class]="checkValidity('postalCode')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <input type="text" name="postalCode" id="postalCode" class="form-control"
+              [placeholder]="'customers-crm.add-customer-page.postal-code-placeholder' | translate"
+              formControlName="postalCode" />
+            @if(addCustomerForm.get('postalCode')?.invalid &&
+            addCustomerForm.get('postalCode')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+              getErrorMessage('postalCode') }}</div>
+            }
+          </div>
 
-      <!-- Address Container -->
-      <div class="address-container d-flex justify-content-start align-items-start gap-3 w-100">
-        <div class="form-group w-100">
-          <label for="address" class="form-label">
-            <span>{{ 'customers-crm.add-customer-page.address' | translate }}</span>
-            <span [class]="checkValidity('address')"> *</span>
-          </label>
-          <textarea name="address" id="address" class="form-control"
-            [placeholder]="'customers-crm.add-customer-page.address-placeholder' | translate" formControlName="address"
-            rows="3" [readonly]="false"></textarea>
-          @if(addCustomerForm.get('address')?.invalid && addCustomerForm.get('address')?.touched) {
-          <div class="text-danger small mt-1">{{ getErrorMessage('address') }}</div>
-          }
+          <!-- Address Container -->
+          <div class="form-group flex-fill">
+            <label for="address" class="form-label d-flex align-items-center "
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'customers-crm.add-customer-page.address' | translate }}</span>
+              <span [class]="checkValidity('address')" [class.ms-2]="!languageService.isRTL()"
+                [class.me-2]="languageService.isRTL()">*</span>
+            </label>
+            <textarea name="address" id="address" class="form-control"
+              [placeholder]="'customers-crm.add-customer-page.address-placeholder' | translate"
+              formControlName="address" rows="3"></textarea>
+            @if(addCustomerForm.get('address')?.invalid && addCustomerForm.get('address')?.touched) {
+            <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">{{
+              getErrorMessage('address') }}</div>
+            }
+          </div>
         </div>
       </div>
 
       <!-- Submit Button Container -->
-      <div class="buttons-container w-100 d-flex justify-content-between align-items-center gap-3">
+      <div
+        class="buttons-container w-100 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
         <!-- Cancel Button -->
         <button type="button"
-          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          class="btn btn-outline-primary d-flex justify-content-center align-items-center  rounded-3 flex-grow-1 mb-2 mb-md-0"
           (click)="cancel()" [disabled]="loading()">
           {{ 'COMMON.CANCEL' | translate }}
         </button>
 
         <!-- Save/Update Button -->
         <button type="submit"
-          class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
+          class="btn btn-primary d-flex justify-content-center align-items-center  rounded-3 flex-grow-1"
           (click)="save()" [disabled]="loading()">
           @if (!loading()) {
           <span>{{ isEditMode() ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate) }}</span>

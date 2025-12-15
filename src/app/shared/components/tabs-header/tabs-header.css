@@ -1,8 +1,92 @@
-.rating-value {
-  color: #616161;
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.title-icon {
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .title-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .card-icon {
+    padding: 0.75rem !important;
+  }
 }
 
 .card-icon img {
   width: 40px;
   height: 40px;
+}
+
+@media (max-width: 576px) {
+  .card-icon img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Rating Icon Styles */
+.rating-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* RTL Specific Adjustments */
+:host-context([dir='rtl']) .rating-icon.flip-rtl {
+  transform: scaleX(-1);
+}
+
+:host-context([dir='rtl']) .direction-aware-icon.flip-rtl {
+  transform: scaleX(-1);
+}
+
+/* Text Colors */
+.rating-value {
+  color: #616161;
+  font-size: 0.875rem;
+}
+
+.trend-up-clr {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.trend-down-clr {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  .card-title {
+    font-size: 0.875rem;
+  }
+
+  .card-value {
+    font-size: 1.25rem !important;
+  }
+
+  .rating-value {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-title {
+    font-size: 0.75rem;
+  }
+
+  .card-value {
+    font-size: 1rem !important;
+  }
 }

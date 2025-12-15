@@ -1,8 +1,19 @@
-.customers-crm-container {
-  height: 100vh;
-  overflow-y: auto;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .customers-crm-container {
+    padding: 1rem !important;
+    height: auto;
+    min-height: calc(100vh - 56px); /* Account for mobile header */
+  }
 }
 
+@media (max-width: 576px) {
+  .customers-crm-container {
+    padding: 0.75rem !important;
+  }
+}
+
+/* Skeleton Loading Animation */
 .skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -10,14 +21,19 @@
   border-radius: 4px;
 }
 
+/* RTL Skeleton Animation */
+:host-context([dir='rtl']) .skeleton {
+  animation: loading-rtl 1.5s infinite;
+}
+
 .skeleton-title {
   height: 16px;
-  width: 60%;
+  width: 100%;
 }
 
 .skeleton-value {
   height: 24px;
-  width: 40%;
+  width: 75%;
 }
 
 .skeleton-rating {
@@ -30,11 +46,53 @@
   width: 48px;
 }
 
+@media (max-width: 576px) {
+  .skeleton-title {
+    height: 14px;
+  }
+
+  .skeleton-value {
+    height: 20px;
+  }
+
+  .skeleton-rating {
+    height: 12px;
+  }
+
+  .skeleton-icon {
+    height: 40px;
+    width: 40px;
+  }
+}
+
 @keyframes loading {
   0% {
     background-position: 200% 0;
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+@keyframes loading-rtl {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Customers Table Responsive */
+.customers-table {
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .customers-table {
+    margin-top: 1rem;
+    border-radius: 6px;
   }
 }

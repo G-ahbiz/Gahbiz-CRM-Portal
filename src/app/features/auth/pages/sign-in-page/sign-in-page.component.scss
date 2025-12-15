@@ -126,8 +126,9 @@
 }
 
 .branding-content.rtl {
+  direction: rtl;
+  align-items: flex-start;
   text-align: right;
-  align-items: flex-end;
 }
 
 .branding-title {
@@ -195,16 +196,23 @@
     z-index: 10;
   }
 
-  /* Fixed positioning for branding on large screens */
   .branding-wrapper {
     position: fixed;
     top: 0;
     height: 100vh;
     z-index: 20;
+    /* Default LTR position */
     right: 0;
+    left: auto;
     width: 50%;
   }
 
+  .sign-in-page[dir='rtl'] .branding-wrapper {
+    right: auto;
+    left: 0;
+  }
+
+  /* Content Alignment for LTR */
   .branding-content:not(.rtl) {
     text-align: left;
     align-items: flex-start;

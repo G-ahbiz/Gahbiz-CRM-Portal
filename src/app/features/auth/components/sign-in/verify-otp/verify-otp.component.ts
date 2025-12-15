@@ -42,7 +42,7 @@ export class VerifyOtp implements OnInit, OnDestroy {
   resendCooldown = signal<number>(0);
   private cooldownInterval?: any;
 
-  dir = computed(() => (this.languageService.currentLang() === 'ar' ? 'rtl' : 'ltr'));
+  dir = computed(() => this.languageService.direction());
 
   // Services
   private toastService = inject(ToastService);

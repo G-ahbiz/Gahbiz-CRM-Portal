@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  DestroyRef,
+  inject,
+  signal,
+  ElementRef,
+  ViewChild,
+  HostListener,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
@@ -13,6 +22,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { CustomerDetails } from '../customer-details/customer-details';
+import { TooltipModule } from 'primeng/tooltip';
+import { SkeletonModule } from 'primeng/skeleton';
+import { LanguageService } from '@core/services/language.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
@@ -30,7 +44,11 @@ const ALLOWED_SORT_FIELDS = ['Name'] as const;
     IconFieldModule,
     InputIconModule,
     CustomerDetails,
+    TooltipModule,
+    SkeletonModule,
+    ConfirmDialogModule,
   ],
+  providers: [ConfirmationService],
   templateUrl: './customer-tabel.html',
   styleUrl: './customer-tabel.css',
 })
@@ -46,12 +64,15 @@ export class CustomerTabel implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
+  private readonly confirmationService = inject(ConfirmationService);
+  languageService = inject(LanguageService);
 
   // Data properties
   customersTabelData = signal<CustomerViewModel[]>([]);
   totalRecords: number = 0;
   loading = signal<boolean>(false);
-  exportLoading = signal<boolean>(false); // Separate loading state for export
+  exportLoading = signal<boolean>(false);
+  bulkDeleteLoading = signal<boolean>(false);
 
   // Selection state
   isAllSelected: boolean = false;
@@ -63,6 +84,32 @@ export class CustomerTabel implements OnInit {
   // Customer Details Dialog state
   showDetailsDialog = signal<boolean>(false);
   selectedCustomerForDialog = signal<string | null>(null); // Renamed for clarity
+
+  @ViewChild('dt1') dt1: any;
+  @ViewChild('searchInput') searchInput!: ElementRef;
+
+  screenWidth: number = window.innerWidth;
+
+  // Add for responsive pagination
+  get responsiveRowsPerPageOptions(): number[] {
+    return this.screenWidth < 768 ? [5, 10] : [5, 10, 20, 50];
+  }
+
+  // Track screen resize
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screenWidth = window.innerWidth;
+  }
+
+  private searchTimeout: any;
+  onSearchChange(value: string): void {
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.search = value.toLowerCase().trim();
+      this.pageNumber = 1;
+      this.loadCustomersData();
+    }, 300);
+  }
 
   constructor(private readonly customersFacade: CustomersFacadeService, private router: Router) {}
 
@@ -209,7 +256,21 @@ export class CustomerTabel implements OnInit {
     this.selectedCustomerForDialog.set(null);
   }
 
+  /**
+   * Delete single customer
+   */
   onDeleteCustomer(id: string): void {
+    this.confirmationService.confirm({
+      message: this.translate.instant('customers-crm.delete-customer-confirmation'),
+      header: this.translate.instant('COMMON.CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteCustomer(id);
+      },
+    });
+  }
+
+  private deleteCustomer(id: string): void {
     this.loading.set(true);
     this.customersFacade
       .deleteCustomer(id)
@@ -240,18 +301,86 @@ export class CustomerTabel implements OnInit {
         },
       });
   }
-  
-  editCustomer(id: number) {
-    this.router.navigate(['/main/customers/edit-customer', id]);
+
+  /**
+   * Delete multiple selected customers
+   */
+  deleteSelectedCustomers(): void {
+    const selectedIds = Array.from(this.selectedCustomerIds());
+
+    if (selectedIds.length === 0) {
+      this.toast.error(
+        this.translate.instant('customers-crm.select-at-least-one-customer-to-delete')
+      );
+      return;
+    }
+
+    this.confirmationService.confirm({
+      message: this.translate.instant('customers-crm.delete-multiple-customers-confirmation', {
+        count: selectedIds.length,
+      }),
+      header: this.translate.instant('COMMON.CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.performBulkDelete(selectedIds);
+      },
+    });
   }
 
   /**
-   * Handle search input changes
-   * Note: Search is currently disabled/ignored until API support is added
+   * Perform bulk delete operation
    */
-  onSearchChange(value: string): void {
-    this.search = value.toLowerCase().trim();
-    // Search not implemented yet
+  private performBulkDelete(ids: string[]): void {
+    this.bulkDeleteLoading.set(true);
+
+    this.customersFacade
+      .deleteMultipleCustomers(ids)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.bulkDeleteLoading.set(false))
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.succeeded.length > 0) {
+            // Show success message for successful deletions
+            this.toast.success(
+              this.translate.instant('customers-crm.customers-deleted-successfully', {
+                count: result.succeeded.length,
+              })
+            );
+
+            // Remove successful deletions from selected IDs
+            const currentSelectedIds = new Set(this.selectedCustomerIds());
+            result.succeeded.forEach((id) => currentSelectedIds.delete(id));
+            this.selectedCustomerIds.set(currentSelectedIds);
+          }
+
+          if (result.failed.length > 0) {
+            // Show error message for failed deletions
+            const errorMessage = this.translate.instant(
+              'customers-crm.some-customers-delete-failed',
+              {
+                count: result.failed.length,
+              }
+            );
+            this.toast.error(errorMessage);
+
+            // Log detailed errors for debugging
+            console.error('Failed to delete customers:', result.failed);
+          }
+
+          // Reload the data
+          this.loadCustomersData();
+        },
+        error: (err) => {
+          console.error('Error in bulk delete operation:', err);
+          this.toast.error(this.translate.instant('customers-crm.error-deleting-customers'));
+        },
+      });
+  }
+
+  editCustomer(id: number) {
+    this.router.navigate(['/main/customers/edit-customer', id]);
   }
 
   /**
@@ -323,5 +452,10 @@ export class CustomerTabel implements OnInit {
    */
   trackByCustomerId(index: number, customer: CustomerViewModel): string {
     return customer.id;
+  }
+
+  // Optimize performance for large datasets
+  trackByFn(index: number, item: CustomerViewModel): string {
+    return item.id;
   }
 }

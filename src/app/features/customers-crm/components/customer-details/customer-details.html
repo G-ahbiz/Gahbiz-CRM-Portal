@@ -1,118 +1,170 @@
-<p-dialog
-  [header]="'Customer Info'"
-  [(visible)]="visible"
-  [modal]="true"
-  [style]="{ width: '900px', maxWidth: '95vw' }"
-  [draggable]="false"
-  [resizable]="false"
-  (onHide)="onDialogHide()"
-  styleClass="customer-details-dialog"
->
-  <div class="customer-details-content">
+<p-dialog [header]="translationKeys.CUSTOMER_INFO | translate" [(visible)]="visible" [modal]="true"
+  [style]="{ width: 'min(900px, 95vw)', minWidth: 'min(350px, 95vw)' }" [draggable]="false" [resizable]="false"
+  [closable]="true" [closeOnEscape]="true" [focusOnShow]="false" (onHide)="onDialogHide()"
+  styleClass="customer-details-dialog" [ngClass]="{ 'rtl-dialog': isRTL() }">
+  <div class="customer-details-content" [ngClass]="{ 'rtl-content': isRTL() }">
     <!-- Loading State -->
     @if (loading()) {
-    <div class="loading-container d-flex justify-content-center align-items-center">
+    <div class="loading-container d-flex flex-column justify-content-center align-items-center gap-3">
       <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <span class="visually-hidden">{{ translationKeys.LOADING | translate }}</span>
       </div>
+      <p class="text-muted mb-0">{{ translationKeys.LOADING | translate }}</p>
     </div>
     }
 
     <!-- Error State -->
     @if (error() && !loading()) {
-    <div class="error-container d-flex flex-column justify-content-center align-items-center gap-3">
-      <i class="pi pi-exclamation-circle text-danger fs-1"></i>
-      <p class="text-danger mb-0">{{ error() }}</p>
-      <button class="btn btn-outline-primary" (click)="closeDialog()">
-        <i class="pi pi-times me-2"></i>Close
+    <div class="error-container d-flex flex-column justify-content-center align-items-center gap-3 p-4">
+      <i class="pi pi-exclamation-circle text-danger" style="font-size: 3rem;"></i>
+      <p class="text-danger text-center mb-0">{{ error() }}</p>
+      <button class="btn btn-outline-primary mt-2" (click)="closeDialog()"
+        [attr.aria-label]="translationKeys.CLOSE | translate">
+        <i class="pi pi-times me-2"></i>
+        {{ translationKeys.CLOSE | translate }}
       </button>
     </div>
     }
 
     <!-- Customer Details -->
     @if (customer() && !loading() && !error()) {
-    <!-- Profile Section -->
-    <div class="profile-section d-flex justify-content-between align-items-center">
-      <div class="profile-info d-flex align-items-center gap-3">
-        <div class="profile-avatar">
+    <div class="profile-section d-flex align-items-start justify-content-between gap-3 mb-4">
+      <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+        <div class="profile-avatar flex-shrink-0">
           <i class="pi pi-user"></i>
         </div>
-        <div class="profile-details">
-          <h3 class="profile-name mb-1">{{ getFullName() }}</h3>
-          <span class="profile-location">{{ customer()?.state }}</span>
+        <div class="profile-details min-w-0">
+          <h3 class="profile-name mb-1 text-truncate">{{ getFullName() }}</h3>
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="profile-location d-inline-block text-truncate">
+              <i class="pi pi-map-marker me-1"></i>{{ customer()?.state }}
+            </span>
+            <!-- Client badge moved inline on mobile -->
+            <div class="d-block d-md-none">
+              <span class="client-tag badge bg-light text-dark border">
+                <i class="pi pi-users me-1"></i>{{ translationKeys.CLIENT | translate }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="client-badge">
+
+      <!-- Client badge for desktop -->
+      <div class="d-none d-md-flex flex-column align-items-center flex-shrink-0">
         <div class="badge-icon">
           <i class="pi pi-users"></i>
         </div>
-        <span class="badge-label">Client</span>
+        <span class="badge-label mt-1">{{ translationKeys.CLIENT | translate }}</span>
       </div>
     </div>
 
     <!-- Personal Details Section -->
-    <div class="details-section">
-      <h4 class="section-title">Personal Details</h4>
+    <div class="details-section mb-4">
+      <h4 class="section-title mb-3">{{ translationKeys.PERSONAL_DETAILS | translate }}</h4>
 
       <!-- Full Legal Name -->
-      <div class="form-row">
-        <div class="form-group full-width">
-          <label class="form-label"> Full Legal Name <span class="required">*</span> </label>
-          <div class="form-value">{{ getFullName() }}</div>
+      <div class="form-row mb-3">
+        <div class="form-group w-100">
+          <label class="form-label d-flex align-items-center gap-1 mb-2">
+            {{ translationKeys.FULL_NAME | translate }}
+            <span class="required">*</span>
+          </label>
+          <div class="form-value text-truncate">{{ getFullName() }}</div>
         </div>
       </div>
 
       <!-- Email & Gender -->
-      <div class="form-row two-columns">
-        <div class="form-group">
-          <label class="form-label"> Email <span class="required">*</span> </label>
-          <div class="form-value">{{ customer()?.eMail }}</div>
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.EMAIL | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value text-truncate">
+              <a [href]="'mailto:' + customer()?.eMail" class="text-decoration-none">
+                {{ customer()?.eMail }}
+              </a>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label"> Gender <span class="required">*</span> </label>
-          <div class="form-value">{{ customer()?.gender }}</div>
+        <div class="col-12 col-md-6">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.GENDER | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value">{{ getGenderDisplay() }}</div>
+          </div>
         </div>
       </div>
 
       <!-- Phone Number & National ID -->
-      <div class="form-row two-columns">
-        <div class="form-group">
-          <label class="form-label"> Phone Number <span class="required">*</span> </label>
-          <div class="form-value phone-value">
-            <span class="flag-icon">🇺🇸</span>
-            {{ customer()?.phone }}
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.PHONE | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value phone-value">
+              <span class="flag-icon">🇺🇸</span>
+              <a [href]="'tel:' + customer()?.phone" class="text-decoration-none ms-2">
+                {{ customer()?.phone }}
+              </a>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label"> National ID <span class="required">*</span> </label>
-          <div class="form-value">{{ customer()?.ssn }}</div>
+        <div class="col-12 col-md-6">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.NATIONAL_ID | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value text-truncate">{{ customer()?.ssn }}</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <hr class="section-divider" />
+    <hr class="section-divider my-4" />
 
     <!-- Address Section -->
     <div class="details-section">
-      <h4 class="section-title">Address</h4>
+      <h4 class="section-title mb-3">{{ translationKeys.ADDRESS | translate }}</h4>
 
       <!-- Country & City/State -->
-      <div class="form-row two-columns">
-        <div class="form-group">
-          <label class="form-label"> Country <span class="required">*</span> </label>
-          <div class="form-value">{{ customer()?.country }}</div>
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.COUNTRY | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value">{{ customer()?.country }}</div>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label"> City/State <span class="required">*</span> </label>
-          <div class="form-value">{{ customer()?.state }}</div>
+        <div class="col-12 col-md-6">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.CITY_STATE | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value">{{ customer()?.state }}</div>
+          </div>
         </div>
       </div>
 
       <!-- Postal Code -->
-      <div class="form-row">
-        <div class="form-group half-width">
-          <label class="form-label"> Postal Code <span class="required">*</span> </label>
-          <div class="form-value">{{ customer()?.postalCode }}</div>
+      <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="form-group h-100">
+            <label class="form-label d-flex align-items-center gap-1 mb-2">
+              {{ translationKeys.POSTAL_CODE | translate }}
+              <span class="required">*</span>
+            </label>
+            <div class="form-value">{{ customer()?.postalCode }}</div>
+          </div>
         </div>
       </div>
     </div>

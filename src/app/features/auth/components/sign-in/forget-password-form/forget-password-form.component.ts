@@ -32,7 +32,7 @@ export class ForgetPasswordFormComponent implements OnDestroy {
   // Signals
   isLoading = signal<boolean>(false);
 
-  dir = computed(() => (this.languageService.currentLang() === 'ar' ? 'rtl' : 'ltr'));
+  dir = computed(() => this.languageService.direction());
 
   // Services
   private authService = inject(AuthService);
