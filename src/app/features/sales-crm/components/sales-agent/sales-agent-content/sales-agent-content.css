@@ -1,0 +1,89 @@
+.sales-agents-crm-container {
+  height: 100%;
+  min-height: calc(100vh - 120px);
+  background-color: #f8f9fa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sales-agents-crm-container {
+    padding: 1rem !important;
+    min-height: calc(100vh - 56px);
+  }
+}
+
+@media (max-width: 576px) {
+  .sales-agents-crm-container {
+    padding: 0.75rem !important;
+  }
+}
+
+/* Skeleton Loading Animation */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  height: 16px;
+  width: 100%;
+}
+
+.skeleton-value {
+  height: 24px;
+  width: 75%;
+}
+
+.skeleton-rating {
+  height: 14px;
+  width: 50%;
+}
+
+.skeleton-icon {
+  height: 48px;
+  width: 48px;
+}
+
+@media (max-width: 576px) {
+  .skeleton-title {
+    height: 14px;
+  }
+
+  .skeleton-value {
+    height: 20px;
+  }
+
+  .skeleton-rating {
+    height: 12px;
+  }
+
+  .skeleton-icon {
+    height: 40px;
+    width: 40px;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* RTL Skeleton Animation */
+:host-context([dir='rtl']) .skeleton {
+  animation: loading-rtl 1.5s infinite;
+}
+
+@keyframes loading-rtl {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

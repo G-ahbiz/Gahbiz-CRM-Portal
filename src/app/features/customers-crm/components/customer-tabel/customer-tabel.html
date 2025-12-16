@@ -21,9 +21,9 @@
               <button
                 class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
                 (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
-                [title]="'customers-crm.delete-selected' | translate">
+                [title]="'CUSTOMERS-CRM.delete-selected' | translate">
                 <i class="pi fs-875" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
-                <span>{{ 'customers-crm.delete' | translate }}</span>
+                <span>{{ 'CUSTOMERS-CRM.delete' | translate }}</span>
                 <span *ngIf="selectedCustomersCount > 0" class="ms-1">
                   ({{ selectedCustomersCount }})
                 </span>
@@ -34,7 +34,7 @@
                 class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
                 (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
                 <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
-                <span>{{ 'customers-crm.export' | translate }}</span>
+                <span>{{ 'CUSTOMERS-CRM.export' | translate }}</span>
                 <span *ngIf="selectedCustomersCount > 0" class="ms-1">
                   ({{ selectedCustomersCount }})
                 </span>
@@ -54,7 +54,7 @@
                   <i class="pi pi-search"></i>
                 </p-inputicon>
                 <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
-                  #searchInput [placeholder]="'customers-crm.search' | translate" />
+                  #searchInput [placeholder]="'CUSTOMERS-CRM.search' | translate" />
               </p-iconfield>
             </div>
 
@@ -63,7 +63,7 @@
               <button
                 class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
                 routerLink="/main/customers/add-customer">
-                <span>{{ 'customers-crm.add-customer' | translate }}</span>
+                <span>{{ 'CUSTOMERS-CRM.add-customer' | translate }}</span>
               </button>
             </div>
           </div>
@@ -77,7 +77,7 @@
                   <i class="pi pi-search"></i>
                 </p-inputicon>
                 <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
-                  #searchInput [placeholder]="'customers-crm.search' | translate" />
+                  #searchInput [placeholder]="'CUSTOMERS-CRM.search' | translate" />
               </p-iconfield>
             </div>
 
@@ -87,9 +87,9 @@
               <button
                 class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
-                [title]="'customers-crm.delete-selected' | translate">
+                [title]="'CUSTOMERS-CRM.delete-selected' | translate">
                 <i class="pi" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
-                <span class="ms-1 d-none d-sm-inline">{{ 'customers-crm.delete' | translate }}</span>
+                <span class="ms-1 d-none d-sm-inline">{{ 'CUSTOMERS-CRM.delete' | translate }}</span>
                 <span *ngIf="selectedCustomersCount > 0" class="ms-1">
                   ({{ selectedCustomersCount }})
                 </span>
@@ -100,7 +100,7 @@
                 class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
                 <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
-                <span class="ms-1 d-none d-sm-inline">{{ 'customers-crm.export' | translate }}</span>
+                <span class="ms-1 d-none d-sm-inline">{{ 'CUSTOMERS-CRM.export' | translate }}</span>
               </button>
 
               <!-- Clear Button (Icon only when text doesn't fit) -->
@@ -116,7 +116,7 @@
                 class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 routerLink="/main/customers/add-customer">
                 <i class="pi pi-plus d-sm-none"></i>
-                <span class="d-none d-sm-inline">{{ 'customers-crm.add-customer' | translate }}</span>
+                <span class="d-none d-sm-inline">{{ 'CUSTOMERS-CRM.add-customer' | translate }}</span>
               </button>
             </div>
           </div>
@@ -128,12 +128,12 @@
           'text-md-start': !languageService.isRTL(),
           'text-md-end': languageService.isRTL()
         }">
-          <h5 class="m-0 p-0">{{ 'customers-crm.all-customers' | translate }}</h5>
+          <h5 class="m-0 p-0">{{ 'CUSTOMERS-CRM.all-customers' | translate }}</h5>
           <small class="text-muted" *ngIf="selectedCustomersCount > 0">
-            {{ selectedCustomersCount }} {{ 'customers-crm.selected-customers-for-action' | translate }}
+            {{ selectedCustomersCount }} {{ 'CUSTOMERS-CRM.selected-customers-for-action' | translate }}
           </small>
           <div class="mt-2 d-block d-md-none">
-            <small class="text-muted">{{ 'customers-crm.swipe-to-scroll' | translate }}</small>
+            <small class="text-muted">{{ 'CUSTOMERS-CRM.swipe-to-scroll' | translate }}</small>
           </div>
         </div>
 
@@ -144,29 +144,29 @@
           <th class="text-center" style="width: 60px;">
             <div class="d-flex justify-content-center align-items-center">
               <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
-                (change)="onSelectAll($event)" [title]="'customers-crm.select-all' | translate" />
+                (change)="onSelectAll($event)" [title]="'CUSTOMERS-CRM.select-all' | translate" />
             </div>
           </th>
           <th class="d-none d-md-table-cell">
-            {{ 'customers-crm.customer-id' | translate }}
+            {{ 'CUSTOMERS-CRM.customer-id' | translate }}
           </th>
           <th>
-            {{ 'customers-crm.phone-number' | translate }}
+            {{ 'CUSTOMERS-CRM.phone-number' | translate }}
           </th>
           <th [pSortableColumn]="'fullName'">
             <div class="d-flex justify-content-center align-items-center gap-1">
-              {{ 'customers-crm.customer-name' | translate }}
+              {{ 'CUSTOMERS-CRM.customer-name' | translate }}
               <p-sortIcon field="fullName" />
             </div>
           </th>
           <th>
-            {{ 'customers-crm.no-of-orders' | translate }}
+            {{ 'CUSTOMERS-CRM.no-of-orders' | translate }}
           </th>
           <th class="d-none d-md-table-cell">
-            {{ 'customers-crm.assigned-to' | translate }}
+            {{ 'CUSTOMERS-CRM.assigned-to' | translate }}
           </th>
           <th style="width: 150px;">
-            {{ 'customers-crm.actions' | translate }}
+            {{ 'CUSTOMERS-CRM.actions' | translate }}
           </th>
         </tr>
       </ng-template>
@@ -175,7 +175,7 @@
         <tr>
           <td class="text-center">
             <input type="checkbox" name="select-customer" id="customer-{{ customer.id }}" [checked]="customer.selected"
-              (change)="toggleCustomerSelection(customer)" [title]="'customers-crm.select-customer' | translate" />
+              (change)="toggleCustomerSelection(customer)" [title]="'CUSTOMERS-CRM.select-customer' | translate" />
           </td>
           <td class="d-none d-md-table-cell" [title]="customer.id">
             {{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
@@ -208,7 +208,7 @@
       <ng-template #emptymessage>
         <tr>
           <td colspan="7" class="text-center py-4">
-            {{ 'customers-crm.no-customers-found' | translate }}
+            {{ 'CUSTOMERS-CRM.no-customers-found' | translate }}
           </td>
         </tr>
       </ng-template>

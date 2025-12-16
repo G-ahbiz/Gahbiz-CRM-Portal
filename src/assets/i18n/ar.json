@@ -453,7 +453,7 @@
       "status-required": "الحالة مطلوبة"
     }
   },
-  "customers-crm": {
+  "CUSTOMERS-CRM": {
     "TITLE": "العملاء",
     "TOTAL_CUSTOMERS": "إجمالي العملاء",
     "TOTAL_LEADS": "إجمالي العملاء المحتملين",
@@ -577,10 +577,19 @@
   },
   "sales-crm": {
     "sales-agents-cards": {
+      "TITLE": "مندوبو المبيعات",
+      "TOTAL_AGENTS": "إجمالي المندوبين",
+      "ACTIVE_AGENTS": "المندوبين النشطين",
+      "INACTIVE_AGENTS": "المندوبين غير النشطين",
+      "TOTAL_LEADS": "إجمالي العملاء المحتملين",
+      "LEADS_PER_AGENT": "العملاء المحتملون لكل مندوب",
       "assign-task": "تعيين مهمة",
       "add-sales-agent": "إضافة مندوب مبيعات",
       "sort": "ترتيب",
-      "search": "البحث بالاسم"
+      "search": "البحث بالاسم",
+      "ERROR": {
+        "FETCH_TEAM_STATISTICS": "فشل تحميل إحصائيات فريق المبيعات. يرجى المحاولة مرة أخرى."
+      }
     },
     "leads-tabel": {
       "export": "تصدير",

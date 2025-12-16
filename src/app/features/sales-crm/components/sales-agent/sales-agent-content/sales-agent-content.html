@@ -1,9 +1,31 @@
 <div class="container-fluid p-0 m-0">
   <!-- Sales Agents CRM Container -->
-  <div class="sales-agents-crm-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+  <div class="sales-agents-crm-container p-2 p-md-3 d-flex flex-column gap-3" [class.rtl]="languageService.isRTL()">
 
     <div class="sales-agents-top w-100">
-      <app-tabs-header [title]="'Sales Agents'" [cardsData]="cardsData" [folderName]="'salesAgents'"></app-tabs-header>
+      @if (isLoading()) {
+      <!-- Responsive loading skeleton -->
+      <div class="row g-3 g-md-4">
+        @for (item of [1,2,3,4]; track $index) {
+        <div class="{{ cardColumns() }}">
+          <div class="card border-0 shadow-sm h-100">
+            <div
+              class="card-body d-flex {{ languageService.getFlexDirectionClass() }} justify-content-between align-items-center p-3">
+              <div class="card-data d-flex flex-column justify-content-start align-items-start gap-2 flex-grow-1">
+                <div class="skeleton-title skeleton w-100"></div>
+                <div class="skeleton-value skeleton w-75"></div>
+                <div class="skeleton-rating skeleton w-50"></div>
+              </div>
+              <div class="skeleton-icon skeleton rounded-2 {{ languageService.getMarginClass('start', '2') }}"></div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      } @else {
+      <app-tabs-header [title]="'SALES-CRM.SALES-AGENTS-CARDS.TITLE'" [cardsData]="cardsData()" [folderName]="'salesAgents'">
+      </app-tabs-header>
+      }
     </div>
 
     <div class="sales-agents-cards w-100">

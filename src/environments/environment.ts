@@ -68,6 +68,7 @@ export const environment = {
     geInvoicestStatistics: '/Statistics/invoices',
     getCustomerStatistics: '/Statistics/customers',
     getLeadsStatistics: '/Statistics/leads',
+    getSalesAgentStatistics: '/Statistics/team/statistics',
   },
   operations: {
     getAllServiceSubmissions: '/ServiceSubmissions',

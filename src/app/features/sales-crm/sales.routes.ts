@@ -35,7 +35,7 @@ export const salesRoutes: Routes = [
           ),
       },
       {
-        path: 'sales-agent-details',
+        path: 'sales-agent-details/:id',
         loadComponent: () =>
           import('./components/sales-agent/sales-agents-details/sales-agents-details').then(
             (m) => m.SalesAgentsDetails
