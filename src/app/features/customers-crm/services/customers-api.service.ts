@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { map, Observable } from 'rxjs';
-import { GetSalesAgentsResponse } from '../interfaces/get-sales-agents-response';
+import { SalesAgentBrief } from '../interfaces/sales-agent-brief';
 import { GetCustomersResponse } from '../interfaces/get-customers-response';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersFilters } from '../interfaces/get-customers-filters';
@@ -63,8 +63,8 @@ export class CustomersApiService {
     });
   }
 
-  getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {
-    const url = `${this.baseUrl}${environment.customers.getSalesAgents}`;
+  getSalesAgents(): Observable<ApiResponse<SalesAgentBrief[]>> {
+    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgents}`;
     return this.http.get<any>(url).pipe(
       map((response) => {
         if (response.succeeded && response.data?.items) {

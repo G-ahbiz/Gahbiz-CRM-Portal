@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { ToastService } from '@core/services/toast.service';
 
@@ -67,6 +66,25 @@ export class ErrorFacadeService {
     }
 
     return errorMessage;
+  }
+
+  /**
+   * Extract error message(s) from any error type without displaying
+   */
+  getErrorMessage(error: any): string | string[] {
+    if (error instanceof HttpErrorResponse && error.error) {
+      const apiError = error.error as ApiResponse<any>;
+
+      if (apiError.errors?.length > 0) {
+        return apiError.errors;
+      }
+
+      if (apiError.message) {
+        return apiError.message;
+      }
+    }
+
+    return 'An unexpected error occurred';
   }
 
   /**

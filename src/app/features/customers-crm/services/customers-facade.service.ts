@@ -1,10 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { AddCustomerRequest } from '../interfaces/add-customer-request';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { CustomersApiService } from './customers-api.service';
-import { environment } from '@env/environment';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
-import { GetSalesAgentsResponse } from '../interfaces/get-sales-agents-response';
+import { SalesAgentBrief } from '../interfaces/sales-agent-brief';
 import { GetCustomersFilters } from '../interfaces/get-customers-filters';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetCustomersResponse } from '../interfaces/get-customers-response';
@@ -90,7 +88,7 @@ export class CustomersFacadeService {
     );
   }
 
-  getSalesAgents(): Observable<ApiResponse<GetSalesAgentsResponse[]>> {
+  getSalesAgents(): Observable<ApiResponse<SalesAgentBrief[]>> {
     return this.customerService.getSalesAgents();
   }
 

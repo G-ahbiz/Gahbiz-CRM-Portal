@@ -5,10 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { AuthService } from '@core/services/auth.service';
-import { GetSalesAgentsResponse } from '../../interfaces/get-sales-agents-response';
+import { SalesAgentBrief } from '../../interfaces/sales-agent-brief';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { GENDERS, LANGUAGES, ROUTES, USER_TYPES } from '@shared/config/constants';
-import { AddCustomerRequest } from '../../interfaces/add-customer-request';
+import { ROUTES, USER_TYPES } from '@shared/config/constants';
 import { UpdateCustomerRequest } from '../../interfaces/update-customer-request';
 import { ToastService } from '@core/services/toast.service';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
@@ -40,7 +39,7 @@ export class AddCustomers implements OnInit, OnDestroy {
   private locationService = inject(LocationsService);
 
   addCustomerForm: FormGroup;
-  salesAgents = signal<GetSalesAgentsResponse[]>([]);
+  salesAgents = signal<SalesAgentBrief[]>([]);
   countries = signal<Country[]>([]); // Changed from countries$ to countries signal
   states = signal<State[]>([]);
   loading = signal<boolean>(false);
