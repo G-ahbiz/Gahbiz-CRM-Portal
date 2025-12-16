@@ -600,6 +600,7 @@
       "add-sales-agent": "Add Sales Agent",
       "sort": "Sort",
       "search": "Search By Name",
+      "no-agents-found": "No sales agents found",
       "ERROR": {
         "FETCH_TEAM_STATISTICS": "Failed to load sales agent statistics"
       }

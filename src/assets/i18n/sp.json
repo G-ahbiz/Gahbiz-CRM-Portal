@@ -578,7 +578,8 @@
       "assign-task": "Asignar Tarea",
       "add-sales-agent": "Agregar Agente de Ventas",
       "sort": "Ordenar",
-      "search": "Buscar por Nombre"
+      "search": "Buscar por Nombre",
+      "no-agents-found": "No se encontraron agentes de ventas"
     },
     "leads-tabel": {
       "export": "Exportar",

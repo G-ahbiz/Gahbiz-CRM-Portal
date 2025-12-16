@@ -19,7 +19,7 @@ import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { catchError, debounceTime, distinctUntilChanged, forkJoin, of, Subject } from 'rxjs';
-import { GetSalesAgentsResponse } from '@features/customers-crm/interfaces/get-sales-agents-response';
+import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
 import { AuthService } from '@core/services/auth.service';
 import { ROUTES, USER_TYPES } from '@shared/config/constants';
 import { InvoiceFacadeService } from '@features/invoices-crm/services/invoice.facade.service';
@@ -80,7 +80,7 @@ export class AddInvoice implements OnInit {
 
   customers = signal<GetCustomersResponse[] | undefined>(undefined);
   services = signal<ServiceDetails[]>([]);
-  salesAgents = signal<GetSalesAgentsResponse[]>([]);
+  salesAgents = signal<SalesAgentBrief[]>([]);
 
   USER_TYPES = USER_TYPES;
 

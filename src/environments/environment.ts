@@ -46,7 +46,6 @@ export const environment = {
     getAllCustomers: '/Customers/all',
     updateCustomer: '/Customers/update',
     deleteCustomer: (id: string) => `/Customers/${id}`,
-    getSalesAgents: '/SalesManagement/agentsList',
     exportCustomers: '/Customers/export',
   },
   invoices: {
@@ -83,5 +82,8 @@ export const environment = {
       `/ServiceSubmissions/accept-files/${serviceSubmissionId}`,
     rejectSubmission: (serviceSubmissionId: string) =>
       `/ServiceSubmissions/${serviceSubmissionId}/reject`,
+  },
+  salesAgents: {
+    getSalesAgents: '/SalesManagement/agentsList',
   },
 };

@@ -1,8 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '@core/interfaces/api-response';
+import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { environment } from '@env/environment';
+import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentStatistics } from '@features/sales-crm/interfaces/sales-agent-statistics';
+import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -16,5 +19,26 @@ export class SalesAgentApiService {
   getSalesAgentStatistics(): Observable<ApiResponse<SalesAgentStatistics>> {
     const url = `${this.baseUrl}${environment.statistics.getSalesAgentStatistics}`;
     return this.http.get<ApiResponse<SalesAgentStatistics>>(url);
+  }
+
+  getAllSalesAgents(
+    filters: SalesAgentsFilter
+  ): Observable<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>> {
+    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgents}`;
+
+    let params = new HttpParams()
+      .set('pageNumber', filters.pageNumber.toString())
+      .set('pageSize', filters.pageSize.toString());
+
+    if (filters.sortColumn) {
+      params = params.set('sortColumn', filters.sortColumn);
+    }
+    if (filters.sortDirection) {
+      params = params.set('sortDirection', filters.sortDirection);
+    }
+    if (filters.searchTerm) {
+      params = params.set('searchTerm', filters.searchTerm);
+    }
+    return this.http.get<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>>(url, { params });
   }
 }

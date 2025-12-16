@@ -6,16 +6,31 @@
   }
 }
 
+.sales-agents-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .card {
   width: 17.5625rem;
+  flex: 0 0 auto;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   &:hover {
     translate: 0 -0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 }
 
 .card-header {
   background-color: #005DB50D;
+}
+
+.pagination-container {
+  button:disabled {
+    cursor: not-allowed;
+  }
 }
