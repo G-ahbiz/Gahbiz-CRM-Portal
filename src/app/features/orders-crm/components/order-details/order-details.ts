@@ -3,13 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  finalize,
-  debounceTime,
-  distinctUntilChanged,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { finalize, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { Observable, of, Subject } from 'rxjs';
 import { OrderDetails } from '../../interfaces/order-details';
@@ -64,7 +58,7 @@ export class OrderDetailsComponent implements OnInit {
   >([
     {
       value: 'Created',
-      label: 'orders-crm.order-details.created',
+      label: 'ORDERS.order-details.created',
       icon: 'pi pi-plus-circle',
       color: 'bg-gray-100 text-gray-800',
       requiresConfirmation: false,
@@ -72,15 +66,15 @@ export class OrderDetailsComponent implements OnInit {
     },
     {
       value: 'Paid',
-      label: 'orders-crm.order-details.paid',
+      label: 'ORDERS.order-details.paid',
       icon: 'pi pi-check-circle',
       color: 'bg-green-100 text-green-800',
       requiresConfirmation: true,
-      confirmationMessage: 'orders-crm.order-details.confirm-paid',
+      confirmationMessage: 'ORDERS.order-details.confirm-paid',
     },
     {
       value: 'Pending',
-      label: 'orders-crm.order-details.pending',
+      label: 'ORDERS.order-details.pending',
       icon: 'pi pi-clock',
       color: 'bg-yellow-100 text-yellow-800',
       requiresConfirmation: false,
@@ -88,7 +82,7 @@ export class OrderDetailsComponent implements OnInit {
     },
     {
       value: 'Processing',
-      label: 'orders-crm.order-details.processing',
+      label: 'ORDERS.order-details.processing',
       icon: 'pi pi-cog',
       color: 'bg-blue-100 text-blue-800',
       requiresConfirmation: false,
@@ -96,27 +90,27 @@ export class OrderDetailsComponent implements OnInit {
     },
     {
       value: 'Completed',
-      label: 'orders-crm.order-details.completed',
+      label: 'ORDERS.order-details.completed',
       icon: 'pi pi-check',
       color: 'bg-green-100 text-green-800',
       requiresConfirmation: true,
-      confirmationMessage: 'orders-crm.order-details.confirm-completed',
+      confirmationMessage: 'ORDERS.order-details.confirm-completed',
     },
     {
       value: 'Cancelled',
-      label: 'orders-crm.order-details.cancelled',
+      label: 'ORDERS.order-details.cancelled',
       icon: 'pi pi-times-circle',
       color: 'bg-red-100 text-red-800',
       requiresConfirmation: true,
-      confirmationMessage: 'orders-crm.order-details.confirm-cancelled',
+      confirmationMessage: 'ORDERS.order-details.confirm-cancelled',
     },
     {
       value: 'Refunded',
-      label: 'orders-crm.order-details.refunded',
+      label: 'ORDERS.order-details.refunded',
       icon: 'pi pi-dollar',
       color: 'bg-purple-100 text-purple-800',
       requiresConfirmation: true,
-      confirmationMessage: 'orders-crm.order-details.confirm-refunded',
+      confirmationMessage: 'ORDERS.order-details.confirm-refunded',
     },
   ]);
 
@@ -153,7 +147,7 @@ export class OrderDetailsComponent implements OnInit {
       .subscribe({
         error: (err) => {
           console.error('Auto-save note error', err);
-          this.toast.error(this.translate.instant('orders-crm.order-details.note-save-error'));
+          this.toast.error(this.translate.instant('ORDERS.order-details.note-save-error'));
         },
       });
   }
@@ -209,15 +203,15 @@ export class OrderDetailsComponent implements OnInit {
     if (!status) return '';
 
     const statusMap: Record<string, string> = {
-      created: 'orders-crm.order-details.created',
-      pending: 'orders-crm.order-details.pending',
-      processing: 'orders-crm.order-details.processing',
-      completed: 'orders-crm.order-details.completed',
-      cancelled: 'orders-crm.order-details.cancelled',
-      paid: 'orders-crm.order-details.paid',
-      refunded: 'orders-crm.order-details.refunded',
-      unpaid: 'orders-crm.order-details.unpaid',
-      failed: 'orders-crm.order-details.failed',
+      created: 'ORDERS.order-details.created',
+      pending: 'ORDERS.order-details.pending',
+      processing: 'ORDERS.order-details.processing',
+      completed: 'ORDERS.order-details.completed',
+      cancelled: 'ORDERS.order-details.cancelled',
+      paid: 'ORDERS.order-details.paid',
+      refunded: 'ORDERS.order-details.refunded',
+      unpaid: 'ORDERS.order-details.unpaid',
+      failed: 'ORDERS.order-details.failed',
     };
 
     const key = statusMap[status.toLowerCase()] || status;
@@ -244,9 +238,9 @@ export class OrderDetailsComponent implements OnInit {
     if (!status) return '';
 
     const statusMap: Record<string, string> = {
-      paid: 'orders-crm.order-details.paid',
-      pending: 'orders-crm.order-details.pending',
-      failed: 'orders-crm.order-details.failed',
+      paid: 'ORDERS.order-details.paid',
+      pending: 'ORDERS.order-details.pending',
+      failed: 'ORDERS.order-details.failed',
     };
     return this.translate.instant(statusMap[status.toLowerCase()] || status);
   }
@@ -255,11 +249,11 @@ export class OrderDetailsComponent implements OnInit {
     if (!method) return '';
 
     const methodMap: Record<string, string> = {
-      creditcard: 'orders-crm.order-details.credit-card',
-      debitcard: 'orders-crm.order-details.debit-card',
-      paypal: 'orders-crm.order-details.paypal',
-      banktransfer: 'orders-crm.order-details.bank-transfer',
-      cash: 'orders-crm.order-details.cash',
+      creditcard: 'ORDERS.order-details.credit-card',
+      debitcard: 'ORDERS.order-details.debit-card',
+      paypal: 'ORDERS.order-details.paypal',
+      banktransfer: 'ORDERS.order-details.bank-transfer',
+      cash: 'ORDERS.order-details.cash',
     };
     return this.translate.instant(methodMap[method.toLowerCase()] || method);
   }
@@ -305,7 +299,7 @@ export class OrderDetailsComponent implements OnInit {
         : order
     );
 
-    this.toast.success(this.translate.instant('orders-crm.order-details.quantity-updated'));
+    this.toast.success(this.translate.instant('ORDERS.order-details.quantity-updated'));
   }
 
   ngOnInit(): void {
@@ -331,13 +325,13 @@ export class OrderDetailsComponent implements OnInit {
             this.order.set({ ...response.data, id });
             this.loadNote(id);
           } else {
-            this.error.set(this.translate.instant('orders-crm.order-details.order-not-found'));
+            this.error.set(this.translate.instant('ORDERS.order-details.order-not-found'));
           }
         },
         error: (err) => {
           console.error('Error loading order details', err);
-          this.error.set(this.translate.instant('orders-crm.order-details.load-error'));
-          this.toast.error(this.translate.instant('orders-crm.order-details.load-error'));
+          this.error.set(this.translate.instant('ORDERS.order-details.load-error'));
+          this.toast.error(this.translate.instant('ORDERS.order-details.load-error'));
         },
       });
   }
@@ -372,7 +366,7 @@ export class OrderDetailsComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error saving note manually', err);
-          this.toast.error(this.translate.instant('orders-crm.order-details.note-save-error'));
+          this.toast.error(this.translate.instant('ORDERS.order-details.note-save-error'));
         },
       });
   }
@@ -399,7 +393,7 @@ export class OrderDetailsComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef),
       tap(() => {
         this.noteChanged.set(false);
-        this.toast.success(this.translate.instant('orders-crm.order-details.note-saved-server'));
+        this.toast.success(this.translate.instant('ORDERS.order-details.note-saved-server'));
       })
     );
   }
@@ -447,14 +441,14 @@ export class OrderDetailsComponent implements OnInit {
           this.pendingStatusChange.set(null);
 
           this.toast.success(
-            this.translate.instant('orders-crm.order-details.status-updated', {
+            this.translate.instant('ORDERS.order-details.status-updated', {
               status: this.getStatusTranslation(newStatus),
             })
           );
         },
         error: (err) => {
           console.error('Error updating order status', err);
-          this.toast.error(this.translate.instant('orders-crm.order-details.status-update-error'));
+          this.toast.error(this.translate.instant('ORDERS.order-details.status-update-error'));
           // Reset the select dropdown to current status
           this.order.update((order) => order);
         },
@@ -475,7 +469,7 @@ export class OrderDetailsComponent implements OnInit {
 
   saveOrder(): void {
     if (!this.order() || !this.canEditOrder()) {
-      this.toast.error(this.translate.instant('orders-crm.order-details.cannot-edit-order'));
+      this.toast.error(this.translate.instant('ORDERS.order-details.cannot-edit-order'));
       return;
     }
 
@@ -483,7 +477,7 @@ export class OrderDetailsComponent implements OnInit {
     // TODO: Implement actual save functionality
     setTimeout(() => {
       this.saving.set(false);
-      this.toast.success(this.translate.instant('orders-crm.order-details.order-saved'));
+      this.toast.success(this.translate.instant('ORDERS.order-details.order-saved'));
     }, 1000);
   }
 
@@ -497,7 +491,7 @@ export class OrderDetailsComponent implements OnInit {
 
   downloadInvoice(): void {
     if (!this.order()) {
-      this.toast.error(this.translate.instant('orders-crm.order-details.no-data'));
+      this.toast.error(this.translate.instant('ORDERS.order-details.no-data'));
       return;
     }
 
@@ -513,7 +507,7 @@ export class OrderDetailsComponent implements OnInit {
       a.download = `invoice-${this.order()?.id?.slice(0, 8)}.txt`;
       a.click();
       window.URL.revokeObjectURL(url);
-      this.toast.success(this.translate.instant('orders-crm.order-details.invoice-downloaded'));
+      this.toast.success(this.translate.instant('ORDERS.order-details.invoice-downloaded'));
     }, 1500);
   }
 
@@ -522,44 +516,42 @@ export class OrderDetailsComponent implements OnInit {
     if (!order) return '';
 
     return `
-${this.translate.instant('orders-crm.order-details.invoice')}
-${this.translate.instant('orders-crm.order-details.order-id')}: ${order.id?.slice(0, 8) || 'N/A'}
-${this.translate.instant('orders-crm.order-details.date')}: ${new Date().toLocaleDateString()}
-${this.translate.instant('orders-crm.order-details.status')}: ${this.getStatusTranslation(
-      order.status
-    )}
+${this.translate.instant('ORDERS.order-details.invoice')}
+${this.translate.instant('ORDERS.order-details.order-id')}: ${order.id?.slice(0, 8) || 'N/A'}
+${this.translate.instant('ORDERS.order-details.date')}: ${new Date().toLocaleDateString()}
+${this.translate.instant('ORDERS.order-details.status')}: ${this.getStatusTranslation(order.status)}
 ${this.translate.instant(
-  'orders-crm.order-details.payment-status'
+  'ORDERS.order-details.payment-status'
 )}: ${this.getPaymentStatusTranslation(order.paymentStatus)}
 
-${this.translate.instant('orders-crm.order-details.customer-info')}
-${this.translate.instant('orders-crm.order-details.name')}: ${order.customerName}
-${this.translate.instant('orders-crm.order-details.email')}: ${order.customerEmail}
-${this.translate.instant('orders-crm.order-details.phone')}: ${order.customerPhone}
+${this.translate.instant('ORDERS.order-details.customer-info')}
+${this.translate.instant('ORDERS.order-details.name')}: ${order.customerName}
+${this.translate.instant('ORDERS.order-details.email')}: ${order.customerEmail}
+${this.translate.instant('ORDERS.order-details.phone')}: ${order.customerPhone}
 ${
   order.buyerName
-    ? `${this.translate.instant('orders-crm.order-details.buyer-name')}: ${order.buyerName}`
+    ? `${this.translate.instant('ORDERS.order-details.buyer-name')}: ${order.buyerName}`
     : ''
 }
 
-${this.translate.instant('orders-crm.order-details.shipping-info')}
-${this.translate.instant('orders-crm.order-details.address')}: ${order.address}
-${this.translate.instant('orders-crm.order-details.state')}: ${order.state}
-${this.translate.instant('orders-crm.order-details.country')}: ${order.country}
-${this.translate.instant('orders-crm.order-details.zip-code')}: ${order.zipCode}
+${this.translate.instant('ORDERS.order-details.shipping-info')}
+${this.translate.instant('ORDERS.order-details.address')}: ${order.address}
+${this.translate.instant('ORDERS.order-details.state')}: ${order.state}
+${this.translate.instant('ORDERS.order-details.country')}: ${order.country}
+${this.translate.instant('ORDERS.order-details.zip-code')}: ${order.zipCode}
 
-${this.translate.instant('orders-crm.order-details.order-items')}
+${this.translate.instant('ORDERS.order-details.order-items')}
 ${order.orderItems
   .map((item) => `${item.name} - $${item.price} x ${item.quantity} = $${item.total}`)
   .join('\n')}
 
-${this.translate.instant('orders-crm.order-details.totals')}
-${this.translate.instant('orders-crm.order-details.items')}: ${this.itemsTotalQuantity()}
-${this.translate.instant('orders-crm.order-details.subtotal')}: $${this.itemsTotalPrice()}
-${this.translate.instant('orders-crm.order-details.grand-total')}: $${this.itemsTotalPrice()}
+${this.translate.instant('ORDERS.order-details.totals')}
+${this.translate.instant('ORDERS.order-details.items')}: ${this.itemsTotalQuantity()}
+${this.translate.instant('ORDERS.order-details.subtotal')}: $${this.itemsTotalPrice()}
+${this.translate.instant('ORDERS.order-details.grand-total')}: $${this.itemsTotalPrice()}
 
 ${this.translate.instant(
-  'orders-crm.order-details.payment-method'
+  'ORDERS.order-details.payment-method'
 )}: ${this.getPaymentMethodTranslation(order.paymentMethod)}
     `.trim();
   }

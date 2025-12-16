@@ -22,4 +22,6 @@ export class OperationsContent {
   getCardsData() {
     this.cardsData = this.allData.getOperationsCardsData();
   }
+
+  
 }

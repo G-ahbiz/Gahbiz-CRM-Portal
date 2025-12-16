@@ -262,7 +262,12 @@
     "reports": "Reports",
     "settings": "Settings"
   },
-  "orders-crm": {
+  "ORDERS": {
+    "TITLE": "Orders",
+    "TOTAL_ORDERS": "Total Orders",
+    "CONFIRMED": "Confirmed",
+    "PENDING": "Pending",
+    "CANCELLED": "Cancelled",
     "export": "Export",
     "add-order": "Add Order",
     "order-details": {
@@ -349,7 +354,12 @@
       "title": "Add Order"
     }
   },
-  "invoices-crm": {
+  "INVOICES": {
+    "TITLE": "Invoices",
+    "TOTAL_INVOICES": "Total Invoices",
+    "PAID": "Paid Invoices",
+    "UNPAID": "Unpaid Invoices",
+    "PARTIALLY_PAID": "Partially Paid Invoices",
     "export": "Export",
     "add-invoice": "Add Invoice",
     "search": "Search...",
@@ -453,7 +463,7 @@
       "status-required": "Status is required"
     }
   },
-  "customers-crm": {
+  "CUSTOMERS-CRM": {
     "TITLE": "Customers",
     "TOTAL_CUSTOMERS": "Total Customers",
     "TOTAL_LEADS": "Total Leads",
@@ -575,12 +585,24 @@
       "NETWORK_ERROR": "Network error. Please check your connection."
     }
   },
-  "sales-crm": {
-    "sales-agents-cards": {
+  "SALES-CRM": {
+    "SALES-AGENTS-CARDS": {
+      "TITLE": "Sales Agents",
+      "TOTAL_AGENTS": "Total Agents",
+      "ACTIVE_AGENTS": "Active Agents",
+      "INACTIVE_AGENTS": "Inactive Agents",
+      "TOTAL_LEADS": "Total Leads",
+      "LEADS_PER_AGENT": "Leads per Agent",
+      "CONVERTED_LEADS": "Converted Leads",
+      "MONTHLY_TARGET": "Monthly Target",
+      "REVENUE_ACHIEVED": "Revenue Achieved",
       "assign-task": "Assign Task",
       "add-sales-agent": "Add Sales Agent",
       "sort": "Sort",
-      "search": "Search By Name"
+      "search": "Search By Name",
+      "ERROR": {
+        "FETCH_TEAM_STATISTICS": "Failed to load sales agent statistics"
+      }
     },
     "leads-tabel": {
       "export": "Export",
@@ -590,6 +612,10 @@
   },
   "LEADS": {
     "TITLE": "Leads",
+    "TOTAL_LEADS": "Total Leads",
+    "NEW_LEADS": "New Leads",
+    "QUALIFIED_LEADS": "Qualified Leads",
+    "IN_PROGRESS": "In Progress",
     "NEW_ACTIVITIES": "Add Activity",
     "DETAILS": "Details",
     "ACTIVITY_LOGS": "Activity Logs",
@@ -791,7 +817,12 @@
       "FAILED_TO_ADD_ACTIVITY": "Failed to add activity. Please try again."
     }
   },
-  "operations": {
+  "OPERATIONS": {
+    "TITLE": "Operations",
+    "ASSIGNED_REQUESTS": "Total Requests",
+    "PENDING_REQUESTS": "Pending Requests",
+    "COMPLETED_REQUESTS": "Completed Requests",
+    "AVG._PROCESSING_TIME":" Avg. Processing Time",
     "export": "Export",
     "add-request": "Add Request",
     "search": "Search...",

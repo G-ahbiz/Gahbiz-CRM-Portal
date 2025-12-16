@@ -453,7 +453,7 @@
       "status-required": "El estado es requerido"
     }
   },
-  "customers-crm": {
+  "CUSTOMERS-CRM": {
     "TITLE": "Clientes",
     "TOTAL_CUSTOMERS": "Total de Clientes",
     "TOTAL_LEADS": "Total de Leads",

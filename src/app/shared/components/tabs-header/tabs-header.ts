@@ -33,7 +33,7 @@ export class TabsHeader implements OnInit {
   ngOnInit() {}
 
   getTranslatedTitle$(card: LogCard): Observable<string> {
-    const key = `customers-crm.${card.title.toUpperCase().replace(/\s+/g, '_')}`;
+    const key = `${card.title.toUpperCase().replace(/\s+/g, '_')}`;
     return this.translate.stream(key).pipe(map((translation) => translation || card.title));
   }
 }

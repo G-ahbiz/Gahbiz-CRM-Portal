@@ -19,7 +19,7 @@
               class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
               (click)="exportLeads()">
               <i class="pi pi-download fs-875"></i>
-              {{ 'sales-crm.leads-tabel.export' | translate }}
+              {{ 'SALES-CRM.leads-tabel.export' | translate }}
             </button>
           </div>
           <!-- Filter and Search Container -->
@@ -149,21 +149,9 @@
   </div>
 </div>
 
-<p-dialog
-  [visible]="showLeadModal()"
-  modal="true"
-  (onHide)="closeLeadModal()"
-  [style]="{width: '700px'}"
-  styleClass="lead-details-dialog"
-  [closable]="true"
-  [dismissableMask]="true"
-  [draggable]="false"
-  [resizable]="false"
-  [showHeader]="false"
->
-  <app-leads-details
-    *ngIf="selectedLeadData()"
-    [lead]="selectedLeadData()"
-    (closed)="closeLeadModal()">
+<p-dialog [visible]="showLeadModal()" modal="true" (onHide)="closeLeadModal()" [style]="{width: '700px'}"
+  styleClass="lead-details-dialog" [closable]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false"
+  [showHeader]="false">
+  <app-leads-details *ngIf="selectedLeadData()" [lead]="selectedLeadData()" (closed)="closeLeadModal()">
   </app-leads-details>
 </p-dialog>

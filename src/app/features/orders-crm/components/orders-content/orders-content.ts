@@ -49,7 +49,7 @@ export class OrdersContent implements OnInit {
   private mapStatisticsToCards(statistics: StatisticsResponse): LogCard[] {
     return [
       {
-        title: 'Total Orders',
+        title: 'ORDERS.TOTAL_ORDERS',
         value: statistics.totalOrders,
         rating: statistics.totalChangePercentage,
         ratingStatues: statistics.totalChangePercentage >= 0 ? 'up' : 'down',
@@ -57,7 +57,7 @@ export class OrdersContent implements OnInit {
         bgColor: 'bg-primary-light',
       },
       {
-        title: 'Confirmed',
+        title: 'ORDERS.CONFIRMED',
         value: statistics.confirmedOrders,
         rating: statistics.confirmedChangePercentage,
         ratingStatues: statistics.confirmedChangePercentage >= 0 ? 'up' : 'down',
@@ -65,7 +65,7 @@ export class OrdersContent implements OnInit {
         bgColor: 'bg-success-light',
       },
       {
-        title: 'Pending',
+        title: 'ORDERS.PENDING',
         value: statistics.pendingOrders,
         rating: statistics.pendingChangePercentage,
         ratingStatues: statistics.pendingChangePercentage >= 0 ? 'up' : 'down',
@@ -73,7 +73,7 @@ export class OrdersContent implements OnInit {
         bgColor: 'bg-warning-light',
       },
       {
-        title: 'Cancelled',
+        title: 'ORDERS.CANCELLED',
         value: statistics.cancelledOrders,
         rating: statistics.cancelledChangePercentage,
         ratingStatues: statistics.cancelledChangePercentage >= 0 ? 'up' : 'down',
@@ -86,7 +86,7 @@ export class OrdersContent implements OnInit {
   private getFallbackCardsData(): LogCard[] {
     return [
       {
-        title: 'Total Orders',
+        title: 'ORDERS.TOTAL_ORDERS',
         value: 0,
         rating: 0,
         ratingStatues: 'up',
@@ -94,7 +94,7 @@ export class OrdersContent implements OnInit {
         bgColor: 'bg-primary-light',
       },
       {
-        title: 'Confirmed',
+        title: 'ORDERS.CONFIRMED',
         value: 0,
         rating: 0,
         ratingStatues: 'up',
@@ -102,7 +102,7 @@ export class OrdersContent implements OnInit {
         bgColor: 'bg-success-light',
       },
       {
-        title: 'Pending',
+        title: 'ORDERS.PENDING',
         value: 0,
         rating: 0,
         ratingStatues: 'up',
@@ -110,7 +110,7 @@ export class OrdersContent implements OnInit {
         bgColor: 'bg-warning-light',
       },
       {
-        title: 'Cancelled',
+        title: 'ORDERS.CANCELLED',
         value: 0,
         rating: 0,
         ratingStatues: 'up',

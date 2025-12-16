@@ -58,7 +58,7 @@ export class InvoiceContent implements OnInit {
   private mapStatisticsToCards(stats: InvoicesStatistics): LogCard[] {
     return [
       {
-        title: 'Total Invoices',
+        title: 'INVOICES.TOTAL_INVOICES',
         value: stats.totalInvoices,
         icon: 'totalInvoices',
         bgColor: 'bg-primary-light',
@@ -66,7 +66,7 @@ export class InvoiceContent implements OnInit {
         ratingStatues: stats.totalChangePercentage >= 0 ? 'up' : 'down',
       },
       {
-        title: 'Paid',
+        title: 'INVOICES.PAID',
         value: stats.paidInvoices,
         icon: 'paid',
         bgColor: 'bg-success-light',
@@ -74,7 +74,7 @@ export class InvoiceContent implements OnInit {
         ratingStatues: stats.paidChangePercentage >= 0 ? 'up' : 'down',
       },
       {
-        title: 'Partially Paid',
+        title: 'INVOICES.PARTIALLY_PAID',
         value: stats.partiallyPaidInvoices,
         icon: 'partiallyPaid',
         bgColor: 'bg-warning-light',
@@ -82,7 +82,7 @@ export class InvoiceContent implements OnInit {
         ratingStatues: stats.partiallyPaidChangePercentage >= 0 ? 'up' : 'down',
       },
       {
-        title: 'Unpaid',
+        title: 'INVOICES.UNPAID',
         value: stats.unpaidInvoices,
         icon: 'unpaid',
         bgColor: 'bg-danger-light',

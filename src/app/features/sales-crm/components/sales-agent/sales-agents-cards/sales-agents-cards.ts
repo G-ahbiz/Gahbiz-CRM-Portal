@@ -44,8 +44,7 @@ export class SalesAgentsCards implements OnInit {
     this.getDataCards();
   }
 
-  navigateToSalesAgent(id: number) {
-    sessionStorage.setItem('salesAgentId', id.toString());
-    this.router.navigate(['/main/sales/sales-agents/sales-agent-details']);
+  viewSalesAgent(id: string): void {
+    this.router.navigate(['/main/sales/sales-agents/sales-agent-details', id]);
   }
 }

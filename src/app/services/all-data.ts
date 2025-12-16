@@ -645,7 +645,7 @@ export class AllData {
 
   salesAgentsDetailsDataCards: LogCard[] = [
     {
-      title: 'Total Leads',
+      title: 'SALES-CRM.SALES-AGENTS-CARDS.TOTAL_LEADS',
       value: 250,
       icon: 'totalLeads',
       bgColor: 'card-blue',
@@ -653,7 +653,7 @@ export class AllData {
       ratingStatues: 'up',
     },
     {
-      title: 'Converted Leads',
+      title: 'SALES-CRM.SALES-AGENTS-CARDS.CONVERTED_LEADS',
       value: 180,
       icon: 'convertedLeads',
       bgColor: 'card-green',
@@ -661,7 +661,7 @@ export class AllData {
       ratingStatues: 'up',
     },
     {
-      title: 'Monthly Target',
+      title: 'SALES-CRM.SALES-AGENTS-CARDS.MONTHLY_TARGET',
       value: 78,
       icon: 'monthlyTarget',
       bgColor: 'card-yellow',
@@ -669,7 +669,7 @@ export class AllData {
       ratingStatues: 'down',
     },
     {
-      title: 'Revenue Achieved',
+      title: 'SALES-CRM.SALES-AGENTS-CARDS.REVENUE_ACHIEVED',
       value: 248,
       icon: 'revenueAchieved',
       bgColor: 'card-red',

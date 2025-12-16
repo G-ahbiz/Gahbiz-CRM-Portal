@@ -167,11 +167,11 @@ export const SOURCE_TYPES = [
 ];
 
 export const ORDER_STATUS_OPTION = [
-  { value: 'Created', label: 'orders-crm.order-details.created' },
-  { value: 'Paid', label: 'orders-crm.order-details.paid' },
-  { value: 'Pending', label: 'orders-crm.order-details.pending' },
-  { value: 'Processing', label: 'orders-crm.order-details.processing' },
-  { value: 'Completed', label: 'orders-crm.order-details.completed' },
-  { value: 'Cancelled', label: 'orders-crm.order-details.cancelled' },
-  { value: 'Refunded', label: 'orders-crm.order-details.refunded' },
+  { value: 'Created', label: 'ORDERS.order-details.created' },
+  { value: 'Paid', label: 'ORDERS.order-details.paid' },
+  { value: 'Pending', label: 'ORDERS.order-details.pending' },
+  { value: 'Processing', label: 'ORDERS.order-details.processing' },
+  { value: 'Completed', label: 'ORDERS.order-details.completed' },
+  { value: 'Cancelled', label: 'ORDERS.order-details.cancelled' },
+  { value: 'Refunded', label: 'ORDERS.order-details.refunded' },
 ];

@@ -58,10 +58,10 @@ export class AddCustomers implements OnInit, OnDestroy {
   ];
 
   genders = [
-    { value: 'male', label: 'customers-crm.add-customer-page.male' },
-    { value: 'female', label: 'customers-crm.add-customer-page.female' },
-    { value: 'other', label: 'customers-crm.add-customer-page.other' },
-    { value: 'prefer not to say', label: 'customers-crm.add-customer-page.prefer-not-to-say' },
+    { value: 'male', label: 'CUSTOMERS-CRM.add-customer-page.male' },
+    { value: 'female', label: 'CUSTOMERS-CRM.add-customer-page.female' },
+    { value: 'other', label: 'CUSTOMERS-CRM.add-customer-page.other' },
+    { value: 'prefer not to say', label: 'CUSTOMERS-CRM.add-customer-page.prefer-not-to-say' },
   ];
 
   currentUser$ = this.authService.currentUser$;
@@ -385,7 +385,7 @@ export class AddCustomers implements OnInit, OnDestroy {
         next: (response) => {
           if (response.succeeded) {
             this.toast.success(
-              this.translateService.instant('customers-crm.add-customer-page.success.add')
+              this.translateService.instant('CUSTOMERS-CRM.add-customer-page.success.add')
             );
             this.router.navigate([ROUTES.customersTable]);
           } else {
@@ -444,7 +444,7 @@ export class AddCustomers implements OnInit, OnDestroy {
         next: (response) => {
           if (response.succeeded) {
             this.toast.success(
-              this.translateService.instant('customers-crm.edit-customer-page.success.update')
+              this.translateService.instant('CUSTOMERS-CRM.edit-customer-page.success.update')
             );
             this.router.navigate([ROUTES.customersTable]);
           } else {
@@ -504,17 +504,17 @@ export class AddCustomers implements OnInit, OnDestroy {
     const errors = control.errors;
 
     const fieldTranslationKeys: { [key: string]: string } = {
-      fullName: 'customers-crm.add-customer-page.full-name',
-      email: 'customers-crm.add-customer-page.email',
-      phone: 'customers-crm.add-customer-page.phone',
-      ssn: 'customers-crm.add-customer-page.ssn',
-      gender: 'customers-crm.add-customer-page.gender',
-      country: 'customers-crm.add-customer-page.country',
-      state: 'customers-crm.add-customer-page.state',
-      postalCode: 'customers-crm.add-customer-page.postal-code',
-      address: 'customers-crm.add-customer-page.address',
-      defaultLanguage: 'customers-crm.add-customer-page.default-language',
-      assignedAgentId: 'customers-crm.add-customer-page.assign-user',
+      fullName: 'CUSTOMERS-CRM.add-customer-page.full-name',
+      email: 'CUSTOMERS-CRM.add-customer-page.email',
+      phone: 'CUSTOMERS-CRM.add-customer-page.phone',
+      ssn: 'CUSTOMERS-CRM.add-customer-page.ssn',
+      gender: 'CUSTOMERS-CRM.add-customer-page.gender',
+      country: 'CUSTOMERS-CRM.add-customer-page.country',
+      state: 'CUSTOMERS-CRM.add-customer-page.state',
+      postalCode: 'CUSTOMERS-CRM.add-customer-page.postal-code',
+      address: 'CUSTOMERS-CRM.add-customer-page.address',
+      defaultLanguage: 'CUSTOMERS-CRM.add-customer-page.default-language',
+      assignedAgentId: 'CUSTOMERS-CRM.add-customer-page.assign-user',
     };
 
     const translationKey = fieldTranslationKeys[fieldName] || fieldName;

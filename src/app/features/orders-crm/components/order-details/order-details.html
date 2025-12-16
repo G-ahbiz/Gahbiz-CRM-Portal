@@ -12,7 +12,7 @@
           <i class="pi pi-chevron-left text-gray-600"></i>
         </button>
         <h1 class="mb-0 fs-4 fw-bold text-gray-900">
-          {{ 'orders-crm.order-details.title' | translate }}
+          {{ 'ORDERS.order-details.title' | translate }}
         </h1>
       </div>
     </header>
@@ -26,7 +26,7 @@
             <i class="pi pi-shopping-bag text-primary fs-4"></i>
             <div>
               <span class="fs-5 fw-bold text-gray-900">
-                {{ 'orders-crm.order-details.order-id' | translate }}
+                {{ 'ORDERS.order-details.order-id' | translate }}
                 <span class="fs-6 text-muted">#{{ order()?.id?.slice(0, 8) || 'N/A' }}</span>
               </span>
             </div>
@@ -53,9 +53,9 @@
               <select [value]="order()?.status" (change)="onStatusChange($event)"
                 [disabled]="updatingStatus() || !order() || !canEditOrder()"
                 class="form-select border-start-0 bg-gray-50 border-gray-200 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 pe-4"
-                title="{{ !canEditOrder() ? ('orders-crm.order-details.cannot-change-status' | translate) : '' }}">
+                title="{{ !canEditOrder() ? ('ORDERS.order-details.cannot-change-status' | translate) : '' }}">
                 <option value="" disabled>
-                  {{ 'orders-crm.order-details.change-status' | translate }}
+                  {{ 'ORDERS.order-details.change-status' | translate }}
                 </option>
                 @for (status of statusOptions(); track status.value) {
                 <option [value]="status.value" [disabled]="!canEditOrder() && status.value !== order()?.status">
@@ -80,7 +80,7 @@
                 <i class="pi pi-comment"></i>
               </span>
               <input type="text" [ngModel]="currentNote()" (ngModelChange)="onNoteChange($event)"
-                placeholder="{{ 'orders-crm.order-details.add-note' | translate }}"
+                placeholder="{{ 'ORDERS.order-details.add-note' | translate }}"
                 class="form-control border-start-0 bg-gray-50 border-gray-200 text-sm rounded-lg py-2"
                 [disabled]="savingNote() || updatingStatus()" />
               <span class="input-group-text bg-gray-50 border-start-0">
@@ -99,7 +99,7 @@
             <button (click)="saveNoteManual()"
               class="btn btn-link btn-sm position-absolute end-0 mt-1 text-decoration-none" style="font-size: 0.75rem;">
               <i class="pi pi-save me-1"></i>
-              {{ 'orders-crm.order-details.save' | translate }}
+              {{ 'ORDERS.order-details.save' | translate }}
             </button>
             }
           </div>
@@ -108,13 +108,13 @@
           <div class="d-flex gap-2">
             <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2 px-3" (click)="saveOrder()"
               [disabled]="saving() || !canEditOrder()"
-              title="{{ !canEditOrder() ? ('orders-crm.order-details.cannot-edit-order' | translate) : '' }}">
+              title="{{ !canEditOrder() ? ('ORDERS.order-details.cannot-edit-order' | translate) : '' }}">
               @if (saving()) {
               <span class="spinner-border spinner-border-sm"></span>
               } @else {
               <i class="pi pi-save"></i>
               }
-              <span class="d-none d-sm-inline">{{ 'orders-crm.order-details.save-order' | translate }}</span>
+              <span class="d-none d-sm-inline">{{ 'ORDERS.order-details.save-order' | translate }}</span>
             </button>
 
             <button class="btn btn-outline-success btn-sm d-flex align-items-center gap-2 px-3"
@@ -124,13 +124,13 @@
               } @else {
               <i class="pi pi-download"></i>
               }
-              <span class="d-none d-sm-inline">{{ 'orders-crm.order-details.download' | translate }}</span>
+              <span class="d-none d-sm-inline">{{ 'ORDERS.order-details.download' | translate }}</span>
             </button>
 
             <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3"
               (click)="printOrder()">
               <i class="pi pi-print"></i>
-              <span class="d-none d-sm-inline">{{ 'orders-crm.order-details.print' | translate }}</span>
+              <span class="d-none d-sm-inline">{{ 'ORDERS.order-details.print' | translate }}</span>
             </button>
           </div>
         </div>
@@ -146,7 +146,7 @@
           <div class="modal-header border-0 pb-0">
             <h5 class="modal-title text-gray-900">
               <i class="pi pi-exclamation-triangle text-warning me-2"></i>
-              {{ 'orders-crm.order-details.confirm-status-change-title' | translate }}
+              {{ 'ORDERS.order-details.confirm-status-change-title' | translate }}
             </h5>
             <button type="button" class="btn-close" (click)="cancelStatusChange()"></button>
           </div>
@@ -171,7 +171,7 @@
               </div>
             </div>
             <p class="text-muted mb-0">
-              {{ 'orders-crm.order-details.confirm-status-change-message' | translate }}
+              {{ 'ORDERS.order-details.confirm-status-change-message' | translate }}
             </p>
             @if (pendingStatusChange() && getStatusOption(pendingStatusChange()!)?.confirmationMessage) {
             <p class="alert alert-warning mt-3 mb-0 py-2">
@@ -224,31 +224,31 @@
             </div>
             <div>
               <h3 class="fw-bold text-gray-900 fs-6 mb-2">
-                {{ 'orders-crm.order-details.customer-info' | translate }}
+                {{ 'ORDERS.order-details.customer-info' | translate }}
               </h3>
               <div class="space-y-1">
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 60px;">
-                    {{ 'orders-crm.order-details.name' | translate }}:
+                    {{ 'ORDERS.order-details.name' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ order()?.customerName }}</span>
                 </p>
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 60px;">
-                    {{ 'orders-crm.order-details.email' | translate }}:
+                    {{ 'ORDERS.order-details.email' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ order()?.customerEmail }}</span>
                 </p>
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 60px;">
-                    {{ 'orders-crm.order-details.phone' | translate }}:
+                    {{ 'ORDERS.order-details.phone' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ order()?.customerPhone }}</span>
                 </p>
                 @if (order()?.buyerName) {
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 60px;">
-                    {{ 'orders-crm.order-details.buyer-name' | translate }}:
+                    {{ 'ORDERS.order-details.buyer-name' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ order()?.buyerName }}</span>
                 </p>
@@ -269,25 +269,25 @@
             </div>
             <div>
               <h3 class="fw-bold text-gray-900 fs-6 mb-2">
-                {{ 'orders-crm.order-details.payment-info' | translate }}
+                {{ 'ORDERS.order-details.payment-info' | translate }}
               </h3>
               <div class="space-y-1">
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 80px;">
-                    {{ 'orders-crm.order-details.total-amount' | translate }}:
+                    {{ 'ORDERS.order-details.total-amount' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">$ {{ order()?.amount | number: '1.2-2' }}</span>
                 </p>
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 80px;">
-                    {{ 'orders-crm.order-details.payment-method' | translate }}:
+                    {{ 'ORDERS.order-details.payment-method' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ getPaymentMethodTranslation(order()?.paymentMethod || '')
                     }}</span>
                 </p>
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 80px;">
-                    {{ 'orders-crm.order-details.payment-status' | translate }}:
+                    {{ 'ORDERS.order-details.payment-status' | translate }}:
                   </span>
                   <span [class]="getPaymentStatusClass(order()?.paymentStatus || '')" class="badge">
                     {{ getPaymentStatusTranslation(order()?.paymentStatus || '') }}
@@ -309,32 +309,32 @@
             </div>
             <div>
               <h3 class="fw-bold text-gray-900 fs-6 mb-2">
-                {{ 'orders-crm.order-details.shipping-info' | translate }}
+                {{ 'ORDERS.order-details.shipping-info' | translate }}
               </h3>
               <div class="space-y-1">
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 70px;">
-                    {{ 'orders-crm.order-details.address' | translate }}:
+                    {{ 'ORDERS.order-details.address' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ order()?.address }}</span>
                 </p>
                 <div class="d-flex gap-3 mb-2">
                   <p class="text-sm mb-0">
                     <span class="text-gray-400 d-inline-block" style="width: 70px;">
-                      {{ 'orders-crm.order-details.state' | translate }}:
+                      {{ 'ORDERS.order-details.state' | translate }}:
                     </span>
                     <span class="fw-medium text-gray-700">{{ order()?.state }}</span>
                   </p>
                   <p class="text-sm mb-0">
                     <span class="text-gray-400 d-inline-block" style="width: 70px;">
-                      {{ 'orders-crm.order-details.country' | translate }}:
+                      {{ 'ORDERS.order-details.country' | translate }}:
                     </span>
                     <span class="fw-medium text-gray-700">{{ order()?.country }}</span>
                   </p>
                 </div>
                 <p class="text-sm mb-2">
                   <span class="text-gray-400 d-inline-block" style="width: 70px;">
-                    {{ 'orders-crm.order-details.zip-code' | translate }}:
+                    {{ 'ORDERS.order-details.zip-code' | translate }}:
                   </span>
                   <span class="fw-medium text-gray-700">{{ order()?.zipCode }}</span>
                 </p>
@@ -353,11 +353,11 @@
               <i class="pi pi-pencil text-gray-600"></i>
             </div>
             <div class="w-100">
-              <h3 class="fw-bold text-gray-900 fs-6 mb-2">{{ 'orders-crm.order-details.notes' | translate }}</h3>
+              <h3 class="fw-bold text-gray-900 fs-6 mb-2">{{ 'ORDERS.order-details.notes' | translate }}</h3>
               <div class="position-relative">
                 <textarea [(ngModel)]="currentNote"
                   class="form-control w-100 p-3 text-sm border border-gray-200 rounded-lg focus:ring-blue-500 focus:border-blue-500 min-h-20 bg-white resize-none"
-                  [placeholder]="'orders-crm.order-details.type-note-placeholder' | translate" rows="3"></textarea>
+                  [placeholder]="'ORDERS.order-details.type-note-placeholder' | translate" rows="3"></textarea>
                 <div class="d-flex justify-content-end mt-2">
                   <button
                     class="btn btn-sm px-3 py-1 text-xs fw-semibold text-blue-600 bg-white border border-gray-200 rounded hover-bg-gray-50"
@@ -374,7 +374,7 @@
 
     <div class="bg-white rounded-3 p-4 shadow-sm border border-gray-100">
       <h3 class="fw-bold text-gray-900 fs-5 mb-4">
-        {{ 'orders-crm.order-details.order-items' | translate }}
+        {{ 'ORDERS.order-details.order-items' | translate }}
       </h3>
 
       <div class="orders-table overflow-x-auto overflow-y-auto w-100">
@@ -383,10 +383,10 @@
             <thead class="table-light">
               <tr>
                 <th scope="col" style="width: 40px;" class="ps-3"></th>
-                <th scope="col" class="text-start">{{ 'orders-crm.order-details.item-name' | translate }}</th>
-                <th scope="col" class="text-center">{{ 'orders-crm.order-details.price' | translate }}</th>
-                <th scope="col" class="text-center">{{ 'orders-crm.order-details.quantity' | translate }}</th>
-                <th scope="col" class="text-end pe-3">{{ 'orders-crm.order-details.total' | translate }}</th>
+                <th scope="col" class="text-start">{{ 'ORDERS.order-details.item-name' | translate }}</th>
+                <th scope="col" class="text-center">{{ 'ORDERS.order-details.price' | translate }}</th>
+                <th scope="col" class="text-center">{{ 'ORDERS.order-details.quantity' | translate }}</th>
+                <th scope="col" class="text-end pe-3">{{ 'ORDERS.order-details.total' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -404,7 +404,7 @@
                     </div>
                     <div>
                       <div class="fw-medium text-gray-800">{{ item.name }}</div>
-                      <small class="text-muted">{{ 'orders-crm.order-details.id' | translate }}: {{ item.id | slice: -8
+                      <small class="text-muted">{{ 'ORDERS.order-details.id' | translate }}: {{ item.id | slice: -8
                         }}</small>
                     </div>
                   </div>
@@ -431,20 +431,20 @@
                 <td colspan="3" class="pt-3 ps-3 border-top">
                   <div class="d-flex align-items-center gap-2">
                     <i class="pi pi-chart-bar text-primary"></i>
-                    <span class="fw-medium text-gray-700">{{ 'orders-crm.order-details.summary' | translate }}</span>
+                    <span class="fw-medium text-gray-700">{{ 'ORDERS.order-details.summary' | translate }}</span>
                     @if (selectedItems().length > 0) {
                     <span class="badge bg-primary rounded-pill ms-2">{{ selectedItems().length }} {{
-                      'orders-crm.order-details.selected' | translate }}</span>
+                      'ORDERS.order-details.selected' | translate }}</span>
                     }
                   </div>
                 </td>
                 <td class="pt-3 text-center border-top">
                   <div class="fw-bold text-gray-800">{{ itemsTotalQuantity() }}</div>
-                  <small class="text-muted">{{ 'orders-crm.order-details.items' | translate }}</small>
+                  <small class="text-muted">{{ 'ORDERS.order-details.items' | translate }}</small>
                 </td>
                 <td class="pt-3 pe-3 text-end border-top">
                   <div class="fw-bold text-primary fs-5">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
-                  <small class="text-muted">{{ 'orders-crm.order-details.order-total' | translate }}</small>
+                  <small class="text-muted">{{ 'ORDERS.order-details.order-total' | translate }}</small>
                 </td>
               </tr>
             </tbody>
@@ -457,17 +457,17 @@
         class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mt-4 pt-3 border-top">
         <div class="text-muted small">
           <i class="pi pi-info-circle me-1"></i>
-          {{ 'orders-crm.order-details.showing' | translate: { count: order()?.orderItems?.length || 0, selected:
+          {{ 'ORDERS.order-details.showing' | translate: { count: order()?.orderItems?.length || 0, selected:
           selectedItems().length } }}
         </div>
         <div class="d-flex flex-wrap gap-4">
           <div class="text-end">
-            <div class="text-muted small">{{ 'orders-crm.order-details.subtotal' | translate }}</div>
+            <div class="text-muted small">{{ 'ORDERS.order-details.subtotal' | translate }}</div>
             <div class="fw-medium">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
           </div>
           <!-- Removed tax section -->
           <div class="text-end">
-            <div class="text-gray-700 fw-semibold">{{ 'orders-crm.order-details.grand-total' | translate }}</div>
+            <div class="text-gray-700 fw-semibold">{{ 'ORDERS.order-details.grand-total' | translate }}</div>
             <div class="fw-bold text-primary fs-5">${{ itemsTotalPrice() | number:'1.2-2' }}</div>
           </div>
         </div>

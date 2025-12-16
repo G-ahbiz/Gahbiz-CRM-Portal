@@ -97,7 +97,7 @@ export class CustomerContent implements OnInit {
   private mapStatisticsToCards(stats: CustomersStatistics): LogCard[] {
     return [
       {
-        title: 'TOTAL_CUSTOMERS', // Translation key
+        title: 'CUSTOMERS-CRM.TOTAL_CUSTOMERS', // Translation key
         value: stats.toltalCustomers || 0,
         rating: Math.abs(this.formatPercentage(stats.customersChangePercentage || 0)),
         ratingStatues: (stats.customersChangePercentage || 0) >= 0 ? 'up' : 'down',
@@ -105,7 +105,7 @@ export class CustomerContent implements OnInit {
         bgColor: 'bg-primary-light',
       },
       {
-        title: 'TOTAL_LEADS', // Translation key
+        title: 'CUSTOMERS-CRM.TOTAL_LEADS', // Translation key
         value: stats.totlaLeads || 0,
         rating: Math.abs(this.formatPercentage(stats.leadsChangePercentage || 0)),
         ratingStatues: (stats.leadsChangePercentage || 0) >= 0 ? 'up' : 'down',
@@ -113,7 +113,7 @@ export class CustomerContent implements OnInit {
         bgColor: 'bg-success-light',
       },
       {
-        title: 'TOTAL_USERS', // Translation key
+        title: 'CUSTOMERS-CRM.TOTAL_USERS', // Translation key
         value: stats.totalUsers || 0,
         rating: Math.abs(this.formatPercentage(stats.usersChangePercentage || 0)),
         ratingStatues: (stats.usersChangePercentage || 0) >= 0 ? 'up' : 'down',
@@ -131,7 +131,7 @@ export class CustomerContent implements OnInit {
   private getFallbackCardsData(): LogCard[] {
     return [
       {
-        title: 'TOTAL_CUSTOMERS',
+        title: 'CUSTOMERS-CRM.TOTAL_CUSTOMERS',
         value: 0,
         rating: 0,
         ratingStatues: 'up',
@@ -139,7 +139,7 @@ export class CustomerContent implements OnInit {
         bgColor: 'bg-primary-light',
       },
       {
-        title: 'TOTAL_LEADS',
+        title: 'CUSTOMERS-CRM.TOTAL_LEADS',
         value: 0,
         rating: 0,
         ratingStatues: 'up',
@@ -147,7 +147,7 @@ export class CustomerContent implements OnInit {
         bgColor: 'bg-success-light',
       },
       {
-        title: 'TOTAL_USERS',
+        title: 'CUSTOMERS-CRM.TOTAL_USERS',
         value: 0,
         rating: 0,
         ratingStatues: 'up',

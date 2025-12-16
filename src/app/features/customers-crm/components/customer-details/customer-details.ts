@@ -46,21 +46,21 @@ export class CustomerDetails implements OnChanges, OnInit {
 
   // Translation keys for better maintainability
   readonly translationKeys = {
-    CUSTOMER_INFO: 'customers-crm.customer.info.title',
+    CUSTOMER_INFO: 'CUSTOMERS-CRM.customer.info.title',
     LOADING: 'COMMON.LOADING',
     CLOSE: 'COMMON.CLOSE',
-    PERSONAL_DETAILS: 'customers-crm.customer.details.personal',
-    ADDRESS: 'customers-crm.customer.details.address',
-    FULL_NAME: 'customers-crm.customer.details.fullName',
-    EMAIL: 'customers-crm.customer.details.email',
-    GENDER: 'customers-crm.customer.details.gender',
-    PHONE: 'customers-crm.customer.details.phone',
-    NATIONAL_ID: 'customers-crm.customer.details.nationalId',
-    COUNTRY: 'customers-crm.customer.details.country',
-    CITY_STATE: 'customers-crm.customer.details.cityState',
-    POSTAL_CODE: 'customers-crm.customer.details.postalCode',
-    CLIENT: 'customers-crm.customer.details.client',
-    ERROR_LOADING: 'customers-crm.customer.details.error.loading',
+    PERSONAL_DETAILS: 'CUSTOMERS-CRM.customer.details.personal',
+    ADDRESS: 'CUSTOMERS-CRM.customer.details.address',
+    FULL_NAME: 'CUSTOMERS-CRM.customer.details.fullName',
+    EMAIL: 'CUSTOMERS-CRM.customer.details.email',
+    GENDER: 'CUSTOMERS-CRM.customer.details.gender',
+    PHONE: 'CUSTOMERS-CRM.customer.details.phone',
+    NATIONAL_ID: 'CUSTOMERS-CRM.customer.details.nationalId',
+    COUNTRY: 'CUSTOMERS-CRM.customer.details.country',
+    CITY_STATE: 'CUSTOMERS-CRM.customer.details.cityState',
+    POSTAL_CODE: 'CUSTOMERS-CRM.customer.details.postalCode',
+    CLIENT: 'CUSTOMERS-CRM.customer.details.client',
+    ERROR_LOADING: 'CUSTOMERS-CRM.customer.details.error.loading',
     ERROR_GENERIC: 'COMMON.ERRORS.GENERIC',
   };
 
@@ -152,7 +152,7 @@ export class CustomerDetails implements OnChanges, OnInit {
     if (!gender) return '';
 
     // Translate gender values if they exist in your translations
-    const translationKey = `customers-crm.customer.gender.${gender.toLowerCase()}`;
+    const translationKey = `CUSTOMERS-CRM.customer.gender.${gender.toLowerCase()}`;
     const translated = this.translate.instant(translationKey);
 
     // Fallback to original value if no translation exists

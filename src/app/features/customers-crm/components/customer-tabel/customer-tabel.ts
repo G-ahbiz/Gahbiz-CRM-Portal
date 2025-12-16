@@ -147,7 +147,7 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error loading customers', err);
-          this.toast.error(this.translate.instant('customers-crm.error-loading-customers'));
+          this.toast.error(this.translate.instant('CUSTOMERS-CRM.error-loading-customers'));
         },
       });
   }
@@ -261,7 +261,7 @@ export class CustomerTabel implements OnInit {
    */
   onDeleteCustomer(id: string): void {
     this.confirmationService.confirm({
-      message: this.translate.instant('customers-crm.delete-customer-confirmation'),
+      message: this.translate.instant('CUSTOMERS-CRM.delete-customer-confirmation'),
       header: this.translate.instant('COMMON.CONFIRM'),
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -282,7 +282,7 @@ export class CustomerTabel implements OnInit {
         next: (response) => {
           if (response.succeeded) {
             this.toast.success(
-              this.translate.instant('customers-crm.customer-deleted-successfully')
+              this.translate.instant('CUSTOMERS-CRM.customer-deleted-successfully')
             );
 
             // Remove from selected IDs if it was selected
@@ -297,7 +297,7 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error deleting customer', err);
-          this.toast.error(this.translate.instant('customers-crm.error-deleting-customer'));
+          this.toast.error(this.translate.instant('CUSTOMERS-CRM.error-deleting-customer'));
         },
       });
   }
@@ -310,13 +310,13 @@ export class CustomerTabel implements OnInit {
 
     if (selectedIds.length === 0) {
       this.toast.error(
-        this.translate.instant('customers-crm.select-at-least-one-customer-to-delete')
+        this.translate.instant('CUSTOMERS-CRM.select-at-least-one-customer-to-delete')
       );
       return;
     }
 
     this.confirmationService.confirm({
-      message: this.translate.instant('customers-crm.delete-multiple-customers-confirmation', {
+      message: this.translate.instant('CUSTOMERS-CRM.delete-multiple-customers-confirmation', {
         count: selectedIds.length,
       }),
       header: this.translate.instant('COMMON.CONFIRM'),
@@ -344,7 +344,7 @@ export class CustomerTabel implements OnInit {
           if (result.succeeded.length > 0) {
             // Show success message for successful deletions
             this.toast.success(
-              this.translate.instant('customers-crm.customers-deleted-successfully', {
+              this.translate.instant('CUSTOMERS-CRM.customers-deleted-successfully', {
                 count: result.succeeded.length,
               })
             );
@@ -358,7 +358,7 @@ export class CustomerTabel implements OnInit {
           if (result.failed.length > 0) {
             // Show error message for failed deletions
             const errorMessage = this.translate.instant(
-              'customers-crm.some-customers-delete-failed',
+              'CUSTOMERS-CRM.some-customers-delete-failed',
               {
                 count: result.failed.length,
               }
@@ -374,7 +374,7 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error in bulk delete operation:', err);
-          this.toast.error(this.translate.instant('customers-crm.error-deleting-customers'));
+          this.toast.error(this.translate.instant('CUSTOMERS-CRM.error-deleting-customers'));
         },
       });
   }
@@ -391,7 +391,7 @@ export class CustomerTabel implements OnInit {
 
     if (selectedIds.length === 0) {
       this.toast.error(
-        this.translate.instant('customers-crm.select-at-least-one-customer-to-export')
+        this.translate.instant('CUSTOMERS-CRM.select-at-least-one-customer-to-export')
       );
       return;
     }
@@ -423,14 +423,14 @@ export class CustomerTabel implements OnInit {
           window.URL.revokeObjectURL(url);
 
           // Show success message with count
-          const successMessage = this.translate.instant('customers-crm.export-success', {
+          const successMessage = this.translate.instant('CUSTOMERS-CRM.export-success', {
             count: selectedIds.length,
           });
           this.toast.success(successMessage);
         },
         error: (error) => {
           console.error('Export error:', error);
-          this.toast.error(this.translate.instant('customers-crm.export-failed'));
+          this.toast.error(this.translate.instant('CUSTOMERS-CRM.export-failed'));
         },
       });
   }
@@ -444,7 +444,7 @@ export class CustomerTabel implements OnInit {
       customer.selected = false;
     });
     this.isAllSelected = false;
-    this.toast.info(this.translate.instant('customers-crm.selection-cleared'));
+    this.toast.info(this.translate.instant('CUSTOMERS-CRM.selection-cleared'));
   }
 
   /**

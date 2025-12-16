@@ -64,7 +64,7 @@ export class LeadsContent implements OnInit {
   private mapStatisticsToCards(stats: LeadsStatistics): LogCard[] {
     return [
       {
-        title: 'Total Leads',
+        title: 'LEADS.TOTAL_LEADS',
         value: stats.totalLeads,
         rating: this.formatPercentage(stats.totalChangePercentage),
         ratingStatues: stats.totalChangePercentage >= 0 ? 'up' : 'down',
@@ -72,7 +72,7 @@ export class LeadsContent implements OnInit {
         bgColor: 'bg-primary-light',
       },
       {
-        title: 'New Leads',
+        title: 'LEADS.NEW_LEADS',
         value: stats.newLeads,
         rating: this.formatPercentage(stats.newChangePercentage),
         ratingStatues: stats.newChangePercentage >= 0 ? 'up' : 'down',
@@ -80,7 +80,7 @@ export class LeadsContent implements OnInit {
         bgColor: 'bg-success-light',
       },
       {
-        title: 'Qualified Leads',
+        title: 'LEADS.QUALIFIED_LEADS',
         value: stats.qualifiedLeads,
         rating: this.formatPercentage(stats.qualifiedChangePercentage),
         ratingStatues: stats.qualifiedChangePercentage >= 0 ? 'up' : 'down',
@@ -88,7 +88,7 @@ export class LeadsContent implements OnInit {
         bgColor: 'bg-warning-light',
       },
       {
-        title: 'In Progress',
+        title: 'LEADS.IN_PROGRESS',
         value: stats.inProgressLeads,
         rating: this.formatPercentage(stats.inProgressChangePercentage),
         ratingStatues: stats.inProgressChangePercentage >= 0 ? 'up' : 'down',
@@ -106,7 +106,7 @@ export class LeadsContent implements OnInit {
   private getFallbackCardsData(): LogCard[] {
     return [
       {
-        title: 'Total Leads',
+        title: 'LEADS.TOTAL_LEADS',
         value: 0,
         rating: 0.0,
         ratingStatues: 'up',
@@ -114,7 +114,7 @@ export class LeadsContent implements OnInit {
         bgColor: 'bg-primary-light',
       },
       {
-        title: 'New Leads',
+        title: 'LEADS.NEW_LEADS',
         value: 0,
         rating: 0.0,
         ratingStatues: 'up',
@@ -122,7 +122,7 @@ export class LeadsContent implements OnInit {
         bgColor: 'bg-success-light',
       },
       {
-        title: 'Qualified Leads',
+        title: 'LEADS.QUALIFIED_LEADS',
         value: 0,
         rating: 0.0,
         ratingStatues: 'up',
@@ -130,7 +130,7 @@ export class LeadsContent implements OnInit {
         bgColor: 'bg-warning-light',
       },
       {
-        title: 'In Progress',
+        title: 'LEADS.IN_PROGRESS',
         value: 0,
         rating: 0.0,
         ratingStatues: 'up',

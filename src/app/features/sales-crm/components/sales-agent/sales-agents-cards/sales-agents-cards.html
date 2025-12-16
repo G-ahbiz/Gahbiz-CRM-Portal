@@ -12,7 +12,7 @@
         <i class="pi pi-search text-muted-clr"></i>
         <!-- Search Input -->
         <input type="text" class="form-control border-0 bg-transparent"
-          placeholder="{{ 'sales-crm.sales-agents-cards.search' | translate }}"
+          placeholder="{{ 'SALES-CRM.SALES-AGENTS-CARDS.search' | translate }}"
           (input)="onSearchChange($any($event.target).value)" #searchInput>
         <!-- Clear Search Button -->
         <button type="button" class="btn bg-transparent d-flex {{ searchValue.length > 0 ? 'visible' : 'invisible' }}"
@@ -26,21 +26,21 @@
         <!-- Assign Task Button -->
         <button class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3">
           <img src="assets/images/shared/plus.svg" alt="" class="">
-          <span class="">{{ 'sales-crm.sales-agents-cards.assign-task' | translate }}</span>
+          <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.assign-task' | translate }}</span>
         </button>
 
         <!-- Add Sales Agent Button -->
         <button
           class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3">
           <i class="pi pi-plus text-primary-clr fs-875"></i>
-          <span class="">{{ 'sales-crm.sales-agents-cards.add-sales-agent' | translate }}</span>
+          <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.add-sales-agent' | translate }}</span>
         </button>
 
         <!-- Sort Button -->
         <button
           class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3">
           <i class="pi pi-sort-alt"></i>
-          <span class="">{{ 'sales-crm.sales-agents-cards.sort' | translate }}</span>
+          <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.sort' | translate }}</span>
         </button>
       </div>
     </div>
@@ -50,7 +50,7 @@
       class="sales-agents-cards-container d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 w-100">
 
       @for (card of dataCards; track card.id) {
-      <div class="card sales-agent-card p-2 border-0" (click)="navigateToSalesAgent(card.id)">
+      <div class="card sales-agent-card p-2 border-0" (click)="viewSalesAgent(card.id)">
         <div class="card-header d-flex flex-column justify-content-between align-items-center gap-2 p-3 border-0 mb-2">
           <!-- More Actions Button -->
           <button type="button"
