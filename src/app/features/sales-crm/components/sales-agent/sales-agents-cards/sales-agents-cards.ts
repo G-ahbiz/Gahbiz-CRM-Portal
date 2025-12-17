@@ -102,6 +102,22 @@ export class SalesAgentsCards implements OnInit {
       });
   }
 
+  getAgentImage(profileImage: string | null | undefined): string {
+    const placeholder = 'assets/images/salesAgents/photo2.svg';
+
+    if (!profileImage) return placeholder;
+
+    try {
+      if (profileImage.startsWith('http://') || profileImage.startsWith('https://')) {
+        return profileImage;
+      }
+    } catch {
+      return placeholder;
+    }
+
+    return `assets/images/salesAgents/${profileImage}`;
+  }
+
   onSearchChange(value: string): void {
     this.searchSubject.next(value.trim());
   }
@@ -157,8 +173,11 @@ export class SalesAgentsCards implements OnInit {
     return calculatedEnd > this.totalCount() ? this.totalCount() : calculatedEnd;
   }
 
-  viewSalesAgent(id: string): void {
-    this.router.navigate(['/main/sales/sales-agents/sales-agent-details', id]);
+  viewSalesAgent(agent: GetSalesAgentsResponse): void {
+    const resolvedImage = this.getAgentImage(agent.profileImage); // returns full URL or local asset
+    this.router.navigate(['/main/sales/sales-agents/sales-agent-details', agent.agentId], {
+      state: { name: agent.name, imageUrl: resolvedImage },
+    });
   }
 
   openAssignTaskDialog() {

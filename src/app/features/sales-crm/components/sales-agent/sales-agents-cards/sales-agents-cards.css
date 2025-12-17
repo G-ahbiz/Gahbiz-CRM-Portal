@@ -26,11 +26,27 @@
 }
 
 .card-header {
-  background-color: #005DB50D;
+  background-color: #005db50d;
 }
 
 .pagination-container {
   button:disabled {
     cursor: not-allowed;
   }
+}
+
+.img-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden; 
+  background-color: #f1f1f1; 
+}
+
+.sales-agent-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
 }

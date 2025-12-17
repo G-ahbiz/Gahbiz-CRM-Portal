@@ -7,9 +7,12 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
+import { SalesAgentStatisticsOne } from '@features/sales-crm/interfaces/sales-agent-statistics-one';
+import { LeadSummary } from '@features/sales-crm/interfaces/lead-summary';
 import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
 import { AddSalesAgentRequest } from '@features/sales-crm/interfaces/add-sales-agent-request';
 import { AddSalesAgentResponse } from '@features/sales-crm/interfaces/add-sales-agent-response';
+
 
 @Injectable({
   providedIn: 'root',
@@ -31,9 +34,18 @@ export class SalesAgentFacadeService {
     return this.salesAgentApiService.assignTask(request);
   }
 
+  getSalesAgentStatisticsById(agentId: string): Observable<ApiResponse<SalesAgentStatisticsOne>> {
+    return this.salesAgentApiService.getSalesAgentStatisticsById(agentId);
+  }
+
+  getLeadsBySalesAgentId(agentId: string, filter: SalesAgentsFilter): Observable<ApiResponse<LeadSummary>> {
+    return this.salesAgentApiService.getLeadsBySalesAgentId(agentId, filter);
+  }
+  
   getSalesAgentsDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
     return this.salesAgentApiService.getSalesAgentsDropdown();
   }
+  
   getManagersDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
     return this.salesAgentApiService.getManagersDropdown();
   }

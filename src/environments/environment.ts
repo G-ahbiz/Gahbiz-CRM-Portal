@@ -88,6 +88,8 @@ export const environment = {
     addSalesAgent: '/SalesManagement/AddSalesAgent',
     getSalesAgentDropdown: '/SalesManagement/agents-dropdown-list',
     assignTask: '/SalesManagement/assign-task',
+    getSalesAgentStatistics: (agentId: string) => `/SalesManagement/AgentStatistics/${agentId}`,
+    getLeadsBySalesAgentId: (agentId: string) => `/leads/agent/${agentId}/leads`,
     getManagersDropdown: '/SalesManagement/managers',
   },
 };
