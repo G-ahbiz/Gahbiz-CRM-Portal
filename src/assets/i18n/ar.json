@@ -136,7 +136,9 @@
     "THIS_MONTH": "هذا الشهر",
     "MONTH": "شهر",
     "INCREASE": "زيادة",
-    "DECREASE": "انخفاض"
+    "DECREASE": "انخفاض",
+    "REQUIRED_FIELD": "هذا الحقل مطلوب",
+    "DATE_INVALID": "التاريخ غير صالح"
   },
   "LANGUAGES": {
     "ENGLISH": "الإنجليزية",
@@ -575,22 +577,46 @@
       "NETWORK_ERROR": "خطأ في الشبكة. يرجى التحقق من اتصالك."
     }
   },
-  "sales-crm": {
-    "sales-agents-cards": {
+  "SALES-CRM": {
+    "SALES-AGENTS-CARDS": {
       "TITLE": "مندوبو المبيعات",
       "TOTAL_AGENTS": "إجمالي المندوبين",
       "ACTIVE_AGENTS": "المندوبين النشطين",
       "INACTIVE_AGENTS": "المندوبين غير النشطين",
       "TOTAL_LEADS": "إجمالي العملاء المحتملين",
       "LEADS_PER_AGENT": "العملاء المحتملون لكل مندوب",
+      "CONVERTED_LEADS": "العملاء المحتملون المحولون",
+      "MONTHLY_TARGET": "الهدف الشهري",
+      "REVENUE_ACHIEVED": "الإيرادات المحققة",
       "assign-task": "تعيين مهمة",
       "add-sales-agent": "إضافة مندوب مبيعات",
       "sort": "ترتيب",
       "search": "البحث بالاسم",
       "no-agents-found": "لم يتم العثور على مندوبي مبيعات",
       "ERROR": {
-        "FETCH_TEAM_STATISTICS": "فشل تحميل إحصائيات فريق المبيعات. يرجى المحاولة مرة أخرى."
+        "FETCH_TEAM_STATISTICS": "فشل تحميل إحصائيات فريق المبيعات"
       }
+    },
+    "ASSIGN-TASK": {
+      "TITLE": "تعيين مهمة",
+      "LEAD_ID": "معرف العميل المحتمل",
+      "LEAD_ID_PLACEHOLDER": "أدخل رقم المعرف",
+      "NOTE": "ملاحظة",
+      "NOTE_PLACEHOLDER": "أدخل الوصف...",
+      "STATUS": "الحالة",
+      "STATUS_PLACEHOLDER": "اختر الحالة",
+      "STATUS_CREATED": "تم الإنشاء",
+      "STATUS_DELAYED": "متأخر",
+      "STATUS_CANCELLED": "ملغى",
+      "STATUS_CLOSED": "مغلق",
+      "ASSIGNEE": "المكلف",
+      "ASSIGNEE_PLACEHOLDER": "اختر المكلف",
+      "DUE_DATE": "تاريخ الاستحقاق",
+      "DUE_DATE_PLACEHOLDER": "يوم / شهر / سنة",
+      "ASSIGN": "تعيين",
+      "ASSIGNING": "جاري التعيين...",
+      "SUCCESS": "تم تعيين المهمة بنجاح",
+      "ERROR": "فشل تعيين المهمة"
     },
     "leads-tabel": {
       "export": "تصدير",

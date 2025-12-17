@@ -85,5 +85,6 @@ export const environment = {
   },
   salesAgents: {
     getSalesAgents: '/SalesManagement/agentsList',
+    assignTask: '/SalesManagement/assign-task',
   },
 };

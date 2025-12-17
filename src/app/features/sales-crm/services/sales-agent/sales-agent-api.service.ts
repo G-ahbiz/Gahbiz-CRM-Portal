@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { environment } from '@env/environment';
+import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentStatistics } from '@features/sales-crm/interfaces/sales-agent-statistics';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
@@ -40,5 +41,10 @@ export class SalesAgentApiService {
       params = params.set('searchTerm', filters.searchTerm);
     }
     return this.http.get<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>>(url, { params });
+  }
+
+  assignTask(request: FormData): Observable<ApiResponse<AssignTaskResponse>> {
+    const url = `${this.baseUrl}${environment.salesAgents.assignTask}`;
+    return this.http.post<ApiResponse<AssignTaskResponse>>(url, request);
   }
 }

@@ -1,19 +1,36 @@
 <div class="container-fluid p-0 m-0">
-
   <div class="card border-0 bg-transparent w-100">
-    <p-table #dt1 [value]="salesAgentData" dataKey="leadId" sortField="leadId" [sortOrder]="1"
-      [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rowsPerPageOptions]="[2, 4, 6, 8, 10]" [rows]="4"
-      [loading]="loading" [globalFilterFields]="['customer', 'phoneNumber', 'DateAdded', 'source', 'status']">
+    <p-table
+      #dt1
+      [value]="salesAgentData"
+      dataKey="leadId"
+      sortField="leadId"
+      [sortOrder]="1"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rowsPerPageOptions]="[2, 4, 6, 8, 10]"
+      [rows]="4"
+      [loading]="loading"
+      [globalFilterFields]="['customer', 'phoneNumber', 'DateAdded', 'source', 'status']"
+    >
       <ng-template #caption>
         <div class="d-flex justify-content-between align-items-center mb-2">
           <!-- Filter and Search Container -->
           <div
-            class="search-container d-flex justify-content-start align-items-center gap-2 px-3 py-1 rounded-3 border">
+            class="search-container d-flex justify-content-start align-items-center gap-2 px-3 py-1 rounded-3 border"
+          >
             <label for="searchInput">
               <i class="pi pi-search"></i>
             </label>
-            <input class="border-0" pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
-              #searchInput id="searchInput" placeholder="Search keyword" />
+            <input
+              class="border-0"
+              pInputText
+              type="text"
+              (input)="dt1.filterGlobal($event.target.value, 'contains')"
+              #searchInput
+              id="searchInput"
+              placeholder="Search keyword"
+            />
             <button type="button" class="btn btn-sm bg-transparent p-2" (click)="clear(dt1)">
               <i class="pi pi-times"></i>
             </button>
@@ -23,9 +40,10 @@
           <div class="d-flex justify-content-start align-items-center gap-0">
             <button
               class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              routerLink="/main/sales/leads/add-lead">
-              <img src="assets/images/shared/plus.svg" alt="" class="">
-              {{'SALES-CRM.leads-tabel.addLead' | translate}}
+              routerLink="/main/sales/leads/add-lead"
+            >
+              <img src="assets/images/shared/plus.svg" alt="" class="" />
+              {{ 'SALES-CRM.leads-tabel.addLead' | translate }}
             </button>
           </div>
         </div>
@@ -34,8 +52,13 @@
         <tr>
           <th class="d-flex justify-content-center align-items-center gap-2">
             <div class="flex items-center gap-2">
-              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
-                (change)="onSelectAll($event)">
+              <input
+                type="checkbox"
+                name="select-all"
+                id="select-all"
+                [checked]="isAllSelected"
+                (change)="onSelectAll($event)"
+              />
             </div>
           </th>
           <th [pSortableColumn]="'leadId'">
@@ -69,9 +92,7 @@
             </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">
-              Documents
-            </div>
+            <div class="flex items-center gap-2">Documents</div>
           </th>
           <th [pSortableColumn]="'status'">
             <div class="flex items-center gap-2">
@@ -85,8 +106,13 @@
       <ng-template #body let-salesAgent>
         <tr>
           <td>
-            <input type="checkbox" name="select-salesAgent" id="salesAgent-{{ salesAgent.id }}"
-              [checked]="salesAgent.selected" (change)="toggleSalesAgentSelection(salesAgent)">
+            <input
+              type="checkbox"
+              name="select-salesAgent"
+              id="salesAgent-{{ salesAgent.id }}"
+              [checked]="salesAgent.selected"
+              (change)="toggleSalesAgentSelection(salesAgent)"
+            />
           </td>
           <td>#{{ salesAgent.leadId }}</td>
           <td>{{ salesAgent.customer }}</td>
@@ -97,18 +123,39 @@
             <i class="pi pi-folder primary-clr"></i>
           </td>
           <td>
-            <span class="py-1 px-2 rounded-3"
-              [class]="salesAgent.status === 'New' ? 'text-white bg-black' : salesAgent.status === 'Qualified' ? 'text-success card-green' : salesAgent.status === 'In-Progress' ? 'text-warning card-yellow' : salesAgent.status === 'Lost' ? 'text-danger card-red' : ''">{{
-              salesAgent.status }}</span>
+            <span
+              class="py-1 px-2 rounded-3"
+              [class]="
+                salesAgent.status === 'New'
+                  ? 'text-white bg-black'
+                  : salesAgent.status === 'Qualified'
+                  ? 'text-success card-green'
+                  : salesAgent.status === 'In-Progress'
+                  ? 'text-warning card-yellow'
+                  : salesAgent.status === 'Lost'
+                  ? 'text-danger card-red'
+                  : ''
+              "
+              >{{ salesAgent.status }}</span
+            >
           </td>
           <td class="d-flex justify-content-center align-items-center gap-2">
-            <button class="btn btn-sm" (click)="viewSalesAgent(salesAgent.id); $event.stopPropagation()">
-              <img src="assets/images/shared/eye.svg" alt="" class="">
+            <button
+              class="btn btn-sm"
+              (click)="viewSalesAgent(salesAgent.id); $event.stopPropagation()"
+            >
+              <img src="assets/images/shared/eye.svg" alt="" class="" />
             </button>
-            <button class="btn btn-sm" (click)="editSalesAgent(salesAgent.id); $event.stopPropagation()">
+            <button
+              class="btn btn-sm"
+              (click)="editSalesAgent(salesAgent.id); $event.stopPropagation()"
+            >
               <i class="pi pi-pencil"></i>
             </button>
-            <button class="btn btn-sm" (click)="deleteSalesAgent(salesAgent.id); $event.stopPropagation()">
+            <button
+              class="btn btn-sm"
+              (click)="deleteSalesAgent(salesAgent.id); $event.stopPropagation()"
+            >
               <i class="pi pi-trash"></i>
             </button>
           </td>
@@ -116,5 +163,4 @@
       </ng-template>
     </p-table>
   </div>
-
 </div>

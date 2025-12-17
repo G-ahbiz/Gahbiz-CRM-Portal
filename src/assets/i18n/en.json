@@ -136,7 +136,8 @@
     "THIS_MONTH": "this month",
     "MONTH": "mo",
     "INCREASE": "Increase",
-    "DECREASE": "Decrease"
+    "DECREASE": "Decrease",
+    "REQUIRED_FIELD": "This field is required"
   },
   "LANGUAGES": {
     "ENGLISH": "English",
@@ -604,6 +605,27 @@
       "ERROR": {
         "FETCH_TEAM_STATISTICS": "Failed to load sales agent statistics"
       }
+    },
+    "ASSIGN-TASK": {
+      "TITLE": "Assign Task",
+      "LEAD_ID": "Lead ID",
+      "LEAD_ID_PLACEHOLDER": "Enter ID Number",
+      "NOTE": "Note",
+      "NOTE_PLACEHOLDER": "Enter Description...",
+      "STATUS": "Status",
+      "STATUS_PLACEHOLDER": "Select Status",
+      "STATUS_CREATED": "Created",
+      "STATUS_DELAYED": "Delayed",
+      "STATUS_CANCELLED": "Cancelled",
+      "STATUS_CLOSED": "Closed",
+      "ASSIGNEE": "Assignee",
+      "ASSIGNEE_PLACEHOLDER": "Select Assignee",
+      "DUE_DATE": "Due Date",
+      "DUE_DATE_PLACEHOLDER": "MM / DD / YYYY",
+      "ASSIGN": "Assign",
+      "ASSIGNING": "Assigning...",
+      "SUCCESS": "Task assigned successfully",
+      "ERROR": "Failed to assign task"
     },
     "leads-tabel": {
       "export": "Export",

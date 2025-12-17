@@ -136,7 +136,9 @@
     "THIS_MONTH": "este mes",
     "MONTH": "mes",
     "INCREASE": "Aumentar",
-    "DECREASE": "Disminuir"
+    "DECREASE": "Disminuir",
+    "REQUIRED_FIELD": "Este campo es requerido",
+    "DATE_INVALID": "Fecha inválida"
   },
   "LANGUAGES": {
     "ENGLISH": "Inglés",
