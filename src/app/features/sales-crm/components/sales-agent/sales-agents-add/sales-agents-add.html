@@ -1,1 +1,152 @@
-<p>sales-agents-add works!</p>
+<p-dialog
+  [header]="translationKeys.TITLE | translate"
+  [visible]="visible()"
+  [modal]="true"
+  [style]="{ width: 'min(600px, 95vw)' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [closeOnEscape]="true"
+  (visibleChange)="onDialogHide()"
+  (onHide)="onDialogHide()"
+  styleClass="add-sales-agent-dialog"
+>
+  <form [formGroup]="addSalesAgentForm" class="add-sales-agent-form">
+    <!-- Full Name -->
+    <div class="form-group mb-3">
+      <label for="fullName" class="form-label">
+        {{ translationKeys.FULL_NAME | translate }}
+        <span [class]="getFieldValidityClass('fullName')">*</span>
+      </label>
+      <input
+        type="text"
+        id="fullName"
+        formControlName="fullName"
+        class="form-control"
+        [placeholder]="translationKeys.FULL_NAME_PLACEHOLDER | translate"
+        [attr.disabled]="submitting() ? true : null"
+      />
+      @if (isFieldInvalid('fullName')) {
+      <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+      }
+    </div>
+
+    <!-- Email -->
+    <div class="form-group mb-3">
+      <label for="email" class="form-label">
+        {{ translationKeys.EMAIL | translate }}
+        <span [class]="getFieldValidityClass('email')">*</span>
+      </label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+        [placeholder]="translationKeys.EMAIL_PLACEHOLDER | translate"
+        [attr.disabled]="submitting() ? true : null"
+      />
+      @if (hasError('email', 'required')) {
+      <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+      } @else if (hasError('email', 'email')) {
+      <small class="text-danger">{{ 'COMMON.INVALID_EMAIL' | translate }}</small>
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="form-group mb-3">
+      <label for="password" class="form-label">
+        {{ translationKeys.PASSWORD | translate }}
+        <span [class]="getFieldValidityClass('password')">*</span>
+      </label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+        [placeholder]="translationKeys.PASSWORD_PLACEHOLDER | translate"
+        [attr.disabled]="submitting() ? true : null"
+      />
+      @if (hasError('password', 'required')) {
+      <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+      } @else if (hasError('password', 'minlength')) {
+      <small class="text-danger">{{ 'COMMON.MIN_LENGTH' | translate : { minLength: 8 } }}</small>
+      }
+    </div>
+
+    <!-- Monthly Target & Manager Row -->
+    <div class="row g-3 mb-3">
+      <!-- Monthly Target -->
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="MonthlyTarget" class="form-label">
+            {{ translationKeys.MONTHLY_TARGET | translate }}
+            <span [class]="getFieldValidityClass('MonthlyTarget')">*</span>
+          </label>
+          <input
+            type="number"
+            id="MonthlyTarget"
+            formControlName="MonthlyTarget"
+            class="form-control"
+            [placeholder]="translationKeys.MONTHLY_TARGET_PLACEHOLDER | translate"
+            [attr.disabled]="submitting() ? true : null"
+            min="0"
+          />
+          @if (hasError('MonthlyTarget', 'required')) {
+          <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+          } @else if (hasError('MonthlyTarget', 'min')) {
+          <small class="text-danger">{{ 'COMMON.MIN_VALUE' | translate : { minValue: 0 } }}</small>
+          }
+        </div>
+      </div>
+
+      <!-- Manager -->
+      @if(!isManager()){
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="managerId" class="form-label">
+            {{ translationKeys.MANAGER | translate }}
+          </label>
+          <select
+            id="managerId"
+            formControlName="managerId"
+            class="form-select"
+            [attr.disabled]="submitting() || loading() ? true : null"
+          >
+            <option [ngValue]="null" disabled>
+              {{ translationKeys.MANAGER_PLACEHOLDER | translate }}
+            </option>
+            @for (manager of managers(); track manager.id) {
+            <option [value]="manager.id">{{ manager.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+      <button
+        type="button"
+        class="btn btn-outline-secondary px-4 py-2"
+        (click)="closeDialog()"
+        [disabled]="submitting()"
+      >
+        {{ translationKeys.CANCEL | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary primary-bg-clr px-4 py-2"
+        (click)="onSubmit()"
+        [disabled]="submitting() || addSalesAgentForm.invalid"
+      >
+        @if (!submitting()) {
+        {{ translationKeys.SUBMIT | translate }}
+        } @else {
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        {{ translationKeys.SUBMITTING | translate }}
+        }
+      </button>
+    </div>
+  </form>
+</p-dialog>

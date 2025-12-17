@@ -12,10 +12,11 @@ import { debounceTime, distinctUntilChanged, finalize, Subject } from 'rxjs';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { SelectModule } from 'primeng/select';
 import { AssignTask } from '../assign-task/assign-task';
+import { SalesAgentsAdd } from '../sales-agents-add/sales-agents-add';
 
 @Component({
   selector: 'app-sales-agents-cards',
-  imports: [CommonModule, TranslateModule, PopoverModule, SelectModule, AssignTask],
+  imports: [CommonModule, TranslateModule, PopoverModule, SelectModule, AssignTask, SalesAgentsAdd],
   templateUrl: './sales-agents-cards.html',
   styleUrl: './sales-agents-cards.css',
 })
@@ -23,6 +24,7 @@ export class SalesAgentsCards implements OnInit {
   salesAgents = signal<GetSalesAgentsResponse[]>([]);
   searchValue = signal<string>('');
   assignTaskVisible = signal<boolean>(false);
+  addSalesAgentVisible = signal<boolean>(false);
   loading = signal<boolean>(true);
 
   // Pagination state
@@ -184,5 +186,17 @@ export class SalesAgentsCards implements OnInit {
 
   closeAssignTaskDialog() {
     this.assignTaskVisible.set(false);
+  }
+
+  openAddSalesAgentDialog() {
+    this.addSalesAgentVisible.set(true);
+  }
+
+  closeAddSalesAgentDialog() {
+    this.addSalesAgentVisible.set(false);
+  }
+
+  onAgentAdded() {
+    this.getSalesAgents();
   }
 }

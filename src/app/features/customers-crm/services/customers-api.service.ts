@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { ApiResponse } from '@core/interfaces/api-response';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SalesAgentBrief } from '../interfaces/sales-agent-brief';
 import { GetCustomersResponse } from '../interfaces/get-customers-response';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
@@ -64,27 +64,8 @@ export class CustomersApiService {
   }
 
   getSalesAgents(): Observable<ApiResponse<SalesAgentBrief[]>> {
-    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgents}`;
-    return this.http.get<any>(url).pipe(
-      map((response) => {
-        if (response.succeeded && response.data?.items) {
-          const transformedData = response.data.items.map((item: any) => ({
-            id: item.agentId,
-            name: item.name,
-          }));
-
-          return {
-            ...response,
-            data: transformedData,
-          };
-        }
-
-        return {
-          ...response,
-          data: [],
-        };
-      })
-    );
+    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgentDropdown}`;
+    return this.http.get<ApiResponse<SalesAgentBrief[]>>(url);
   }
 
   exportCustomers(customerIds: string[]): Observable<Blob> {
