@@ -33,6 +33,7 @@
           </p>
 
           <!-- Card Rating -->
+          @if(card.rating !== undefined && card.ratingStatues) {
           <div class="card-rating d-flex {{ languageService.getFlexDirectionClass() }} align-items-center gap-1 w-100">
 
             <!-- Rating Status -->
@@ -57,6 +58,7 @@
             </div>
 
           </div>
+          }
         </div>
 
         <!-- Card Icon -->

@@ -3,6 +3,6 @@ export interface LogCard {
   value: number;
   icon: string;
   bgColor: string;
-  rating: number;
-  ratingStatues: string;
+  rating?: number;
+  ratingStatues?: string;
 }

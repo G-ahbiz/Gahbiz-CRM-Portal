@@ -77,7 +77,7 @@ export class SalesAgentsDetails implements OnInit {
   }
 
   getSalesAgentsDetailsDataCards() {
-    this.salesAgentsDetailsDataCards = this.allData.getSalesAgentsDetailsDataCards();
+    //this.salesAgentsDetailsDataCards = this.allData.getSalesAgentsDetailsDataCards();
   }
 
   getSalesAgentsDetailsData() {
