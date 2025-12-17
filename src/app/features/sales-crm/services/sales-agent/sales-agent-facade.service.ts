@@ -8,6 +8,8 @@ import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
 import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
+import { AddSalesAgentRequest } from '@features/sales-crm/interfaces/add-sales-agent-request';
+import { AddSalesAgentResponse } from '@features/sales-crm/interfaces/add-sales-agent-response';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +33,12 @@ export class SalesAgentFacadeService {
 
   getSalesAgentsDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
     return this.salesAgentApiService.getSalesAgentsDropdown();
+  }
+  getManagersDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
+    return this.salesAgentApiService.getManagersDropdown();
+  }
+
+  addSalesAgent(request: AddSalesAgentRequest): Observable<ApiResponse<AddSalesAgentResponse>> {
+    return this.salesAgentApiService.addSalesAgent(request);
   }
 }

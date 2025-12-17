@@ -137,7 +137,10 @@
     "MONTH": "mo",
     "INCREASE": "Increase",
     "DECREASE": "Decrease",
-    "REQUIRED_FIELD": "This field is required"
+    "REQUIRED_FIELD": "This field is required",
+    "INVALID_EMAIL": "Please enter a valid email address",
+    "MIN_LENGTH": "Must be at least {{minLength}} characters",
+    "MIN_VALUE": "Value must be at least {{minValue}}"
   },
   "LANGUAGES": {
     "ENGLISH": "English",
@@ -626,6 +629,23 @@
       "ASSIGNING": "Assigning...",
       "SUCCESS": "Task assigned successfully",
       "ERROR": "Failed to assign task"
+    },
+    "ADD-SALES-AGENT": {
+      "TITLE": "Add Sales Agent",
+      "FULL_NAME": "Full Name",
+      "FULL_NAME_PLACEHOLDER": "Enter full name",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "Enter email address",
+      "PASSWORD": "Password",
+      "PASSWORD_PLACEHOLDER": "Enter password",
+      "MONTHLY_TARGET": "Monthly Target",
+      "MONTHLY_TARGET_PLACEHOLDER": "Enter monthly target",
+      "MANAGER": "Manager",
+      "MANAGER_PLACEHOLDER": "Select manager (optional)",
+      "SUBMIT": "Add Agent",
+      "SUBMITTING": "Adding...",
+      "SUCCESS": "Sales agent added successfully",
+      "ERROR": "Failed to add sales agent"
     },
     "leads-tabel": {
       "export": "Export",
