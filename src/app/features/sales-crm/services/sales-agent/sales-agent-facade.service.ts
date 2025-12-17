@@ -7,6 +7,7 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
+import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,9 @@ export class SalesAgentFacadeService {
 
   assignTask(request: FormData): Observable<ApiResponse<AssignTaskResponse>> {
     return this.salesAgentApiService.assignTask(request);
+  }
+
+  getSalesAgentsDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
+    return this.salesAgentApiService.getSalesAgentsDropdown();
   }
 }

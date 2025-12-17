@@ -18,8 +18,8 @@ import { finalize } from 'rxjs/operators';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
 import { ToastService } from '@core/services/toast.service';
 import { AssignTaskRequest } from '@features/sales-crm/interfaces/assign-task-request';
-import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentFacadeService } from '@features/sales-crm/services/sales-agent/sales-agent-facade.service';
+import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
 
 type TaskStatus = AssignTaskRequest['status'];
 
@@ -57,7 +57,7 @@ export class AssignTask implements OnInit {
   // Signals
   loading = signal<boolean>(false);
   submitting = signal<boolean>(false);
-  salesAgents = signal<GetSalesAgentsResponse[]>([]);
+  salesAgents = signal<SalesAgentBrief[]>([]);
 
   // Form
   assignTaskForm!: FormGroup;
@@ -109,15 +109,15 @@ export class AssignTask implements OnInit {
     this.loading.set(true);
 
     this.salesAgentFacade
-      .getAllSalesAgents({ pageNumber: 1, pageSize: 100 })
+      .getSalesAgentsDropdown()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.loading.set(false))
       )
       .subscribe({
         next: (response) => {
-          if (response.succeeded && response.data?.items) {
-            this.salesAgents.set(response.data.items);
+          if (response.succeeded && response.data) {
+            this.salesAgents.set(response.data);
           }
         },
         error: (error) => {

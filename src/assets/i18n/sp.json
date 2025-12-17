@@ -583,6 +583,34 @@
       "search": "Buscar por Nombre",
       "no-agents-found": "No se encontraron agentes de ventas"
     },
+    "assign-task": {
+      "title": "Asignar Tarea",
+      "lead-id": "ID de Lead",
+      "lead-id-placeholder": "Ingresa ID de Lead",
+      "note": "Nota",
+      "note-placeholder": "Ingresa nota..."
+    },
+    "ASSIGN-TASK": {
+      "TITLE": "Asignar Tarea",
+      "LEAD_ID": "ID de Lead",
+      "LEAD_ID_PLACEHOLDER": "Ingresa ID de Lead",
+      "NOTE": "Nota",
+      "NOTE_PLACEHOLDER": "Ingresa nota...",
+      "STATUS": "Estado",
+      "STATUS_PLACEHOLDER": "Seleccionar Estado",
+      "STATUS_CREATED": "Creado",
+      "STATUS_DELAYED": "Retrasado",
+      "STATUS_CANCELLED": "Cancelado",
+      "STATUS_CLOSED": "Cerrado",
+      "ASSIGNEE": "Asignado a",
+      "ASSIGNEE_PLACEHOLDER": "Seleccionar Asignado a",
+      "DUE_DATE": "Fecha de Vencimiento",
+      "DUE_DATE_PLACEHOLDER": "DD / MM / YYYY",
+      "ASSIGN": "Asignar",
+      "ASSIGNING": "Asignando...",
+      "SUCCESS": "Tarea asignada exitosamente",
+      "ERROR": "Error al asignar tarea"
+    },
     "leads-tabel": {
       "export": "Exportar",
       "import": "Importar",
