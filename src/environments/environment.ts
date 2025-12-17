@@ -86,5 +86,7 @@ export const environment = {
   salesAgents: {
     getSalesAgents: '/SalesManagement/agentsList',
     assignTask: '/SalesManagement/assign-task',
+    getSalesAgentStatistics: (agentId: string) => `/SalesManagement/AgentStatistics/${agentId}`,
+    getLeadsBySalesAgentId: (agentId: string) => `/leads/agent/${agentId}/leads`,
   },
 };

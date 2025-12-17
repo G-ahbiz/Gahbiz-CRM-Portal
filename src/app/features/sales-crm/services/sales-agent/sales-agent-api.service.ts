@@ -5,7 +5,9 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { environment } from '@env/environment';
 import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
+import { LeadSummary } from '@features/sales-crm/interfaces/lead-summary';
 import { SalesAgentStatistics } from '@features/sales-crm/interfaces/sales-agent-statistics';
+import { SalesAgentStatisticsOne } from '@features/sales-crm/interfaces/sales-agent-statistics-one';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { Observable } from 'rxjs';
 
@@ -46,5 +48,27 @@ export class SalesAgentApiService {
   assignTask(request: FormData): Observable<ApiResponse<AssignTaskResponse>> {
     const url = `${this.baseUrl}${environment.salesAgents.assignTask}`;
     return this.http.post<ApiResponse<AssignTaskResponse>>(url, request);
+  }
+
+  getSalesAgentStatisticsById(agentId: string): Observable<ApiResponse<SalesAgentStatisticsOne>> {
+    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgentStatistics(agentId)}`;
+    return this.http.get<ApiResponse<SalesAgentStatisticsOne>>(url);
+  }
+
+  getLeadsBySalesAgentId(
+    agentId: string,
+    params: SalesAgentsFilter
+  ): Observable<ApiResponse<LeadSummary>> {
+    let httpParams = new HttpParams()
+      .set('pageNumber', params.pageNumber.toString())
+      .set('pageSize', params.pageSize.toString());
+
+    if (params.searchTerm) {
+      httpParams = httpParams.set('searchTerm', params.searchTerm);
+    }
+
+    return this.http.get<ApiResponse<LeadSummary>>(`${this.baseUrl}${environment.salesAgents.getLeadsBySalesAgentId(agentId)}`, {
+      params: httpParams,
+    });
   }
 }

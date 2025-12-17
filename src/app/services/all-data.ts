@@ -643,45 +643,7 @@ export class AllData {
     return this.salesAgentsDetailsData;
   }
 
-  salesAgentsDetailsDataCards: LogCard[] = [
-    {
-      title: 'SALES-CRM.SALES-AGENTS-CARDS.TOTAL_LEADS',
-      value: 250,
-      icon: 'totalLeads',
-      bgColor: 'card-blue',
-      rating: 2,
-      ratingStatues: 'up',
-    },
-    {
-      title: 'SALES-CRM.SALES-AGENTS-CARDS.CONVERTED_LEADS',
-      value: 180,
-      icon: 'convertedLeads',
-      bgColor: 'card-green',
-      rating: 4,
-      ratingStatues: 'up',
-    },
-    {
-      title: 'SALES-CRM.SALES-AGENTS-CARDS.MONTHLY_TARGET',
-      value: 78,
-      icon: 'monthlyTarget',
-      bgColor: 'card-yellow',
-      rating: 1,
-      ratingStatues: 'down',
-    },
-    {
-      title: 'SALES-CRM.SALES-AGENTS-CARDS.REVENUE_ACHIEVED',
-      value: 248,
-      icon: 'revenueAchieved',
-      bgColor: 'card-red',
-      rating: 2,
-      ratingStatues: 'down',
-    },
-  ];
-
-  getSalesAgentsDetailsDataCards() {
-    return this.salesAgentsDetailsDataCards;
-  }
-
+  
   // Leads Data
   leadsCardsData: LogCard[] = [
     {

@@ -1,166 +1,252 @@
 <div class="container-fluid p-0 m-0">
-  <div class="card border-0 bg-transparent w-100">
-    <p-table
-      #dt1
-      [value]="salesAgentData"
-      dataKey="leadId"
-      sortField="leadId"
-      [sortOrder]="1"
-      [tableStyle]="{ 'min-width': '60rem' }"
-      [paginator]="true"
-      [rowsPerPageOptions]="[2, 4, 6, 8, 10]"
-      [rows]="4"
-      [loading]="loading"
-      [globalFilterFields]="['customer', 'phoneNumber', 'DateAdded', 'source', 'status']"
-    >
+  <!-- Add PrimeNG ConfirmDialog -->
+  <p-confirmDialog [style]="{width: '350px'}" acceptLabel="{{ 'COMMON.YES' | translate }}"
+    rejectLabel="{{ 'COMMON.NO' | translate }}" acceptIcon="pi pi-check" rejectIcon="pi pi-times"></p-confirmDialog>
+
+  <div class="card border-0 bg-transparent">
+    <p-table #dt1 [value]="leadsData()" dataKey="id" [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
+      [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="responsiveRowsPerPageOptions" [lazy]="true" (onPage)="onPageChange($event)"
+      [loading]="loading()" responsiveLayout="scroll">
+
       <ng-template #caption>
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <!-- Filter and Search Container -->
-          <div
-            class="search-container d-flex justify-content-start align-items-center gap-2 px-3 py-1 rounded-3 border"
-          >
-            <label for="searchInput">
-              <i class="pi pi-search"></i>
-            </label>
-            <input
-              class="border-0"
-              pInputText
-              type="text"
-              (input)="dt1.filterGlobal($event.target.value, 'contains')"
-              #searchInput
-              id="searchInput"
-              placeholder="Search keyword"
-            />
-            <button type="button" class="btn btn-sm bg-transparent p-2" (click)="clear(dt1)">
-              <i class="pi pi-times"></i>
-            </button>
+        <!-- Responsive Header Container -->
+        <div class="responsive-header">
+
+          <!-- Desktop Layout (default) -->
+          <div class="d-none d-md-flex w-100 align-items-center">
+            <!-- Left Section: Action Buttons -->
+            <div class="desktop-action-btns d-flex gap-2">
+              <!-- Export Button -->
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                (click)="exportLeads()" [disabled]="exportLoading() || selectedLeads().length === 0"
+                [title]="'SALES-CRM.leads-tabel.export' | translate">
+                <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span>{{ 'SALES-CRM.leads-tabel.export' | translate }}</span>
+                <span *ngIf="selectedLeads().length > 0" class="ms-1">
+                  ({{ selectedLeads().length }})
+                </span>
+              </button>
+
+              <!-- Clear Selection Button -->
+              <button *ngIf="selectedLeads().length > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
+                (click)="clearSelections()" [disabled]="exportLoading()">
+                {{ 'COMMON.CLEAR' | translate }}
+              </button>
+            </div>
+
+            <!-- Center Section: Search -->
+            <div class="desktop-search flex-grow-1 mx-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" (input)="onSearch($event)" #searchInput
+                  [placeholder]="'COMMON.SEARCH' | translate" />
+              </p-iconfield>
+            </div>
+
+            <!-- Right Section: Add Lead -->
+            <div class="desktop-add-btn">
+              <button
+                class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
+                routerLink="/main/sales/leads/add-lead">
+                <img src="assets/images/shared/plus.svg" alt="Add Lead" class="me-1" />
+                <span>{{ 'SALES-CRM.leads-tabel.addLead' | translate }}</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Add Lead Button Container -->
-          <div class="d-flex justify-content-start align-items-center gap-0">
-            <button
-              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              routerLink="/main/sales/leads/add-lead"
-            >
-              <img src="assets/images/shared/plus.svg" alt="" class="" />
-              {{ 'SALES-CRM.leads-tabel.addLead' | translate }}
-            </button>
+          <!-- Mobile Layout -->
+          <div class="d-md-none">
+            <!-- Search at the top -->
+            <div class="mobile-search mb-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" (input)="onSearch($event)" #searchInput
+                  [placeholder]="'COMMON.SEARCH' | translate" />
+              </p-iconfield>
+            </div>
+
+            <!-- Action buttons in a single row -->
+            <div class="mobile-action-btns d-flex gap-2 mb-3">
+              <!-- Export Button (Icon + Text) -->
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="exportLeads()" [disabled]="exportLoading() || selectedLeads().length === 0"
+                [title]="'SALES-CRM.leads-tabel.export' | translate">
+                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span class="ms-1 d-none d-sm-inline">{{ 'SALES-CRM.leads-tabel.export' | translate }}</span>
+                <span *ngIf="selectedLeads().length > 0" class="ms-1">
+                  ({{ selectedLeads().length }})
+                </span>
+              </button>
+
+              <!-- Clear Button -->
+              <button *ngIf="selectedLeads().length > 0"
+                class="btn btn-sm btn-outline-secondary px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="clearSelections()" [disabled]="exportLoading()">
+                <i class="pi pi-times d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR' | translate }}</span>
+              </button>
+
+              <!-- Add Button -->
+              <button
+                class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                routerLink="/main/sales/leads/add-lead">
+                <i class="pi pi-plus d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'SALES-CRM.leads-tabel.addLead' | translate }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Title Section -->
+        <div class="title-container my-3 my-md-4" [attr.dir]="languageService.direction()" [ngClass]="{
+          'text-center': true,
+          'text-md-start': !languageService.isRTL(),
+          'text-md-end': languageService.isRTL()
+        }">
+          <h5 class="m-0 p-0">{{ 'SALES-CRM.salesAgent.leads' | translate }}</h5>
+          <small class="text-muted" *ngIf="selectedLeads().length > 0">
+            {{ selectedLeads().length }} {{ 'SALES-CRM.SALES-AGENTS-CARDS.selected-leads-for-action' | translate }}
+          </small>
+          <div class="mt-2 d-block d-md-none">
+            <small class="text-muted">{{ 'SALES-CRM.SALES-AGENTS-CARDS.swipe-to-scroll' | translate }}</small>
           </div>
         </div>
       </ng-template>
+
       <ng-template #header>
         <tr>
-          <th class="d-flex justify-content-center align-items-center gap-2">
-            <div class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="select-all"
-                id="select-all"
-                [checked]="isAllSelected"
-                (change)="onSelectAll($event)"
-              />
+          <th class="text-center" style="width: 50px;">
+            <div class="d-flex justify-content-center align-items-center">
+              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+                (change)="onSelectAll($event)" [title]="'SALES-CRM.SALES-AGENTS-CARDS.select-all-leads' | translate" />
             </div>
           </th>
-          <th [pSortableColumn]="'leadId'">
-            <div class="flex items-center gap-2">
-              Leads ID
-              <p-sortIcon field="'leadId'" />
-            </div>
-          </th>
-          <th [pSortableColumn]="'customer'">
-            <div class="flex items-center gap-2">
-              Customer
-              <p-sortIcon field="'customer'" />
-            </div>
-          </th>
-          <th [pSortableColumn]="'phoneNumber'">
-            <div class="flex items-center gap-2">
-              Phone Number
-              <p-sortIcon field="'phoneNumber'" />
-            </div>
-          </th>
-          <th [pSortableColumn]="'DateAdded'">
-            <div class="flex items-center gap-2">
-              Date Added
-              <p-sortIcon field="'DateAdded'" />
-            </div>
-          </th>
-          <th [pSortableColumn]="'source'">
-            <div class="flex items-center gap-2">
-              Source
-              <p-sortIcon field="'source'" />
+          <th class="d-none d-md-table-cell">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'COMMON.ID' | translate }}
             </div>
           </th>
           <th>
-            <div class="flex items-center gap-2">Documents</div>
-          </th>
-          <th [pSortableColumn]="'status'">
-            <div class="flex items-center gap-2">
-              Status
-              <p-sortIcon field="'status'" />
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'LEADS.name' | translate }}
             </div>
           </th>
-          <th class="d-flex justify-content-center align-items-center gap-2">Actions</th>
+          <th>
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'LEADS.SERVICES' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'LEADS.STATUS' | translate }}
+            </div>
+          </th>
+          <th class="d-none d-md-table-cell">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'LEADS.SOURCE' | translate }}
+            </div>
+          </th>
+          <th>
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'LEADS.value' | translate }}
+            </div>
+          </th>
+          <th class="d-none d-md-table-cell">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'LEADS.createdDate' | translate }}
+            </div>
+          </th>
+          <th style="width: 140px;">
+            <div class="d-flex justify-content-center align-items-center gap-1">
+              {{ 'COMMON.ACTIONS' | translate }}
+            </div>
+          </th>
         </tr>
       </ng-template>
-      <ng-template #body let-salesAgent>
+
+      <ng-template #body let-lead let-rowIndex="rowIndex">
         <tr>
-          <td>
-            <input
-              type="checkbox"
-              name="select-salesAgent"
-              id="salesAgent-{{ salesAgent.id }}"
-              [checked]="salesAgent.selected"
-              (change)="toggleSalesAgentSelection(salesAgent)"
-            />
+          <td class="text-center">
+            <input type="checkbox" name="select-lead" id="lead-{{ lead.id }}" [checked]="lead.selected"
+              (change)="toggleLeadSelection(lead)" [title]="'SALES-CRM.SALES-AGENTS-CARDS.select-lead' | translate" />
           </td>
-          <td>#{{ salesAgent.leadId }}</td>
-          <td>{{ salesAgent.customer }}</td>
-          <td>{{ salesAgent.phoneNumber }}</td>
-          <td>{{ salesAgent.DateAdded }}</td>
-          <td>{{ salesAgent.source }}</td>
-          <td>
-            <i class="pi pi-folder primary-clr"></i>
+          <td class="d-none d-md-table-cell" [title]="lead.id">
+            {{ lead.id | slice : 0 : 8 }}{{ lead.id.length > 8 ? '...' : '' }}
           </td>
           <td>
-            <span
-              class="py-1 px-2 rounded-3"
-              [class]="
-                salesAgent.status === 'New'
-                  ? 'text-white bg-black'
-                  : salesAgent.status === 'Qualified'
-                  ? 'text-success card-green'
-                  : salesAgent.status === 'In-Progress'
-                  ? 'text-warning card-yellow'
-                  : salesAgent.status === 'Lost'
-                  ? 'text-danger card-red'
-                  : ''
-              "
-              >{{ salesAgent.status }}</span
-            >
+            <div class="d-flex flex-column">
+              <span class="fw-medium">{{ lead.firstName }} {{ lead.lastName }}</span>
+              <small class="text-muted d-md-none">{{ lead.phoneNumber }}</small>
+            </div>
           </td>
-          <td class="d-flex justify-content-center align-items-center gap-2">
-            <button
-              class="btn btn-sm"
-              (click)="viewSalesAgent(salesAgent.id); $event.stopPropagation()"
-            >
-              <img src="assets/images/shared/eye.svg" alt="" class="" />
-            </button>
-            <button
-              class="btn btn-sm"
-              (click)="editSalesAgent(salesAgent.id); $event.stopPropagation()"
-            >
-              <i class="pi pi-pencil"></i>
-            </button>
-            <button
-              class="btn btn-sm"
-              (click)="deleteSalesAgent(salesAgent.id); $event.stopPropagation()"
-            >
-              <i class="pi pi-trash"></i>
-            </button>
+          <td>
+            <div class="text-truncate" style="max-width: 150px" [title]="getServiceName(lead)">
+              {{ getServiceName(lead) }}
+            </div>
+          </td>
+          <td>
+            <span class="badge py-1 px-2" [ngClass]="getStatusBadgeClass(lead.status)">
+              {{ lead.status || ('COMMON.NOT_AVAILABLE' | translate) }}
+            </span>
+          </td>
+          <td class="d-none d-md-table-cell">
+            <span class="text-truncate d-inline-block" style="max-width: 100px" [title]="lead.sourceName">
+              {{ lead.sourceName || ('COMMON.NOT_AVAILABLE' | translate) }}
+            </span>
+          </td>
+          <td>
+            <span class="fw-medium">{{ lead.value | currency:'USD':'symbol':'1.0-0' }}</span>
+          </td>
+          <td class="d-none d-md-table-cell">
+            {{ lead.createdAt | date : 'dd/MM/yyyy' }}
+          </td>
+          <td class="action-buttons">
+            <div class="d-flex justify-content-center gap-1">
+              <button class="btn btn-sm btn-outline-primary" (click)="viewLead(lead.id); $event.stopPropagation()"
+                [title]="'COMMON.VIEW' | translate">
+                <i class="pi pi-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" (click)="editLead(lead.id); $event.stopPropagation()"
+                [title]="'COMMON.EDIT' | translate">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="onDeleteLead(lead.id); $event.stopPropagation()"
+                [title]="'COMMON.DELETE' | translate">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td [attr.colspan]="9" class="text-center py-4">
+            <div *ngIf="!loading()" class="text-muted">
+              {{ 'LEADS.noLeadsFound' | translate }}
+            </div>
+            <div *ngIf="loading()" class="text-muted">
+              {{ 'COMMON.LOADING' | translate }}
+            </div>
           </td>
         </tr>
       </ng-template>
     </p-table>
   </div>
 </div>
+
+<!-- Lead Details Dialog -->
+<p-dialog [visible]="showLeadModal()" modal="true" (onHide)="closeLeadModal()"
+  [style]="{width: '700px', maxWidth: '95vw'}" styleClass="lead-details-dialog" [closable]="true"
+  [dismissableMask]="true" [draggable]="false" [resizable]="false" [showHeader]="false">
+
+  <app-leads-details *ngIf="selectedLeadData()" [lead]="selectedLeadData()" (closed)="closeLeadModal()">
+  </app-leads-details>
+</p-dialog>

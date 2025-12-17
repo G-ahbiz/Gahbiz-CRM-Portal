@@ -1,42 +1,31 @@
 <div class="container-fluid p-0 m-0">
-  <div
-    class="sales-agents-cards-container d-flex flex-column justify-content-start align-items-start gap-3"
-  >
+  <div class="sales-agents-cards-container d-flex flex-column justify-content-start align-items-start gap-3">
     <!-- Sales Agents Actions Container -->
     <div
-      class="sales-agents-actions-container d-flex flex-row justify-content-between align-items-center gap-3 mt-4 w-100"
-    >
+      class="sales-agents-actions-container d-flex flex-row justify-content-between align-items-center gap-3 mt-4 w-100">
       <!-- Search Container -->
       <div
-        class="search-container d-flex flex-row justify-content-start align-items-center gap-3 bg-white rounded-3 pt-0 ps-2 border"
-      >
+        class="search-container d-flex flex-row justify-content-start align-items-center gap-3 bg-white rounded-3 pt-0 ps-2 border">
         <!-- Search Icon -->
         <i class="pi pi-search text-muted-clr"></i>
         <!-- Search Input -->
-        <input
-          type="text"
-          class="form-control border-0 bg-transparent"
+        <input type="text" class="form-control border-0 bg-transparent"
           placeholder="{{ 'SALES-CRM.SALES-AGENTS-CARDS.search' | translate }}"
-          (input)="onSearchChange($any($event.target).value)"
-          #searchInput
-        />
+          (input)="onSearchChange($any($event.target).value)" #searchInput />
       </div>
 
       <!-- Buttons Container -->
       <div class="btns-container d-flex flex-row justify-content-start align-items-center gap-3">
         <!-- Assign Task Button -->
-        <button
-          class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3"
-          (click)="openAssignTaskDialog()"
-        >
+        <button class="btn btn-primary primary-bg-clr d-flex justify-content-center align-items-center gap-2 rounded-3"
+          (click)="openAssignTaskDialog()">
           <img src="assets/images/shared/plus.svg" alt="" class="" />
           <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.assign-task' | translate }}</span>
         </button>
 
         <!-- Add Sales Agent Button -->
         <button
-          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3"
-        >
+          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3">
           <i class="pi pi-plus text-primary-clr fs-875"></i>
           <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.add-sales-agent' | translate }}</span>
         </button>
@@ -48,13 +37,8 @@
           <i class="pi pi-sort-alt"></i>
           <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.sort' | translate }}</span>
         </button> -->
-        <p-select
-          [options]="sortOptions()"
-          optionLabel="name"
-          optionValue="value"
-          (onChange)="onSortChange($event)"
-          [placeholder]="'SALES-CRM.SALES-AGENTS-CARDS.sort' | translate"
-        ></p-select>
+        <p-select [options]="sortOptions()" optionLabel="name" optionValue="value" (onChange)="onSortChange($event)"
+          [placeholder]="'SALES-CRM.SALES-AGENTS-CARDS.sort' | translate"></p-select>
       </div>
     </div>
 
@@ -76,13 +60,10 @@
     <!-- Sales Agents Cards Container -->
     @else {
     <div
-      class="sales-agents-cards-container d-flex flex-wrap justify-content-start align-items-stretch gap-3 mt-4 w-100"
-    >
+      class="sales-agents-cards-container d-flex flex-wrap justify-content-start align-items-stretch gap-3 mt-4 w-100">
       @for (agent of salesAgents(); track agent.agentId) {
-      <div class="card sales-agent-card p-2 border-0" (click)="viewSalesAgent(agent.agentId)">
-        <div
-          class="card-header d-flex flex-column justify-content-between align-items-center gap-2 p-3 border-0 mb-2"
-        >
+      <div class="card sales-agent-card p-2 border-0" (click)="viewSalesAgent(agent)">
+        <div class="card-header d-flex flex-column justify-content-between align-items-center gap-2 p-3 border-0 mb-2">
           <!-- More Actions Button -->
           <!-- <button
             type="button"
@@ -92,29 +73,21 @@
           </button> -->
 
           <!-- Profile Container -->
-          <div
-            class="profile-container d-flex flex-column justify-content-start align-items-center gap-3 w-100"
-          >
+          <div class="profile-container d-flex flex-column justify-content-start align-items-center gap-3 w-100">
             <div class="img-container d-flex justify-content-center align-items-center">
-              <img
-                src="assets/images/salesAgents/{{ agent.profileImage }}"
-                alt="{{ agent.name }}"
-                class="sales-agent-card-image"
-              />
+              <img title="profileImage" [src]="getAgentImage(agent.profileImage)" [alt]="agent.name"
+                class="sales-agent-card-image" />
             </div>
+
 
             <!-- Sales Agent Details Container -->
             <div
-              class="sales-agent-details-container d-flex flex-column justify-content-center align-items-center gap-2"
-            >
+              class="sales-agent-details-container d-flex flex-column justify-content-center align-items-center gap-2">
               <h6 class="sales-agent-card-name m-0 fw-bold">{{ agent.name }}</h6>
               <p class="sales-agent-card-proffession fw-normal m-0">{{ agent.role }}</p>
-              <p
-                class="sales-agent-card-status m-0 py-1 px-4 rounded-3 border border-1 text-center fw-medium"
-                [class]="
+              <p class="sales-agent-card-status m-0 py-1 px-4 rounded-3 border border-1 text-center fw-medium" [class]="
                   agent.isActive ? 'text-success border-success' : 'text-danger border-danger'
-                "
-              >
+                ">
                 @if(agent.isActive){ Active }@else{ Inactive }
               </p>
             </div>
@@ -124,9 +97,7 @@
         <!-- Card Body -->
         <div class="card-body d-flex flex-row justify-content-center align-items-start gap-3">
           <!-- Total Leads -->
-          <div
-            class="total-leads d-flex flex-column justify-content-center align-items-center gap-2"
-          >
+          <div class="total-leads d-flex flex-column justify-content-center align-items-center gap-2">
             <p class="total-leads-value fw-bold fs-4">{{ agent.totalLeads }}</p>
             <p class="total-leads-label">Total Leads</p>
           </div>
@@ -151,8 +122,7 @@
     <!-- Pagination Container -->
     @if (totalCount() > 0) {
     <div
-      class="pagination-container w-auto d-flex flex-row justify-content-end align-items-center gap-3 mt-4 bg-white rounded-3 p-3 align-self-end"
-    >
+      class="pagination-container w-auto d-flex flex-row justify-content-end align-items-center gap-3 mt-4 bg-white rounded-3 p-3 align-self-end">
       <!-- Pagination Info -->
       <p class="text-muted-clr m-0 p-0">
         Showing {{ getStartIndex() }} - {{ getEndIndex() }} of {{ totalCount() }}
@@ -162,18 +132,12 @@
       <div class="d-flex flex-row justify-content-center align-items-center gap-1">
         <button
           class="btn bg-transparent primary-clr border-0 d-flex justify-content-center align-items-center gap-2 rounded-3"
-          [disabled]="!hasPreviousPage()"
-          [class.opacity-50]="!hasPreviousPage()"
-          (click)="onPreviousPage()"
-        >
+          [disabled]="!hasPreviousPage()" [class.opacity-50]="!hasPreviousPage()" (click)="onPreviousPage()">
           <i class="pi pi-arrow-left"></i>
         </button>
         <button
           class="btn bg-transparent primary-clr border-0 d-flex justify-content-center align-items-center gap-2 rounded-3"
-          [disabled]="!hasNextPage()"
-          [class.opacity-50]="!hasNextPage()"
-          (click)="onNextPage()"
-        >
+          [disabled]="!hasNextPage()" [class.opacity-50]="!hasNextPage()" (click)="onNextPage()">
           <i class="pi pi-arrow-right"></i>
         </button>
       </div>
@@ -182,7 +146,4 @@
   </div>
 </div>
 
-<app-assign-task
-  [visible]="assignTaskVisible()"
-  (visibleChange)="closeAssignTaskDialog()"
-></app-assign-task>
+<app-assign-task [visible]="assignTaskVisible()" (visibleChange)="closeAssignTaskDialog()"></app-assign-task>
