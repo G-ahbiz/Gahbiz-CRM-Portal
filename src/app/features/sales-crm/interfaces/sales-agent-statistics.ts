@@ -1,13 +1,13 @@
 export interface SalesAgentStatistics {
   totalAgents: number;
-  //totalAgentsPercentage: number;
+  totalAgentsPercentage: number;
 
   activeAgents: number;
-  //activeAgentsPercentage: number;
+  activeAgentsPercentage: number;
 
   inactiveAgents: number;
-  //inactiveAgentsPercentage: number;
+  inactiveAgentsPercentage: number;
 
   totalLeads: number;
-  //totalLeadsPercentage: number;
+  totalLeadsPercentage: number;
 }

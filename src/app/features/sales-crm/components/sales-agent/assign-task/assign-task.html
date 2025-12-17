@@ -91,8 +91,8 @@
             <option [ngValue]="null" disabled>
               {{ translationKeys.ASSIGNEE_PLACEHOLDER | translate }}
             </option>
-            @for (agent of salesAgents(); track agent.agentId) {
-            <option [value]="agent.agentId">{{ agent.name }}</option>
+            @for (agent of salesAgents(); track agent.id) {
+            <option [value]="agent.id">{{ agent.name }}</option>
             }
           </select>
           @if (isFieldInvalid('assigneeId')) {

@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { environment } from '@env/environment';
+import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
+import { AddSalesAgentRequest } from '@features/sales-crm/interfaces/add-sales-agent-request';
+import { AddSalesAgentResponse } from '@features/sales-crm/interfaces/add-sales-agent-response';
 import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentStatistics } from '@features/sales-crm/interfaces/sales-agent-statistics';
@@ -43,8 +46,23 @@ export class SalesAgentApiService {
     return this.http.get<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>>(url, { params });
   }
 
+  getSalesAgentsDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
+    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgentDropdown}`;
+    return this.http.get<ApiResponse<SalesAgentBrief[]>>(url);
+  }
+
   assignTask(request: FormData): Observable<ApiResponse<AssignTaskResponse>> {
     const url = `${this.baseUrl}${environment.salesAgents.assignTask}`;
     return this.http.post<ApiResponse<AssignTaskResponse>>(url, request);
+  }
+
+  getManagersDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
+    const url = `${this.baseUrl}${environment.salesAgents.getManagersDropdown}`;
+    return this.http.get<ApiResponse<SalesAgentBrief[]>>(url);
+  }
+
+  addSalesAgent(request: AddSalesAgentRequest): Observable<ApiResponse<AddSalesAgentResponse>> {
+    const url = `${this.baseUrl}${environment.salesAgents.addSalesAgent}`;
+    return this.http.post<ApiResponse<AddSalesAgentResponse>>(url, request);
   }
 }

@@ -138,7 +138,10 @@
     "INCREASE": "زيادة",
     "DECREASE": "انخفاض",
     "REQUIRED_FIELD": "هذا الحقل مطلوب",
-    "DATE_INVALID": "التاريخ غير صالح"
+    "DATE_INVALID": "التاريخ غير صالح",
+    "INVALID_EMAIL": "الرجاء إدخال بريد إلكتروني صحيح",
+    "MIN_LENGTH": "يجب أن يكون {{minLength}} أحرف على الأقل",
+    "MIN_VALUE": "يجب أن تكون القيمة {{minValue}} على الأقل"
   },
   "LANGUAGES": {
     "ENGLISH": "الإنجليزية",
@@ -617,6 +620,23 @@
       "ASSIGNING": "جاري التعيين...",
       "SUCCESS": "تم تعيين المهمة بنجاح",
       "ERROR": "فشل تعيين المهمة"
+    },
+    "ADD-SALES-AGENT": {
+      "TITLE": "إضافة مندوب مبيعات",
+      "FULL_NAME": "الاسم الكامل",
+      "FULL_NAME_PLACEHOLDER": "أدخل الاسم الكامل",
+      "EMAIL": "البريد الإلكتروني",
+      "EMAIL_PLACEHOLDER": "أدخل البريد الإلكتروني",
+      "PASSWORD": "كلمة المرور",
+      "PASSWORD_PLACEHOLDER": "أدخل كلمة المرور",
+      "MONTHLY_TARGET": "الهدف الشهري",
+      "MONTHLY_TARGET_PLACEHOLDER": "أدخل الهدف الشهري",
+      "MANAGER": "المدير",
+      "MANAGER_PLACEHOLDER": "اختر المدير (اختياري)",
+      "SUBMIT": "إضافة مندوب",
+      "SUBMITTING": "جاري الإضافة...",
+      "SUCCESS": "تمت إضافة مندوب المبيعات بنجاح",
+      "ERROR": "فشل إضافة مندوب المبيعات"
     },
     "leads-tabel": {
       "export": "تصدير",
