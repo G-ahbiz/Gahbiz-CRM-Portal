@@ -1,12 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule } from 'primeng/popover';
@@ -19,16 +11,18 @@ import { ErrorFacadeService } from '@core/services/error.facade.service';
 import { debounceTime, distinctUntilChanged, finalize, Subject } from 'rxjs';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
 import { SelectModule } from 'primeng/select';
+import { AssignTask } from '../assign-task/assign-task';
 
 @Component({
   selector: 'app-sales-agents-cards',
-  imports: [CommonModule, TranslateModule, PopoverModule, SelectModule],
+  imports: [CommonModule, TranslateModule, PopoverModule, SelectModule, AssignTask],
   templateUrl: './sales-agents-cards.html',
   styleUrl: './sales-agents-cards.css',
 })
 export class SalesAgentsCards implements OnInit {
   salesAgents = signal<GetSalesAgentsResponse[]>([]);
   searchValue = signal<string>('');
+  assignTaskVisible = signal<boolean>(false);
   loading = signal<boolean>(true);
 
   // Pagination state
@@ -51,8 +45,6 @@ export class SalesAgentsCards implements OnInit {
   ]);
 
   private searchSubject = new Subject<string>();
-
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   private readonly salesAgentService = inject(SalesAgentFacadeService);
   private readonly router = inject(Router);
@@ -165,5 +157,13 @@ export class SalesAgentsCards implements OnInit {
 
   viewSalesAgent(id: string): void {
     this.router.navigate(['/main/sales/sales-agents/sales-agent-details', id]);
+  }
+
+  openAssignTaskDialog() {
+    this.assignTaskVisible.set(true);
+  }
+
+  closeAssignTaskDialog() {
+    this.assignTaskVisible.set(false);
   }
 }

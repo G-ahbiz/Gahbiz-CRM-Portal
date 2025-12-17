@@ -1,0 +1,157 @@
+.assign-task-form {
+  padding: 0.5rem 0;
+}
+
+.assign-task-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.assign-task-form .form-label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.assign-task-form .form-control,
+.assign-task-form .form-select {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.assign-task-form .form-control:focus,
+.assign-task-form .form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+  outline: none;
+}
+
+.assign-task-form .form-control::placeholder {
+  color: #999;
+}
+
+.assign-task-form textarea.form-control {
+  resize: none;
+  min-height: 100px;
+}
+
+.assign-task-form .form-select {
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.assign-task-form .form-select option[disabled] {
+  color: #999;
+}
+
+/* Button Styles */
+.assign-task-form .btn {
+  min-width: 140px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.assign-task-form .btn-outline-secondary {
+  border-color: #e0e0e0;
+  color: #666;
+}
+
+.assign-task-form .btn-outline-secondary:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+  color: #333;
+}
+
+.assign-task-form .btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.assign-task-form .btn-primary:hover:not(:disabled) {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.assign-task-form .btn-primary:disabled {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  opacity: 0.65;
+}
+
+/* PrimeNG DatePicker Override */
+:host ::ng-deep .p-datepicker {
+  width: 100%;
+}
+
+:host ::ng-deep .p-datepicker .p-inputtext {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+:host ::ng-deep .p-datepicker .p-inputtext:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+:host ::ng-deep .p-datepicker .p-datepicker-trigger {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Validation Styles */
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-success {
+  color: #198754 !important;
+}
+
+small.text-danger {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+/* Dialog Styles */
+:host ::ng-deep .assign-task-dialog .p-dialog-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: none;
+}
+
+:host ::ng-deep .assign-task-dialog .p-dialog-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+:host ::ng-deep .assign-task-dialog .p-dialog-content {
+  padding: 0 1.5rem 1.5rem;
+}
+
+:host ::ng-deep .assign-task-dialog .p-dialog-header-close {
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+:host ::ng-deep .assign-task-dialog .p-dialog-header-close:hover {
+  background-color: #f5f5f5;
+}
+
+
+
+
+
+
+
+
+
+

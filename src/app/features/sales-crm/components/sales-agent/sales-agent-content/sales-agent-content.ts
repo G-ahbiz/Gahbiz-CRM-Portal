@@ -98,7 +98,7 @@ export class SalesAgentContent implements OnInit {
       {
         title: 'SALES-CRM.SALES-AGENTS-CARDS.TOTAL_AGENTS',
         value: stats.totalAgents || 0,
-        rating: this.formatPercentage(stats.totalAgentsPercentage || 0), 
+        rating: this.formatPercentage(stats.totalAgentsPercentage || 0),
         ratingStatues: 'up',
         icon: 'totalAgents',
         bgColor: 'bg-primary-light',
@@ -126,7 +126,7 @@ export class SalesAgentContent implements OnInit {
         ratingStatues: 'up',
         icon: 'totalLeads',
         bgColor: 'bg-info-light',
-      }
+      },
     ];
   }
 

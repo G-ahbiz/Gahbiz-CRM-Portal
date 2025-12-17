@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-filters';
+import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +22,9 @@ export class SalesAgentFacadeService {
     filters: SalesAgentsFilter
   ): Observable<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>> {
     return this.salesAgentApiService.getAllSalesAgents(filters);
+  }
+
+  assignTask(request: FormData): Observable<ApiResponse<AssignTaskResponse>> {
+    return this.salesAgentApiService.assignTask(request);
   }
 }

@@ -1,0 +1,153 @@
+<p-dialog
+  [header]="translationKeys.TITLE | translate"
+  [visible]="visible()"
+  [modal]="true"
+  [style]="{ width: 'min(600px, 95vw)' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [closeOnEscape]="true"
+  (visibleChange)="onDialogHide()"
+  (onHide)="onDialogHide()"
+  styleClass="assign-task-dialog"
+>
+  <form [formGroup]="assignTaskForm" class="assign-task-form">
+    <!-- Lead ID -->
+    <div class="form-group mb-3">
+      <label for="leadId" class="form-label">
+        {{ translationKeys.LEAD_ID | translate }}
+        <span [class]="getFieldValidityClass('leadId')">*</span>
+      </label>
+      <input
+        type="text"
+        id="leadId"
+        formControlName="leadId"
+        class="form-control"
+        [placeholder]="translationKeys.LEAD_ID_PLACEHOLDER | translate"
+        [attr.disabled]="submitting() ? true : null"
+      />
+      @if (isFieldInvalid('leadId')) {
+      <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+      }
+    </div>
+
+    <!-- Note -->
+    <div class="form-group mb-3">
+      <label for="note" class="form-label">
+        {{ translationKeys.NOTE | translate }}
+      </label>
+      <textarea
+        id="note"
+        formControlName="note"
+        class="form-control"
+        rows="4"
+        [placeholder]="translationKeys.NOTE_PLACEHOLDER | translate"
+        [attr.disabled]="submitting() ? true : null"
+      >
+      </textarea>
+    </div>
+
+    <!-- Status & Assignee Row -->
+    <div class="row g-3 mb-3">
+      <!-- Status -->
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="status" class="form-label">
+            {{ translationKeys.STATUS | translate }}
+            <span [class]="getFieldValidityClass('status')">*</span>
+          </label>
+          <select
+            id="status"
+            formControlName="status"
+            class="form-select"
+            [attr.disabled]="submitting() ? true : null"
+          >
+            <option [ngValue]="null" disabled>
+              {{ translationKeys.STATUS_PLACEHOLDER | translate }}
+            </option>
+            @for (option of statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label | translate }}</option>
+            }
+          </select>
+          @if (isFieldInvalid('status')) {
+          <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+          }
+        </div>
+      </div>
+
+      <!-- Assignee -->
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label for="assigneeId" class="form-label">
+            {{ translationKeys.ASSIGNEE | translate }}
+            <span [class]="getFieldValidityClass('assigneeId')">*</span>
+          </label>
+          <select
+            id="assigneeId"
+            formControlName="assigneeId"
+            class="form-select"
+            [attr.disabled]="submitting() || loading() ? true : null"
+          >
+            <option [ngValue]="null" disabled>
+              {{ translationKeys.ASSIGNEE_PLACEHOLDER | translate }}
+            </option>
+            @for (agent of salesAgents(); track agent.agentId) {
+            <option [value]="agent.agentId">{{ agent.name }}</option>
+            }
+          </select>
+          @if (isFieldInvalid('assigneeId')) {
+          <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Due Date -->
+    <div class="form-group mb-4">
+      <label for="dueDate" class="form-label">
+        {{ translationKeys.DUE_DATE | translate }}
+        <span [class]="getFieldValidityClass('dueDate')">*</span>
+      </label>
+      <p-datepicker
+        formControlName="dueDate"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        [iconDisplay]="'input'"
+        [placeholder]="translationKeys.DUE_DATE_PLACEHOLDER | translate"
+        inputId="dueDate"
+        styleClass="w-100"
+        [disabled]="submitting()"
+      />
+      @if (isFieldInvalid('dueDate')) {
+      <small class="text-danger">{{ 'COMMON.REQUIRED_FIELD' | translate }}</small>
+      } @if (isFieldInvalid('dueDate') && isFieldInvalid('dateInvalid')) {
+      <small class="text-danger">{{ 'COMMON.DATE_INVALID' | translate }}</small>
+      }
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+      <button
+        type="button"
+        class="btn btn-outline-secondary px-4 py-2"
+        (click)="closeDialog()"
+        [disabled]="submitting()"
+      >
+        {{ translationKeys.CANCEL | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary primary-bg-clr px-4 py-2"
+        (click)="onSubmit()"
+        [disabled]="submitting() || assignTaskForm.invalid"
+      >
+        @if (!submitting()) {
+        {{ translationKeys.ASSIGN | translate }}
+        } @else {
+        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+        {{ translationKeys.ASSIGNING | translate }}
+        }
+      </button>
+    </div>
+  </form>
+</p-dialog>

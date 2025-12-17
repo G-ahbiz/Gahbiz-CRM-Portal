@@ -9,7 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterLink } from '@angular/router';
-import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 // const SESSION_STORAGE_KEYS = {
 //   LEAD_ID: 'salesAgentId'
@@ -23,21 +23,29 @@ export const salesAgentHeader: readonly string[] = [
   'Source',
   'Assigned To',
   'Value',
-  'Created Date'
+  'Created Date',
 ];
 @Component({
   selector: 'app-sales-agents-tabel',
-  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, RouterLink, TranslateModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+    RouterLink,
+    TranslateModule,
+  ],
   templateUrl: './sales-agents-tabel.html',
   styleUrl: './sales-agents-tabel.css',
-  providers: [AllData]
+  providers: [AllData],
 })
 export class SalesAgentsTabel implements OnInit {
   @ViewChild('dt') dt!: Table;
   loading: boolean = true;
   salesAgentData: LeadsInterface[] = [];
   leadsTabelHeader: readonly string[] = salesAgentHeader;
-
   activityValues: number[] = [0, 100];
 
   searchValue: string = '';
@@ -46,10 +54,10 @@ export class SalesAgentsTabel implements OnInit {
   // Selection state
   isAllSelected: boolean = false;
 
-  constructor(private allData: AllData, private router: Router) { }
+  constructor(private allData: AllData, private router: Router) {}
 
   ngOnInit() {
-    this.getSalesAgentData()
+    this.getSalesAgentData();
   }
 
   getSalesAgentData() {
@@ -68,7 +76,7 @@ export class SalesAgentsTabel implements OnInit {
     this.isAllSelected = checkbox.checked;
 
     // Update selection state for all visible leads on current page
-    this.salesAgentData.forEach(salesAgent => {
+    this.salesAgentData.forEach((salesAgent) => {
       salesAgent.selected = this.isAllSelected;
     });
   }
@@ -85,9 +93,8 @@ export class SalesAgentsTabel implements OnInit {
       return;
     }
 
-    this.isAllSelected = currentPageSalesAgent.every(salesAgent => salesAgent.selected);
+    this.isAllSelected = currentPageSalesAgent.every((salesAgent) => salesAgent.selected);
   }
-
 
   viewSalesAgent(id: number) {
     sessionStorage.setItem('salesAgentId', id.toString());
@@ -103,6 +110,4 @@ export class SalesAgentsTabel implements OnInit {
     sessionStorage.setItem('salesAgentId', id.toString());
     this.router.navigate(['/main/sales/leads/add-lead']);
   }
-
-
 }
