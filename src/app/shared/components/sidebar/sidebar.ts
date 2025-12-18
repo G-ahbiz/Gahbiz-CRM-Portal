@@ -19,9 +19,15 @@ export class Sidebar implements OnInit {
 
   private languageService = inject(LanguageService);
 
+  // Sales sidebar button
   isSalesActive = signal<boolean>(false);
   isLeadsActive = signal<boolean>(false);
   isSalesAgentsActive = signal<boolean>(false);
+
+  // Reports sidebar button
+  isSalesReportsActive = signal<boolean>(false);
+  isLeadsReportsActive = signal<boolean>(false);
+  isReportsActive = signal<boolean>(false);
 
   Routes = ROUTES;
   isRTL = this.languageService.isRTL;
@@ -69,6 +75,19 @@ export class Sidebar implements OnInit {
     if (this.isMobile) {
       this.sidebarToggled.emit();
     }
+  }
+
+  toggleReportsActive() {
+    this.isReportsActive.set(!this.isReportsActive());
+  }
+
+  toggleSalesReportsActive() {
+    this.isSalesReportsActive.set(!this.isSalesReportsActive());
+    this.isLeadsReportsActive.set(false);
+  }
+  toggleLeadsReportsActive() {
+    this.isLeadsReportsActive.set(!this.isLeadsReportsActive());
+    this.isSalesReportsActive.set(false);
   }
 
   private checkActiveRoutes() {

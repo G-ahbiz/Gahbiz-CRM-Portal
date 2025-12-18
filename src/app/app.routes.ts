@@ -49,7 +49,8 @@ export const routes: Routes = [
       },
       {
         path: 'reports',
-        loadComponent: () => import('./features/reports-crm/reports-crm').then((m) => m.ReportsCrm),
+        loadChildren: () =>
+          import('./features/reports-crm/reports.routes').then((m) => m.REPORTS_ROUTES),
       },
       {
         path: 'settings',
