@@ -19,9 +19,9 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TooltipModule } from 'primeng/tooltip';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SalesReportsFacadeService } from '@features/reports-crm/services/sales-reports/sales-reports.facade.service';
-import { CustomerReportParams } from '@features/reports-crm/interfaces/customer-report-params';
+import { CustomerReportParams } from '@features/reports-crm/interfaces/sales-report/customer-report-params';
 import { ToastService } from '@core/services/toast.service';
-import { CustomerReportItem } from '@features/reports-crm/interfaces/customer-report-item';
+import { CustomerReportItem } from '@features/reports-crm/interfaces/sales-report/customer-report-item';
 import { CustomerDetails } from '@features/customers-crm/components/customer-details/customer-details';
 import { finalize } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
@@ -73,9 +73,9 @@ export class CustomerTable implements OnInit {
   selectedCustomerForDialog = signal<string | null>(null);
 
   // From facade
-  loading$ = this.facade.loading$;
-  error$ = this.facade.error$;
-  report$ = this.facade.reportCache$;
+  loading$ = this.facade.customerLoading$;
+  error$ = this.facade.customerError$;
+  report$ = this.facade.customerReportCache$;
 
   // Responsive
   screenWidth: number = window.innerWidth;
@@ -138,7 +138,7 @@ export class CustomerTable implements OnInit {
 
   refreshReport(): void {
     this.facade
-      .refreshCurrentReport()
+      .refreshCurrentCustomerReport()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         error: (error) => {
