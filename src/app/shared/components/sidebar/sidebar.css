@@ -99,29 +99,29 @@ ul {
 }
 
 /* Sales dropdown styles */
-.sales-dropdown-container {
+.dropdown-container {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out;
 }
 
-.sales-dropdown-container.show {
+.dropdown-container.show {
   max-height: 200px; /* Adjust based on your content height */
   transition: max-height 0.3s ease-in;
 }
 
 /* Sales dropdown items */
-.sales-dropdown-container li {
+.dropdown-container li {
   margin-bottom: 0.25rem;
 }
 
 /* RTL adjustments for sales dropdown */
-[dir='rtl'] .sales-dropdown-container ul {
+[dir='rtl'] .dropdown-container ul {
   padding-right: 1.5rem;
   padding-left: 0;
 }
 
-[dir='ltr'] .sales-dropdown-container ul {
+[dir='ltr'] .dropdown-container ul {
   padding-left: 1.5rem;
   padding-right: 0;
 }
@@ -136,18 +136,18 @@ ul {
 }
 
 /* Sales item active state */
-.sales.active {
+.sidebar-toggle.active {
   background-color: var(--sidebar-active-color);
 }
 
-.sales.active > button {
+.sidebar-toggle.active > button {
   color: white !important;
 }
 
-.sales.active > button img {
+.sidebar-toggle.active > button img {
   filter: brightness(0) invert(1) !important;
 }
 
-.collapsed .sales-dropdown-container {
+.collapsed .dropdown-container {
   display: none !important;
 }

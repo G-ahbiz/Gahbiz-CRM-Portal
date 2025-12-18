@@ -34,6 +34,10 @@ export const ROUTES = {
   //Operations
   getOperationFiles: (id: string) => `main/operations/operation-files/${id}`,
   operations: '/main/operations',
+  // Reports
+  reports: '/main/reports',
+  salesReports: '/main/reports/sales',
+  leadsReports: '/main/reports/leads',
 };
 
 export const USER_TYPES = {

@@ -1,0 +1,35 @@
+.tabs {
+  border-bottom: 1px solid #e3e1e1;
+}
+.nav-link {
+  border: none;
+  background: transparent;
+  color: #888888;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: #005db5;
+}
+
+.nav-link.active {
+  background-color: #ffffff;
+  color: #005db5;
+  font-weight: 600;
+
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e3e1e1;
+  border-bottom: 1px solid #ffffff;
+}
+
+/* Content area */
+.tab-content {
+  background: #ffffff;
+  border: 1px solid #e3e1e1;
+  border-radius: 0 0.5rem 0.5rem 0.5rem;
+  padding: 1.5rem;
+}
