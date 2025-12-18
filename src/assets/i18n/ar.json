@@ -868,6 +868,13 @@
       "FAILED_TO_ADD_ACTIVITY": "فشل إضافة النشاط. يرجى المحاولة مرة أخرى."
     }
   },
+  "OPERATIONS": {
+    "TITLE": "العمليات",
+    "ASSIGNED_REQUESTS": "الطلبات المعينة",
+    "PENDING_REQUESTS": "الطلبات المعلقة",
+    "COMPLETED_REQUESTS": "الطلبات المكتملة",
+    "AVG_PROCESSING_TIME": "متوسط وقت المعالجة"
+  },
   "operations": {
     "export": "تصدير",
     "add-request": "إضافة طلب",

@@ -820,6 +820,13 @@
       "FAILED_TO_ADD_ACTIVITY": "Error al agregar actividad. Por favor inténtalo de nuevo."
     }
   },
+  "OPERATIONS": {
+    "TITLE": "Operaciones",
+    "ASSIGNED_REQUESTS": "Solicitudes Asignadas",
+    "PENDING_REQUESTS": "Solicitudes Pendientes",
+    "COMPLETED_REQUESTS": "Solicitudes Completadas",
+    "AVG_PROCESSING_TIME": "Tiempo Promedio de Procesamiento"
+  },
   "operations": {
     "export": "Exportar",
     "add-request": "Agregar Solicitud",

@@ -48,7 +48,7 @@ export class OperationsContent {
   mapStatisticsToCards(statistics: SubmissionsStatistics): LogCard[] {
     return [
       {
-        title: 'Assigned Requests',
+        title: 'OPERATIONS.ASSIGNED_REQUESTS',
         value: statistics.assignedRequests,
         icon: 'requests',
         bgColor: 'card-blue',
@@ -56,7 +56,7 @@ export class OperationsContent {
         ratingStatues: statistics.assignmentRate >= 0 ? 'up' : 'down',
       },
       {
-        title: 'Completed Requests',
+        title: 'OPERATIONS.COMPLETED_REQUESTS',
         value: statistics.completedRequests,
         icon: 'completed',
         bgColor: 'card-green',
@@ -64,7 +64,7 @@ export class OperationsContent {
         ratingStatues: statistics.completionRate >= 0 ? 'up' : 'down',
       },
       {
-        title: 'Pending Requests',
+        title: 'OPERATIONS.PENDING_REQUESTS',
         value: statistics.pendingRequests,
         icon: 'pending',
         bgColor: 'card-yellow',
@@ -72,7 +72,7 @@ export class OperationsContent {
         ratingStatues: statistics.pendingRate >= 0 ? 'up' : 'down',
       },
       {
-        title: 'Avg. Processing Time',
+        title: 'OPERATIONS.AVG_PROCESSING_TIME',
         value: statistics.avgProcessingTime,
         icon: 'processing',
         bgColor: 'card-red',
