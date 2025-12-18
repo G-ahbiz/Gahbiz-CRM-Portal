@@ -6,6 +6,7 @@ import { OperationsApiService } from './operations.api.service';
 import { Observable } from 'rxjs';
 import { GetSubmissionsFilters } from '../interfaces/get-submissions-filters';
 import { GetSubmissionDetails } from '../interfaces/get-submission-details';
+import { SubmissionsStatistics } from '../interfaces/submissions-statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -34,5 +35,9 @@ export class OperationsFacadeService {
   }
   rejectSubmission(submissionId: string, rejectionReason: string): Observable<ApiResponse<any>> {
     return this.operationsApiService.rejectSubmission(submissionId, rejectionReason);
+  }
+
+  getSubmissionsStatistics(): Observable<ApiResponse<SubmissionsStatistics>> {
+    return this.operationsApiService.getSubmissionsStatistics();
   }
 }
