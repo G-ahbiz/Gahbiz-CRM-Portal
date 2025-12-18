@@ -119,6 +119,7 @@
     "VIEW": "عرض",
     "ADD": "إضافة",
     "REMOVE": "إزالة",
+    "EXPORT": "تصدير",
     "CREATED": "تم الإنشاء",
     "UPDATED": "تم التحديث",
     "DELETED": "تم الحذف",
@@ -141,6 +142,8 @@
     "DATE_INVALID": "التاريخ غير صالح",
     "ID": "الرقم التعريفي",
     "ACTIONS": "الإجراءات",
+    "REFRESH": "تحديث",
+    "TOTAL_RECORDS": "إجمالي السجلات",
     "INVALID_EMAIL": "الرجاء إدخال بريد إلكتروني صحيح",
     "MIN_LENGTH": "يجب أن يكون {{minLength}} أحرف على الأقل",
     "MIN_VALUE": "يجب أن تكون القيمة {{minValue}} على الأقل"
@@ -923,5 +926,23 @@
       "rejection-reason-placeholder": "أدخل سبب الرفض",
       "submit-rejection": "إرسال الرفض"
     }
+  },
+  "REPORTS": {
+    "customer-report": "تقرير العملاء",
+    "customer-summary": "تقرير ملخص العملاء",
+    "search-customers": "البحث عن طريق الاسم أو الهاتف أو البريد الإلكتروني...",
+    "customer-id": "الرقم التعريفي",
+    "customer-name": "اسم العميل",
+    "phone": "الهاتف",
+    "email": "البريد الإلكتروني",
+    "invoices": "الفواتير",
+    "total-amount": "المبلغ الإجمالي",
+    "no-customers-found": "لم يتم العثور على عملاء",
+    "try-different-search": "جرب مصطلح بحث مختلف",
+    "error-loading-report": "خطأ في تحميل التقرير",
+    "error-refreshing-report": "خطأ في تحديث التقرير",
+    "export-success": "تم تصدير التقرير بنجاح",
+    "export-failed": "فشل في تصدير التقرير",
+    "exporting": "جاري تصدير التقرير..."
   }
 }

@@ -1,0 +1,182 @@
+<div class="container-fluid p-0 m-0">
+  <div class="card border-0 bg-transparent">
+    <p-table #dt [value]="customersData()" dataKey="customerId"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }" [paginator]="true"
+      [rows]="pageSizeControl.value || 10" [totalRecords]="totalRecords()"
+      [rowsPerPageOptions]="getResponsiveRowsPerPageOptions()" [lazy]="true" (onPage)="onPageChange($event)"
+      [loading]="loading()" responsiveLayout="scroll">
+
+      <ng-template #caption>
+        <!-- Responsive Header Container -->
+        <div class="responsive-header">
+          <!-- Desktop Layout -->
+          <div class="d-none d-md-flex w-100 align-items-center">
+            <!-- Left Section: Title and Refresh -->
+            <div class="desktop-title-section">
+              <h5 class="m-0 p-0">{{ 'REPORTS.customer-report' | translate }}</h5>
+              <small class="text-muted">{{ 'REPORTS.customer-summary' | translate }}</small>
+            </div>
+
+            <!-- Center Section: Search -->
+            <div class="desktop-search flex-grow-1 mx-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" [formControl]="searchControl"
+                  [placeholder]="'REPORTS.search-customers' | translate" />
+              </p-iconfield>
+            </div>
+
+            <!-- Right Section: Action Buttons -->
+            <div class="desktop-action-btns d-flex gap-2">
+              <button class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2"
+                (click)="refreshReport()" [disabled]="loading()" [title]="'COMMON.REFRESH' | translate">
+                <i class="pi" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+                <span class="d-none d-lg-inline">{{ 'COMMON.REFRESH' | translate }}</span>
+              </button>
+
+              <button class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center gap-2"
+                (click)="exportReport()" [disabled]="exportLoading() || customersData().length === 0"
+                [title]="'COMMON.EXPORT' | translate">
+                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span class="d-none d-lg-inline">{{ 'COMMON.EXPORT' | translate }}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mobile Layout -->
+          <div class="d-md-none">
+            <!-- Title -->
+            <div class="mobile-title mb-2">
+              <h6 class="m-0">{{ 'REPORTS.customer-report' | translate }}</h6>
+              <small class="text-muted">{{ 'REPORTS.customer-summary' | translate }}</small>
+            </div>
+
+            <!-- Search -->
+            <div class="mobile-search mb-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" [formControl]="searchControl"
+                  [placeholder]="'REPORTS.search-customers' | translate" />
+              </p-iconfield>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="mobile-action-btns d-flex gap-2 mb-3">
+              <button
+                class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center justify-content-center flex-grow-1"
+                (click)="refreshReport()" [disabled]="loading()">
+                <i class="pi me-2" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.REFRESH' | translate }}</span>
+              </button>
+
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center justify-content-center flex-grow-1"
+                (click)="exportReport()" [disabled]="exportLoading() || customersData().length === 0">
+                <i class="pi me-2" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.EXPORT' | translate }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div *ngIf="loading() || exportLoading()" class="mt-3">
+          <div class="d-flex align-items-center gap-2">
+            <p-progressSpinner [style]="{width: '20px', height: '20px'}" strokeWidth="4">
+            </p-progressSpinner>
+            <small class="text-muted">
+              {{ exportLoading() ? ('REPORTS.exporting' | translate) : ('COMMON.LOADING' | translate) }}
+            </small>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #header>
+        <tr>
+          <th class="text-center" style="width: 60px;">
+            {{ 'REPORTS.customer-id' | translate }}
+          </th>
+          <th>
+            {{ 'REPORTS.customer-name' | translate }}
+          </th>
+          <th>
+            {{ 'REPORTS.phone' | translate }}
+          </th>
+          <th class="d-none d-md-table-cell">
+            {{ 'REPORTS.email' | translate }}
+          </th>
+          <th class="text-center">
+            {{ 'REPORTS.invoices' | translate }}
+          </th>
+          <th class="text-center">
+            {{ 'REPORTS.total-amount' | translate }}
+          </th>
+          <th style="width: 80px;">
+            {{ 'COMMON.ACTIONS' | translate }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-customer>
+        <tr>
+          <td class="text-center" [title]="customer.customerId">
+            {{ customer.customerId | slice:0:6 }}...
+          </td>
+          <td>
+            <span class="d-none d-md-inline">{{ customer.customerName }}</span>
+            <span class="d-md-none" [title]="customer.customerName">
+              {{ customer.customerName | slice:0:12 }}{{ customer.customerName.length > 12 ? '...' : '' }}
+            </span>
+          </td>
+          <td>{{ customer.customerPhone || '-' }}</td>
+          <td class="d-none d-md-table-cell" [title]="customer.customerEmail">
+            {{ customer.customerEmail || '-' }}
+          </td>
+          <td class="text-center">
+            <span class="badge bg-primary rounded-pill">
+              {{ customer.totalInvoicesCount }}
+            </span>
+          </td>
+          <td class="text-center">
+            <span class="fw-bold text-success">
+              {{ formatCurrency(customer.totalAmount) }}
+            </span>
+          </td>
+          <td class="action-buttons">
+            <button class="btn btn-sm btn-outline-primary" (click)="viewCustomer(customer.customerId)"
+              [title]="'COMMON.VIEW' | translate" pTooltip="{{ 'COMMON.VIEW' | translate }}">
+              <i class="pi pi-eye"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="7" class="text-center py-4">
+            <div class="d-flex flex-column align-items-center">
+              <i class="pi pi-info-circle text-muted mb-2" style="font-size: 2rem"></i>
+              <p class="text-muted mb-0">{{ 'REPORTS.no-customers-found' | translate }}</p>
+              <small class="text-muted">{{ 'REPORTS.try-different-search' | translate }}</small>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #paginatorleft>
+        <small class="text-muted">
+          {{ totalRecords() }} {{ 'COMMON.TOTAL_RECORDS' | translate }}
+        </small>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Customer Details Dialog -->
+<app-customer-details [customerId]="selectedCustomerForDialog()" [(visible)]="showDetailsDialog"
+  (onClose)="closeDetailsDialog()">
+</app-customer-details>
