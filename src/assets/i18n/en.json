@@ -393,6 +393,22 @@
     "paid": "Paid",
     "partially-paid": "Partially Paid",
     "unpaid": "Unpaid",
+    "status-option": {
+      "all": "All Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "partiallyPaid": "Partially Paid"
+    },
+    "period": {
+      "AllTime": "All Time",
+      "ThisMonth": "This Month",
+      "LastMonth": "Last Month",
+      "ThisYear": "This Year",
+      "LastYear": "Last Year",
+      "Last3Months": "Last 3 Months",
+      "Last6Months": "Last 6 Months",
+      "Last12Months": "Last 12 Months"
+    },
     "add-invoice-page": {
       "title": "Invoice Details",
       "customer": "Customer",
@@ -961,6 +977,29 @@
     "error-refreshing-report": "Error refreshing report",
     "export-success": "Report exported successfully",
     "export-failed": "Failed to export report",
-    "exporting": "Exporting report..."
+    "exporting": "Exporting report...",
+
+    "invoices-report": "Invoices Report",
+    "invoices-summary": "View and manage all invoices",
+    "search-invoices": "Search invoices...",
+    "invoice-number": "Invoice #",
+    "invoice-date": "Invoice Date",
+    "due-date": "Due Date",
+    "amount-paid": "Amount Paid",
+    "due-amount": "Due Amount",
+    "status": "Status",
+    "no-invoices-found": "No invoices found",
+    "try-different-filters": "Try adjusting your search or filters",
+    "error-loading-invoices": "Failed to load invoices",
+    "error-refreshing-invoices": "Failed to refresh invoices",
+    "exporting-invoices": "Exporting invoices...",
+    "all-sales-agents": "All Sales Agents",
+    "error-loading-sales-agents": "Failed to load sales agents",
+    "sales-agent": "Sales Agent",
+    "period": "Period",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partially-paid": "Partially Paid",
+    "unknown": "Unknown"
   }
 }
