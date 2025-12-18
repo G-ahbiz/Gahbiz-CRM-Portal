@@ -941,5 +941,44 @@
       "rejection-reason-placeholder": "Enter reason for rejection",
       "submit-rejection": "Submit Rejection"
     }
+  },
+  "PAYMENT_REPORTS": {
+    "title": "Payments Report",
+    "export": "Export",
+    "search": "Search...",
+    "from-date": "From Date",
+    "to-date": "To Date",
+    "no-data": "No payment data found",
+    "columns": {
+      "payment-id": "Payment ID",
+      "invoice-id": "Invoice ID",
+      "payment-date": "Payment Date",
+      "customer-name": "Customer Name",
+      "payment-mode": "Payment Mode",
+      "transaction-id": "Transaction ID",
+      "note": "Note",
+      "amount": "Amount"
+    },
+    "periods": {
+      "all-time": "All Time",
+      "this-month": "This Month",
+      "last-month": "Last Month",
+      "this-year": "This Year",
+      "last-year": "Last Year",
+      "last-3-months": "Last 3 Months",
+      "last-6-months": "Last 6 Months",
+      "last-12-months": "Last 12 Months",
+      "custom": "Custom Period"
+    },
+    "payment-methods": {
+      "all": "All Payment Methods",
+      "cash-on-delivery": "Cash on Delivery",
+      "bank-transfer": "Bank Transfer",
+      "credit-card": "Credit Card",
+      "paypal": "PayPal",
+      "cashondelivery": "Cash on Delivery",
+      "banktransfer": "Bank Transfer",
+      "creditcard": "Credit Card"
+    }
   }
 }
