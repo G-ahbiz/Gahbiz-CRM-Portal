@@ -1,0 +1,302 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Search and Header Styles */
+.search-container {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  background: white;
+}
+
+.form-control,
+.form-select {
+  &:focus {
+    box-shadow: none;
+    outline: none;
+    border-color: var(--primary-color);
+  }
+}
+
+/* Table Styles */
+td,
+th {
+  vertical-align: middle !important;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #e9ecef !important;
+}
+
+/* Primary color button */
+.primary-bg-clr {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+
+  &:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+  }
+
+  &:disabled {
+    background-color: #93c5fd;
+    border-color: #93c5fd;
+    opacity: 0.7;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  th:nth-child(4),
+  td:nth-child(4) {
+    display: none;
+  }
+
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Mobile action buttons */
+  .mobile-action-btns {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .mobile-action-btns .btn {
+    flex: 1;
+    min-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Hide text on very small screens, show only icons */
+  @media (max-width: 576px) {
+    .mobile-action-btns .btn span:not(.ms-1) {
+      display: none !important;
+    }
+
+    .mobile-action-btns .btn i {
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+    }
+
+    .mobile-action-btns .btn {
+      min-width: 50px;
+      max-width: 70px;
+      padding: 0.5rem !important;
+    }
+  }
+
+  /* Mobile title */
+  .mobile-title h6 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+}
+
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+  th:nth-child(5),
+  td:nth-child(5),
+  th:nth-child(6),
+  td:nth-child(6) {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure table is responsive */
+::ng-deep .p-datatable {
+  .p-datatable-table {
+    min-width: 100% !important;
+    overflow-x: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    padding: 0.75rem 1rem;
+
+    @media (max-width: 768px) {
+      max-width: 120px;
+      padding: 0.5rem !important;
+      font-size: 0.85rem;
+    }
+  }
+
+  .p-datatable-tbody > tr {
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #f0f0f0;
+
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  /* Pagination styles */
+  .p-paginator {
+    background: transparent;
+    border: none;
+    padding: 1rem 0;
+
+    .p-paginator-element {
+      border-radius: 4px;
+      margin: 0 2px;
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+      }
+    }
+  }
+}
+
+/* Responsive header layout */
+.responsive-header {
+  display: block;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Desktop layout */
+.desktop-title-section {
+  min-width: 200px;
+}
+
+.desktop-search {
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.desktop-action-btns {
+  min-width: 180px;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+
+  button {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.25rem;
+
+    button {
+      width: 28px;
+      height: 28px;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Badge styles */
+.badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  min-width: 36px;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  border-radius: 8px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+
+  i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  small {
+    font-size: 0.9rem;
+  }
+}
+
+/* For RTL support */
+:host-context([dir='rtl']) {
+  .mobile-action-btns .btn i {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+
+  ::ng-deep .p-datatable {
+    .p-datatable-thead > tr > th {
+      text-align: right;
+    }
+
+    .p-datatable-tbody > tr > td {
+      text-align: right;
+    }
+  }
+}
+
+.btn-outline-secondary {
+  color: #005db5;
+  border-color: #005db5;
+}
+.btn-outline-secondary:hover {
+  background-color: #005db5;
+  color: #ffffff;
+}

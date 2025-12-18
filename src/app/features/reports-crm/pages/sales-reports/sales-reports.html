@@ -1,30 +1,18 @@
 <ul class="nav nav-tabs tabs">
   <li class="nav-item">
-    <button
-      class="nav-link"
-      [class.active]="activeTab() === 'payments'"
-      (click)="activeTab.set('payments')"
-    >
+    <button class="nav-link" [class.active]="activeTab() === 'payments'" (click)="activeTab.set('payments')">
       Payments
     </button>
   </li>
 
   <li class="nav-item">
-    <button
-      class="nav-link"
-      [class.active]="activeTab() === 'customers'"
-      (click)="activeTab.set('customers')"
-    >
+    <button class="nav-link" [class.active]="activeTab() === 'customers'" (click)="activeTab.set('customers')">
       Customers
     </button>
   </li>
 
   <li class="nav-item">
-    <button
-      class="nav-link"
-      [class.active]="activeTab() === 'invoices'"
-      (click)="activeTab.set('invoices')"
-    >
+    <button class="nav-link" [class.active]="activeTab() === 'invoices'" (click)="activeTab.set('invoices')">
       Invoices
     </button>
   </li>
@@ -37,11 +25,11 @@
   </div>
   } @if (activeTab() === 'customers') {
   <div>
-    <!-- <app-customer-table></app-customer-table> -->
+    <app-customer-table></app-customer-table>
   </div>
   } @if (activeTab() === 'invoices') {
   <div>
-    <!-- <app-invoice-table></app-invoice-table> -->
+    <app-invoice-table></app-invoice-table>
   </div>
   }
 </div>

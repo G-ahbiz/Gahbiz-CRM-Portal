@@ -122,6 +122,7 @@
     "CREATED": "Created",
     "UPDATED": "Updated",
     "DELETED": "Deleted",
+    "EXPORT": "Export",
     "TRY_AGAIN": "Try Again",
     "READ_MORE": "Read More",
     "NOT_AVAILABLE": "N/A",
@@ -140,6 +141,8 @@
     "REQUIRED_FIELD": "This field is required",
     "ID": "ID",
     "ACTIONS": "Actions",
+    "REFRESH": "Refresh",
+    "TOTAL_RECORDS": "total records",
     "INVALID_EMAIL": "Please enter a valid email address",
     "MIN_LENGTH": "Must be at least {{minLength}} characters",
     "MIN_VALUE": "Value must be at least {{minValue}}"
@@ -941,5 +944,23 @@
       "rejection-reason-placeholder": "Enter reason for rejection",
       "submit-rejection": "Submit Rejection"
     }
+  },
+  "REPORTS": {
+    "customer-report": "Customer Report",
+    "customer-summary": "Customer Summary Report",
+    "search-customers": "Search by name, phone or email...",
+    "customer-id": "ID",
+    "customer-name": "Customer Name",
+    "phone": "Phone",
+    "email": "Email",
+    "invoices": "Invoices",
+    "total-amount": "Total Amount",
+    "no-customers-found": "No customers found",
+    "try-different-search": "Try a different search term",
+    "error-loading-report": "Error loading report",
+    "error-refreshing-report": "Error refreshing report",
+    "export-success": "Report exported successfully",
+    "export-failed": "Failed to export report",
+    "exporting": "Exporting report..."
   }
 }
