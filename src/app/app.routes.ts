@@ -60,5 +60,11 @@ export const routes: Routes = [
     ],
   },
   { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
-  { path: 'unauthorized', loadComponent: () => import('@shared/components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent) },
+  {
+    path: 'unauthorized',
+    loadComponent: () =>
+      import('@shared/components/unauthorized/unauthorized.component').then(
+        (m) => m.UnauthorizedComponent
+      ),
+  },
 ];
