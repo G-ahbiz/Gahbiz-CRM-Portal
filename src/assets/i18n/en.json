@@ -122,6 +122,7 @@
     "CREATED": "Created",
     "UPDATED": "Updated",
     "DELETED": "Deleted",
+    "EXPORT": "Export",
     "TRY_AGAIN": "Try Again",
     "READ_MORE": "Read More",
     "NOT_AVAILABLE": "N/A",
@@ -140,6 +141,8 @@
     "REQUIRED_FIELD": "This field is required",
     "ID": "ID",
     "ACTIONS": "Actions",
+    "REFRESH": "Refresh",
+    "TOTAL_RECORDS": "total records",
     "INVALID_EMAIL": "Please enter a valid email address",
     "MIN_LENGTH": "Must be at least {{minLength}} characters",
     "MIN_VALUE": "Value must be at least {{minValue}}"
@@ -390,6 +393,22 @@
     "paid": "Paid",
     "partially-paid": "Partially Paid",
     "unpaid": "Unpaid",
+    "status-option": {
+      "all": "All Status",
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "partiallyPaid": "Partially Paid"
+    },
+    "period": {
+      "AllTime": "All Time",
+      "ThisMonth": "This Month",
+      "LastMonth": "Last Month",
+      "ThisYear": "This Year",
+      "LastYear": "Last Year",
+      "Last3Months": "Last 3 Months",
+      "Last6Months": "Last 6 Months",
+      "Last12Months": "Last 12 Months"
+    },
     "add-invoice-page": {
       "title": "Invoice Details",
       "customer": "Customer",
@@ -941,5 +960,84 @@
       "rejection-reason-placeholder": "Enter reason for rejection",
       "submit-rejection": "Submit Rejection"
     }
+  },
+  "PAYMENT_REPORTS": {
+    "title": "Payments Report",
+    "export": "Export",
+    "search": "Search...",
+    "from-date": "From Date",
+    "to-date": "To Date",
+    "no-data": "No payment data found",
+    "columns": {
+      "payment-id": "Payment ID",
+      "invoice-id": "Invoice ID",
+      "payment-date": "Payment Date",
+      "customer-name": "Customer Name",
+      "payment-mode": "Payment Mode",
+      "transaction-id": "Transaction ID",
+      "note": "Note",
+      "amount": "Amount"
+    },
+    "periods": {
+      "all-time": "All Time",
+      "this-month": "This Month",
+      "last-month": "Last Month",
+      "this-year": "This Year",
+      "last-year": "Last Year",
+      "last-3-months": "Last 3 Months",
+      "last-6-months": "Last 6 Months",
+      "last-12-months": "Last 12 Months",
+      "custom": "Custom Period"
+    },
+    "payment-methods": {
+      "all": "All Payment Methods",
+      "cash-on-delivery": "Cash on Delivery",
+      "bank-transfer": "Bank Transfer",
+      "credit-card": "Credit Card",
+      "paypal": "PayPal",
+      "cashondelivery": "Cash on Delivery",
+      "banktransfer": "Bank Transfer",
+      "creditcard": "Credit Card"
+    }
+  "REPORTS": {
+    "customer-report": "Customer Report",
+    "customer-summary": "Customer Summary Report",
+    "search-customers": "Search by name, phone or email...",
+    "customer-id": "ID",
+    "customer-name": "Customer Name",
+    "phone": "Phone",
+    "email": "Email",
+    "invoices": "Invoices",
+    "total-amount": "Total Amount",
+    "no-customers-found": "No customers found",
+    "try-different-search": "Try a different search term",
+    "error-loading-report": "Error loading report",
+    "error-refreshing-report": "Error refreshing report",
+    "export-success": "Report exported successfully",
+    "export-failed": "Failed to export report",
+    "exporting": "Exporting report...",
+
+    "invoices-report": "Invoices Report",
+    "invoices-summary": "View and manage all invoices",
+    "search-invoices": "Search invoices...",
+    "invoice-number": "Invoice #",
+    "invoice-date": "Invoice Date",
+    "due-date": "Due Date",
+    "amount-paid": "Amount Paid",
+    "due-amount": "Due Amount",
+    "status": "Status",
+    "no-invoices-found": "No invoices found",
+    "try-different-filters": "Try adjusting your search or filters",
+    "error-loading-invoices": "Failed to load invoices",
+    "error-refreshing-invoices": "Failed to refresh invoices",
+    "exporting-invoices": "Exporting invoices...",
+    "all-sales-agents": "All Sales Agents",
+    "error-loading-sales-agents": "Failed to load sales agents",
+    "sales-agent": "Sales Agent",
+    "period": "Period",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "partially-paid": "Partially Paid",
+    "unknown": "Unknown"
   }
 }
