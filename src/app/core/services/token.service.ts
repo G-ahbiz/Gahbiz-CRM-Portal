@@ -214,6 +214,7 @@ export class TokenService {
     const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA_KEY);
     if (!userData) return null;
     const payload = JSON.parse(userData);
+    console.log('payload');
     return (
       payload?.type ??
       payload?.role ??

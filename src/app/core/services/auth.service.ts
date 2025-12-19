@@ -72,9 +72,10 @@ export class AuthService {
             const { user, token } = response.data;
 
             const userRoles =
+              this.tokenService.extractRolesFromToken(token) ??
               (user as any)?.roles ??
               (user as any)?.role ??
-              this.tokenService.extractRolesFromLocalStorage();
+              null;
 
             if (!isAnyAllowedRole(userRoles)) {
               this.tokenService.clearAllTokens();

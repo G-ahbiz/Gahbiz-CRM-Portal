@@ -75,7 +75,6 @@ export class RoleGuard implements CanActivate, CanActivateChild {
     const roles = user.roles || user.role || this.tokenService.extractRolesFromLocalStorage() || [];
     // Convert to array if needed
     const roleArray = Array.isArray(roles) ? roles : [roles];
-
     // Filter and normalize
     return roleArray
       .filter((role): role is string => typeof role === 'string' && role.trim() !== '')

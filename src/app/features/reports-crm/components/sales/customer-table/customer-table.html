@@ -10,38 +10,44 @@
         <!-- Responsive Header Container -->
         <div class="responsive-header">
           <!-- Desktop Layout -->
-          <div class="d-none d-md-flex w-100 align-items-center">
-            <!-- Left Section: Title and Refresh -->
-            <div class="desktop-title-section">
-              <h5 class="m-0 p-0">{{ 'REPORTS.customer-report' | translate }}</h5>
-              <small class="text-muted">{{ 'REPORTS.customer-summary' | translate }}</small>
+          <div class="d-none d-md-flex flex-column w-100">
+            <!-- First Row: Title and Action Buttons -->
+            <div class="desktop-top-row w-100 d-flex align-items-center justify-content-between mb-3">
+              <!-- Title -->
+              <div class="desktop-title-section">
+                <h5 class="m-0 p-0">{{ 'REPORTS.customer-report' | translate }}</h5>
+                <small class="text-muted">{{ 'REPORTS.customer-summary' | translate }}</small>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="desktop-action-btns d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2"
+                  (click)="refreshReport()" [disabled]="loading()" [title]="'COMMON.REFRESH' | translate">
+                  <i class="pi" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+                  <span class="d-none d-lg-inline">{{ 'COMMON.REFRESH' | translate }}</span>
+                </button>
+
+                <button class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center gap-2"
+                  (click)="exportReport()" [disabled]="exportLoading() || customersData().length === 0"
+                  [title]="'COMMON.EXPORT' | translate">
+                  <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                  <span class="d-none d-lg-inline">{{ 'COMMON.EXPORT' | translate }}</span>
+                </button>
+              </div>
             </div>
 
-            <!-- Center Section: Search -->
-            <div class="desktop-search flex-grow-1 mx-3">
-              <p-iconfield iconPosition="left" class="w-100">
-                <p-inputicon>
-                  <i class="pi pi-search"></i>
-                </p-inputicon>
-                <input pInputText type="text" class="w-100" [formControl]="searchControl"
-                  [placeholder]="'REPORTS.search-customers' | translate" />
-              </p-iconfield>
-            </div>
-
-            <!-- Right Section: Action Buttons -->
-            <div class="desktop-action-btns d-flex gap-2">
-              <button class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2"
-                (click)="refreshReport()" [disabled]="loading()" [title]="'COMMON.REFRESH' | translate">
-                <i class="pi" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
-                <span class="d-none d-lg-inline">{{ 'COMMON.REFRESH' | translate }}</span>
-              </button>
-
-              <button class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center gap-2"
-                (click)="exportReport()" [disabled]="exportLoading() || customersData().length === 0"
-                [title]="'COMMON.EXPORT' | translate">
-                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
-                <span class="d-none d-lg-inline">{{ 'COMMON.EXPORT' | translate }}</span>
-              </button>
+            <!-- Second Row: Search -->
+            <div class="desktop-search-filters-row w-100 d-flex align-items-center gap-3">
+              <!-- Search - Takes Full Width -->
+              <div class="desktop-search-container flex-grow-1">
+                <p-iconfield iconPosition="left" class="w-100">
+                  <p-inputicon>
+                    <i class="pi pi-search"></i>
+                  </p-inputicon>
+                  <input pInputText type="text" class="w-100" [formControl]="searchControl"
+                    [placeholder]="'REPORTS.search-customers' | translate" />
+                </p-iconfield>
+              </div>
             </div>
           </div>
 

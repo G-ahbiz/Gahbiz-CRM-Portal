@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject, signal, computed } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DatePickerModule } from 'primeng/datepicker';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { SalesReportsFacadeService } from '@features/reports-crm/services/sales-reports/sales-reports.facade.service';
@@ -30,6 +31,7 @@ type PaymentMethodType = PaymentReportFilters['paymentMethod'];
     IconFieldModule,
     InputIconModule,
     DatePickerModule,
+    ProgressSpinnerModule,
   ],
   templateUrl: './payment-table.html',
   styleUrl: './payment-table.css',
@@ -52,6 +54,12 @@ export class PaymentTable implements OnInit {
   // Data properties
   paymentsData = signal<GetPaymentsReportResponse[]>([]);
   loading = signal<boolean>(false);
+  exportLoading = signal<boolean>(false);
+
+  // Computed total amount
+  totalAmount = computed(() =>
+    this.paymentsData().reduce((sum, payment) => sum + (payment.amount || 0), 0)
+  );
 
   // Filter state
   searchValue = signal<string>('');
@@ -212,9 +220,17 @@ export class PaymentTable implements OnInit {
   }
 
   /**
+   * Refresh payments data
+   */
+  refreshPayments(): void {
+    this.loadPaymentsData();
+  }
+
+  /**
    * Export payments report
    */
   exportPayments(): void {
+    this.exportLoading.set(true);
     const filters: PaymentReportFilters = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
@@ -240,9 +256,11 @@ export class PaymentTable implements OnInit {
         a.download = `Payments_Report_${new Date().toISOString().split('T')[0]}.xlsx`;
         a.click();
         window.URL.revokeObjectURL(url);
+        this.exportLoading.set(false);
       },
       error: (err) => {
         console.error('Error exporting payments report', err);
+        this.exportLoading.set(false);
       },
     });
   }

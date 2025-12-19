@@ -1,15 +1,28 @@
 <div class="container-fluid p-0 m-0">
   <div class="card border-0 bg-transparent">
-    <p-table #dt1 [value]="submissionsData()" dataKey="submissionId" [tableStyle]="{ 'min-width': '60rem' }"
-      [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [lazy]="true" (onPage)="onPageChange($event)" (onSort)="onSortColumn($event)" [loading]="loading()">
+    <p-table
+      #dt1
+      [value]="submissionsData()"
+      dataKey="submissionId"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [lazy]="true"
+      (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
+      [loading]="loading()"
+    >
       <ng-template #caption>
         <div class="d-flex justify-content-between align-items-center">
           <!-- Export Button Container -->
           <div class="export-btn-container d-flex align-items-center gap-2">
             <button
               class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-              (click)="exportSubmissions()" [disabled]="selectedSubmissionsCount === 0">
+              (click)="exportSubmissions()"
+              [disabled]="selectedSubmissionsCount === 0"
+            >
               <i class="pi fs-875 pi-download"></i>
               {{ 'OPERATIONS.export' | translate }}
               @if (selectedSubmissionsCount > 0) {
@@ -31,24 +44,49 @@
               <p-inputicon>
                 <i class="pi pi-search"></i>
               </p-inputicon>
-              <input pInputText type="text" (input)="onSearchChange($any($event.target).value)" #searchInput
-                [placeholder]="'OPERATIONS.search' | translate" />
+              <input
+                pInputText
+                type="text"
+                (input)="onSearchChange($any($event.target).value)"
+                #searchInput
+                [placeholder]="'OPERATIONS.search' | translate"
+              />
             </p-iconfield>
 
             <!-- Date Range Inputs -->
             <div class="d-flex align-items-center gap-2">
-              <input type="date" class="form-control form-control-sm" [(ngModel)]="createdDateFrom"
-                (change)="onDateFilterChange()" [max]="maxDateFrom" [title]="'OPERATIONS.from-date' | translate"
-                aria-label="From Date" />
-              <input type="date" class="form-control form-control-sm" [(ngModel)]="createdDateTo"
-                (change)="onDateFilterChange()" [min]="minDateTo" [max]="todayDate"
-                [title]="'OPERATIONS.to-date' | translate" aria-label="To Date" />
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="createdDateFrom"
+                (change)="onDateFilterChange()"
+                [max]="maxDateFrom"
+                [title]="'OPERATIONS.from-date' | translate"
+                aria-label="From Date"
+              />
+              <input
+                type="date"
+                class="form-control form-control-sm"
+                [(ngModel)]="createdDateTo"
+                (change)="onDateFilterChange()"
+                [min]="minDateTo"
+                [max]="todayDate"
+                [title]="'OPERATIONS.to-date' | translate"
+                aria-label="To Date"
+              />
             </div>
 
             <!-- Status Filter Dropdown -->
-            <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" (onChange)="onStatusFilterChange()"
-              [placeholder]="'OPERATIONS.filter-by-status' | translate" [showClear]="true" optionLabel="label"
-              optionValue="value" class="status-filter"></p-select>
+            <p-select
+              [options]="statusOptions"
+              [(ngModel)]="selectedStatus"
+              (onChange)="onStatusFilterChange()"
+              [placeholder]="'OPERATIONS.filter-by-status' | translate"
+              [showClear]="true"
+              optionLabel="label"
+              optionValue="value"
+              class="status-filter"
+            ></p-select>
           </div>
         </div>
         <div class="title-container my-4">
@@ -64,8 +102,14 @@
         <tr>
           <th class="d-flex justify-content-center align-items-center gap-2">
             <div class="flex items-center gap-2">
-              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
-                (change)="onSelectAll($event)" [title]="'OPERATIONS.select-all' | translate" />
+              <input
+                type="checkbox"
+                name="select-all"
+                id="select-all"
+                [checked]="isAllSelected"
+                (change)="onSelectAll($event)"
+                [title]="'OPERATIONS.select-all' | translate"
+              />
             </div>
           </th>
           <th>
@@ -112,9 +156,14 @@
       <ng-template #body let-submission let-rowIndex="rowIndex">
         <tr>
           <td>
-            <input type="checkbox" name="select-submission" id="submission-{{ submission.submissionId }}"
-              [checked]="submission.selected" (change)="toggleSubmissionSelection(submission)"
-              [title]="'OPERATIONS.select-request' | translate" />
+            <input
+              type="checkbox"
+              name="select-submission"
+              id="submission-{{ submission.submissionId }}"
+              [checked]="submission.selected"
+              (change)="toggleSubmissionSelection(submission)"
+              [title]="'OPERATIONS.select-request' | translate"
+            />
           </td>
           <td [title]="submission.submissionId">
             {{ submission.submissionId | slice : 0 : 8
@@ -122,16 +171,25 @@
           </td>
           <td>{{ submission.customerName }}</td>
           <td>{{ submission.serviceName }}</td>
-          <td>{{ submission.slaDeadline | date : 'mediumDate' }}</td>
-          <td>{{ submission.lastUpdated | date : 'mediumDate' }}</td>
+          <td>{{ submission.slaDeadline }}</td>
+          <td>{{ submission.lastUpdated }}</td>
           <td>
-            <button class="btn btn-sm" [title]="'OPERATIONS.documents' | translate"
-              (click)="navigateOperationFiles(submission.submissionId)">
-              <img src="assets/images/operations/folder.svg" alt="Documents" style="width: 20px; height: 18px" />
+            <button
+              class="btn btn-sm"
+              [title]="'OPERATIONS.documents' | translate"
+              (click)="navigateOperationFiles(submission.submissionId)"
+            >
+              <img
+                src="assets/images/operations/folder.svg"
+                alt="Documents"
+                style="width: 20px; height: 18px"
+              />
             </button>
           </td>
           <td class="text-center">
-            <span class="py-1 px-2 rounded-3" [class]="
+            <span
+              class="py-1 px-2 rounded-3"
+              [class]="
                 submission.status === 'Completed' || submission.status === 'Verified'
                   ? 'text-success card-green'
                   : submission.status === 'Cancelled'
@@ -144,17 +202,24 @@
                   : submission.status === 'InProgress'
                   ? 'text-primary card-blue'
                   : 'text-secondary card-gray'
-              ">
+              "
+            >
               {{ submission.status }}
             </span>
           </td>
           <td class="d-flex justify-content-center align-items-center gap-2">
-            <button class="btn btn-sm" (click)="viewSubmission(submission.submissionId); $event.stopPropagation()"
-              [title]="'COMMON.VIEW' | translate">
+            <button
+              class="btn btn-sm"
+              (click)="viewSubmission(submission.submissionId); $event.stopPropagation()"
+              [title]="'COMMON.VIEW' | translate"
+            >
               <img src="assets/images/shared/eye.svg" alt="" class="" />
             </button>
-            <button class="btn btn-sm" (click)="editSubmission(submission.submissionId); $event.stopPropagation()"
-              [title]="'COMMON.EDIT' | translate">
+            <button
+              class="btn btn-sm"
+              (click)="editSubmission(submission.submissionId); $event.stopPropagation()"
+              [title]="'COMMON.EDIT' | translate"
+            >
               <i class="pi pi-pencil"></i>
             </button>
           </td>
