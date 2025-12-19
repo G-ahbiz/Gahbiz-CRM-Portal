@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { LeadsApiService } from './leads-api.service';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { LeadSummary, LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
-import { Observable } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { AddLeadRequest } from '@features/sales-crm/interfaces/add-lead-request';
 import { PaginatedServices } from '@features/sales-crm/interfaces/paginated-response';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
@@ -47,6 +47,53 @@ export class LeadsFacadeService {
 
   deleteLead(id: string): Observable<ApiResponse<any>> {
     return this.leadsService.deleteLead(id);
+  }
+
+  deleteMultipleLeads(
+    ids: string[]
+  ): Observable<{ succeeded: string[]; failed: { id: string; error: any }[] }> {
+    if (ids.length === 0) {
+      return of({ succeeded: [], failed: [] });
+    }
+
+    const deleteRequests = ids.map((id) =>
+      this.deleteLead(id).pipe(
+        map((response) => ({
+          id,
+          response,
+          success: true,
+          error: null,
+        })),
+        catchError((error) =>
+          of({
+            id,
+            response: null,
+            success: false,
+            error,
+          })
+        )
+      )
+    );
+
+    return forkJoin(deleteRequests).pipe(
+      map((results) => {
+        const succeeded: string[] = [];
+        const failed: { id: string; error: any }[] = [];
+
+        results.forEach((result) => {
+          if (result.success && result.response?.succeeded) {
+            succeeded.push(result.id);
+          } else {
+            failed.push({
+              id: result.id,
+              error: result.error || result.response?.message || 'Unknown error',
+            });
+          }
+        });
+
+        return { succeeded, failed };
+      })
+    );
   }
 
   updateLead(
