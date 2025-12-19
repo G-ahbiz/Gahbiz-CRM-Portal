@@ -38,6 +38,8 @@ export const ROUTES = {
   reports: '/main/reports',
   salesReports: '/main/reports/sales',
   leadsReports: '/main/reports/leads',
+
+  dashboard: 'https://serva-best-dashboard.netlify.app',
 };
 
 export const USER_TYPES = {
@@ -55,6 +57,25 @@ export const USER_TYPES = {
   USER: 'User',
   CUSTOMER: 'Customer',
 };
+
+// Role groups for easier management
+export const ALL_CRM_ROLES = [
+  USER_TYPES.ADMIN,
+  USER_TYPES.MANAGER,
+  USER_TYPES.SALES_AGENT,
+  USER_TYPES.OPERATION_TEAM_LEADER,
+  USER_TYPES.OPERATION_AGENT,
+  USER_TYPES.SALES_AGENT_PROVIDER,
+];
+
+export const SALES_ROLES = [USER_TYPES.ADMIN, USER_TYPES.MANAGER, USER_TYPES.SALES_AGENT];
+export const CRM_HIGH_LEVEL_ROLES = [USER_TYPES.ADMIN, USER_TYPES.MANAGER];
+
+export const OPERATIONS_ROLES = [
+  USER_TYPES.ADMIN,
+  USER_TYPES.OPERATION_TEAM_LEADER,
+  USER_TYPES.OPERATION_AGENT,
+];
 
 export const COUNTRIES: CountryCodes[] = [
   { name: 'United States', dialCode: '+1', iso2: 'us' },

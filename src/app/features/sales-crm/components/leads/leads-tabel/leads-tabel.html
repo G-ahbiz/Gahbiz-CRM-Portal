@@ -41,6 +41,16 @@
                 </span>
               </button>
 
+              <!-- Import Button (Manager, Admin, SalesAgentProvider only) -->
+              @if (canImportLeads()) {
+              <button
+                class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                routerLink="/main/sales/leads/import-leads">
+                <i class="pi pi-upload fs-875"></i>
+                {{ 'SALES-CRM.leads-tabel.import' | translate }}
+              </button>
+              }
+
               <!-- Clear Selection Button -->
               <button *ngIf="selectedLeadsCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
                 (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
@@ -67,12 +77,15 @@
                 <span class="ms-1">{{ 'COMMON.CLEAR_FILTER' | translate }}</span>
               </button>
 
+              <!-- Add Lead Button (SalesAgent, Manager, Admin only - not SalesAgentProvider) -->
+              @if (canAddLead()) {
               <button
                 class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
                 routerLink="/main/sales/leads/add-lead">
                 <i class="pi pi-plus"></i>
                 <span>{{ 'LEADS.ADD_LEAD' | translate }}</span>
               </button>
+              }
             </div>
           </div>
 
@@ -111,6 +124,16 @@
                 <span class="ms-1 d-none d-sm-inline">{{ 'LEADS.EXPORT' | translate }}</span>
               </button>
 
+              <!-- Import Button (Mobile) -->
+              @if (canImportLeads()) {
+              <button
+                class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                routerLink="/main/sales/leads/import-leads">
+                <i class="pi pi-upload d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'SALES-CRM.leads-tabel.import' | translate }}</span>
+              </button>
+              }
+
               <!-- Clear Button -->
               <button *ngIf="selectedLeadsCount > 0"
                 class="btn btn-sm btn-outline-secondary px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
@@ -119,15 +142,25 @@
                 <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR' | translate }}</span>
               </button>
 
-              <!-- Add Button -->
+              <!-- Add Button (Mobile) -->
+              @if (canAddLead()) {
               <button
                 class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 routerLink="/main/sales/leads/add-lead">
                 <i class="pi pi-plus d-sm-none"></i>
                 <span class="d-none d-sm-inline">{{ 'LEADS.ADD_LEAD' | translate }}</span>
               </button>
+              }
+              
+              <!-- Clear Filter Button (Mobile) -->
+              <button type="button" class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="clear()">
+                <i class="pi pi-filter-slash d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR_FILTER' | translate }}</span>
+              </button>
             </div>
           </div>
+
         </div>
 
         <!-- Title Section -->
@@ -146,7 +179,8 @@
         </div>
 
       </ng-template>
-
+      
+      <!-- Rest of the table remains the same -->
       <ng-template #header>
         <tr>
           <th class="text-center" style="width: 60px;">
@@ -243,11 +277,13 @@
               [title]="'COMMON.EDIT' | translate">
               <i class="pi pi-pencil"></i>
             </button>
-            <button class="btn btn-sm btn-outline-danger"
+            @if (canDeleteLead()) {
+           <button class="btn btn-sm btn-outline-danger"
               (click)="onDeleteLead(lead.id.toString()); $event.stopPropagation()"
               [title]="'COMMON.DELETE' | translate">
               <i class="pi pi-trash"></i>
             </button>
+            }
           </td>
         </tr>
       </ng-template>

@@ -29,6 +29,7 @@ import { OrderListItem } from '@features/orders-crm/interfaces/order-list-item';
 import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { User } from '@features/auth/interfaces/sign-in/user';
 import { CRMOrderRequestParams } from '@features/orders-crm/interfaces/CRM-order-request-params';
+import { ErrorFacadeService } from '@core/services/error.facade.service';
 
 // ------------------------------
 // Constants
@@ -112,6 +113,7 @@ export class OrdersTabel implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly errorFacade = inject(ErrorFacadeService);
 
   ngOnInit(): void {
     this.listenToUser();
@@ -165,8 +167,8 @@ export class OrdersTabel implements OnInit, OnDestroy {
           // Reset selection
           this.selectedOrders.set([]);
         },
-        error: () => {
-          this.toast.error('Failed to load orders');
+        error: (error) => {
+          this.errorFacade.showError(error as Error);
         },
       });
   }

@@ -11,6 +11,8 @@ import { ResetPasswordRequest } from '@features/auth/interfaces/sign-in/reset-pa
 import { ResetPasswordResponse } from '@features/auth/interfaces/sign-in/reset-password-response';
 import { TokenData } from '@core/interfaces/token-data';
 import { isAnyAllowedRole } from '@core/constants/auth.constants';
+import { Router } from '@angular/router';
+import { ROUTES } from '@shared/config/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +30,9 @@ export class AuthService {
 
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
+  private router = inject(Router);
+
+  readonly ROUTES = ROUTES;
 
   constructor() {
     // Initialize immediately in browser context
@@ -174,6 +179,7 @@ export class AuthService {
 
   logout(): void {
     this.clearAuthState();
+    this.router.navigate([this.ROUTES.signIn]);
   }
 
   isAuthenticated(): boolean {

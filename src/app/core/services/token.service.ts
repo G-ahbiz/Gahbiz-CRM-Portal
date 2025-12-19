@@ -38,13 +38,12 @@ export class TokenService {
   }
 
   setAccessToken(token: string): void {
-    if (!this.validateToken(token)) {
-      console.warn('Invalid token format');
+    if (!token || !isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    if (!token || !isPlatformBrowser(this.platformId)) {
-      console.warn('Cannot set access token - invalid token or not in browser');
+    if (!this.validateToken(token)) {
+      console.warn('Invalid token format');
       return;
     }
 

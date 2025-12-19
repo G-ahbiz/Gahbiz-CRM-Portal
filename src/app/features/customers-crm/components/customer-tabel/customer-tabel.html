@@ -17,7 +17,8 @@
           <div class="d-none d-md-flex w-100 align-items-center">
             <!-- Left Section: Action Buttons -->
             <div class="desktop-action-btns d-flex gap-2">
-              <!-- Bulk Delete Button -->
+              <!-- Bulk Delete Button (Manager/Admin only) -->
+              @if (canDeleteCustomer()) {
               <button
                 class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
                 (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
@@ -28,6 +29,7 @@
                   ({{ selectedCustomersCount }})
                 </span>
               </button>
+              }
 
               <!-- Export Button -->
               <button
@@ -83,7 +85,8 @@
 
             <!-- Action buttons in a single row -->
             <div class="mobile-action-btns d-flex gap-2 mb-3">
-              <!-- Delete Button (Icon only) -->
+              <!-- Delete Button (Icon only) - Manager/Admin only -->
+              @if (canDeleteCustomer()) {
               <button
                 class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
@@ -94,6 +97,7 @@
                   ({{ selectedCustomersCount }})
                 </span>
               </button>
+              }
 
               <!-- Export Button (Icon + Text) -->
               <button
@@ -197,10 +201,12 @@
               (click)="editCustomer(customer.id); $event.stopPropagation()" [title]="'COMMON.EDIT' | translate">
               <i class="pi pi-pencil"></i>
             </button>
+            @if (canDeleteCustomer()) {
             <button class="btn btn-sm btn-outline-danger"
               (click)="onDeleteCustomer(customer.id); $event.stopPropagation()" [title]="'COMMON.DELETE' | translate">
               <i class="pi pi-trash"></i>
             </button>
+            }
           </td>
         </tr>
       </ng-template>

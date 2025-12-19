@@ -8,6 +8,7 @@ import {
   ViewChild,
   DestroyRef,
   HostListener,
+  computed
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -35,6 +36,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LanguageService } from '@core/services/language.service';
+import {
+  LEAD_DELETE_ROLES,
+  LEAD_IMPORT_ROLES,
+  LEAD_ADD_ROLES,
+  hasPermission,
+} from '@shared/utils/role-permissions';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
@@ -129,6 +136,25 @@ export class LeadsTabel implements OnInit, OnDestroy {
   get responsiveRowsPerPageOptions(): number[] {
     return this.screenWidth < 768 ? [5, 10] : [5, 10, 20, 50];
   }
+
+  currentUser = signal<User | null>(null);
+  searchValue = signal<string>('');
+  sortColumn = signal<string>('');
+  sortDirection = signal<string>('ASC');
+
+  // Role-based permissions
+  canDeleteLead = computed(() => hasPermission(this.currentUser()?.type, LEAD_DELETE_ROLES));
+  canImportLeads = computed(() => hasPermission(this.currentUser()?.type, LEAD_IMPORT_ROLES));
+  canAddLead = computed(() => hasPermission(this.currentUser()?.type, LEAD_ADD_ROLES));
+
+  // Selection state
+  isAllSelected: boolean = false;
+
+  // Pagination state
+  totalRecords: number = 0;
+  pageNumber: number = 1;
+  pageSize: number = 10;
+  totalPages: number = 0;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {

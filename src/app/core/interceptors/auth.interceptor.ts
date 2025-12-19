@@ -60,7 +60,9 @@ export class AuthInterceptor implements HttpInterceptor {
       environment.account.verifyOtp,
       environment.account.resendEmailConfirmation,
       environment.account.confirmEmail,
-      environment.account.refresh, // handled separately
+      environment.account.refresh,
+      environment.account.forgotPassword,
+      environment.account.resendOtp,
     ];
     return publicEndpoints.some((endpoint) => request.url.includes(endpoint));
   }
@@ -82,12 +84,14 @@ export class AuthInterceptor implements HttpInterceptor {
           }),
           catchError((err) => {
             this.isRefreshing = false;
+            this.refreshTokenSubject.next('');
             this.authService.logout();
             return throwError(() => err);
           })
         );
       } else {
         this.isRefreshing = false;
+        this.refreshTokenSubject.next('');
         this.authService.logout();
         return throwError(() => new Error('No refresh token available'));
       }
@@ -97,7 +101,12 @@ export class AuthInterceptor implements HttpInterceptor {
     return this.refreshTokenSubject.pipe(
       filter((token) => token !== null),
       take(1),
-      switchMap((token) => next.handle(this.addTokenHeader(request, token!)))
+      switchMap((token) => {
+        if (!token) {
+          return throwError(() => new Error('Token refresh failed'));
+        }
+        return next.handle(this.addTokenHeader(request, token));
+      })
     );
   }
 }
