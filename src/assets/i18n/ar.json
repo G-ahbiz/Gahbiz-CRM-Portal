@@ -1001,6 +1001,7 @@
       "banktransfer": "تحويل بنكي",
       "creditcard": "بطاقة ائتمان"
     }
+  },
   "REPORTS": {
     "customer-report": "تقرير العملاء",
     "customer-summary": "تقرير ملخص العملاء",

@@ -999,6 +999,7 @@
       "banktransfer": "Bank Transfer",
       "creditcard": "Credit Card"
     }
+  },
   "REPORTS": {
     "customer-report": "Customer Report",
     "customer-summary": "Customer Summary Report",

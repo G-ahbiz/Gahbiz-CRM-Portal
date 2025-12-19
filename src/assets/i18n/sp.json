@@ -1001,6 +1001,7 @@
       "banktransfer": "Transferencia Bancaria",
       "creditcard": "Tarjeta de Crédito"
     }
+  },
   "REPORTS": {
     "customer-report": "Reporte de Clientes",
     "customer-summary": "Reporte Resumen de Clientes",
