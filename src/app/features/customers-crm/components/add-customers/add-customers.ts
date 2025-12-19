@@ -110,8 +110,8 @@ export class AddCustomers implements OnInit, OnDestroy {
       phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(15)]],
       ssn: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(14)]],
       gender: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      state: ['', [Validators.required]],
+      country: [null, [Validators.required]],
+      state: [null, [Validators.required]],
       postalCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       address: ['', [Validators.required, Validators.maxLength(200)]],
       defaultLanguage: [{ value: '', disabled: isEdit }, [Validators.required]],
@@ -370,12 +370,37 @@ export class AddCustomers implements OnInit, OnDestroy {
 
   addCustomer() {
     const formValue = this.addCustomerForm.value;
+
+    // Get country and state IDs from form
+    const countryId = this.addCustomerForm.get('country')?.value;
+    const stateId = this.addCustomerForm.get('state')?.value;
+
+    // Convert to numbers for comparison
+    const countryIdNum = Number(countryId);
+    const stateIdNum = Number(stateId);
+
+    // Find country and state objects
+    const country = this.countries().find((c) => Number(c.id) === countryIdNum);
+    const state = this.states().find((s) => Number(s.id) === stateIdNum);
+
+    // Create FormData with the same format as update
     const formData = new FormData();
 
+    // Append all fields to FormData
     Object.keys(formValue).forEach((key) => {
-      const value = formValue[key];
+      let value = formValue[key];
+
+      // Convert country and state IDs to names
+      if (key === 'country') {
+        value = country?.name || '';
+      } else if (key === 'state') {
+        value = state?.name || '';
+      }
+
       formData.append(key, value);
     });
+
+    console.log('Saving customer with FormData');
 
     this.customersFacadeService
       .addCustomer(formData)
