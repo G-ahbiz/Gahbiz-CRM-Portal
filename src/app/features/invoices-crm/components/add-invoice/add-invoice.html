@@ -1,11 +1,13 @@
 <div class="container-fluid p-0 m-0">
   <div
-    class="add-invoice-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 overflow-y-auto">
+    class="add-invoice-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 overflow-y-auto"
+  >
     <div class="add-invoice-top w-100 d-flex justify-content-start align-items-center gap-3">
       <div class="add-invoice-back-btn-container">
         <button
           class="back-btn btn btn-sm p-2 border-0 bg-white shadow d-flex justify-content-center align-items-center"
-          (click)="back()">
+          (click)="back()"
+        >
           <i class="pi pi-chevron-left fs-875"></i>
         </button>
       </div>
@@ -16,8 +18,10 @@
       </div>
     </div>
 
-    <form [formGroup]="addInvoiceForm"
-      class="add-invoice-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white">
+    <form
+      [formGroup]="addInvoiceForm"
+      class="add-invoice-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white"
+    >
       <!-- Customer Container -->
       <div class="customer-container d-flex justify-content-between align-items-start gap-3 w-100">
         <div class="form-group w-100">
@@ -48,8 +52,15 @@
             {{ 'INVOICES.add-invoice-page.due-date' | translate }}
             <span [class]="checkValidity('dueDate')">*</span>
           </label>
-          <p-datepicker formControlName="dueDate" dateFormat="dd-mm-yy" [showIcon]="true" [iconDisplay]="'input'"
-            placeholder="{{ 'INVOICES.add-invoice-page.due-date' | translate }}" inputId="dueDate" styleClass="w-100" />
+          <p-datepicker
+            formControlName="dueDate"
+            dateFormat="dd-mm-yy"
+            [showIcon]="true"
+            [iconDisplay]="'input'"
+            placeholder="{{ 'INVOICES.add-invoice-page.due-date' | translate }}"
+            inputId="dueDate"
+            styleClass="w-100"
+          />
           <div class="error-message d-flex justify-content-start align-items-start">
             @if (checkErrors('dueDate')) {
             <span class="text-danger">{{ getErrorMessage('dueDate') }}</span>
@@ -59,15 +70,23 @@
       </div>
 
       <!-- Total & Services Select & Due Container -->
-      <div class="total-paymentReceived-due-container d-flex justify-content-between align-items-start gap-3 w-100">
+      <div
+        class="total-paymentReceived-due-container d-flex justify-content-between align-items-start gap-3 w-100"
+      >
         <!-- Total Container -->
         <div class="form-group w-100">
           <label for="total">
             {{ 'INVOICES.add-invoice-page.total' | translate }}
             <span [class]="checkValidity('total')">*</span>
           </label>
-          <input type="number" name="total" id="total" class="form-control"
-            placeholder="{{ 'INVOICES.add-invoice-page.total' | translate }}" formControlName="total" />
+          <input
+            type="number"
+            name="total"
+            id="total"
+            class="form-control"
+            placeholder="{{ 'INVOICES.add-invoice-page.total' | translate }}"
+            formControlName="total"
+          />
           <div class="error-message d-flex justify-content-start align-items-start">
             @if (checkErrors('total')) {
             <span class="text-danger">{{ getErrorMessage('total') }}</span>
@@ -80,12 +99,21 @@
           <label for="items">
             {{ 'INVOICES.add-invoice-page.services-of-interest' | translate }}
           </label>
-          <p-multiselect [options]="services()" formControlName="items" optionLabel="name" optionValue="id"
-            placeholder="{{ 'INVOICES.add-invoice-page.select-services' | translate }}" [maxSelectedLabels]="3"
-            [filter]="true" (onFilter)="onFilterServices($event)" [showClear]="true" class="w-100" />
+          <p-multiselect
+            [options]="services()"
+            formControlName="items"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="{{ 'INVOICES.add-invoice-page.select-services' | translate }}"
+            [maxSelectedLabels]="3"
+            [filter]="true"
+            (onFilter)="onFilterServices($event)"
+            [showClear]="true"
+            class="w-100"
+          />
           <small class="text-muted">{{
             'INVOICES.add-invoice-page.search-select-services' | translate
-            }}</small>
+          }}</small>
         </div>
       </div>
 
@@ -95,9 +123,14 @@
           {{ 'INVOICES.add-invoice-page.notes' | translate }}
           <span [class]="checkValidity('notes')">*</span>
         </label>
-        <textarea name="notes" id="notes" class="form-control" rows="4"
+        <textarea
+          name="notes"
+          id="notes"
+          class="form-control"
+          rows="4"
           placeholder="{{ 'INVOICES.add-invoice-page.notes-placeholder' | translate }}"
-          formControlName="notes"></textarea>
+          formControlName="notes"
+        ></textarea>
         <div class="error-message d-flex justify-content-start align-items-start">
           @if (checkErrors('notes')) {
           <span class="text-danger">{{ getErrorMessage('notes') }}</span>
@@ -113,8 +146,12 @@
           {{ 'INVOICES.add-invoice-page.assigned-sales-agent' | translate }}
           <span [class]="checkValidity('assignedSalesAgentId')">*</span>
         </label>
-        <select name="assignedSalesAgent" id="assignedSalesAgent" class="form-select"
-          formControlName="assignedSalesAgentId">
+        <select
+          name="assignedSalesAgent"
+          id="assignedSalesAgent"
+          class="form-select"
+          formControlName="assignedSalesAgentId"
+        >
           <option value="" selected disabled>
             {{ 'INVOICES.add-invoice-page.select-sales-agent' | translate }}
           </option>
@@ -136,8 +173,14 @@
           {{ 'INVOICES.add-invoice-page.invoice-number' | translate }}
           <span [class]="checkValidity('invoiceNumber')">*</span>
         </label>
-        <input type="text" name="invoiceNumber" id="invoiceNumber" class="form-control"
-          placeholder="Invoice Number (ex. INV-123)" formControlName="invoiceNumber" />
+        <input
+          type="text"
+          name="invoiceNumber"
+          id="invoiceNumber"
+          class="form-control"
+          placeholder="Invoice Number (ex. INV-123)"
+          formControlName="invoiceNumber"
+        />
         <div class="error-message d-flex justify-content-start align-items-start">
           @if (checkErrors('invoiceNumber')) {
           <span class="text-danger">{{ getErrorMessage('invoiceNumber') }}</span>
@@ -146,15 +189,22 @@
       </div>
 
       <!-- Buttons Container -->
-      <div class="buttons-container d-flex justify-content-center align-items-center gap-3 w-100 mt-4">
-        <button type="button"
+      <div
+        class="buttons-container d-flex justify-content-center align-items-center gap-3 w-100 mt-4"
+      >
+        <button
+          type="button"
           class="btn btn-sm outline-primary-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
-          (click)="cancelInvoice()">
+          (click)="cancelInvoice()"
+        >
           {{ 'INVOICES.add-invoice-page.cancel' | translate }}
         </button>
-        <button type="submit"
+        <button
+          type="submit"
           class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 flex-grow-1"
-          (click)="addInvoice()" [disabled]="addInvoiceForm.invalid || isSubmitting()">
+          (click)="addInvoice()"
+          [disabled]="addInvoiceForm.invalid || isSubmitting()"
+        >
           @if (isSubmitting()) {
           <i class="pi pi-spin pi-spinner"></i>
           <span>{{ 'INVOICES.add-invoice-page.saving' | translate }}</span>

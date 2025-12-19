@@ -226,6 +226,7 @@ export class InvoicesTabel implements OnInit {
    */
   onSearchChange(value: string): void {
     this.searchSubject.next(value.trim());
+    console.log(this.searchValue());
   }
 
   /**

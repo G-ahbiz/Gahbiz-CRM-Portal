@@ -47,18 +47,13 @@
         }
 
         <!-- Sort Button -->
-        <!-- <button
-          class="btn btn-outline-primary outline-primary-clr d-flex justify-content-center align-items-center gap-2 rounded-3"
-        >
-          <i class="pi pi-sort-alt"></i>
-          <span class="">{{ 'SALES-CRM.SALES-AGENTS-CARDS.sort' | translate }}</span>
-        </button> -->
         <p-select
           [options]="sortOptions()"
           optionLabel="name"
           optionValue="value"
           (onChange)="onSortChange($event)"
           [placeholder]="'SALES-CRM.SALES-AGENTS-CARDS.sort' | translate"
+          [focusOnHover]="false"
         ></p-select>
       </div>
     </div>

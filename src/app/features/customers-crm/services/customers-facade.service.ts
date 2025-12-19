@@ -26,6 +26,13 @@ export class CustomersFacadeService {
     return this.customerService.getAllCustomers(filters);
   }
 
+  getCustomer(
+    id?: string,
+    customerName?: string
+  ): Observable<ApiResponse<CustomerDetailsResponse>> {
+    return this.customerService.getCustomer(id, customerName);
+  }
+
   getCustomerDetails(
     id?: string,
     customerName?: string

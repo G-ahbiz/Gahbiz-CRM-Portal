@@ -1,18 +1,32 @@
 <div class="container-fluid p-0 m-0">
   <!-- Add PrimeNG ConfirmDialog -->
-  <p-confirmDialog [style]="{width: '350px'}" acceptLabel="{{ 'COMMON.YES' | translate }}"
-    rejectLabel="{{ 'COMMON.NO' | translate }}" acceptIcon="pi pi-check red" rejectIcon="pi pi-times"></p-confirmDialog>
+  <p-confirmDialog
+    [style]="{ width: '350px' }"
+    acceptLabel="{{ 'COMMON.YES' | translate }}"
+    rejectLabel="{{ 'COMMON.NO' | translate }}"
+    acceptIcon="pi pi-check red"
+    rejectIcon="pi pi-times"
+  ></p-confirmDialog>
 
   <div class="card border-0 bg-transparent">
-    <p-table #dt1 [value]="customersTabelData()" dataKey="id"
-      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }" [paginator]="true" [rows]="pageSize"
-      [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true" (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll">
-
+    <p-table
+      #dt1
+      [value]="customersTabelData()"
+      dataKey="id"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [lazy]="true"
+      (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
+      [loading]="loading()"
+      responsiveLayout="scroll"
+    >
       <ng-template #caption>
         <!-- Responsive Header Container -->
         <div class="responsive-header">
-
           <!-- Desktop Layout (default) -->
           <div class="d-none d-md-flex w-100 align-items-center">
             <!-- Left Section: Action Buttons -->
@@ -21,9 +35,14 @@
               @if (canDeleteCustomer()) {
               <button
                 class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-                (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
-                [title]="'CUSTOMERS-CRM.delete-selected' | translate">
-                <i class="pi fs-875" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
+                (click)="deleteSelectedCustomers()"
+                [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
+                [title]="'CUSTOMERS-CRM.delete-selected' | translate"
+              >
+                <i
+                  class="pi fs-875"
+                  [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
+                ></i>
                 <span>{{ 'CUSTOMERS-CRM.delete' | translate }}</span>
                 <span *ngIf="selectedCustomersCount > 0" class="ms-1">
                   ({{ selectedCustomersCount }})
@@ -34,8 +53,13 @@
               <!-- Export Button -->
               <button
                 class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-                (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
-                <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                (click)="exportCustomers()"
+                [disabled]="exportLoading() || selectedCustomersCount === 0"
+              >
+                <i
+                  class="pi fs-875"
+                  [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
+                ></i>
                 <span>{{ 'CUSTOMERS-CRM.export' | translate }}</span>
                 <span *ngIf="selectedCustomersCount > 0" class="ms-1">
                   ({{ selectedCustomersCount }})
@@ -43,8 +67,12 @@
               </button>
 
               <!-- Clear Selection Button -->
-              <button *ngIf="selectedCustomersCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
-                (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
+              <button
+                *ngIf="selectedCustomersCount > 0"
+                class="btn btn-sm btn-outline-secondary px-3 py-2"
+                (click)="clearSelections()"
+                [disabled]="exportLoading() || bulkDeleteLoading()"
+              >
                 {{ 'COMMON.CLEAR' | translate }}
               </button>
             </div>
@@ -55,8 +83,14 @@
                 <p-inputicon>
                   <i class="pi pi-search"></i>
                 </p-inputicon>
-                <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
-                  #searchInput [placeholder]="'CUSTOMERS-CRM.search' | translate" />
+                <input
+                  pInputText
+                  type="text"
+                  class="w-100"
+                  (input)="onSearchChange($any($event.target).value)"
+                  #searchInput
+                  [placeholder]="'CUSTOMERS-CRM.search' | translate"
+                />
               </p-iconfield>
             </div>
 
@@ -64,7 +98,8 @@
             <div class="desktop-add-btn">
               <button
                 class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
-                routerLink="/main/customers/add-customer">
+                routerLink="/main/customers/add-customer"
+              >
                 <span>{{ 'CUSTOMERS-CRM.add-customer' | translate }}</span>
               </button>
             </div>
@@ -78,8 +113,14 @@
                 <p-inputicon>
                   <i class="pi pi-search"></i>
                 </p-inputicon>
-                <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
-                  #searchInput [placeholder]="'CUSTOMERS-CRM.search' | translate" />
+                <input
+                  pInputText
+                  type="text"
+                  class="w-100"
+                  (input)="onSearchChange($any($event.target).value)"
+                  #searchInput
+                  [placeholder]="'CUSTOMERS-CRM.search' | translate"
+                />
               </p-iconfield>
             </div>
 
@@ -89,10 +130,17 @@
               @if (canDeleteCustomer()) {
               <button
                 class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="deleteSelectedCustomers()" [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
-                [title]="'CUSTOMERS-CRM.delete-selected' | translate">
-                <i class="pi" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
-                <span class="ms-1 d-none d-sm-inline">{{ 'CUSTOMERS-CRM.delete' | translate }}</span>
+                (click)="deleteSelectedCustomers()"
+                [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
+                [title]="'CUSTOMERS-CRM.delete-selected' | translate"
+              >
+                <i
+                  class="pi"
+                  [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
+                ></i>
+                <span class="ms-1 d-none d-sm-inline">{{
+                  'CUSTOMERS-CRM.delete' | translate
+                }}</span>
                 <span *ngIf="selectedCustomersCount > 0" class="ms-1">
                   ({{ selectedCustomersCount }})
                 </span>
@@ -102,15 +150,25 @@
               <!-- Export Button (Icon + Text) -->
               <button
                 class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="exportCustomers()" [disabled]="exportLoading() || selectedCustomersCount === 0">
-                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
-                <span class="ms-1 d-none d-sm-inline">{{ 'CUSTOMERS-CRM.export' | translate }}</span>
+                (click)="exportCustomers()"
+                [disabled]="exportLoading() || selectedCustomersCount === 0"
+              >
+                <i
+                  class="pi"
+                  [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
+                ></i>
+                <span class="ms-1 d-none d-sm-inline">{{
+                  'CUSTOMERS-CRM.export' | translate
+                }}</span>
               </button>
 
               <!-- Clear Button (Icon only when text doesn't fit) -->
-              <button *ngIf="selectedCustomersCount > 0"
+              <button
+                *ngIf="selectedCustomersCount > 0"
                 class="btn btn-sm btn-outline-secondary px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
+                (click)="clearSelections()"
+                [disabled]="exportLoading() || bulkDeleteLoading()"
+              >
                 <i class="pi pi-times d-sm-none"></i>
                 <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR' | translate }}</span>
               </button>
@@ -118,37 +176,50 @@
               <!-- Add Button (Icon + Text) -->
               <button
                 class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                routerLink="/main/customers/add-customer">
+                routerLink="/main/customers/add-customer"
+              >
                 <i class="pi pi-plus d-sm-none"></i>
-                <span class="d-none d-sm-inline">{{ 'CUSTOMERS-CRM.add-customer' | translate }}</span>
+                <span class="d-none d-sm-inline">{{
+                  'CUSTOMERS-CRM.add-customer' | translate
+                }}</span>
               </button>
             </div>
           </div>
         </div>
 
         <!-- Title Section -->
-        <div class="title-container my-3 my-md-4" [attr.dir]="languageService.direction()" [ngClass]="{
-          'text-center': true,
-          'text-md-start': !languageService.isRTL(),
-          'text-md-end': languageService.isRTL()
-        }">
+        <div
+          class="title-container my-3 my-md-4"
+          [attr.dir]="languageService.direction()"
+          [ngClass]="{
+            'text-center': true,
+            'text-md-start': !languageService.isRTL(),
+            'text-md-end': languageService.isRTL()
+          }"
+        >
           <h5 class="m-0 p-0">{{ 'CUSTOMERS-CRM.all-customers' | translate }}</h5>
           <small class="text-muted" *ngIf="selectedCustomersCount > 0">
-            {{ selectedCustomersCount }} {{ 'CUSTOMERS-CRM.selected-customers-for-action' | translate }}
+            {{ selectedCustomersCount }}
+            {{ 'CUSTOMERS-CRM.selected-customers-for-action' | translate }}
           </small>
           <div class="mt-2 d-block d-md-none">
             <small class="text-muted">{{ 'CUSTOMERS-CRM.swipe-to-scroll' | translate }}</small>
           </div>
         </div>
-
       </ng-template>
 
       <ng-template #header>
         <tr>
-          <th class="text-center" style="width: 60px;">
+          <th class="text-center" style="width: 60px">
             <div class="d-flex justify-content-center align-items-center">
-              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
-                (change)="onSelectAll($event)" [title]="'CUSTOMERS-CRM.select-all' | translate" />
+              <input
+                type="checkbox"
+                name="select-all"
+                id="select-all"
+                [checked]="isAllSelected"
+                (change)="onSelectAll($event)"
+                [title]="'CUSTOMERS-CRM.select-all' | translate"
+              />
             </div>
           </th>
           <th class="d-none d-md-table-cell">
@@ -169,7 +240,7 @@
           <th class="d-none d-md-table-cell">
             {{ 'CUSTOMERS-CRM.assigned-to' | translate }}
           </th>
-          <th style="width: 150px;">
+          <th style="width: 150px">
             {{ 'CUSTOMERS-CRM.actions' | translate }}
           </th>
         </tr>
@@ -178,8 +249,14 @@
       <ng-template #body let-customer let-rowIndex="rowIndex">
         <tr>
           <td class="text-center">
-            <input type="checkbox" name="select-customer" id="customer-{{ customer.id }}" [checked]="customer.selected"
-              (change)="toggleCustomerSelection(customer)" [title]="'CUSTOMERS-CRM.select-customer' | translate" />
+            <input
+              type="checkbox"
+              name="select-customer"
+              id="customer-{{ customer.id }}"
+              [checked]="customer.selected"
+              (change)="toggleCustomerSelection(customer)"
+              [title]="'CUSTOMERS-CRM.select-customer' | translate"
+            />
           </td>
           <td class="d-none d-md-table-cell" [title]="customer.id">
             {{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
@@ -187,23 +264,34 @@
           <td>{{ customer.phoneNumber }}</td>
           <td>
             <span class="d-none d-md-inline">{{ customer.fullName }}</span>
-            <span class="d-md-none">{{ customer.fullName | slice:0:12 }}{{ customer.fullName.length > 12 ? '...' : ''
-              }}</span>
+            <span class="d-md-none"
+              >{{ customer.fullName | slice : 0 : 12
+              }}{{ customer.fullName.length > 12 ? '...' : '' }}</span
+            >
           </td>
           <td>{{ customer.noOrders }}</td>
           <td class="d-none d-md-table-cell">{{ customer.assignedTo }}</td>
           <td class="action-buttons">
-            <button class="btn btn-sm btn-outline-primary" (click)="viewCustomer(customer.id); $event.stopPropagation()"
-              [title]="'COMMON.VIEW' | translate">
+            <button
+              class="btn btn-sm p-1"
+              (click)="viewCustomer(customer.id); $event.stopPropagation()"
+              [title]="'COMMON.VIEW' | translate"
+            >
               <i class="pi pi-eye"></i>
             </button>
-            <button class="btn btn-sm btn-outline-secondary"
-              (click)="editCustomer(customer.id); $event.stopPropagation()" [title]="'COMMON.EDIT' | translate">
+            <button
+              class="btn btn-sm p-1"
+              (click)="editCustomer(customer.id); $event.stopPropagation()"
+              [title]="'COMMON.EDIT' | translate"
+            >
               <i class="pi pi-pencil"></i>
             </button>
             @if (canDeleteCustomer()) {
-            <button class="btn btn-sm btn-outline-danger"
-              (click)="onDeleteCustomer(customer.id); $event.stopPropagation()" [title]="'COMMON.DELETE' | translate">
+            <button
+              class="btn btn-sm p-1"
+              (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
+              [title]="'COMMON.DELETE' | translate"
+            >
               <i class="pi pi-trash"></i>
             </button>
             }
@@ -223,6 +311,9 @@
 </div>
 
 <!-- Customer Details Dialog -->
-<app-customer-details [customerId]="selectedCustomerForDialog()" [(visible)]="showDetailsDialog"
-  (onClose)="closeDetailsDialog()">
+<app-customer-details
+  [customerId]="selectedCustomerForDialog()"
+  [(visible)]="showDetailsDialog"
+  (onClose)="closeDetailsDialog()"
+>
 </app-customer-details>

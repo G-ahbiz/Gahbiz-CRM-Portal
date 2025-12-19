@@ -91,6 +91,7 @@ export class OperationsTable implements OnInit {
     { label: 'Verified', value: 'Verified' },
     { label: 'Completed', value: 'Completed' },
     { label: 'Cancelled', value: 'Cancelled' },
+    { label: 'Rejected', value: 'Rejected' },
   ];
 
   private readonly destroyRef = inject(DestroyRef);
@@ -319,6 +320,7 @@ export class OperationsTable implements OnInit {
       Verified: 'bg-success',
       Completed: 'bg-success',
       Cancelled: 'bg-danger',
+      Rejected: 'bg-danger',
     };
     return statusClasses[status] || 'bg-secondary';
   }
