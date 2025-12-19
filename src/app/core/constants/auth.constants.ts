@@ -13,7 +13,7 @@ export type AllowedRole = (typeof ALLOWED_ROLES)[number];
 
 export function isAllowedRole(role?: string | null): boolean {
   if (!role) return false;
-  return ALLOWED_ROLES.includes(role as AllowedRole);
+  return ALLOWED_ROLES.some((allowedRole) => allowedRole.toLowerCase() === role.toLowerCase());
 }
 
 export function isAnyAllowedRole(userRoles?: string[] | string | null): boolean {

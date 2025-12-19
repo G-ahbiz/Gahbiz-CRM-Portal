@@ -1,21 +1,21 @@
 import { Routes } from '@angular/router';
 import { CrmLayout } from './shared/pages/crm-layout/crm-layout';
-import { NoAuthGuard } from '@core/guards/no-auth.guard';
-import { AuthGuard } from '@core/guards/auth.guard';
+import { noAuthGuard } from '@core/guards/no-auth.guard';
+import { authGuard } from '@core/guards/auth.guard';
 import { ALLOWED_ROLES } from '@core/constants/auth.constants';
-import { RoleGuard } from '@core/guards/role.guard';
+import { roleGuard } from '@core/guards/role.guard';
 
 export const routes: Routes = [
   {
     path: 'auth',
-    canActivateChild: [NoAuthGuard],
+    canActivateChild: [noAuthGuard],
     loadChildren: () => import('./features/auth/auth.routing').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'main',
     component: CrmLayout,
-    canActivate: [AuthGuard, RoleGuard],
-    canActivateChild: [AuthGuard, RoleGuard],
+    canActivate: [authGuard, roleGuard],
+    canActivateChild: [authGuard, roleGuard],
     data: { roles: [...ALLOWED_ROLES] },
     children: [
       {

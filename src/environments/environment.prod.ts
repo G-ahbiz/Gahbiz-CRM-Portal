@@ -35,6 +35,10 @@ export const environment = {
     bestOffers: '/Services/best-offers',
     searchServices: (text: string) => `/Services/search/${text}`,
   },
+  locations: {
+    getAllCountries: '/countries/All/Countries',
+    getAllStates: (countryId: string) => `/states/country/${countryId}`,
+  },
   customers: {
     addCustomer: '/Customers/Customer',
     leadToCustomer: (leadId: string) => `/Customers/${leadId}/ConvertLeadToCustomer`,
@@ -42,7 +46,6 @@ export const environment = {
     getAllCustomers: '/Customers/all',
     updateCustomer: '/Customers/update',
     deleteCustomer: (id: string) => `/Customers/${id}`,
-    getSalesAgents: '/SalesManagement/agentsList',
     exportCustomers: '/Customers/export',
   },
   invoices: {
@@ -57,12 +60,15 @@ export const environment = {
     addOrder: '/CRMOrders/manual',
     addOrderFromLead: '/CRMOrders/from-lead',
     importOrders: '/CRMOrders/import',
+    updateOrderStatus: (id: string) => `/CRMOrders/${id}/status`,
   },
   statistics: {
     getOrderStatistics: '/Statistics/orders',
     geInvoicestStatistics: '/Statistics/invoices',
     getCustomerStatistics: '/Statistics/customers',
     getLeadsStatistics: '/Statistics/leads',
+    getSalesAgentStatistics: '/Statistics/team/statistics',
+    getSubmissionsStatistics: '/Statistics/operations/agent-stats',
   },
   operations: {
     getAllServiceSubmissions: '/ServiceSubmissions',
@@ -77,5 +83,23 @@ export const environment = {
       `/ServiceSubmissions/accept-files/${serviceSubmissionId}`,
     rejectSubmission: (serviceSubmissionId: string) =>
       `/ServiceSubmissions/${serviceSubmissionId}/reject`,
+  },
+  salesAgents: {
+    getSalesAgents: '/SalesManagement/agentsList',
+    addSalesAgent: '/SalesManagement/AddSalesAgent',
+    getSalesAgentDropdown: '/SalesManagement/agents-dropdown-list',
+    assignTask: '/SalesManagement/assign-task',
+    getSalesAgentStatistics: (agentId: string) => `/SalesManagement/AgentStatistics/${agentId}`,
+    getLeadsBySalesAgentId: (agentId: string) => `/leads/agent/${agentId}/leads`,
+    getManagersDropdown: '/SalesManagement/managers',
+  },
+
+  reports: {
+    getPaymentsReport: '/Reports/payments',
+    exportPaymentsReport: '/Reports/payments/export',
+    customerReport: '/Reports/customers',
+    invoicesReport: '/Reports/invoices',
+    customerExports: '/Reports/customers/export',
+    invoicesExports: '/Reports/invoices/export',
   },
 };
