@@ -9,6 +9,7 @@ import { GetInvoiceetails } from '../interfaces/get-invoice-details';
 import { AddInvoiceRequest } from '../interfaces/add-invoice-request';
 import { UpdateInvoiceRequest } from '../interfaces/update-invoice-request';
 import { InvoicesStatistics } from '../interfaces/statistics';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,9 @@ export class InvoiceFacadeService {
   }
   getStatistics(): Observable<ApiResponse<InvoicesStatistics>> {
     return this.invoiceServiceApi.getStatistics();
+  }
+
+  exportInvoice(invoiceIds: string[]): Observable<HttpResponse<Blob>> {
+    return this.invoiceServiceApi.exportInvoice(invoiceIds);
   }
 }

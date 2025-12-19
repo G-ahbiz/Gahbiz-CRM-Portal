@@ -1,43 +1,221 @@
-.table-container {
-  height: calc(100vh - 100px);
+/* EXACTLY LIKE CUSTOMER CSS WITH INVOICE-SPECIFIC ADJUSTMENTS */
+
+td,
+th {
+  text-align: center !important;
 }
 
-.search-container {
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.form-control,
-.form-select {
-  &:focus {
-    box-shadow: none;
-    outline: none;
-    border: none;
+/* Mobile responsiveness - SAME BREAKPOINTS AS CUSTOMER */
+@media (max-width: 768px) {
+  /* Hide columns on mobile: Invoice ID, Bill Date, Due Date, Payment Received, Due */
+  th:nth-child(2),
+  td:nth-child(2),
+  th:nth-child(4),
+  td:nth-child(4),
+  th:nth-child(5),
+  td:nth-child(5),
+  th:nth-child(7),
+  td:nth-child(7),
+  th:nth-child(8),
+  td:nth-child(8) {
+    display: none;
   }
-}
 
-/* Table column styles */
-:host ::ng-deep .p-datatable {
-  .p-datatable-thead > tr > th {
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .card {
+    border: none !important;
+  }
+
+  /* Mobile action buttons in a single row - EXACTLY LIKE CUSTOMER */
+  .mobile-action-btns {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .mobile-action-btns .btn {
+    flex: 1;
+    min-width: 70px;
+    max-width: 120px;
     white-space: nowrap;
-    font-weight: 600;
-    padding: 0.75rem 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.25rem !important;
   }
 
-  .p-datatable-tbody > tr > td {
-    padding: 0.75rem 0.5rem;
-    vertical-align: middle;
+  .mobile-action-btns .btn i {
+    font-size: 0.875rem;
+    margin-right: 0.25rem;
+  }
+
+  .mobile-action-btns .filter-container .form-select {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+
+  /* Hide text on very small screens, show only icons - SAME AS CUSTOMER */
+  @media (max-width: 400px) {
+    .mobile-action-btns .btn span:not(.ms-1) {
+      display: none;
+    }
+
+    .mobile-action-btns .btn i {
+      margin-right: 0;
+    }
+
+    .mobile-action-btns .btn {
+      min-width: 50px;
+      max-width: 70px;
+      padding: 0.5rem !important;
+    }
+
+    .mobile-action-btns .filter-container {
+      min-width: 80px;
+    }
+  }
+
+  /* For screens between 400px and 576px - SAME AS CUSTOMER */
+  @media (min-width: 401px) and (max-width: 576px) {
+    .mobile-action-btns .btn span.d-sm-inline {
+      display: inline !important;
+      font-size: 0.7rem;
+    }
+  }
+
+  /* Hide the count on mobile if it makes button too wide - SAME AS CUSTOMER */
+  .mobile-action-btns .btn span.ms-1 {
+    display: none;
   }
 }
 
-/* Status badge styles */
+/* Tablet responsiveness - SAME AS CUSTOMER */
+@media (max-width: 1024px) {
+  th:nth-child(3),
+  td:nth-child(3),
+  th:nth-child(6),
+  td:nth-child(6),
+  th:nth-child(9),
+  td:nth-child(9),
+  th:nth-child(10),
+  td:nth-child(10) {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure table is responsive - SAME AS CUSTOMER */
+:host ::ng-deep .p-datatable {
+  .p-datatable-table {
+    min-width: 100% !important;
+    overflow-x: auto;
+  }
+
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+
+    @media (max-width: 768px) {
+      max-width: 100px;
+      padding: 0.5rem !important;
+    }
+  }
+}
+
+/* Responsive header layout - SAME AS CUSTOMER */
+.responsive-header {
+  display: block;
+}
+
+/* Desktop layout - SAME AS CUSTOMER */
+.desktop-action-btns {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.desktop-search-filter {
+  min-width: 300px;
+}
+
+/* Action buttons responsive - SAME AS CUSTOMER */
+.action-buttons {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
+
+/* Status badge styles - INVOICE SPECIFIC */
 .card-green {
   background-color: rgba(34, 197, 94, 0.15);
+  font-size: 0.875rem;
+  white-space: nowrap;
 }
 
 .card-yellow {
   background-color: rgba(234, 179, 8, 0.15);
+  font-size: 0.875rem;
+  white-space: nowrap;
 }
 
 .card-red {
   background-color: rgba(239, 68, 68, 0.15);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .card-green,
+  .card-yellow,
+  .card-red {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem !important;
+  }
+}
+
+/* For RTL support - EXACTLY LIKE CUSTOMER */
+:host-context([dir='rtl']) {
+  .mobile-action-btns .btn i {
+    margin-right: 0;
+    margin-left: 0.25rem;
+  }
+
+  @media (max-width: 400px) {
+    .mobile-action-btns .btn i {
+      margin-left: 0;
+    }
+  }
+}
+
+/* Title container - SAME AS CUSTOMER */
+.title-container {
+  margin: 1rem 0;
+}
+
+.title-container h5 {
+  font-weight: 600;
+}
+
+/* Search container - SAME AS CUSTOMER */
+.search-container {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  overflow-x: auto;
 }
