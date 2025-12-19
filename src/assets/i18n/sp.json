@@ -902,10 +902,12 @@
   },
   "OPERATIONS": {
     "TITLE": "Operaciones",
-    "ASSIGNED_REQUESTS": "Solicitudes Totales",
+    "ASSIGNED_REQUESTS": "Solicitudes Asignadas",
     "PENDING_REQUESTS": "Solicitudes Pendientes",
     "COMPLETED_REQUESTS": "Solicitudes Completadas",
-    "AVG._PROCESSING_TIME": "Tiempo Promedio de Procesamiento",
+    "AVG_PROCESSING_TIME": "Tiempo Promedio de Procesamiento"
+  },
+  "operations": {
     "export": "Exportar",
     "add-request": "Agregar Solicitud",
     "search": "Buscar...",

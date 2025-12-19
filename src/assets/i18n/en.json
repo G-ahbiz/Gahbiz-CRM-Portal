@@ -902,10 +902,10 @@
   },
   "OPERATIONS": {
     "TITLE": "Operations",
-    "ASSIGNED_REQUESTS": "Total Requests",
+    "ASSIGNED_REQUESTS": "Assigned Requests",
     "PENDING_REQUESTS": "Pending Requests",
     "COMPLETED_REQUESTS": "Completed Requests",
-    "AVG._PROCESSING_TIME": " Avg. Processing Time",
+    "AVG_PROCESSING_TIME": "Avg. Processing Time",
     "export": "Export",
     "add-request": "Add Request",
     "search": "Search...",

@@ -7,6 +7,7 @@ import { PagenatedResponse } from '@core/interfaces/pagenated-response';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { GetSubmissionsFilters } from '../interfaces/get-submissions-filters';
 import { GetSubmissionDetails } from '../interfaces/get-submission-details';
+import { SubmissionsStatistics } from '../interfaces/submissions-statistics';
 
 @Injectable({
   providedIn: 'root',
@@ -72,5 +73,10 @@ export class OperationsApiService {
       `${this.baseUrl}${environment.operations.rejectServiceSubmission(submissionId)}`,
       { rejectionReason: rejectionReason }
     );
+  }
+
+  getSubmissionsStatistics(): Observable<ApiResponse<SubmissionsStatistics>> {
+    const url = `${this.baseUrl}${environment.statistics.getSubmissionsStatistics}`;
+    return this.http.get<ApiResponse<SubmissionsStatistics>>(url);
   }
 }

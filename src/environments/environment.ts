@@ -68,6 +68,7 @@ export const environment = {
     getCustomerStatistics: '/Statistics/customers',
     getLeadsStatistics: '/Statistics/leads',
     getSalesAgentStatistics: '/Statistics/team/statistics',
+    getSubmissionsStatistics: '/Statistics/operations/agent-stats',
   },
   operations: {
     getAllServiceSubmissions: '/ServiceSubmissions',

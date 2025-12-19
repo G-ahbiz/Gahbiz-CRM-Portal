@@ -902,10 +902,12 @@
   },
   "OPERATIONS": {
     "TITLE": "العمليات",
-    "ASSIGNED_REQUESTS": "إجمالي الطلبات",
+    "ASSIGNED_REQUESTS": "الطلبات المعينة",
     "PENDING_REQUESTS": "الطلبات المعلقة",
     "COMPLETED_REQUESTS": "الطلبات المكتملة",
-    "AVG._PROCESSING_TIME": " متوسط وقت المعالجة",
+    "AVG_PROCESSING_TIME": "متوسط وقت المعالجة"
+  },
+  "operations": {
     "export": "تصدير",
     "add-request": "إضافة طلب",
     "search": "بحث...",
