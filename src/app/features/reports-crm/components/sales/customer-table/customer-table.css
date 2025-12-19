@@ -172,7 +172,6 @@ th {
 /* Responsive header layout */
 .responsive-header {
   display: block;
-  padding: 1rem;
   background: white;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -184,6 +183,17 @@ th {
   min-width: 200px;
 }
 
+.desktop-title-section h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.desktop-title-section small {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
 .desktop-search {
   min-width: 300px;
   max-width: 500px;
@@ -191,6 +201,46 @@ th {
 
 .desktop-action-btns {
   min-width: 180px;
+}
+
+.desktop-action-btns .btn {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.desktop-top-row {
+  padding: 0.5rem 0;
+}
+
+.desktop-search-filters-row {
+  padding: 0.5rem 0;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Search container on desktop */
+.desktop-search-container {
+  min-width: 300px;
+  max-width: 100%;
+}
+
+.desktop-search-container ::ng-deep .p-inputtext {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  padding-left: 2.5rem;
+}
+
+.desktop-search-container ::ng-deep .p-icon-field-left {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
 }
 
 /* Action buttons */
@@ -299,4 +349,18 @@ th {
 .btn-outline-secondary:hover {
   background-color: #005db5;
   color: #ffffff;
+}
+
+.desktop-action-btns .btn-outline-secondary {
+  color: #005db5;
+  border-color: #005db5;
+
+  &:hover {
+    background-color: #005db5;
+    color: #ffffff;
+  }
+}
+
+.p-datatable-header {
+  padding: 0 !important;
 }

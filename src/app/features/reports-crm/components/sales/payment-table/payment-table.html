@@ -4,7 +4,7 @@
       #dt1
       [value]="paymentsData()"
       dataKey="paymentId"
-      [tableStyle]="{ 'min-width': '60rem' }"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
       [paginator]="true"
       [rows]="pageSize"
       [totalRecords]="totalRecords"
@@ -13,176 +13,327 @@
       (onPage)="onPageChange($event)"
       (onSort)="onSortColumn($event)"
       [loading]="loading()"
+      responsiveLayout="scroll"
     >
       <ng-template #caption>
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-          <!-- Export Button Container -->
-          <div class="export-btn-container">
-            <button
-              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-              (click)="exportPayments()"
+        <!-- Responsive Header Container -->
+        <div class="responsive-header">
+          <!-- Desktop Layout -->
+          <div class="d-none d-md-flex flex-column w-100">
+            <!-- First Row: Title and Action Buttons -->
+            <div
+              class="desktop-top-row w-100 d-flex align-items-center justify-content-between mb-3"
             >
-              <i class="pi pi-download fs-875"></i>
-              {{ 'PAYMENT_REPORTS.export' | translate }}
-            </button>
+              <!-- Title -->
+              <div class="desktop-title-section">
+                <h5 class="m-0 p-0">{{ 'PAYMENT_REPORTS.title' | translate }}</h5>
+                <small class="text-muted">{{ 'PAYMENT_REPORTS.summary' | translate }}</small>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="desktop-action-btns d-flex gap-2">
+                <button
+                  class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2"
+                  (click)="refreshPayments()"
+                  [disabled]="loading()"
+                  [title]="'COMMON.REFRESH' | translate"
+                >
+                  <i class="pi" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+                  <span class="d-none d-lg-inline">{{ 'COMMON.REFRESH' | translate }}</span>
+                </button>
+
+                <button
+                  class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center gap-2"
+                  (click)="exportPayments()"
+                  [disabled]="exportLoading() || paymentsData().length === 0"
+                  [title]="'COMMON.EXPORT' | translate"
+                >
+                  <i
+                    class="pi"
+                    [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
+                  ></i>
+                  <span class="d-none d-lg-inline">{{ 'COMMON.EXPORT' | translate }}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Second Row: Search and Filters -->
+            <div class="desktop-search-filters-row w-100 d-flex align-items-center gap-3">
+              <!-- Search - Takes More Space -->
+              <div class="desktop-search-container flex-grow-1">
+                <p-iconfield iconPosition="left" class="w-100">
+                  <p-inputicon>
+                    <i class="pi pi-search"></i>
+                  </p-inputicon>
+                  <input
+                    pInputText
+                    type="text"
+                    class="w-100"
+                    (input)="onSearchChange($any($event.target).value)"
+                    #searchInput
+                    [placeholder]="'PAYMENT_REPORTS.search' | translate"
+                  />
+                </p-iconfield>
+              </div>
+
+              <!-- Filters -->
+              <div class="desktop-filters-container d-flex gap-2 align-items-center">
+                <!-- Payment Method Filter -->
+                <select
+                  class="form-select filter-select"
+                  (change)="onPaymentMethodChange($any($event.target).value)"
+                >
+                  @for (option of paymentMethodOptions; track option.value) {
+                  <option [value]="option.value">
+                    {{ option.labelKey | translate }}
+                  </option>
+                  }
+                </select>
+
+                <!-- Period Filter -->
+                <select
+                  class="form-select filter-select"
+                  (change)="onPeriodChange($any($event.target).value)"
+                >
+                  @for (option of periodOptions; track option.value) {
+                  <option [value]="option.value">
+                    {{ option.labelKey | translate }}
+                  </option>
+                  }
+                </select>
+
+                <!-- Custom Date Range (shown only when Period/Custom is selected) -->
+                @if (periodValue() === 'Period') {
+                <p-datepicker
+                  [(ngModel)]="fromDate"
+                  [showIcon]="true"
+                  [iconDisplay]="'input'"
+                  dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.from-date' | translate"
+                  (onSelect)="onDateRangeChange()"
+                  appendTo="body"
+                  styleClass="date-picker-inline"
+                  [maxDate]="maxDate()"
+                ></p-datepicker>
+                <p-datepicker
+                  [(ngModel)]="toDate"
+                  [showIcon]="true"
+                  [iconDisplay]="'input'"
+                  dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.to-date' | translate"
+                  (onSelect)="onDateRangeChange()"
+                  appendTo="body"
+                  styleClass="date-picker-inline"
+                  [maxDate]="maxDate()"
+                  [minDate]="fromDate()"
+                ></p-datepicker>
+                }
+              </div>
+            </div>
           </div>
 
-          <!-- Filter and Search Container -->
-          <div class="d-flex justify-content-start align-items-center gap-3 flex-wrap">
-            <!-- Search Input -->
-            <p-iconfield iconPosition="left" class="fw-bold">
-              <p-inputicon>
-                <i class="pi pi-search"></i>
-              </p-inputicon>
-              <input
-                pInputText
-                type="text"
-                (input)="onSearchChange($any($event.target).value)"
-                #searchInput
-                placeholder="{{ 'PAYMENT_REPORTS.search' | translate }}"
-              />
-            </p-iconfield>
+          <!-- Mobile Layout -->
+          <div class="d-md-none">
+            <!-- Title -->
+            <div class="mobile-title mb-2">
+              <h6 class="m-0">{{ 'PAYMENT_REPORTS.title' | translate }}</h6>
+              <small class="text-muted">{{ 'PAYMENT_REPORTS.summary' | translate }}</small>
+            </div>
 
-            <!-- Payment Method Filter -->
-            <div
-              class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3"
-            >
+            <!-- Search -->
+            <div class="mobile-search mb-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input
+                  pInputText
+                  type="text"
+                  class="w-100"
+                  (input)="onSearchChange($any($event.target).value)"
+                  [placeholder]="'PAYMENT_REPORTS.search' | translate"
+                />
+              </p-iconfield>
+            </div>
+
+            <!-- Filters -->
+            <div class="mobile-filters d-flex flex-column gap-2 mb-3">
+              <!-- Payment Method Filter -->
               <select
-                name="paymentMethod"
-                id="paymentMethod"
-                class="form-select border-0 bg-transparent"
-                aria-label="Payment Method"
+                class="form-select filter-select-mobile"
                 (change)="onPaymentMethodChange($any($event.target).value)"
               >
                 @for (option of paymentMethodOptions; track option.value) {
                 <option [value]="option.value">
+                  {{ 'PAYMENT_REPORTS.payment-method' | translate }}:
                   {{ option.labelKey | translate }}
                 </option>
                 }
               </select>
-            </div>
 
-            <!-- Period Filter -->
-            <div
-              class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3"
-            >
+              <!-- Period Filter -->
               <select
-                name="period"
-                id="period"
-                class="form-select border-0 bg-transparent"
-                aria-label="Period"
+                class="form-select filter-select-mobile"
                 (change)="onPeriodChange($any($event.target).value)"
               >
                 @for (option of periodOptions; track option.value) {
                 <option [value]="option.value">
-                  {{ option.labelKey | translate }}
+                  {{ 'PAYMENT_REPORTS.period' | translate }}: {{ option.labelKey | translate }}
                 </option>
                 }
               </select>
+
+              <!-- Custom Date Range for Mobile -->
+              @if (periodValue() === 'Period') {
+              <div class="d-flex gap-2">
+                <p-datepicker
+                  [(ngModel)]="fromDate"
+                  [showIcon]="true"
+                  [iconDisplay]="'input'"
+                  dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.from-date' | translate"
+                  (onSelect)="onDateRangeChange()"
+                  appendTo="body"
+                  styleClass="date-picker-mobile"
+                  [maxDate]="toDate()"
+                ></p-datepicker>
+                <p-datepicker
+                  [(ngModel)]="toDate"
+                  [showIcon]="true"
+                  [iconDisplay]="'input'"
+                  dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.to-date' | translate"
+                  (onSelect)="onDateRangeChange()"
+                  appendTo="body"
+                  styleClass="date-picker-mobile"
+                  [maxDate]="maxDate()"
+                  [minDate]="fromDate()"
+                ></p-datepicker>
+              </div>
+              }
+            </div>
+
+            <!-- Action buttons -->
+            <div class="mobile-action-btns d-flex gap-2 mb-3">
+              <button
+                class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center justify-content-center flex-grow-1"
+                (click)="refreshPayments()"
+                [disabled]="loading()"
+              >
+                <i class="pi me-2" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.REFRESH' | translate }}</span>
+              </button>
+
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center justify-content-center flex-grow-1"
+                (click)="exportPayments()"
+                [disabled]="exportLoading() || paymentsData().length === 0"
+              >
+                <i
+                  class="pi me-2"
+                  [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
+                ></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.EXPORT' | translate }}</span>
+              </button>
             </div>
           </div>
-          <!-- Custom Date Range (shown only when Period/Custom is selected) -->
-          @if (periodValue() === 'Period') {
-          <div class="d-flex align-items-center gap-2 ms-auto">
-            <p-datepicker
-              [(ngModel)]="fromDate"
-              [showIcon]="true"
-              [iconDisplay]="'input'"
-              dateFormat="dd/mm/yy"
-              [placeholder]="'PAYMENT_REPORTS.from-date' | translate"
-              (onSelect)="onDateRangeChange()"
-              appendTo="body"
-              styleClass="date-picker-inline"
-              [maxDate]="toDate()"
-            ></p-datepicker>
-            <p-datepicker
-              [(ngModel)]="toDate"
-              [showIcon]="true"
-              [iconDisplay]="'input'"
-              dateFormat="dd/mm/yy"
-              [placeholder]="'PAYMENT_REPORTS.to-date' | translate"
-              (onSelect)="onDateRangeChange()"
-              appendTo="body"
-              styleClass="date-picker-inline"
-              [maxDate]="maxDate()"
-              [minDate]="fromDate()"
-            ></p-datepicker>
-          </div>
-          }
         </div>
 
-        <div class="title-container my-4">
-          <h5 class="m-0 p-0">{{ 'PAYMENT_REPORTS.title' | translate }}</h5>
+        <!-- Loading Indicator -->
+        @if (loading() || exportLoading()) {
+        <div class="mt-3">
+          <div class="d-flex align-items-center gap-2">
+            <p-progressSpinner [style]="{ width: '20px', height: '20px' }" strokeWidth="4">
+            </p-progressSpinner>
+            <small class="text-muted">
+              {{
+                exportLoading() ? ('REPORTS.exporting' | translate) : ('COMMON.LOADING' | translate)
+              }}
+            </small>
+          </div>
         </div>
+        }
       </ng-template>
 
       <ng-template #header>
         <tr>
-          <th style="width: 8rem">
+          <th>
             {{ 'PAYMENT_REPORTS.columns.payment-id' | translate }}
           </th>
-          <th style="width: 8rem">
-            {{ 'PAYMENT_REPORTS.columns.invoice-id' | translate }}
+          <th class="d-none d-md-table-cell">
+            {{ 'PAYMENT_REPORTS.columns.payment-date' | translate }}
           </th>
-          <th style="width: 10rem" [pSortableColumn]="'PaymentDate'">
-            <div class="d-flex align-items-center gap-2">
-              {{ 'PAYMENT_REPORTS.columns.payment-date' | translate }}
-              <p-sortIcon field="paymentDate" />
-            </div>
+          <th class="d-none d-md-table-cell">
+            {{ 'PAYMENT_REPORTS.columns.customer-name' | translate }}
           </th>
-          <th style="width: 12rem" [pSortableColumn]="'CustomerName'">
-            <div class="d-flex align-items-center gap-2">
-              {{ 'PAYMENT_REPORTS.columns.customer-name' | translate }}
-              <p-sortIcon field="customerName" />
-            </div>
-          </th>
-          <th style="width: 10rem">
+          <th class="d-none d-md-table-cell">
             {{ 'PAYMENT_REPORTS.columns.payment-mode' | translate }}
           </th>
-          <th style="width: 10rem">
+          <th class="d-none d-md-table-cell">
             {{ 'PAYMENT_REPORTS.columns.transaction-id' | translate }}
           </th>
-          <th style="width: 12rem">
+          <th class="d-none d-lg-table-cell">
             {{ 'PAYMENT_REPORTS.columns.note' | translate }}
           </th>
-          <th style="width: 8rem" [pSortableColumn]="'Amount'">
-            <div class="d-flex align-items-center gap-2">
-              {{ 'PAYMENT_REPORTS.columns.amount' | translate }}
-              <p-sortIcon field="amount" />
-            </div>
+          <th class="d-none d-lg-table-cell">
+            {{ 'PAYMENT_REPORTS.columns.amount' | translate }}
           </th>
         </tr>
       </ng-template>
 
       <ng-template #body let-payment let-rowIndex="rowIndex">
         <tr>
-          <td>
+          <td [title]="payment.paymentId">
             {{ payment.paymentId | slice : 0 : 8 }}{{ payment.paymentId.length > 8 ? '...' : '' }}
           </td>
-          <td>{{ payment.invoiceId }}</td>
           <td>{{ payment.paymentDate | date : 'EE, MMM dd, yyyy' }}</td>
           <td>{{ payment.customerName }}</td>
-          <td>
+          <td class="d-none d-md-table-cell">
             <span class="py-1 px-2 rounded-3 payment-mode-badge">
               {{
                 'PAYMENT_REPORTS.payment-methods.' + (payment.paymentMode | lowercase) | translate
               }}
             </span>
           </td>
-          <td>{{ payment.transactionId || '-' }}</td>
-          <td class="text-truncate" style="max-width: 150px" [title]="payment.note">
+          <td class="d-none d-md-table-cell">{{ payment.transactionId || '-' }}</td>
+          <td
+            class="text-truncate d-none d-lg-table-cell"
+            style="max-width: 200px"
+            [title]="payment.note"
+          >
             {{ payment.note || '-' }}
           </td>
-          <td>$ {{ payment.amount | number : '1.2-2' }}</td>
+          <td class="fw-bold text-success">$ {{ payment.amount | number : '1.2-2' }}</td>
         </tr>
+      </ng-template>
+
+      <ng-template #footer>
+        @if (paymentsData().length > 0) {
+        <tr class="total-row">
+          <td colspan="6" class="text-end fw-bold">{{ 'PAYMENT_REPORTS.total' | translate }}:</td>
+          <td class="fw-bold text-success total-amount">
+            $ {{ totalAmount() | number : '1.2-2' }}
+          </td>
+        </tr>
+        }
       </ng-template>
 
       <ng-template #emptymessage>
         <tr>
-          <td colspan="8" class="text-center py-4">
-            {{ 'PAYMENT_REPORTS.no-data' | translate }}
+          <td colspan="7" class="text-center py-4">
+            <div class="d-flex flex-column align-items-center">
+              <i class="pi pi-info-circle text-muted mb-2" style="font-size: 2rem"></i>
+              <p class="text-muted mb-0">{{ 'PAYMENT_REPORTS.no-data' | translate }}</p>
+              <small class="text-muted">{{ 'REPORTS.try-different-filters' | translate }}</small>
+            </div>
           </td>
         </tr>
+      </ng-template>
+
+      <ng-template #paginatorleft>
+        <small class="text-muted">
+          {{ totalRecords }} {{ 'COMMON.TOTAL_RECORDS' | translate }}
+        </small>
       </ng-template>
     </p-table>
   </div>

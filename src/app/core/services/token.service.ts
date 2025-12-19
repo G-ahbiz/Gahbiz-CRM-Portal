@@ -189,6 +189,16 @@ export class TokenService {
       const token = tokenData?.accessToken ?? this.getAccessToken();
       if (!token) return null;
       const payload = JSON.parse(atob(token.split('.')[1]));
+      // const base64Url = token.split('.')[1];
+      // const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      // const payload = JSON.parse(
+      //   decodeURIComponent(
+      //     atob(base64)
+      //       .split('.')
+      //       .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      //       .join('')
+      //   )
+      // );
       return (
         payload?.roles ??
         payload?.role ??
@@ -198,6 +208,19 @@ export class TokenService {
     } catch {
       return null;
     }
+  }
+
+  extractRolesFromLocalStorage(): string | null {
+    const userData = localStorage.getItem(LOCAL_STORAGE_KEYS.USER_DATA_KEY);
+    if (!userData) return null;
+    const payload = JSON.parse(userData);
+    console.log('payload');
+    return (
+      payload?.type ??
+      payload?.role ??
+      payload?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ??
+      null
+    );
   }
 
   isTokenExpired(token?: string): boolean {

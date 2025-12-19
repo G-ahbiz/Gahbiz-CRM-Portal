@@ -64,7 +64,7 @@ export class RoleGuard implements CanActivate, CanActivateChild {
 
         return true;
       }),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   }
 
@@ -72,11 +72,9 @@ export class RoleGuard implements CanActivate, CanActivateChild {
     if (!user) return [];
 
     // Extract roles from various possible locations
-    const roles = user.roles || user.role || this.tokenService.extractRolesFromToken() || [];
-
+    const roles = user.roles || user.role || this.tokenService.extractRolesFromLocalStorage() || [];
     // Convert to array if needed
     const roleArray = Array.isArray(roles) ? roles : [roles];
-
     // Filter and normalize
     return roleArray
       .filter((role): role is string => typeof role === 'string' && role.trim() !== '')

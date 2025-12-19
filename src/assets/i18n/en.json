@@ -963,11 +963,13 @@
   },
   "PAYMENT_REPORTS": {
     "title": "Payments Report",
+    "summary": "View and manage all payments",
     "export": "Export",
     "search": "Search...",
     "from-date": "From Date",
     "to-date": "To Date",
     "no-data": "No payment data found",
+    "total": "Total",
     "columns": {
       "payment-id": "Payment ID",
       "invoice-id": "Invoice ID",

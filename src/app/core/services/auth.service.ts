@@ -10,7 +10,7 @@ import { LoginResponse } from '@features/auth/interfaces/sign-in/login-response'
 import { ResetPasswordRequest } from '@features/auth/interfaces/sign-in/reset-password-request';
 import { ResetPasswordResponse } from '@features/auth/interfaces/sign-in/reset-password-response';
 import { TokenData } from '@core/interfaces/token-data';
-import { ALLOWED_ROLES, isAnyAllowedRole } from '@core/constants/auth.constants';
+import { isAnyAllowedRole } from '@core/constants/auth.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -72,9 +72,10 @@ export class AuthService {
             const { user, token } = response.data;
 
             const userRoles =
+              this.tokenService.extractRolesFromToken(token) ??
               (user as any)?.roles ??
               (user as any)?.role ??
-              this.tokenService.extractRolesFromToken(token);
+              null;
 
             if (!isAnyAllowedRole(userRoles)) {
               this.tokenService.clearAllTokens();

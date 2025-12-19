@@ -965,11 +965,13 @@
   },
   "PAYMENT_REPORTS": {
     "title": "Reporte de Pagos",
+    "summary": "Ver y gestionar todos los pagos",
     "export": "Exportar",
     "search": "Buscar...",
     "from-date": "Desde Fecha",
     "to-date": "Hasta Fecha",
     "no-data": "No se encontraron datos de pago",
+    "total": "Total",
     "columns": {
       "payment-id": "ID de Pago",
       "invoice-id": "ID de Factura",
