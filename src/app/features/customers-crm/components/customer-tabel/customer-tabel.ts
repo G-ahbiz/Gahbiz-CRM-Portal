@@ -8,12 +8,13 @@ import {
   ElementRef,
   ViewChild,
   HostListener,
+  computed,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
 import { ToastService } from '@core/services/toast.service';
 import { TableModule } from 'primeng/table';
@@ -27,6 +28,9 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { LanguageService } from '@core/services/language.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { AuthService } from '@core/services/auth.service';
+import { CUSTOMER_DELETE_ROLES, hasPermission } from '@shared/utils/role-permissions';
+import { ErrorFacadeService } from '@core/services/error.facade.service';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
@@ -65,7 +69,15 @@ export class CustomerTabel implements OnInit {
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly authService = inject(AuthService);
+  private readonly errorFacade = inject(ErrorFacadeService);
   languageService = inject(LanguageService);
+
+  // Current user and role-based permissions
+  private currentUser = toSignal(this.authService.currentUser$);
+  canDeleteCustomer = computed(() =>
+    hasPermission(this.currentUser()?.type, CUSTOMER_DELETE_ROLES)
+  );
 
   // Data properties
   customersTabelData = signal<CustomerViewModel[]>([]);
@@ -147,7 +159,7 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error loading customers', err);
-          this.toast.error(this.translate.instant('CUSTOMERS-CRM.error-loading-customers'));
+          this.errorFacade.showError(err);
         },
       });
   }
@@ -296,8 +308,7 @@ export class CustomerTabel implements OnInit {
           }
         },
         error: (err) => {
-          console.error('Error deleting customer', err);
-          this.toast.error(this.translate.instant('CUSTOMERS-CRM.error-deleting-customer'));
+          this.errorFacade.showError(err as Error);
         },
       });
   }
@@ -374,7 +385,7 @@ export class CustomerTabel implements OnInit {
         },
         error: (err) => {
           console.error('Error in bulk delete operation:', err);
-          this.toast.error(this.translate.instant('CUSTOMERS-CRM.error-deleting-customers'));
+          this.errorFacade.showError(err as Error);
         },
       });
   }
@@ -429,8 +440,7 @@ export class CustomerTabel implements OnInit {
           this.toast.success(successMessage);
         },
         error: (error) => {
-          console.error('Export error:', error);
-          this.toast.error(this.translate.instant('CUSTOMERS-CRM.export-failed'));
+          this.errorFacade.showError(error as Error);
         },
       });
   }

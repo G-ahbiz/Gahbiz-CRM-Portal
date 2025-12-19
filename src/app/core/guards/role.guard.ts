@@ -1,83 +1,78 @@
-import { inject, Injectable } from '@angular/core';
-import {
-  CanActivate,
-  CanActivateChild,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-} from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth.service';
-import { ROUTES } from '@shared/config/constants';
-import { Observable, map, of, shareReplay } from 'rxjs';
-import { ALLOWED_ROLES } from '@core/constants/auth.constants';
 import { TokenService } from '@core/services/token.service';
+import { ROUTES } from '@shared/config/constants';
+import { ALLOWED_ROLES } from '@core/constants/auth.constants';
+import { map, shareReplay, of, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RoleGuard implements CanActivate, CanActivateChild {
-  private authService = inject(AuthService);
-  private tokenService = inject(TokenService);
-  private router = inject(Router);
+// Module-level cache for role checks
+const roleCache = new Map<string, boolean>();
+let cacheSubscriptionInitialized = false;
 
-  private roleCache = new Map<string, boolean>();
+function initializeCacheClearing(authService: AuthService): void {
+  if (cacheSubscriptionInitialized) return;
+  cacheSubscriptionInitialized = true;
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.checkRoles(route, state.url);
-  }
-
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
-    return this.checkRoles(childRoute, state.url);
-  }
-
-  private checkRoles(route: ActivatedRouteSnapshot, url: string): Observable<boolean> {
-    const cacheKey = `${url}-${JSON.stringify(route.data?.['roles'])}`;
-
-    if (this.roleCache.has(cacheKey)) {
-      return of(this.roleCache.get(cacheKey)!);
+  authService.isLoggedIn$.pipe(take(1)).subscribe(); // Ensure subscription exists
+  authService.isLoggedIn$.subscribe((isLoggedIn) => {
+    if (!isLoggedIn) {
+      roleCache.clear();
     }
-
-    return this.authService.waitForInitialization().pipe(
-      map(() => {
-        if (!this.authService.isAuthenticated()) {
-          this.router.navigate([ROUTES.signIn], { queryParams: { returnUrl: url } });
-          return false;
-        }
-
-        const requiredRoles: string[] = (route.data?.['roles'] as string[]) ?? [...ALLOWED_ROLES];
-        const user = this.authService.getCurrentUser();
-        const userRoles = this.normalizeRoles(user);
-
-        const hasRole = requiredRoles.some((requiredRole) =>
-          userRoles.some((userRole) => userRole.toLowerCase() === requiredRole.toLowerCase())
-        );
-
-        this.roleCache.set(cacheKey, hasRole);
-
-        if (!hasRole) {
-          this.router.navigate([ROUTES.unauthorized || '/unauthorized']);
-          return false;
-        }
-
-        return true;
-      }),
-      shareReplay({ bufferSize: 1, refCount: true })
-    );
-  }
-
-  private normalizeRoles(user: any): string[] {
-    if (!user) return [];
-
-    // Extract roles from various possible locations
-    const roles = user.roles || user.role || this.tokenService.extractRolesFromLocalStorage() || [];
-    // Convert to array if needed
-    const roleArray = Array.isArray(roles) ? roles : [roles];
-    // Filter and normalize
-    return roleArray
-      .filter((role): role is string => typeof role === 'string' && role.trim() !== '')
-      .map((role) => role.trim().toLowerCase());
-  }
+  });
 }
+
+function normalizeRoles(user: unknown, tokenService: TokenService): string[] {
+  if (!user || typeof user !== 'object') return [];
+
+  const userObj = user as Record<string, unknown>;
+  const roles =
+    userObj['roles'] || userObj['role'] || tokenService.extractRolesFromLocalStorage() || [];
+  const roleArray = Array.isArray(roles) ? roles : [roles];
+
+  return roleArray
+    .filter((role): role is string => typeof role === 'string' && role.trim() !== '')
+    .map((role) => role.trim().toLowerCase());
+}
+
+export const roleGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const tokenService = inject(TokenService);
+  const router = inject(Router);
+
+  // Initialize cache clearing on first use
+  initializeCacheClearing(authService);
+
+  const cacheKey = `${state.url}-${JSON.stringify(route.data?.['roles'])}`;
+
+  if (roleCache.has(cacheKey)) {
+    return of(roleCache.get(cacheKey)!);
+  }
+
+  return authService.waitForInitialization().pipe(
+    map(() => {
+      if (!authService.isAuthenticated()) {
+        return router.createUrlTree([ROUTES.signIn], {
+          queryParams: { returnUrl: state.url },
+        });
+      }
+
+      const requiredRoles: string[] = (route.data?.['roles'] as string[]) ?? [...ALLOWED_ROLES];
+      const user = authService.getCurrentUser();
+      const userRoles = normalizeRoles(user, tokenService);
+
+      const hasRole = requiredRoles.some((requiredRole) =>
+        userRoles.some((userRole) => userRole === requiredRole.toLowerCase())
+      );
+
+      roleCache.set(cacheKey, hasRole);
+
+      if (!hasRole) {
+        return router.createUrlTree([ROUTES.unauthorized || '/unauthorized']);
+      }
+
+      return true;
+    }),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+};

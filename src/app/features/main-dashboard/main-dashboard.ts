@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ROUTES } from '@shared/config/constants';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './main-dashboard.css',
 })
 export class MainDashboard {
-
+  handelDashboardClick() {
+    window.location.href = ROUTES.dashboard;
+  }
 }

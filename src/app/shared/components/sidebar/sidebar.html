@@ -48,6 +48,7 @@
     <div class="sidebar-content-container mt-5 w-100">
       <ul class="list-unstyled">
         <!-- Dashboard -->
+        @if (canViewDashboard()) {
         <li class="w-100 p-75 rounded-3" routerLink="/main/dashboard" routerLinkActive="active">
           <button
             type="button"
@@ -58,8 +59,10 @@
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.dashboard' | translate }}</span>
           </button>
         </li>
+        }
 
         <!-- Customers -->
+        @if (canViewCustomers()) {
         <li class="w-100 p-75 rounded-3" routerLink="/main/customers" routerLinkActive="active">
           <button
             type="button"
@@ -70,8 +73,10 @@
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.customers' | translate }}</span>
           </button>
         </li>
+        }
 
         <!-- Sales -->
+        @if (canViewSalesLeads()) {
         <li class="sidebar-toggle w-100 p-75 rounded-3">
           <button
             type="button"
@@ -104,6 +109,7 @@
                 </button>
               </li>
               <!-- Sales Agents -->
+              @if (canViewSalesAgents()) {
               <li
                 class="w-100 p-75 rounded-3"
                 routerLink="/main/sales/sales-agents"
@@ -124,11 +130,14 @@
                   }}</span>
                 </button>
               </li>
+              }
             </ul>
           </div>
         </li>
+        }
 
         <!-- Operations -->
+        @if (canViewOperations()) {
         <li class="w-100 p-75 rounded-3" routerLink="/main/operations" routerLinkActive="active">
           <button
             type="button"
@@ -139,8 +148,10 @@
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.operations' | translate }}</span>
           </button>
         </li>
+        }
 
         <!-- Invoices -->
+        @if (canViewInvoices()) {
         <li class="w-100 p-75 rounded-3" routerLink="/main/invoices" routerLinkActive="active">
           <button
             type="button"
@@ -151,8 +162,10 @@
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.invoices' | translate }}</span>
           </button>
         </li>
+        }
 
         <!-- Orders -->
+        @if (canViewOrders()) {
         <li class="w-100 p-75 rounded-3" routerLink="/main/orders" routerLinkActive="active">
           <button
             type="button"
@@ -163,8 +176,10 @@
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.orders' | translate }}</span>
           </button>
         </li>
+        }
 
         <!-- Reports -->
+        @if (canViewReports()) {
         <li class="sidebar-toggle w-100 p-75 rounded-3">
           <button
             type="button"
@@ -218,8 +233,10 @@
             </ul>
           </div>
         </li>
+        }
 
         <!-- Settings -->
+        <!-- @if (canViewSettings()) {
         <li class="w-100 p-75 rounded-3" routerLink="/main/settings" routerLinkActive="active">
           <button
             type="button"
@@ -230,6 +247,7 @@
             <span class="text-nowrap fs-6 fw-medium">{{ 'sidebar.settings' | translate }}</span>
           </button>
         </li>
+        } -->
       </ul>
     </div>
   </div>

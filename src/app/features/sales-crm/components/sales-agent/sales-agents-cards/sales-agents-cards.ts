@@ -1,11 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { PopoverModule } from 'primeng/popover';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { SalesAgentFacadeService } from '@features/sales-crm/services/sales-agent/sales-agent-facade.service';
 import { Router } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from '@core/services/toast.service';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
 import { debounceTime, distinctUntilChanged, finalize, Subject } from 'rxjs';
@@ -13,6 +13,12 @@ import { SalesAgentsFilter } from '@features/sales-crm/interfaces/sales-agents-f
 import { SelectModule } from 'primeng/select';
 import { AssignTask } from '../assign-task/assign-task';
 import { SalesAgentsAdd } from '../sales-agents-add/sales-agents-add';
+import { AuthService } from '@core/services/auth.service';
+import {
+  ASSIGN_TASK_ROLES,
+  ADD_SALES_AGENT_ROLES,
+  hasPermission,
+} from '@shared/utils/role-permissions';
 
 @Component({
   selector: 'app-sales-agents-cards',
@@ -53,6 +59,12 @@ export class SalesAgentsCards implements OnInit {
   private readonly toestr = inject(ToastService);
   private readonly errorFacadeService = inject(ErrorFacadeService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
+
+  // Current user and role-based permissions
+  private currentUser = toSignal(this.authService.currentUser$);
+  canAssignTask = computed(() => hasPermission(this.currentUser()?.type, ASSIGN_TASK_ROLES));
+  canAddSalesAgent = computed(() => hasPermission(this.currentUser()?.type, ADD_SALES_AGENT_ROLES));
 
   ngOnInit() {
     this.setupSearchSubscription();
