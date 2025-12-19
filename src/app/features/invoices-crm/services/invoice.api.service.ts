@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { environment } from '@env/environment';
@@ -71,5 +71,17 @@ export class InvoiceApiService {
   getStatistics(): Observable<ApiResponse<InvoicesStatistics>> {
     const url = `${this.baseUrl}${environment.statistics.geInvoicestStatistics}`;
     return this.http.get<ApiResponse<InvoicesStatistics>>(url);
+  }
+
+  exportInvoice(invoiceIds: string[]): Observable<HttpResponse<Blob>> {
+    const url = `${this.baseUrl}${environment.invoices.exportInvoice}`;
+    return this.http.post(
+      url,
+      { invoiceIds },
+      {
+        observe: 'response',
+        responseType: 'blob',
+      }
+    ) as Observable<HttpResponse<Blob>>;
   }
 }

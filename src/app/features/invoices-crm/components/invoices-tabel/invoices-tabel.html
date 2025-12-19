@@ -1,159 +1,248 @@
 <div class="container-fluid p-0 m-0">
-  <div class="card border-0 bg-transparent">
-    <p-table
-      #dt1
-      [value]="invoicesTabelData()"
-      dataKey="id"
-      [tableStyle]="{ 'min-width': '60rem' }"
-      [paginator]="true"
-      [rows]="pageSize"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [lazy]="true"
-      (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)"
-      [loading]="loading()"
-    >
-      <ng-template #caption>
-        <div class="d-flex justify-content-between align-items-center">
-          <!-- Export Button Container -->
-          <div class="export-btn-container">
-            <button disabled
-              class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-            >
-              <i class="pi pi-download fs-875"></i>
-              {{ 'INVOICES.export' | translate }}
-            </button>
-          </div>
-          <!-- Filter and Search Container -->
-          <div class="d-flex justify-content-start align-items-center gap-3">
-            <p-iconfield iconPosition="left" class="fw-bold">
-              <p-inputicon>
-                <i class="pi pi-search"></i>
-              </p-inputicon>
-              <input
-                pInputText
-                type="text"
-                (input)="onSearchChange($any($event.target).value)"
-                #searchInput
-                placeholder="{{ 'INVOICES.search' | translate }}"
-              />
-            </p-iconfield>
+  <!-- Add PrimeNG ConfirmDialog - SAME AS CUSTOMER -->
+  <p-confirmDialog [style]="{width: '350px'}" acceptLabel="{{ 'COMMON.YES' | translate }}"
+    rejectLabel="{{ 'COMMON.NO' | translate }}" acceptIcon="pi pi-check red" rejectIcon="pi pi-times"></p-confirmDialog>
 
-            <!-- Filter Container -->
-            <div
-              class="filter-container d-flex justify-content-start align-items-center bg-white rounded-3"
-            >
-              <select
-                name="filter"
-                id="filter"
-                class="form-select border-0 bg-transparent"
-                aria-label="Filter"
-                (change)="onFilterChange($any($event.target).value)"
-              >
-                <option value="all">{{ 'INVOICES.all' | translate }}</option>
-                <option value="last-7-days" selected>
-                  {{ 'INVOICES.last-7-days' | translate }}
-                </option>
-                <option value="last-30-days">{{ 'INVOICES.last-30-days' | translate }}</option>
-                <option value="last-60-days">{{ 'INVOICES.last-60-days' | translate }}</option>
-                <option value="last-90-days">{{ 'INVOICES.last-90-days' | translate }}</option>
-                <option value="last-180-days">
-                  {{ 'INVOICES.last-180-days' | translate }}
-                </option>
-                <option value="last-365-days">
-                  {{ 'INVOICES.last-365-days' | translate }}
-                </option>
-              </select>
+  <div class="card border-0 bg-transparent">
+    <p-table #dt1 [value]="invoicesTabelData()" dataKey="id"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }" [paginator]="true" [rows]="pageSize"
+      [totalRecords]="totalRecords" [rowsPerPageOptions]="responsiveRowsPerPageOptions" [lazy]="true"
+      (onPage)="onPageChange($event)" (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll">
+
+      <ng-template #caption>
+        <!-- Responsive Header Container - EXACTLY LIKE CUSTOMER -->
+        <div class="responsive-header">
+
+          <!-- Desktop Layout (default) - SAME STRUCTURE AS CUSTOMER -->
+          <div class="d-none d-md-flex w-100 align-items-center">
+            <!-- Left Section: Action Buttons -->
+            <div class="desktop-action-btns d-flex gap-2">
+              <!-- Export Button -->
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                (click)="exportSelectedInvoices()" [disabled]="exportLoading() || selectedInvoicesCount === 0"
+                [title]="'INVOICES.export-selected' | translate">
+                <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span>{{ 'INVOICES.export' | translate }}</span>
+                <span *ngIf="selectedInvoicesCount > 0" class="ms-1">
+                  ({{ selectedInvoicesCount }})
+                </span>
+              </button>
+
+              <!-- Clear Selection Button -->
+              <button *ngIf="selectedInvoicesCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
+                (click)="clearSelections()" [disabled]="exportLoading()">
+                {{ 'COMMON.CLEAR' | translate }}
+              </button>
+            </div>
+
+            <!-- Center Section: Search and Filter -->
+            <div class="desktop-search-filter d-flex flex-grow-1 mx-3 gap-3 align-items-center">
+              <!-- Search -->
+              <div class="search-container flex-grow-1">
+                <p-iconfield iconPosition="left" class="w-100">
+                  <p-inputicon>
+                    <i class="pi pi-search"></i>
+                  </p-inputicon>
+                  <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
+                    #searchInput [placeholder]="'INVOICES.search' | translate" />
+                </p-iconfield>
+              </div>
+
+              <!-- Filter -->
+              <div class="filter-container">
+                <select name="filter" id="filter" class="form-select border-0 bg-transparent" aria-label="Filter"
+                  (change)="onFilterChange($any($event.target).value)">
+                  <option value="all">{{ 'INVOICES.all' | translate }}</option>
+                  <option value="last-7-days" selected>
+                    {{ 'INVOICES.last-7-days' | translate }}
+                  </option>
+                  <option value="last-30-days">{{ 'INVOICES.last-30-days' | translate }}</option>
+                  <option value="last-60-days">{{ 'INVOICES.last-60-days' | translate }}</option>
+                  <option value="last-90-days">{{ 'INVOICES.last-90-days' | translate }}</option>
+                  <option value="last-180-days">
+                    {{ 'INVOICES.last-180-days' | translate }}
+                  </option>
+                  <option value="last-365-days">
+                    {{ 'INVOICES.last-365-days' | translate }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Right Section: Add Invoice -->
+            <div class="desktop-add-btn">
+              <button
+                class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
+                [routerLink]="Routes.addInvoice">
+                <span>{{ 'INVOICES.add-invoice' | translate }}</span>
+              </button>
             </div>
           </div>
 
-          <!-- Add Invoice Button Container -->
-          <div class="d-flex justify-content-start align-items-center gap-0">
-            <button
-              class="btn btn-primary primary-bg-clr d-flex justify-content-start px-3 py-2 align-items-center gap-2 rounded-3"
-              [routerLink]="Routes.addInvoice"
-            >
-              <img src="assets/images/shared/plus.svg" alt="" class="" />
-              {{ 'INVOICES.add-invoice' | translate }}
-            </button>
+          <!-- Mobile Layout - EXACTLY LIKE CUSTOMER MOBILE -->
+          <div class="d-md-none">
+            <!-- Search at the top - SAME AS CUSTOMER -->
+            <div class="mobile-search mb-3">
+              <p-iconfield iconPosition="left" class="w-100">
+                <p-inputicon>
+                  <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
+                  #searchInput [placeholder]="'INVOICES.search' | translate" />
+              </p-iconfield>
+            </div>
+
+            <!-- Action buttons in a single row - SAME PATTERN AS CUSTOMER -->
+            <div class="mobile-action-btns d-flex gap-2 mb-3">
+              <!-- Export Button (Icon + Text) -->
+              <button
+                class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="exportSelectedInvoices()" [disabled]="exportLoading() || selectedInvoicesCount === 0"
+                [title]="'INVOICES.export-selected' | translate">
+                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                <span class="ms-1 d-none d-sm-inline">{{ 'INVOICES.export' | translate }}</span>
+                <span *ngIf="selectedInvoicesCount > 0" class="ms-1">
+                  ({{ selectedInvoicesCount }})
+                </span>
+              </button>
+
+              <!-- Clear Button (Icon only when text doesn't fit) -->
+              <button *ngIf="selectedInvoicesCount > 0"
+                class="btn btn-sm btn-outline-secondary px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                (click)="clearSelections()" [disabled]="exportLoading()">
+                <i class="pi pi-times d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR' | translate }}</span>
+              </button>
+
+              <!-- Filter Dropdown -->
+              <div class="filter-container flex-grow-1">
+                <select name="filter-mobile" id="filter-mobile" class="form-select border bg-transparent w-100"
+                  aria-label="Filter" (change)="onFilterChange($any($event.target).value)">
+                  <option value="all">{{ 'INVOICES.all' | translate }}</option>
+                  <option value="last-7-days" selected>
+                    {{ 'INVOICES.last-7-days' | translate }}
+                  </option>
+                  <option value="last-30-days">{{ 'INVOICES.last-30-days' | translate }}</option>
+                  <option value="last-90-days">{{ 'INVOICES.last-90-days' | translate }}</option>
+                </select>
+              </div>
+
+              <!-- Add Button (Icon + Text) -->
+              <button
+                class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                [routerLink]="Routes.addInvoice">
+                <i class="pi pi-plus d-sm-none"></i>
+                <span class="d-none d-sm-inline">{{ 'INVOICES.add-invoice' | translate }}</span>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="title-container my-4">
+
+        <!-- Title Section - EXACTLY LIKE CUSTOMER -->
+        <div class="title-container my-3 my-md-4" [attr.dir]="languageService.direction()" [ngClass]="{
+          'text-center': true,
+          'text-md-start': !languageService.isRTL(),
+          'text-md-end': languageService.isRTL()
+        }">
           <h5 class="m-0 p-0">{{ 'INVOICES.all-invoices' | translate }}</h5>
+          <small class="text-muted" *ngIf="selectedInvoicesCount > 0">
+            {{ selectedInvoicesCount }} {{ 'INVOICES.selected-invoices-for-action' | translate }}
+          </small>
+          <div class="mt-2 d-block d-md-none">
+            <small class="text-muted">{{ 'INVOICES.swipe-to-scroll' | translate }}</small>
+          </div>
         </div>
+
       </ng-template>
+
       <ng-template #header>
         <tr>
-          <th style="width: 3rem" class="text-center">
-            <input
-              type="checkbox"
-              name="select-all"
-              id="select-all"
-              [checked]="isAllSelected"
-              (change)="onSelectAll($event)"
-            />
+          <!-- Checkbox Column - SAME AS CUSTOMER -->
+          <th class="text-center" style="width: 60px;">
+            <div class="d-flex justify-content-center align-items-center">
+              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
+                (change)="onSelectAll($event)" [title]="'INVOICES.select-all' | translate" />
+            </div>
           </th>
-          <th style="width: 8rem">
+          <!-- Invoice ID - Hidden on mobile -->
+          <th class="d-none d-md-table-cell">
             {{ 'INVOICES.invoice-id' | translate }}
           </th>
-          <th style="width: 12rem" [pSortableColumn]="'CustomerName'">
-            <div class="d-flex align-items-center gap-2">
+          <!-- Customer - Always visible -->
+          <th [pSortableColumn]="'CustomerName'">
+            <div class="d-flex justify-content-center align-items-center gap-1">
               {{ 'INVOICES.customer' | translate }}
               <p-sortIcon field="customerName" />
             </div>
           </th>
-          <th style="width: 10rem" [pSortableColumn]="'InvoiceDate'">
-            <div class="d-flex align-items-center gap-2">
+          <!-- Bill Date - Hidden on mobile -->
+          <th class="d-none d-md-table-cell" [pSortableColumn]="'InvoiceDate'">
+            <div class="d-flex justify-content-center align-items-center gap-1">
               {{ 'INVOICES.bill-date' | translate }}
               <p-sortIcon field="invoiceDate" />
             </div>
           </th>
-          <th style="width: 10rem" [pSortableColumn]="'DueDate'">
-            <div class="d-flex align-items-center gap-2">
+          <!-- Due Date - Hidden on tablet and mobile -->
+          <th class="d-none d-lg-table-cell" [pSortableColumn]="'DueDate'">
+            <div class="d-flex justify-content-center align-items-center gap-1">
               {{ 'INVOICES.due-date' | translate }}
               <p-sortIcon field="dueDate" />
             </div>
           </th>
-          <th style="width: 7rem">
+          <!-- Total - Always visible -->
+          <th>
             {{ 'INVOICES.total' | translate }}
           </th>
-          <th style="width: 9rem">
+          <!-- Payment Received - Hidden on tablet and mobile -->
+          <th class="d-none d-lg-table-cell">
             {{ 'INVOICES.payment-received' | translate }}
           </th>
-          <th style="width: 8rem">
+          <!-- Due - Hidden on tablet and mobile -->
+          <th class="d-none d-lg-table-cell">
             {{ 'INVOICES.due' | translate }}
           </th>
-          <th style="width: 8rem">
+          <!-- Status - Always visible -->
+          <th>
             {{ 'INVOICES.status' | translate }}
           </th>
-          <th style="width: 6rem" class="text-center">
+          <!-- Actions - Always visible -->
+          <th style="width: 150px;">
             {{ 'INVOICES.actions' | translate }}
           </th>
         </tr>
       </ng-template>
+
       <ng-template #body let-invoice let-rowIndex="rowIndex">
         <tr>
+          <!-- Checkbox -->
           <td class="text-center">
-            <input
-              type="checkbox"
-              name="select-invoice"
-              id="invoice-{{ invoice.id }}"
-              [checked]="invoice.selected"
-              (change)="toggleInvoiceSelection(invoice)"
-            />
+            <input type="checkbox" name="select-invoice" id="invoice-{{ invoice.id }}" [checked]="invoice.selected"
+              (change)="toggleInvoiceSelection(invoice)" [title]="'INVOICES.select-invoice' | translate" />
           </td>
-          <td>{{ invoice.invoiceNumber }}</td>
-          <td>{{ invoice.customerName }}</td>
-          <td>{{ invoice.invoiceDate | date : 'EE, MMM dd, yyyy' }}</td>
-          <td>{{ invoice.dueDate | date : 'EE, MMM dd, yyyy' }}</td>
+          <!-- Invoice ID - Hidden on mobile -->
+          <td class="d-none d-md-table-cell" [title]="invoice.invoiceNumber">
+            {{ invoice.invoiceNumber | slice : 0 : 8 }}{{ invoice.invoiceNumber.length > 8 ? '...' : '' }}
+          </td>
+          <!-- Customer Name -->
+          <td>
+            <span class="d-none d-md-inline">{{ invoice.customerName }}</span>
+            <span class="d-md-none">{{ invoice.customerName | slice:0:12 }}{{ invoice.customerName.length > 12 ? '...' :
+              '' }}</span>
+          </td>
+          <!-- Bill Date - Hidden on mobile -->
+          <td class="d-none d-md-table-cell">{{ invoice.invoiceDate | date : 'EE, MMM dd, yyyy' }}</td>
+          <!-- Due Date - Hidden on tablet and mobile -->
+          <td class="d-none d-lg-table-cell">{{ invoice.dueDate | date : 'EE, MMM dd, yyyy' }}</td>
+          <!-- Total -->
           <td>$ {{ invoice.totalAmount | number : '1.2-2' }}</td>
-          <td>$ {{ invoice.amountPaid | number : '1.2-2' }}</td>
-          <td>$ {{ invoice.dueAmount | number : '1.2-2' }}</td>
+          <!-- Payment Received - Hidden on tablet and mobile -->
+          <td class="d-none d-lg-table-cell">$ {{ invoice.amountPaid | number : '1.2-2' }}</td>
+          <!-- Due - Hidden on tablet and mobile -->
+          <td class="d-none d-lg-table-cell">$ {{ invoice.dueAmount | number : '1.2-2' }}</td>
+          <!-- Status -->
           <td class="text-center">
-            <span
-              class="py-1 px-2 rounded-3"
-              [class]="
+            <span class="py-1 px-2 rounded-3" [class]="
                 invoice.status === 'Paid'
                   ? 'text-success card-green'
                   : invoice.status === 'PartiallyPaid'
@@ -161,31 +250,37 @@
                   : invoice.status === 'Unpaid'
                   ? 'text-danger card-red'
                   : ''
-              "
-            >
+              ">
               {{
-                invoice.status === 'Paid'
-                  ? ('INVOICES.paid' | translate)
-                  : invoice.status === 'PartiallyPaid'
-                  ? ('INVOICES.partially-paid' | translate)
-                  : invoice.status === 'Unpaid'
-                  ? ('INVOICES.unpaid' | translate)
-                  : invoice.status
+              invoice.status === 'Paid'
+              ? ('INVOICES.paid' | translate)
+              : invoice.status === 'PartiallyPaid'
+              ? ('INVOICES.partially-paid' | translate)
+              : invoice.status === 'Unpaid'
+              ? ('INVOICES.unpaid' | translate)
+              : invoice.status
               }}
             </span>
           </td>
-          <td class="text-center">
-            <div class="d-flex justify-content-center align-items-center gap-1">
-              <button class="btn btn-sm p-1" (click)="updateInvoice(invoice.id)">
-                <i class="pi pi-pencil"></i>
-              </button>
-              <button
-                class="btn btn-sm p-1"
-                (click)="viewInvoice(invoice.id); $event.stopPropagation()"
-              >
-                <img src="assets/images/shared/eye.svg" alt="" />
-              </button>
-            </div>
+          <!-- Actions - SAME STYLE AS CUSTOMER -->
+          <td class="action-buttons">
+            <button class="btn btn-sm btn-outline-primary" (click)="viewInvoice(invoice.id); $event.stopPropagation()"
+              [title]="'COMMON.VIEW' | translate">
+              <i class="pi pi-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary"
+              (click)="updateInvoice(invoice.id.toString()); $event.stopPropagation()"
+              [title]="'COMMON.EDIT' | translate">
+              <i class="pi pi-pencil"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="10" class="text-center py-4">
+            {{ 'INVOICES.no-invoices-found' | translate }}
           </td>
         </tr>
       </ng-template>

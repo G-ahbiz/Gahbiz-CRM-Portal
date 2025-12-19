@@ -53,6 +53,7 @@ export const environment = {
     addInvoice: '/Invoices',
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
+    exportInvoice: '/Invoices/export-selected',
   },
   crmOrder: {
     getAllOrders: '/CRMOrders',
