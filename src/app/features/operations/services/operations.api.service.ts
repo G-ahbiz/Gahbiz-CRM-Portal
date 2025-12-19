@@ -8,6 +8,8 @@ import { ApiResponse } from '@core/interfaces/api-response';
 import { GetSubmissionsFilters } from '../interfaces/get-submissions-filters';
 import { GetSubmissionDetails } from '../interfaces/get-submission-details';
 import { SubmissionsStatistics } from '../interfaces/submissions-statistics';
+import { ClientServiceStatus } from '@shared/config/constants';
+import { UpdateStatusResponse } from '../interfaces/update-status-response';
 
 @Injectable({
   providedIn: 'root',
@@ -78,5 +80,14 @@ export class OperationsApiService {
   getSubmissionsStatistics(): Observable<ApiResponse<SubmissionsStatistics>> {
     const url = `${this.baseUrl}${environment.statistics.getSubmissionsStatistics}`;
     return this.http.get<ApiResponse<SubmissionsStatistics>>(url);
+  }
+
+  updateStatus(
+    clientServiceId: string,
+    status: ClientServiceStatus,
+    note: string
+  ): Observable<ApiResponse<UpdateStatusResponse>> {
+    const url = `${this.baseUrl}${environment.operations.updateStatus(clientServiceId)}`;
+    return this.http.put<ApiResponse<UpdateStatusResponse>>(url, { status, note });
   }
 }

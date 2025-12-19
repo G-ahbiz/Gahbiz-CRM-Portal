@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal, computed, OnDestroy } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -24,6 +24,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
+import { LanguageService } from '@core/services/language.service';
 
 @Component({
   selector: 'app-leads-add',
@@ -38,7 +39,7 @@ import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
   templateUrl: './leads-add.html',
   styleUrl: './leads-add.css',
 })
-export class LeadsAdd implements OnInit {
+export class LeadsAdd implements OnInit, OnDestroy {
   addLeadForm: FormGroup;
   private leadsFacadeService = inject(LeadsFacadeService);
   private toastService = inject(ToastService);
@@ -47,6 +48,7 @@ export class LeadsAdd implements OnInit {
   private destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
   private translate = inject(TranslateService);
+  languageService = inject(LanguageService);
 
   isSubmitting = signal<boolean>(false);
   visible = signal<boolean>(false);
@@ -62,6 +64,41 @@ export class LeadsAdd implements OnInit {
   isImporting = signal<boolean>(false);
 
   userTypes = USER_TYPES;
+
+  // Responsive layout
+  private isMobile = signal<boolean>(false);
+  private isTablet = signal<boolean>(false);
+
+  // Computed properties for responsive design
+  formRowClass = computed(() => {
+    return this.isMobile() ? 'flex-column' : 'flex-row';
+  });
+
+  formGroupClass = computed(() => {
+    return this.isMobile() ? 'w-100 mb-3' : 'w-50';
+  });
+
+  buttonContainerClass = computed(() => {
+    return this.isMobile() ? 'flex-column' : 'flex-row';
+  });
+
+  buttonClass = computed(() => {
+    return this.isMobile() ? 'w-100 mb-2' : 'flex-grow-1';
+  });
+
+  textAlignmentClass = computed(() => {
+    return this.languageService.getTextAlignmentClass();
+  });
+
+  flexDirectionClass = computed(() => {
+    return this.languageService.getFlexDirectionClass();
+  });
+
+  getLabelAlignmentClass(): string {
+    return this.languageService.isRTL()
+      ? 'flex-row-reverse justify-content-end'
+      : 'flex-row justify-content-start';
+  }
 
   // Service filter state
   private serviceFilterSubject = new Subject<string>();
@@ -99,6 +136,8 @@ export class LeadsAdd implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initializeResponsiveLayout();
+
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       const id = params.get('id');
       if (id) {
@@ -125,6 +164,26 @@ export class LeadsAdd implements OnInit {
           this.getAllServices();
         }
       });
+  }
+
+  ngOnDestroy() {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.checkViewport.bind(this));
+    }
+    this.serviceFilterSubject.complete();
+  }
+
+  private initializeResponsiveLayout(): void {
+    if (typeof window !== 'undefined') {
+      this.checkViewport();
+      window.addEventListener('resize', this.checkViewport.bind(this));
+    }
+  }
+
+  private checkViewport(): void {
+    const width = window.innerWidth;
+    this.isMobile.set(width < 768);
+    this.isTablet.set(width >= 768 && width < 992);
   }
 
   private loadLeadData(leadId: string): void {
@@ -223,7 +282,6 @@ export class LeadsAdd implements OnInit {
   }
 
   onFilterServices(event: { filter: string }) {
-    // Emit to subject instead of calling directly - debounce will handle the delay
     this.serviceFilterSubject.next(event.filter || '');
   }
 
@@ -358,6 +416,11 @@ export class LeadsAdd implements OnInit {
       zipCode: this.translate.instant('LEADS.leads-add-page.zip-code'),
       status: this.translate.instant('LEADS.leads-add-page.status'),
       source: this.translate.instant('LEADS.leads-add-page.source'),
+      parentId: this.translate.instant('LEADS.leads-add-page.parent-id'),
+      workAt: this.translate.instant('LEADS.leads-add-page.work-at'),
+      currentCity: this.translate.instant('LEADS.leads-add-page.current-city'),
+      fromCity: this.translate.instant('LEADS.leads-add-page.from-city'),
+      notes: this.translate.instant('LEADS.leads-add-page.notes'),
     };
 
     return fieldLabels[fieldName] || fieldName;
@@ -380,14 +443,15 @@ export class LeadsAdd implements OnInit {
   }
 
   checkValidity(control: string) {
-    return this.addLeadForm.get(control)?.valid &&
-      !this.addLeadForm.get(control)?.errors?.['required']
+    const formControl = this.addLeadForm.get(control);
+    return formControl?.valid && !formControl?.errors?.['required']
       ? 'text-success'
       : 'text-danger';
   }
 
   checkErrors(control: string) {
-    return this.addLeadForm.get(control)?.errors && this.addLeadForm.get(control)?.touched;
+    const formControl = this.addLeadForm.get(control);
+    return formControl?.errors && formControl?.touched;
   }
 
   back() {
@@ -550,5 +614,21 @@ export class LeadsAdd implements OnInit {
 
   getPageTitle(): string {
     return this.isEditMode() ? 'Edit Lead' : 'Add Lead';
+  }
+
+  getMarginClass(side: 'start' | 'end' | 'top' | 'bottom', size: string = ''): string {
+    return this.languageService.getMarginClass(side, size);
+  }
+
+  getPaddingClass(side: 'start' | 'end' | 'top' | 'bottom', size: string = ''): string {
+    return this.languageService.getPaddingClass(side, size);
+  }
+
+  getFloatClass(side: 'start' | 'end'): string {
+    return this.languageService.getFloatClass(side);
+  }
+
+  getFlexDirection(reverse: boolean = false): string {
+    return this.languageService.getFlexDirectionClass(reverse);
   }
 }

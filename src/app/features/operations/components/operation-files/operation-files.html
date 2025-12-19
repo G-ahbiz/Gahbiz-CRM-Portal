@@ -186,4 +186,70 @@
     </div>
   </div>
   }
+
+  <!-- Status Update Section -->
+  @if (details() && !isUnderReview()) {
+  <div class="card">
+    <div class="card__header">
+      <h2 class="card__title">{{ 'OPERATIONS.operation-files.update-status' | translate }}</h2>
+    </div>
+    <div class="card__body">
+      <div class="current-status mb-3">
+        <strong>{{ 'OPERATIONS.operation-files.current-status' | translate }}:</strong>
+        <span class="badge ms-2" [class]="getStatusClass(details()?.status || '')">
+          {{ getStatusDisplay(details()?.status || '') }}
+        </span>
+      </div>
+
+      @if (!showStatusUpdateForm()) {
+      <button class="btn btn-primary d-flex align-items-center gap-2" (click)="toggleStatusUpdateForm()">
+        <i class="pi pi-sync"></i>
+        {{ 'OPERATIONS.operation-files.update-status-btn' | translate }}
+      </button>
+      } @else {
+      <div class="status-update-form">
+        <div class="mb-3">
+          <label class="form-label" for="status-select">
+            {{ 'OPERATIONS.operation-files.select-status' | translate }}
+          </label>
+          <select class="form-select" id="status-select" [value]="selectedStatus()"
+            (change)="selectedStatus.set($any($event.target).value)">
+            <option value="" disabled selected>
+              {{ 'OPERATIONS.operation-files.select-status-placeholder' | translate }}
+            </option>
+            @for (status of filteredStatuses(); track status) {
+            <option [value]="status">{{ getStatusDisplay(status) }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="status-note">
+            {{ 'OPERATIONS.operation-files.status-note' | translate }} *
+          </label>
+          <textarea class="form-control" id="status-note" rows="3" [value]="statusNote()"
+            (input)="statusNote.set($any($event.target).value)"
+            [placeholder]="'OPERATIONS.operation-files.status-note-placeholder' | translate"></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary flex-fill" type="button"
+            [disabled]="!selectedStatus() || !statusNote().trim() || updatingStatus()" (click)="updateStatus()">
+            @if (updatingStatus()) {
+            <i class="pi pi-spin pi-spinner me-2"></i>
+            {{ 'OPERATIONS.operation-files.updating-status' | translate }}
+            } @else {
+            {{ 'OPERATIONS.operation-files.submit-status-update' | translate }}
+            }
+          </button>
+          <button class="btn btn-secondary flex-fill" type="button" [disabled]="updatingStatus()"
+            (click)="toggleStatusUpdateForm()">
+            {{ 'OPERATIONS.operation-files.cancel' | translate }}
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
 </section>

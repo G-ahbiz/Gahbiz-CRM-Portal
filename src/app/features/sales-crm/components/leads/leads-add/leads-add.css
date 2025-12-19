@@ -1,3 +1,440 @@
-.error-message {
-  height: 1rem;
+/* Base container styling */
+.leads-add-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.leads-add-form {
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .leads-add-container {
+    padding: 1rem !important;
+  }
+
+  .leads-add-form {
+    padding: 1.5rem !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .fs-4 {
+    font-size: 1.25rem !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .leads-add-form {
+    padding: 2rem !important;
+  }
+}
+
+/* PrimeNG Multiselect styling */
+:host ::ng-deep .p-multiselect {
+  width: 100%;
+  min-height: 45px;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+:host ::ng-deep .p-multiselect:not(.p-disabled):hover {
+  border-color: #86b7fe;
+}
+
+:host ::ng-deep .p-multiselect:not(.p-disabled).p-focus {
+  border-color: #005db5;
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+  outline: none;
+}
+
+:host ::ng-deep .p-multiselect-panel {
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+:host ::ng-deep .p-multiselect-item {
+  padding: 0.5rem 1rem;
+}
+
+:host ::ng-deep .p-multiselect-item.p-highlight {
+  background-color: #005db5;
+  color: white;
+}
+
+/* Form groups should not stretch */
+.two-column-container .form-group {
+  flex: 1 1 0;
+  min-width: 0;
+  height: auto !important;
+  align-self: flex-start; /* Align to top */
+}
+
+/* RTL/LTR specific fixes */
+
+/* Back button arrow direction fix */
+[dir='rtl'] .back-btn i {
+  transform: rotate(180deg);
+}
+
+/* Form label styling for RTL/LTR */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+/* Asterisk positioning fix for RTL */
+[dir='rtl'] .form-label[class*='flex-row-reverse'] {
+  justify-content: flex-end;
+}
+
+[dir='rtl'] .form-label[class*='flex-row-reverse'] span:first-child {
+  order: 2;
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+
+[dir='rtl'] .form-label[class*='flex-row-reverse'] span:last-child {
+  order: 1;
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+[dir='ltr'] .form-label span:last-child {
+  margin-left: 0.5rem;
+}
+
+/* Form control styling */
+.form-control,
+.form-select {
+  transition: all 0.2s ease;
+  min-height: 45px;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  width: 100%;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #005db5;
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+  outline: none;
+}
+
+/* Date input styling */
+input[type='date'] {
+  position: relative;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* RTL form control text alignment */
+[dir='rtl'] .form-control,
+[dir='rtl'] .form-select,
+[dir='rtl'] textarea.form-control {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir='ltr'] .form-control,
+[dir='ltr'] .form-select,
+[dir='ltr'] textarea.form-control {
+  text-align: left;
+  direction: ltr;
+}
+
+/* Select dropdown styling for RTL */
+[dir='rtl'] select.form-select {
+  padding-right: 2.5rem;
+  padding-left: 0.75rem;
+  background-position: left 0.75rem center;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+[dir='rtl'] select.form-select option {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Textarea specific styling */
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+/* Button styling */
+.btn {
+  transition: all 0.2s ease;
+  min-height: 45px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #005db5;
+  border-color: #005db5;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #3a7bc8;
+  border-color: #3a7bc8;
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+  color: #005db5;
+  border-color: #005db5;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: #005db5;
+  border-color: #005db5;
+  color: white;
+}
+
+/* Responsive button adjustments */
+@media (max-width: 576px) {
+  .btn {
+    padding: 0.75rem 1rem;
+    width: 100%;
+  }
+
+  .buttons-container {
+    gap: 1rem !important;
+  }
+}
+
+/* Loading spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.2em;
+}
+
+/* Error message styling */
+.text-danger {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+  position: relative;
+}
+
+/* Back button specific styling */
+.back-btn {
+  border-radius: 50% !important;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #f8f9fa !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Section divider */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #e9ecef;
+  opacity: 0.7;
+  margin: 2rem 0;
+}
+
+/* Card-like shadow for desktop */
+@media (min-width: 768px) {
+  .leads-add-form {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Spacing utilities */
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Accessibility improvements */
+.form-control:disabled,
+.form-select:disabled {
+  background-color: #f8f9fa;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Focus styles for better accessibility */
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible {
+  outline: 2px solid #005db5;
+  outline-offset: 2px;
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+/* Success/Error states for form validation */
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+/* Title alignment fix for RTL */
+[dir='rtl'] h1 {
+  text-align: right;
+}
+
+[dir='ltr'] h1 {
+  text-align: left;
+}
+
+/* Form groups should not use flex: 1 on form controls */
+.form-group {
+  display: block;
+  width: 100%;
+}
+
+/* Ensure proper spacing on mobile */
+@media (max-width: 767.98px) {
+  .two-column-container .form-group {
+    width: 100%;
+  }
+}
+
+/* Add some breathing room for the form */
+.leads-add-form {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* FIXED: Additional utility to prevent height stretching */
+.height-auto {
+  height: auto !important;
+  min-height: auto !important;
+}
+
+/* Ensure form groups maintain their own height */
+.two-column-container .form-group > * {
+  display: block;
+  width: 100%;
+}
+
+/* Dialog styling */
+:host ::ng-deep .p-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-dialog-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+:host ::ng-deep .p-dialog-content {
+  padding: 1.5rem;
+}
+
+/* Import button specific */
+.import-btn-container {
+  margin-left: auto;
+}
+
+@media (max-width: 576px) {
+  .import-btn-container {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .leads-add-top {
+    flex-wrap: wrap;
+    gap: 1rem !important;
+  }
+}
+
+/* Section headers */
+h5 {
+  color: #2c3e50;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* Scrollbar styling for textarea */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Warning text for optional fields */
+.text-muted {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Required field indicator */
+.required-indicator {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Form section spacing */
+.w-100:not(:first-child) {
+  margin-top: 1.5rem;
 }

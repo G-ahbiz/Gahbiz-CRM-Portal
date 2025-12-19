@@ -10,10 +10,178 @@
   font-size: 0.75rem;
 }
 
-td, th {
+td,
+th {
   background-color: transparent !important;
+  text-align: center !important;
 }
 
 tr:hover {
   background-color: #0000ff20 !important;
+}
+
+/* Status Badges */
+.card-green {
+  background-color: #d1fae5 !important;
+}
+
+.card-yellow {
+  background-color: #fef3c7 !important;
+}
+
+.card-red {
+  background-color: #fee2e2 !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  th:nth-child(2),
+  td:nth-child(2),
+  th:nth-child(6),
+  td:nth-child(6),
+  th:nth-child(7),
+  td:nth-child(7),
+  th:nth-child(8),
+  td:nth-child(8) {
+    display: none;
+  }
+
+  .container-fluid {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .card {
+    border: none !important;
+  }
+
+  /* Mobile action buttons in a single row */
+  .mobile-action-btns {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .mobile-action-btns .btn {
+    flex: 1;
+    min-width: 70px;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.75rem;
+    padding: 0.5rem 0.25rem !important;
+  }
+
+  .mobile-action-btns .btn i {
+    font-size: 0.875rem;
+    margin-right: 0.25rem;
+  }
+
+  /* Hide text on very small screens, show only icons */
+  @media (max-width: 400px) {
+    .mobile-action-btns .btn span:not(.ms-1) {
+      display: none;
+    }
+
+    .mobile-action-btns .btn i {
+      margin-right: 0;
+    }
+
+    .mobile-action-btns .btn {
+      min-width: 50px;
+      max-width: 70px;
+      padding: 0.5rem !important;
+    }
+  }
+
+  /* For screens between 400px and 576px */
+  @media (min-width: 401px) and (max-width: 576px) {
+    .mobile-action-btns .btn span.d-sm-inline {
+      display: inline !important;
+      font-size: 0.7rem;
+    }
+  }
+
+  /* Hide the count on mobile if it makes button too wide */
+  .mobile-action-btns .btn span.ms-1 {
+    display: none;
+  }
+}
+
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+  th:nth-child(5),
+  td:nth-child(5) {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ensure table is responsive */
+:host ::ng-deep .p-datatable {
+  .p-datatable-table {
+    min-width: 100% !important;
+    overflow-x: auto;
+  }
+
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+
+    @media (max-width: 768px) {
+      max-width: 100px;
+      padding: 0.5rem !important;
+    }
+  }
+}
+
+/* Responsive header layout */
+.responsive-header {
+  display: block;
+}
+
+/* Desktop layout */
+.desktop-action-btns {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.desktop-search {
+  min-width: 250px;
+}
+
+/* Action buttons responsive */
+.action-buttons {
+  display: flex;
+  gap: 0.25rem;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
+
+/* For RTL support */
+:host-context([dir='rtl']) {
+  .mobile-action-btns .btn i {
+    margin-right: 0;
+    margin-left: 0.25rem;
+  }
+
+  @media (max-width: 400px) {
+    .mobile-action-btns .btn i {
+      margin-left: 0;
+    }
+  }
 }
