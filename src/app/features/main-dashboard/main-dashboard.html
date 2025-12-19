@@ -1,1 +1,39 @@
-<p>main-dashboard works!</p>
+<div class="welcome-container">
+  <div class="welcome-content">
+    <!-- Welcome Icon -->
+    <div class="welcome-icon-wrapper">
+      <div class="welcome-icon">
+        <i class="pi pi-chart-line"></i>
+      </div>
+    </div>
+
+    <!-- Welcome Text -->
+    <h1 class="welcome-title">Welcome to Gahbiz CRM</h1>
+    <p class="welcome-subtitle">
+      Your all-in-one platform for managing customers, leads, and business operations
+    </p>
+
+    <!-- Dashboard Button -->
+    <button class="dashboard-btn" (click)="handelDashboardClick()">
+      <i class="pi pi-external-link"></i>
+      <span>Open Analytics Dashboard</span>
+      <i class="pi pi-arrow-right arrow-icon"></i>
+    </button>
+
+    <!-- Quick Stats Cards -->
+    <div class="quick-info">
+      <div class="info-card">
+        <i class="pi pi-users"></i>
+        <span>Manage Customers</span>
+      </div>
+      <div class="info-card">
+        <i class="pi pi-chart-bar"></i>
+        <span>Track Leads</span>
+      </div>
+      <div class="info-card">
+        <i class="pi pi-file-edit"></i>
+        <span>Handle Invoices</span>
+      </div>
+    </div>
+  </div>
+</div>

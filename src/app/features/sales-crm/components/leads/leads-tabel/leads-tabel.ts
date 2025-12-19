@@ -7,6 +7,7 @@ import {
   signal,
   ViewChild,
   DestroyRef,
+  computed,
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -30,6 +31,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeadsDetails } from '../lead-detail-dialog/leads-details/leads-details';
 import { DialogModule } from 'primeng/dialog';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
+import {
+  LEAD_DELETE_ROLES,
+  LEAD_IMPORT_ROLES,
+  LEAD_ADD_ROLES,
+  hasPermission,
+} from '@shared/utils/role-permissions';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
@@ -92,6 +99,11 @@ export class LeadsTabel implements OnInit, OnDestroy {
   searchValue = signal<string>('');
   sortColumn = signal<string>('');
   sortDirection = signal<string>('ASC');
+
+  // Role-based permissions
+  canDeleteLead = computed(() => hasPermission(this.currentUser()?.type, LEAD_DELETE_ROLES));
+  canImportLeads = computed(() => hasPermission(this.currentUser()?.type, LEAD_IMPORT_ROLES));
+  canAddLead = computed(() => hasPermission(this.currentUser()?.type, LEAD_ADD_ROLES));
 
   // Selection state
   isAllSelected: boolean = false;

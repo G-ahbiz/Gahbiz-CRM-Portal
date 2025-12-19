@@ -1,6 +1,12 @@
 .header-container {
   height: 6.25rem;
   transition: all 0.3s ease-in-out;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .search-form-group {
