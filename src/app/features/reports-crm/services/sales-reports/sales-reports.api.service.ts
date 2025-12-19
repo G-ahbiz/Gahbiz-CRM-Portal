@@ -13,15 +13,14 @@ import { InvoiceReportItem } from '@features/reports-crm/interfaces/sales-report
 import { InvoiceReportParams } from '@features/reports-crm/interfaces/sales-report/invoice-report-params';
 import { Observable, catchError, throwError } from 'rxjs';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class SalesReportsApiService {
   private readonly http = inject(HttpClient);
+  private readonly errorFacade = inject(ErrorFacadeService);
   apiUrl = `${environment.baseApi}`;
 
-  constructor(private errorFacade: ErrorFacadeService) {}
   getPaymentsReport(
     filters: PaymentReportFilters
   ): Observable<ApiResponse<PagenatedResponse<GetPaymentsReportResponse>>> {
@@ -79,7 +78,7 @@ export class SalesReportsApiService {
     }
     const url = `${environment.baseApi}${environment.reports.exportPaymentsReport}`;
     return this.http.get<Blob>(url, { params, responseType: 'blob' as 'json' });
-
+  }
 
   getCustomerReport(
     params?: CustomerReportParams

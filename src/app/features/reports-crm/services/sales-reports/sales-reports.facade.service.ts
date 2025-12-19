@@ -1,10 +1,8 @@
-
 import { inject, Injectable } from '@angular/core';
 import { SalesReportsApiService } from './sales-reports.api.service';
 import { PaymentReportFilters } from '@features/reports-crm/interfaces/payment-report-filters';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { GetPaymentsReportResponse } from '@features/reports-crm/interfaces/get=payments-report-response';
-import { SalesReportsApiService } from './sales-reports.api.service';
 import { CustomerReportParams } from '@features/reports-crm/interfaces/sales-report/customer-report-params';
 import { InvoiceReportParams } from '@features/reports-crm/interfaces/sales-report/invoice-report-params';
 import { Observable, of, tap, catchError, finalize, BehaviorSubject, throwError } from 'rxjs';
@@ -16,13 +14,11 @@ import { ErrorFacadeService } from '@core/services/error.facade.service';
 export type CustomerReportResponse = ApiResponse<PagenatedResponse<CustomerReportItem>>;
 export type InvoiceReportResponse = ApiResponse<PagenatedResponse<InvoiceReportItem>>;
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class SalesReportsFacadeService {
   private readonly salesReportsApiService = inject(SalesReportsApiService);
-
 
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
@@ -50,9 +46,7 @@ export class SalesReportsFacadeService {
   invoiceError$ = this.invoiceErrorSubject.asObservable();
   invoiceReportCache$ = this.invoiceReportCacheSubject.asObservable();
 
-  constructor(
-    private errorFacade: ErrorFacadeService
-  ) {}
+  constructor(private errorFacade: ErrorFacadeService) {}
 
   // Customer Report Methods
   getCustomerReport(
@@ -211,7 +205,7 @@ export class SalesReportsFacadeService {
   getCurrentInvoiceReport(): InvoiceReportResponse | null {
     return this.invoiceReportCacheSubject.value;
   }
-   getPaymentsReport(
+  getPaymentsReport(
     filters: PaymentReportFilters
   ): Observable<ApiResponse<PagenatedResponse<GetPaymentsReportResponse>>> {
     return this.salesReportsApiService.getPaymentsReport(filters);
