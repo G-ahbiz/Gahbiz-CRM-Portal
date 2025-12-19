@@ -96,5 +96,9 @@ export const environment = {
   reports: {
     getPaymentsReport: '/Reports/payments',
     exportPaymentsReport: '/Reports/payments/export',
+    customerReport: '/Reports/customers',
+    invoicesReport: '/Reports/invoices',
+    customerExports: '/Reports/customers/export',
+    invoicesExports: '/Reports/invoices/export',
   },
 };

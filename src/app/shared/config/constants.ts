@@ -179,3 +179,21 @@ export const ORDER_STATUS_OPTION = [
   { value: 'Cancelled', label: 'ORDERS.order-details.cancelled' },
   { value: 'Refunded', label: 'ORDERS.order-details.refunded' },
 ];
+
+export const INVOICES_STATUS_OPTION = [
+  { label: 'INVOICES.status-option.all', value: '' },
+  { label: 'INVOICES.status-option.paid', value: 'Paid' },
+  { label: 'INVOICES.status-option.unpaid', value: 'Unpaid' },
+  { label: 'INVOICES.status-option.partiallyPaid', value: 'PartiallyPaid' },
+];
+
+export const INVOICES_PERIOD_OPTION = [
+  { label: 'INVOICES.period.AllTime', value: 'AllTime' },
+  { label: 'INVOICES.period.ThisMonth', value: 'ThisMonth' },
+  { label: 'INVOICES.period.LastMonth', value: 'LastMonth' },
+  { label: 'INVOICES.period.ThisYear', value: 'ThisYear' },
+  { label: 'INVOICES.period.LastYear', value: 'LastYear' },
+  { label: 'INVOICES.period.Last3Months', value: 'Last3Months' },
+  { label: 'INVOICES.period.Last6Months', value: 'Last6Months' },
+  { label: 'INVOICES.period.Last12Months', value: 'Last12Months' },
+];
