@@ -961,6 +961,44 @@
       "submit-rejection": "إرسال الرفض"
     }
   },
+  "PAYMENT_REPORTS": {
+    "title": "تقرير المدفوعات",
+    "export": "تصدير",
+    "search": "بحث...",
+    "from-date": "من تاريخ",
+    "to-date": "إلى تاريخ",
+    "no-data": "لم يتم العثور على بيانات مدفوعات",
+    "columns": {
+      "payment-id": "رقم الدفعة",
+      "invoice-id": "رقم الفاتورة",
+      "payment-date": "تاريخ الدفع",
+      "customer-name": "اسم العميل",
+      "payment-mode": "طريقة الدفع",
+      "transaction-id": "رقم المعاملة",
+      "note": "ملاحظة",
+      "amount": "المبلغ"
+    },
+    "periods": {
+      "all-time": "كل الوقت",
+      "this-month": "هذا الشهر",
+      "last-month": "الشهر الماضي",
+      "this-year": "هذه السنة",
+      "last-year": "السنة الماضية",
+      "last-3-months": "آخر 3 أشهر",
+      "last-6-months": "آخر 6 أشهر",
+      "last-12-months": "آخر 12 شهر",
+      "custom": "فترة مخصصة"
+    },
+    "payment-methods": {
+      "all": "كل طرق الدفع",
+      "cash-on-delivery": "الدفع عند الاستلام",
+      "bank-transfer": "تحويل بنكي",
+      "credit-card": "بطاقة ائتمان",
+      "paypal": "باي بال",
+      "cashondelivery": "الدفع عند الاستلام",
+      "banktransfer": "تحويل بنكي",
+      "creditcard": "بطاقة ائتمان"
+    }
   "REPORTS": {
     "customer-report": "تقرير العملاء",
     "customer-summary": "تقرير ملخص العملاء",

@@ -961,6 +961,44 @@
       "submit-rejection": "Enviar Rechazo"
     }
   },
+  "PAYMENT_REPORTS": {
+    "title": "Reporte de Pagos",
+    "export": "Exportar",
+    "search": "Buscar...",
+    "from-date": "Desde Fecha",
+    "to-date": "Hasta Fecha",
+    "no-data": "No se encontraron datos de pago",
+    "columns": {
+      "payment-id": "ID de Pago",
+      "invoice-id": "ID de Factura",
+      "payment-date": "Fecha de Pago",
+      "customer-name": "Nombre del Cliente",
+      "payment-mode": "Método de Pago",
+      "transaction-id": "ID de Transacción",
+      "note": "Nota",
+      "amount": "Monto"
+    },
+    "periods": {
+      "all-time": "Todo el Tiempo",
+      "this-month": "Este Mes",
+      "last-month": "Mes Pasado",
+      "this-year": "Este Año",
+      "last-year": "Año Pasado",
+      "last-3-months": "Últimos 3 Meses",
+      "last-6-months": "Últimos 6 Meses",
+      "last-12-months": "Últimos 12 Meses",
+      "custom": "Período Personalizado"
+    },
+    "payment-methods": {
+      "all": "Todos los Métodos de Pago",
+      "cash-on-delivery": "Contra Entrega",
+      "bank-transfer": "Transferencia Bancaria",
+      "credit-card": "Tarjeta de Crédito",
+      "paypal": "PayPal",
+      "cashondelivery": "Contra Entrega",
+      "banktransfer": "Transferencia Bancaria",
+      "creditcard": "Tarjeta de Crédito"
+    }
   "REPORTS": {
     "customer-report": "Reporte de Clientes",
     "customer-summary": "Reporte Resumen de Clientes",
