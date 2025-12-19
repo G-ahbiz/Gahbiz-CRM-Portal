@@ -15,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomersFacadeService } from '../../services/customers-facade.service';
 import { GetCustomersResponse } from '../../interfaces/get-customers-response';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { ToastService } from '@core/services/toast.service';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +31,7 @@ import { ConfirmationService } from 'primeng/api';
 import { AuthService } from '@core/services/auth.service';
 import { CUSTOMER_DELETE_ROLES, hasPermission } from '@shared/utils/role-permissions';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
+import { Subject } from 'rxjs';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
@@ -64,6 +65,10 @@ export class CustomerTabel implements OnInit {
   // Sorting state
   sortColumn = signal<string>('');
   sortDirection = signal<'ASC' | 'DESC'>('ASC');
+
+  // Search debouncer
+  private searchSubject = new Subject<string>();
+  private searchValue = signal<string>('');
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(ToastService);
@@ -113,19 +118,27 @@ export class CustomerTabel implements OnInit {
     this.screenWidth = window.innerWidth;
   }
 
-  private searchTimeout: any;
+  setupSearchSubscription(): void {
+    this.searchSubject
+      .pipe(debounceTime(500), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((searchValue) => {
+        this.searchValue.set(searchValue);
+        this.pageNumber = 1;
+        this.loadCustomersDataBySearch();
+      });
+  }
+
+  /**
+   * Handle search input changes
+   */
   onSearchChange(value: string): void {
-    clearTimeout(this.searchTimeout);
-    this.searchTimeout = setTimeout(() => {
-      this.search = value.toLowerCase().trim();
-      this.pageNumber = 1;
-      this.loadCustomersData();
-    }, 300);
+    this.searchSubject.next(value.trim());
   }
 
   constructor(private readonly customersFacade: CustomersFacadeService, private router: Router) {}
 
   ngOnInit(): void {
+    this.setupSearchSubscription();
     this.loadCustomersData();
   }
 
@@ -153,6 +166,38 @@ export class CustomerTabel implements OnInit {
               ...customer,
               selected: this.selectedCustomerIds().has(customer.id),
             }))
+          );
+          this.totalRecords = response.totalCount;
+          this.updateSelectAllState();
+        },
+        error: (err) => {
+          console.error('Error loading customers', err);
+          this.errorFacade.showError(err);
+        },
+      });
+  }
+
+  private loadCustomersDataBySearch(): void {
+    this.loading.set(true);
+    this.customersFacade
+      .getAllCustomers({
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        sortColumn: this.sortColumn() || undefined,
+        sortDirection: this.sortColumn() ? this.sortDirection() : undefined,
+        search: this.searchValue(),
+      })
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.loading.set(false))
+      )
+      .subscribe({
+        next: (response) => {
+          this.customersTabelData.set(
+            response.items.map((customer) => ({
+              ...customer,
+              selected: this.selectedCustomerIds().has(customer.id),
+            })) || []
           );
           this.totalRecords = response.totalCount;
           this.updateSelectAllState();

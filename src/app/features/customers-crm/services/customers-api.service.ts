@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { ApiResponse } from '@core/interfaces/api-response';
@@ -27,15 +27,26 @@ export class CustomersApiService {
     filters: GetCustomersFilters
   ): Observable<PagenatedResponse<GetCustomersResponse>> {
     const url = `${this.baseUrl}${environment.customers.getAllCustomers}`;
-    return this.http.get<PagenatedResponse<GetCustomersResponse>>(url, {
-      params: {
-        pageNumber: filters.pageNumber ?? '',
-        pageSize: filters.pageSize ?? '',
-        sortColumn: filters.sortColumn ?? '',
-        sortDirection: filters.sortDirection ?? '',
-        days: filters.days ?? '',
-      },
-    });
+    let params = new HttpParams();
+    if (filters.pageNumber) {
+      params = params.set('pageNumber', filters.pageNumber.toString());
+    }
+    if (filters.pageSize) {
+      params = params.set('pageSize', filters.pageSize.toString());
+    }
+    if (filters.sortColumn) {
+      params = params.set('sortColumn', filters.sortColumn);
+    }
+    if (filters.sortDirection) {
+      params = params.set('sortDirection', filters.sortDirection);
+    }
+    if (filters.days) {
+      params = params.set('days', filters.days.toString());
+    }
+    if (filters.search) {
+      params = params.set('search', filters.search);
+    }
+    return this.http.get<PagenatedResponse<GetCustomersResponse>>(url, { params });
   }
 
   getCustomerDetails(
@@ -49,6 +60,21 @@ export class CustomersApiService {
         customerName: customerName ?? '',
       },
     });
+  }
+
+  getCustomer(
+    id?: string,
+    customerName?: string
+  ): Observable<ApiResponse<CustomerDetailsResponse>> {
+    const url = `${this.baseUrl}${environment.customers.getCustomer}`;
+    let params = new HttpParams();
+    if (id) {
+      params = params.set('id', id);
+    }
+    if (customerName) {
+      params = params.set('customerName', customerName);
+    }
+    return this.http.get<ApiResponse<CustomerDetailsResponse>>(url, { params });
   }
 
   deleteCustomer(id: string): Observable<ApiResponse<string>> {

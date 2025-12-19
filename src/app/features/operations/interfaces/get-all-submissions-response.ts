@@ -8,7 +8,8 @@ export type SubmissionStatus =
   | 'InProgress'
   | 'Verified'
   | 'Completed'
-  | 'Cancelled';
+  | 'Cancelled'
+  | 'Rejected';
 
 export interface ServiceSubmission {
   submissionId: string;

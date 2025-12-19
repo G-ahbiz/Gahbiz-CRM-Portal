@@ -148,9 +148,9 @@
               <p-sortIcon field="status" />
             </div>
           </th>
-          <th class="d-flex justify-content-center align-items-center gap-2">
+          <!-- <th class="d-flex justify-content-center align-items-center gap-2">
             {{ 'OPERATIONS.actions' | translate }}
-          </th>
+          </th> -->
         </tr>
       </ng-template>
       <ng-template #body let-submission let-rowIndex="rowIndex">
@@ -207,22 +207,22 @@
               {{ submission.status }}
             </span>
           </td>
-          <td class="d-flex justify-content-center align-items-center gap-2">
+          <!-- <td class="d-flex justify-content-center align-items-center gap-2">
             <button
-              class="btn btn-sm"
+              class="btn btn-sm p-1"
               (click)="viewSubmission(submission.submissionId); $event.stopPropagation()"
               [title]="'COMMON.VIEW' | translate"
             >
-              <img src="assets/images/shared/eye.svg" alt="" class="" />
+              <i class="pi pi-eye"></i>
             </button>
             <button
-              class="btn btn-sm"
+              class="btn btn-sm p-1"
               (click)="editSubmission(submission.submissionId); $event.stopPropagation()"
               [title]="'COMMON.EDIT' | translate"
             >
               <i class="pi pi-pencil"></i>
             </button>
-          </td>
+          </td> -->
         </tr>
       </ng-template>
       <ng-template #emptymessage>
