@@ -83,6 +83,7 @@ export const environment = {
       `/ServiceSubmissions/accept-files/${serviceSubmissionId}`,
     rejectSubmission: (serviceSubmissionId: string) =>
       `/ServiceSubmissions/${serviceSubmissionId}/reject`,
+    updateStatus: (clientServiceId: string) => `/ServiceSubmissions/${clientServiceId}/status`,
   },
   salesAgents: {
     getSalesAgents: '/SalesManagement/agentsList',

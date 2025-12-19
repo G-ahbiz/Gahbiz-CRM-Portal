@@ -207,3 +207,24 @@
   padding: 0;
 }
 
+.btn-secondary{
+  border: 1px solid #005db5;
+  background: #fff;
+  color: #005db5;
+}
+
+.btn-secondary:hover {
+  background-color: #005db5;
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: #005db5;
+  border-color: #005db5;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #3a7bc8;
+  border-color: #3a7bc8;
+}

@@ -15,7 +15,7 @@ import { OperationsFacadeService } from '../../services/operations.facade.servic
 import { GetSubmissionDetails } from '../../interfaces/get-submission-details';
 import { ServiceFileGroup } from '../../interfaces/service-file';
 import { ToastService } from '@core/services/toast.service';
-import { ROUTES } from '@shared/config/constants';
+import { ClientServiceStatus, ROUTES } from '@shared/config/constants';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -32,6 +32,7 @@ export class OperationFiles {
   private readonly toastService = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+
   // Signals
   private readonly paramMapSignal = toSignal(this.route.paramMap, {
     initialValue: this.route.snapshot.paramMap,
@@ -50,6 +51,32 @@ export class OperationFiles {
 
   readonly serviceFiles = computed<ServiceFileGroup[]>(() => this.details()?.serviceFiles ?? []);
 
+  // Status update related signals
+  readonly showStatusUpdateForm = signal(false);
+  readonly updatingStatus = signal(false);
+  readonly selectedStatus = signal<ClientServiceStatus | null>(null);
+  readonly statusNote = signal('');
+
+  // Available statuses for dropdown
+  readonly availableStatuses = [
+    ClientServiceStatus.Created,
+    ClientServiceStatus.Submitted,
+    ClientServiceStatus.UnderReview,
+    ClientServiceStatus.PendingClientAction,
+    ClientServiceStatus.InProgress,
+    ClientServiceStatus.AwaitingExternalResponse,
+    ClientServiceStatus.Verified,
+    ClientServiceStatus.Completed,
+    ClientServiceStatus.Cancelled,
+    ClientServiceStatus.Rejected,
+  ];
+
+  // Filter out current status from available options
+  readonly filteredStatuses = computed(() => {
+    const currentStatus = this.details()?.status;
+    return this.availableStatuses.filter((status) => status !== currentStatus);
+  });
+
   readonly parsedUserInfo = computed<Record<string, unknown>>(() => {
     const detailsData = this.details();
     const raw = detailsData?.jsonData;
@@ -60,15 +87,11 @@ export class OperationFiles {
     try {
       let cleanedRaw = raw.trim();
 
-      // Check if the raw value includes the property name (e.g., "jsonData_PlainText": "{...}")
-      // If so, extract just the value part
       if (cleanedRaw.includes('"jsonData_PlainText":') || cleanedRaw.includes('"jsonData":')) {
-        // Parse the entire string as JSON to get the object
         const tempObj = JSON.parse(`{${cleanedRaw}}`);
         cleanedRaw = tempObj.jsonData_PlainText || tempObj.jsonData || '';
       }
 
-      // Now extract just the JSON object part
       const firstBrace = cleanedRaw.indexOf('{');
       const lastBrace = cleanedRaw.lastIndexOf('}');
 
@@ -78,7 +101,6 @@ export class OperationFiles {
 
       const parsed = JSON.parse(cleanedRaw);
 
-      // Handle double-encoded JSON strings
       if (typeof parsed === 'string') {
         let innerCleaned = parsed.trim();
         const innerFirstBrace = innerCleaned.indexOf('{');
@@ -153,15 +175,11 @@ export class OperationFiles {
       return;
     }
 
-    // Check if already added
     if (this.hasAddedRequest(serviceFileId)) {
       return;
     }
 
-    // Add to pending requests
     this.pendingRequests.update((prev) => [...prev, { serviceFileId, comment }]);
-
-    // Close the edit form
     this.activeEditId.set(null);
   }
 
@@ -255,6 +273,80 @@ export class OperationFiles {
           this.toastService.error(error.error?.message ?? 'Failed to reject submission');
         },
       });
+  }
+
+  // New method: Toggle status update form
+  toggleStatusUpdateForm(): void {
+    this.showStatusUpdateForm.update((current) => !current);
+    if (!this.showStatusUpdateForm()) {
+      this.selectedStatus.set(null);
+      this.statusNote.set('');
+    }
+  }
+
+  // New method: Update status
+  updateStatus(): void {
+    const submissionId = this.submissionId();
+    const status = this.selectedStatus();
+    const note = this.statusNote().trim();
+
+    if (!submissionId || !status || !note) {
+      this.toastService.error('Please select a status and enter a note');
+      return;
+    }
+
+    this.updatingStatus.set(true);
+    this.operationsFacadeService
+      .updateStatus(submissionId, status, note)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.toastService.success(response.message ?? 'Status updated successfully');
+          this.updatingStatus.set(false);
+          this.showStatusUpdateForm.set(false);
+          this.selectedStatus.set(null);
+          this.statusNote.set('');
+
+          // Refresh the current submission details
+          this.fetchSubmission(submissionId);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.updatingStatus.set(false);
+          this.toastService.error(error.error?.message ?? 'Failed to update status');
+        },
+      });
+  }
+
+  // Helper to get status display name (optional)
+  getStatusDisplay(status: string): string {
+    return status.replace(/([A-Z])/g, ' $1').trim();
+  }
+
+  // Helper to get status CSS class
+  getStatusClass(status: string): string {
+    switch (status) {
+      case ClientServiceStatus.Created:
+        return 'bg-info';
+      case ClientServiceStatus.Submitted:
+        return 'bg-primary';
+      case ClientServiceStatus.UnderReview:
+        return 'bg-warning';
+      case ClientServiceStatus.PendingClientAction:
+        return 'bg-secondary';
+      case ClientServiceStatus.InProgress:
+        return 'bg-info text-dark'; // Different text color for distinction
+      case ClientServiceStatus.AwaitingExternalResponse:
+        return 'bg-warning text-dark'; // Different text color for distinction
+      case ClientServiceStatus.Verified:
+        return 'bg-success';
+      case ClientServiceStatus.Completed:
+        return 'bg-success text-light'; // Slight variation
+      case ClientServiceStatus.Cancelled:
+      case ClientServiceStatus.Rejected:
+        return 'bg-danger';
+      default:
+        return 'bg-secondary';
+    }
   }
 
   private fetchSubmission(id: string): void {

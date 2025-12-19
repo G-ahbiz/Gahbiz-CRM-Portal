@@ -999,7 +999,18 @@
       "reject-submission-error": "Failed to reject submission",
       "rejection-reason": "Rejection Reason",
       "rejection-reason-placeholder": "Enter reason for rejection",
-      "submit-rejection": "Submit Rejection"
+      "submit-rejection": "Submit Rejection",
+      "update-status": "Update Status",
+      "current-status": "Current Status",
+      "update-status-btn": "Update Status",
+      "select-status": "Select New Status",
+      "select-status-placeholder": "Choose a status...",
+      "status-note": "Status Note",
+      "status-note-placeholder": "Enter a note describing the status change...",
+      "submit-status-update": "Update Status",
+      "updating-status": "Updating Status...",
+      "status-updated": "Status updated successfully",
+      "status-update-failed": "Failed to update status"
     }
   },
   "PAYMENT_REPORTS": {

@@ -197,3 +197,16 @@ export const INVOICES_PERIOD_OPTION = [
   { label: 'INVOICES.period.Last6Months', value: 'Last6Months' },
   { label: 'INVOICES.period.Last12Months', value: 'Last12Months' },
 ];
+
+export enum ClientServiceStatus {
+  Created = 'Created',
+  Submitted = 'Submitted',
+  UnderReview = 'UnderReview',
+  PendingClientAction = 'PendingClientAction',
+  InProgress = 'InProgress',
+  AwaitingExternalResponse = 'AwaitingExternalResponse',
+  Verified = 'Verified',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled',
+  Rejected = 'Rejected',
+}

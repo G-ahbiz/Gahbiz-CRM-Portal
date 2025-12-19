@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { GetSubmissionsFilters } from '../interfaces/get-submissions-filters';
 import { GetSubmissionDetails } from '../interfaces/get-submission-details';
 import { SubmissionsStatistics } from '../interfaces/submissions-statistics';
+import { ClientServiceStatus } from '@shared/config/constants';
+import { UpdateStatusResponse } from '../interfaces/update-status-response';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +41,13 @@ export class OperationsFacadeService {
 
   getSubmissionsStatistics(): Observable<ApiResponse<SubmissionsStatistics>> {
     return this.operationsApiService.getSubmissionsStatistics();
+  }
+
+  updateStatus(
+    clientServiceId: string,
+    status: ClientServiceStatus,
+    note: string
+  ): Observable<ApiResponse<UpdateStatusResponse>> {
+    return this.operationsApiService.updateStatus(clientServiceId, status, note);
   }
 }
