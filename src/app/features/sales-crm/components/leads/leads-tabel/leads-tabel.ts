@@ -8,7 +8,7 @@ import {
   ViewChild,
   DestroyRef,
   HostListener,
-  computed
+  computed,
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
@@ -89,6 +89,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
   pageNumber: number = 1;
   pageSize: number = 10;
   totalRecords: number = 0;
+  totalPages: number = 0;
 
   // Sorting state
   sortColumn = signal<string>('');
@@ -137,24 +138,10 @@ export class LeadsTabel implements OnInit, OnDestroy {
     return this.screenWidth < 768 ? [5, 10] : [5, 10, 20, 50];
   }
 
-  currentUser = signal<User | null>(null);
-  searchValue = signal<string>('');
-  sortColumn = signal<string>('');
-  sortDirection = signal<string>('ASC');
-
   // Role-based permissions
   canDeleteLead = computed(() => hasPermission(this.currentUser()?.type, LEAD_DELETE_ROLES));
   canImportLeads = computed(() => hasPermission(this.currentUser()?.type, LEAD_IMPORT_ROLES));
   canAddLead = computed(() => hasPermission(this.currentUser()?.type, LEAD_ADD_ROLES));
-
-  // Selection state
-  isAllSelected: boolean = false;
-
-  // Pagination state
-  totalRecords: number = 0;
-  pageNumber: number = 1;
-  pageSize: number = 10;
-  totalPages: number = 0;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
