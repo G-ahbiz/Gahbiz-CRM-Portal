@@ -43,8 +43,8 @@ export class CustomersApiService {
     if (filters.days) {
       params = params.set('days', filters.days.toString());
     }
-    if (filters.search) {
-      params = params.set('search', filters.search);
+    if (filters.searchTerm) {
+      params = params.set('searchTerm', filters.searchTerm);
     }
     return this.http.get<PagenatedResponse<GetCustomersResponse>>(url, { params });
   }

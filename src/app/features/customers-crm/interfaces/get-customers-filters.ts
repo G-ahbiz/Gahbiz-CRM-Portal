@@ -4,5 +4,5 @@ export interface GetCustomersFilters {
   pageSize?: number;
   sortColumn?: string;
   sortDirection?: 'ASC' | 'DESC';
-  search?: string;
+  searchTerm?: string;
 }
