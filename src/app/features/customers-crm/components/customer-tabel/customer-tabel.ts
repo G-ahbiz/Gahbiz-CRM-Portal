@@ -124,7 +124,7 @@ export class CustomerTabel implements OnInit {
       .subscribe((searchValue) => {
         this.searchValue.set(searchValue);
         this.pageNumber = 1;
-        this.loadCustomersDataBySearch();
+        this.loadCustomersData();
       });
   }
 
@@ -153,6 +153,7 @@ export class CustomerTabel implements OnInit {
         pageSize: this.pageSize,
         sortColumn: this.sortColumn() || undefined,
         sortDirection: this.sortColumn() ? this.sortDirection() : undefined,
+        searchTerm: this.searchValue(),
       })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -185,7 +186,7 @@ export class CustomerTabel implements OnInit {
         pageSize: this.pageSize,
         sortColumn: this.sortColumn() || undefined,
         sortDirection: this.sortColumn() ? this.sortDirection() : undefined,
-        search: this.searchValue(),
+        searchTerm: this.searchValue(),
       })
       .pipe(
         takeUntilDestroyed(this.destroyRef),

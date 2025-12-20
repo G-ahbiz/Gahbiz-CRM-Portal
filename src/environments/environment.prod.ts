@@ -53,6 +53,7 @@ export const environment = {
     addInvoice: '/Invoices',
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
+    exportInvoice: '/Invoices/export-selected',
   },
   crmOrder: {
     getAllOrders: '/CRMOrders',
@@ -83,6 +84,7 @@ export const environment = {
       `/ServiceSubmissions/accept-files/${serviceSubmissionId}`,
     rejectSubmission: (serviceSubmissionId: string) =>
       `/ServiceSubmissions/${serviceSubmissionId}/reject`,
+    updateStatus: (clientServiceId: string) => `/ServiceSubmissions/${clientServiceId}/status`,
   },
   salesAgents: {
     getSalesAgents: '/SalesManagement/agentsList',
