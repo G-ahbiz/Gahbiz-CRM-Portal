@@ -116,6 +116,12 @@ export class LeadsTabel implements OnInit, OnDestroy {
   searchValue = signal<string>('');
   private searchSubject = new Subject<string>();
 
+  // Import dialog state
+  visible = signal<boolean>(false);
+  selectedFile = signal<File | null>(null);
+  selectedFileName = signal<string>('');
+  isImporting = signal<boolean>(false);
+
   // User and services
   userTypes = USER_TYPES;
   currentUser = signal<User | null>(null);
@@ -442,6 +448,77 @@ export class LeadsTabel implements OnInit, OnDestroy {
         console.error('Export error:', error);
       },
     });
+  }
+
+  // Import file selection handler
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.selectedFile.set(file);
+      this.selectedFileName.set(file.name);
+    }
+  }
+
+  // Import leads method
+  importLeads() {
+    const file = this.selectedFile();
+    if (!file) {
+      this.toast.error(this.translateService.instant('LEADS.import-dialog.select-file-error'));
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    ];
+
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
+      this.toast.error(this.translateService.instant('LEADS.import-dialog.invalid-file-type'));
+      return;
+    }
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('ExcelFile', file);
+
+    this.isImporting.set(true);
+
+    this.leadsFacadeService.importLeads(formData).subscribe({
+      next: (response) => {
+        this.isImporting.set(false);
+        if (response.succeeded) {
+          this.toast.success(
+            response.message || this.translateService.instant('LEADS.SUCCESS.IMPORTED')
+          );
+          this.closeDialog();
+          // Refresh the table after successful import
+          this.loadLeads();
+        } else {
+          this.toast.error(
+            response.message || this.translateService.instant('LEADS.ERRORS.IMPORT_FAILED')
+          );
+        }
+      },
+      error: (error) => {
+        this.isImporting.set(false);
+        this.toast.error(
+          error?.error?.message || this.translateService.instant('LEADS.ERRORS.IMPORT_FAILED')
+        );
+        console.error('Import error:', error);
+      },
+    });
+  }
+
+  // Dialog methods
+  showDialog() {
+    this.visible.set(true);
+  }
+
+  closeDialog() {
+    this.visible.set(false);
+    this.selectedFile.set(null);
+    this.selectedFileName.set('');
   }
 
   clearSelections() {
