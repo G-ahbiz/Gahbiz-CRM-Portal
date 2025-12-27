@@ -135,7 +135,7 @@ export class SalesAgentsDetails implements OnInit {
           if (response && response.succeeded) {
             this.agentStatistics.set(response.data);
             this.cardsData.set(this.mapStatisticsToCards(response.data));
-            this.updateChartsWithData(response.data);
+            //this.updateChartsWithData(response.data);
           } else {
             this.toast.error(response?.message || 'Error fetching agent statistics');
             this.cardsData.set(this.getFallbackCardsData());
@@ -191,7 +191,7 @@ export class SalesAgentsDetails implements OnInit {
     return Math.round(Math.abs(value) * 10) / 10;
   }
 
-  private updateChartsWithData(statistics: SalesAgentStatisticsOne) {
+  /*private updateChartsWithData(statistics: SalesAgentStatisticsOne) {
     // Update horizontal chart with conversion rate
     this.chartOptionsHorizontal.set({
       ...this.chartOptionsHorizontal(),
@@ -216,7 +216,7 @@ export class SalesAgentsDetails implements OnInit {
 
     // Optional: Update vertical chart with actual data if you have historical data
     // For now, we keep the dummy data
-  }
+  }*/
 
   private getFallbackCardsData(): LogCard[] {
     return [
