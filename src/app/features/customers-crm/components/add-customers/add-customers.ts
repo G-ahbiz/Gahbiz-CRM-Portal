@@ -108,7 +108,7 @@ export class AddCustomers implements OnInit, OnDestroy {
       fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(15)]],
-      ssn: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(14)]],
+      ssn: ['', [Validators.minLength(9), Validators.maxLength(14)]],
       gender: ['', [Validators.required]],
       country: [null, [Validators.required]],
       state: [null, [Validators.required]],

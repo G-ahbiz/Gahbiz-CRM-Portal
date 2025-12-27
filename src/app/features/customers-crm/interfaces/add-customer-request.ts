@@ -7,7 +7,7 @@ export interface AddCustomerRequest {
   State: string;
   PostalCode: string;
   Address: string;
-  SSN: string;
+  SSN?: string;
   DefaultLanguage: string;
   AssignedAgentId: string;
 }

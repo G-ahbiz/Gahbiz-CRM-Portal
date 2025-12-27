@@ -147,8 +147,6 @@
             <label for="ssn" class="form-label d-flex align-items-center "
               [class.flex-row-reverse]="languageService.isRTL()">
               <span>{{ 'CUSTOMERS-CRM.add-customer-page.ssn' | translate }}</span>
-              <span [class]="checkValidity('ssn')" [class.ms-2]="!languageService.isRTL()"
-                [class.me-2]="languageService.isRTL()">*</span>
             </label>
             <input type="text" name="ssn" id="ssn" class="form-control"
               [placeholder]="'CUSTOMERS-CRM.add-customer-page.ssn-placeholder' | translate" formControlName="ssn" />

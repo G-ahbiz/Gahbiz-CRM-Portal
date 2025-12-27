@@ -7,5 +7,5 @@ export interface UpdateCustomerRequest {
   state: string;
   postalCode: string;
   address: string;
-  ssn: string;
+  ssn?: string;
 }
