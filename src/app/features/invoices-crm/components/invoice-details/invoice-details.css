@@ -1,6 +1,4 @@
 .invoice-details-container {
-  height: calc(100vh - 100px) !important;
-
   &::-webkit-scrollbar {
     display: none;
   }

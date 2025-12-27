@@ -54,6 +54,7 @@ export const environment = {
     getInvoice: (id: string) => `/Invoices/${id}`,
     updateInvoice: (id: string) => `/Invoices/${id}`,
     exportInvoice: '/Invoices/export-selected',
+    downLoadInvoice: (id: string) => `/Invoices/download/${id}`,
   },
   crmOrder: {
     getAllOrders: '/CRMOrders',
@@ -95,7 +96,6 @@ export const environment = {
     getLeadsBySalesAgentId: (agentId: string) => `/leads/agent/${agentId}/leads`,
     getManagersDropdown: '/SalesManagement/managers',
   },
-
   reports: {
     getPaymentsReport: '/Reports/payments',
     exportPaymentsReport: '/Reports/payments/export',

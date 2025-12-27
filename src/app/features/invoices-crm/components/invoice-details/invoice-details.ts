@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs/operators';
 import { InvoiceFacadeService } from '../../services/invoice.facade.service';
 import { GetInvoiceetails } from '../../interfaces/get-invoice-details';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-invoice-details',
@@ -21,6 +22,7 @@ export class InvoiceDetails implements OnInit {
   // State signals
   invoice = signal<GetInvoiceetails | null>(null);
   loading = signal<boolean>(false);
+  downloadLoading = signal<boolean>(false);
   error = signal<string | null>(null);
 
   // Computed values for services totals
@@ -67,6 +69,66 @@ export class InvoiceDetails implements OnInit {
   onStatusChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     // handle status change
+  }
+
+  downloadInvoice(): void {
+    const invoice = this.invoice();
+    if (!invoice?.id) return;
+
+    this.downloadLoading.set(true);
+
+    this.invoiceFacade
+      .downloadInvoice(invoice.id)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.downloadLoading.set(false))
+      )
+      .subscribe({
+        next: (response: HttpResponse<Blob>) => {
+          // Handle the HttpResponse<Blob> response
+          this.handleDownloadResponse(response, invoice);
+        },
+        error: (err) => {
+          console.error('Error downloading invoice', err);
+          this.error.set('Failed to download invoice. Please try again.');
+        },
+      });
+  }
+
+  private handleDownloadResponse(response: HttpResponse<Blob>, invoice: GetInvoiceetails): void {
+    const blob = response.body;
+    if (!blob) {
+      this.error.set('No invoice data found');
+      return;
+    }
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+
+    // Try to get filename from content-disposition header
+    const contentDisposition = response.headers.get('content-disposition');
+    let filename = `Invoice_${invoice.invoiceNumber}.pdf`;
+
+    if (contentDisposition) {
+      // Handle different formats of content-disposition header
+      const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+      const matches = filenameRegex.exec(contentDisposition);
+      if (matches != null && matches[1]) {
+        filename = matches[1].replace(/['"]/g, '');
+
+        // Handle UTF-8 encoded filenames (filename*=UTF-8'' format)
+        if (filename.startsWith("UTF-8''")) {
+          filename = decodeURIComponent(filename.substring(7));
+        }
+      }
+    }
+
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   }
 
   goBack(): void {

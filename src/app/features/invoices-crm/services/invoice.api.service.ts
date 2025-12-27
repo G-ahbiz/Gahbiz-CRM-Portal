@@ -84,4 +84,12 @@ export class InvoiceApiService {
       }
     ) as Observable<HttpResponse<Blob>>;
   }
+
+  downloadInvoice(id: string): Observable<HttpResponse<Blob>> {
+    const url = `${this.baseUrl}${environment.invoices.downLoadInvoice(id)}`;
+    return this.http.get<Blob>(url, {
+      observe: 'response',
+      responseType: 'blob' as 'json',
+    }) as Observable<HttpResponse<Blob>>;
+  }
 }
