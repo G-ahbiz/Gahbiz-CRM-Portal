@@ -116,22 +116,6 @@
               }
               <span class="d-none d-sm-inline">{{ 'ORDERS.order-details.save-order' | translate }}</span>
             </button>
-
-            <button class="btn btn-outline-success btn-sm d-flex align-items-center gap-2 px-3"
-              (click)="downloadInvoice()" [disabled]="loading()">
-              @if (loading()) {
-              <span class="spinner-border spinner-border-sm"></span>
-              } @else {
-              <i class="pi pi-download"></i>
-              }
-              <span class="d-none d-sm-inline">{{ 'ORDERS.order-details.download' | translate }}</span>
-            </button>
-
-            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2 px-3"
-              (click)="printOrder()">
-              <i class="pi pi-print"></i>
-              <span class="d-none d-sm-inline">{{ 'ORDERS.order-details.print' | translate }}</span>
-            </button>
           </div>
         </div>
       </div>
