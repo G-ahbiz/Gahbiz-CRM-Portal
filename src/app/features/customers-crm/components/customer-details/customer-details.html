@@ -115,6 +115,7 @@
             </div>
           </div>
         </div>
+        @if (customer()?.ssn) {
         <div class="col-12 col-md-6">
           <div class="form-group h-100">
             <label class="form-label d-flex align-items-center gap-1 mb-2">
@@ -124,6 +125,7 @@
             <div class="form-value text-truncate">{{ customer()?.ssn }}</div>
           </div>
         </div>
+      }
       </div>
     </div>
 

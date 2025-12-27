@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ROUTES } from '@shared/config/constants';
 
 @Component({
   selector: 'app-unauthorized',
@@ -12,6 +13,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class UnauthorizedComponent {
   icon!: SafeHtml;
+
+  readonly ROUTES = ROUTES;
 
   constructor(private sanitizer: DomSanitizer) {
     this.icon = this.sanitizer.bypassSecurityTrustHtml(`

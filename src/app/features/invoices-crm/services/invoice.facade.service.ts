@@ -44,4 +44,8 @@ export class InvoiceFacadeService {
   exportInvoice(invoiceIds: string[]): Observable<HttpResponse<Blob>> {
     return this.invoiceServiceApi.exportInvoice(invoiceIds);
   }
+
+  downloadInvoice(invoiceId: string): Observable<HttpResponse<Blob>> {
+    return this.invoiceServiceApi.downloadInvoice(invoiceId);
+  }
 }

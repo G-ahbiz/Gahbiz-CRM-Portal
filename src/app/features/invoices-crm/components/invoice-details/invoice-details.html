@@ -1,14 +1,12 @@
 <div class="container-fluid p-0 m-0">
   <div
-    class="invoice-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 overflow-x-hidden overflow-y-auto"
-  >
+    class="invoice-details-container p-3 d-flex flex-column justify-content-start align-items-start gap-3 overflow-x-hidden overflow-y-auto">
     <!-- Invoice Details Top -->
     <div class="invoice-details-top w-100 d-flex justify-content-start align-items-center gap-3">
       <div class="invoice-details-back-btn-container">
         <button
           class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
-          (click)="goBack()"
-        >
+          (click)="goBack()">
           <i class="pi pi-chevron-left fs-875"></i>
         </button>
       </div>
@@ -31,27 +29,19 @@
 
     <!-- Invoice Details Content -->
     @if (invoice()) {
-    <div
-      class="invoice-details-content w-100 d-flex flex-column justify-content-start align-items-start gap-3 mt-5"
-    >
+    <div class="invoice-details-content w-100 d-flex flex-column justify-content-start align-items-start gap-3 mt-5">
       <!-- Invoice Details Top -->
-      <div
-        class="invoice-details-top-container d-flex justify-content-between align-items-start gap-3 w-100"
-      >
-        <div
-          class="invoice-id-container d-flex flex-column justify-content-center align-items-start gap-2"
-        >
+      <div class="invoice-details-top-container d-flex justify-content-between align-items-start gap-3 w-100">
+        <div class="invoice-id-container d-flex flex-column justify-content-center align-items-start gap-2">
           <div class="d-flex flex-row justify-content-center align-items-start gap-2">
             <!-- Invoice ID -->
             <h6 class="fs-6 fw-semibold">
               {{ 'INVOICES.invoice-details.invoice-id' | translate }} #{{
-                invoice()?.invoiceNumber
+              invoice()?.invoiceNumber
               }}
             </h6>
             <!-- Status -->
-            <p
-              class="m-0 p-0 fs-875 px-3 py-1 rounded-4 fw-bold"
-              [class]="
+            <p class="m-0 p-0 fs-875 px-3 py-1 rounded-4 fw-bold" [class]="
                 invoice()?.status === 'Paid'
                   ? 'card-green trend-up-clr'
                   : invoice()?.status === 'PartiallyPaid'
@@ -59,16 +49,15 @@
                   : invoice()?.status === 'Unpaid'
                   ? 'card-red trend-down-clr'
                   : 'text-muted-clr'
-              "
-            >
+              ">
               {{
-                invoice()?.status === 'Paid'
-                  ? ('INVOICES.invoice-details.paid' | translate)
-                  : invoice()?.status === 'PartiallyPaid'
-                  ? ('INVOICES.invoice-details.partially-paid' | translate)
-                  : invoice()?.status === 'Unpaid'
-                  ? ('INVOICES.invoice-details.unpaid' | translate)
-                  : invoice()?.status
+              invoice()?.status === 'Paid'
+              ? ('INVOICES.invoice-details.paid' | translate)
+              : invoice()?.status === 'PartiallyPaid'
+              ? ('INVOICES.invoice-details.partially-paid' | translate)
+              : invoice()?.status === 'Unpaid'
+              ? ('INVOICES.invoice-details.unpaid' | translate)
+              : invoice()?.status
               }}
             </p>
           </div>
@@ -86,10 +75,8 @@
           </p>
         </div>
         <!-- Invoice Actions Container -->
-        <div
-          class="invoice-actions-container d-flex justify-content-center align-items-center gap-3"
-          (change)="onStatusChange($event)"
-        >
+        <div class="invoice-actions-container d-flex justify-content-center align-items-center gap-3"
+          (change)="onStatusChange($event)">
           <!-- Status Select -->
           <!-- <select class="form-select" aria-label="Default select" id="statusSelect">
             <option selected disabled>
@@ -112,9 +99,14 @@
           <!-- Download Button -->
           <button
             class="btn btn-sm btn-primary primary-bg-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3"
-          >
+            (click)="downloadInvoice()" [disabled]="downloadLoading()">
+            @if (downloadLoading()) {
+            <i class="pi pi-spin pi-spinner me-2"></i>
+            } @else {
             <i class="pi pi-download"></i>
-            {{ 'INVOICES.invoice-details.download' | translate }}
+            }
+            {{ downloadLoading() ? ('INVOICES.invoice-details.downloading' | translate) :
+            ('INVOICES.invoice-details.download' | translate) }}
           </button>
           <!-- Print Button -->
           <!-- <button
@@ -126,45 +118,34 @@
       </div>
 
       <!-- Order Details Body -->
-      <div
-        class="order-details-body w-100 d-flex flex-column justify-content-start align-items-start gap-3 w-100"
-      >
+      <div class="order-details-body w-100 d-flex flex-column justify-content-start align-items-start gap-3 w-100">
         <div class="cards-container w-100">
           <!-- Cards Container Top -->
-          <div
-            class="cards-container-top d-flex flex-wrap justify-content-start align-items-start gap-3 w-100"
-          >
+          <div class="cards-container-top d-flex flex-wrap justify-content-start align-items-start gap-3 w-100">
             <!-- Customer Card -->
             <div class="card border-0">
               <div class="card-body d-flex justify-content-start align-items-start gap-3">
                 <!-- Card Icon -->
-                <div
-                  class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center"
-                >
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
                   <img src="assets/images/orders/cutomer.svg" alt="Customer Icon" />
                 </div>
                 <!-- Card Info -->
-                <div
-                  class="card-info d-flex flex-column justify-content-start align-items-start gap-3"
-                >
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
                   <h5 class="card-title m-0 fw-semibold">
                     {{ 'INVOICES.invoice-details.customer' | translate }}
                   </h5>
                   <p class="customer-name m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.name' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.name' | translate }}:
                     </span>
                     <span>{{ invoice()?.customerName }}</span>
                   </p>
                   <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.email' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.email' | translate }}:
                     </span>
                     <span>{{ invoice()?.customerEmail }}</span>
                   </p>
                   <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.phone' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.phone' | translate }}:
                     </span>
                     <span>{{ invoice()?.customerPhone }}</span>
                   </p>
@@ -176,33 +157,26 @@
             <div class="card border-0">
               <div class="card-body d-flex justify-content-start align-items-start gap-3">
                 <!-- Card Icon -->
-                <div
-                  class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center"
-                >
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
                   <img src="assets/images/invoices/money.svg" alt="Money Icon" />
                 </div>
                 <!-- Card Info -->
-                <div
-                  class="card-info d-flex flex-column justify-content-start align-items-start gap-3"
-                >
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
                   <h5 class="card-title m-0 fw-semibold">
                     {{ 'INVOICES.invoice-details.amount' | translate }}
                   </h5>
                   <p class="shipping-address m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.total' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.total' | translate }}:
                     </span>
                     <span class="fw-medium">$ {{ invoice()?.totalAmount | number : '1.2-2' }}</span>
                   </p>
                   <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.payment-received' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.payment-received' | translate }}:
                     </span>
                     <span class="fw-medium">$ {{ invoice()?.amountPaid | number : '1.2-2' }}</span>
                   </p>
                   <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.due' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.due' | translate }}:
                     </span>
                     <span class="fw-medium">$ {{ invoice()?.dueAmount | number : '1.2-2' }}</span>
                   </p>
@@ -214,33 +188,26 @@
             <div class="card border-0">
               <div class="card-body d-flex justify-content-start align-items-start gap-3">
                 <!-- Card Icon -->
-                <div
-                  class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center"
-                >
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
                   <img src="assets/images/invoices/delivery.svg" alt="Delivery Icon" />
                 </div>
                 <!-- Card Info -->
-                <div
-                  class="card-info d-flex flex-column justify-content-start align-items-start gap-3"
-                >
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
                   <h5 class="card-title m-0 fw-semibold">
                     {{ 'INVOICES.invoice-details.delivery' | translate }}
                   </h5>
                   <p class="customer-name m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.address' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.address' | translate }}:
                     </span>
                     <span>{{ invoice()?.deliveryAddress }}</span>
                   </p>
                   <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.state' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.state' | translate }}:
                     </span>
                     <span>{{ invoice()?.deliveryState }}</span>
                   </p>
                   <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.postal-code' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.postal-code' | translate }}:
                     </span>
                     <span>{{ invoice()?.deliveryPostalCode }}</span>
                   </p>
@@ -250,40 +217,31 @@
           </div>
 
           <!-- Order Details Bottom -->
-          <div
-            class="cards-container-bottom d-flex flex-wrap justify-content-start align-items-start gap-3 w-100 mt-4"
-          >
+          <div class="cards-container-bottom d-flex flex-wrap justify-content-start align-items-start gap-3 w-100 mt-4">
             <!-- Payment Info Card -->
             <div class="card border-0">
               <div class="card-body d-flex justify-content-start align-items-start gap-3">
                 <!-- Card Icon -->
-                <div
-                  class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center"
-                >
+                <div class="card-icon rounded-circle p-3 d-flex justify-content-center align-items-center">
                   <img src="assets/images/orders/payment.svg" alt="Payment Icon" />
                 </div>
                 <!-- Card Info -->
-                <div
-                  class="card-info d-flex flex-column justify-content-start align-items-start gap-3"
-                >
+                <div class="card-info d-flex flex-column justify-content-start align-items-start gap-3">
                   <h5 class="card-title m-0 fw-semibold">
                     {{ 'INVOICES.invoice-details.payment-info' | translate }}
                   </h5>
                   <p class="customer-name m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.payment-method' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.payment-method' | translate }}:
                     </span>
                     <span>{{ invoice()?.paymentMethod }}</span>
                   </p>
                   <p class="customer-email m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.business-name' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.business-name' | translate }}:
                     </span>
                     <span>{{ invoice()?.businessName }}</span>
                   </p>
                   <p class="customer-phone m-0 fw-medium fs-6">
-                    <span class="text-muted-clr"
-                      >{{ 'INVOICES.invoice-details.expiration-date' | translate }}:
+                    <span class="text-muted-clr">{{ 'INVOICES.invoice-details.expiration-date' | translate }}:
                     </span>
                     <span>{{ invoice()?.expirationDate | date : 'EE, MMM dd, yyyy' }}</span>
                   </p>
@@ -301,34 +259,19 @@
           <table class="table table-hover w-100 mt-3">
             <thead>
               <tr>
-                <th>
-                  <input type="checkbox" />
-                </th>
                 <th>{{ 'INVOICES.invoice-details.name' | translate }}</th>
                 <th>{{ 'INVOICES.invoice-details.price' | translate }}</th>
                 <th>{{ 'INVOICES.invoice-details.quantity' | translate }}</th>
                 <th>{{ 'INVOICES.invoice-details.total' | translate }}</th>
-                <th>{{ 'INVOICES.invoice-details.actions' | translate }}</th>
               </tr>
             </thead>
             <tbody>
               @for (service of invoice()?.services; track service.id) {
               <tr>
-                <td scope="col">
-                  <input type="checkbox" name="select-service" id="service-{{ service.id }}" />
-                </td>
                 <td scope="col">{{ service.name }}</td>
                 <td scope="col">$ {{ service.price | number : '1.2-2' }}</td>
                 <td scope="col">{{ service.quantity }}</td>
                 <td scope="col">$ {{ service.total | number : '1.2-2' }}</td>
-                <td>
-                  <button class="btn btn-sm bg-transparent border-0">
-                    <i class="pi pi-ellipsis-v"></i>
-                  </button>
-                  <button class="btn btn-sm bg-transparent border-0">
-                    <i class="pi pi-trash"></i>
-                  </button>
-                </td>
               </tr>
               }
               <tr>

@@ -439,6 +439,7 @@
     "invoice-details": {
       "title": "Detalles de la Factura",
       "change-status": "Cambiar Estado",
+      "downloading": "Descargando...",
       "invoice-id": "ID de Factura",
       "bill-date": "Fecha de Factura",
       "due-date": "Fecha de Vencimiento",

@@ -457,6 +457,7 @@
     "invoice-details": {
       "title": "Invoice Details",
       "change-status": "Change Status",
+      "downloading": "Downloading...",
       "invoice-id": "Invoice ID",
       "bill-date": "Bill Date",
       "due-date": "Due Date",
