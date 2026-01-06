@@ -21,6 +21,7 @@ export interface LeadDetails {
   city: string;
   state: string;
   county: string;
+  country: string;
   gender: string;
   workAt: string;
   parentId: string | null;

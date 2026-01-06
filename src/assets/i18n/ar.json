@@ -796,9 +796,11 @@
       "work-at-placeholder": "مكان العمل",
       "location-information": "معلومات الموقع",
       "city": "المدينة",
-      "city-placeholder": "المدينة",
+      "select-city": "اختر المدينة",
       "state": "الولاية",
-      "state-placeholder": "الولاية",
+      "select-state": "اختر الولاية",
+      "country": "الدولة",
+      "select-country": "اختر الدولة",
       "county": "المقاطعة",
       "county-placeholder": "المقاطعة",
       "zip-code": "الرمز البريدي",
@@ -889,6 +891,11 @@
       "PROVIDER": "مزود"
     },
     "VALIDATION": {
+      "REQUIRED": "{{field}} مطلوب",
+      "EMAIL": "{{field}} يجب ان يكون بريد إلكتروني صالح",
+      "MAX_LENGTH": "{{field}} يجب ان يكون اقل من {{max}} حرف",
+      "PHONE_PATTERN": "رقم الهاتف يجب ان يكون رقم مصري او امريكي او اسباني مع او بدون كود البلد",
+      "INVALID": "{{field}} خاطئة",
       "FORM_HAS_ERRORS": "يرجى إصلاح الأخطاء في النموذج قبل الإرسال.",
       "FIELDS_REQUIRED": "الحقول المميزة بعلامة * مطلوبة",
       "ACTIVITY_TYPE_REQUIRED": "نوع النشاط مطلوب",
@@ -918,6 +925,9 @@
       "NO_ACTIVITY_LOGS": "لا توجد سجلات نشاط متاحة لهذا العميل المحتمل"
     },
     "ERRORS": {
+      "FAILED_TO_LOAD_CITIES": "فشل تحميل المدن",
+      "FAILED_TO_LOAD_COUNTRIES": "فشل تحميل الدول",
+      "FAILED_TO_LOAD_STATES": "فشل تحميل الولايات",
       "FAILED_TO_LOAD_LEAD": "فشل تحميل تفاصيل العميل المحتمل. يرجى المحاولة مرة أخرى.",
       "LEAD_NOT_FOUND": "العميل المحتمل غير موجود أو تمت إزالته.",
       "FAILED_TO_LOAD_ACTIVITY_LOGS": "تعذر تحميل سجلات النشاط في الوقت الحالي.",

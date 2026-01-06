@@ -38,6 +38,7 @@ export const environment = {
   locations: {
     getAllCountries: '/countries/All/Countries',
     getAllStates: (countryId: string) => `/states/country/${countryId}`,
+    getAllCities: (stateId: string) => `/cities/state/${stateId}`,
   },
   customers: {
     addCustomer: '/Customers/Customer',
