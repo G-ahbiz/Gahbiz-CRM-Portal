@@ -107,7 +107,13 @@ export class AddCustomers implements OnInit, OnDestroy {
     this.addCustomerForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(15)]],
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^((\+20|0)?1[0125]\d{8}|(\+1)?[2-9]\d{9}|(\+34)?[679]\d{8})$/),
+        ],
+      ],
       ssn: ['', [Validators.minLength(9), Validators.maxLength(14)]],
       gender: ['', [Validators.required]],
       country: [null, [Validators.required]],
@@ -348,6 +354,12 @@ export class AddCustomers implements OnInit, OnDestroy {
   }
 
   save() {
+    // Trim phone value before validation
+    const phoneControl = this.addCustomerForm.get('phone');
+    if (phoneControl?.value) {
+      phoneControl.setValue(phoneControl.value.trim(), { emitEvent: false });
+    }
+
     this.loading.set(true);
     if (this.addCustomerForm.invalid) {
       Object.keys(this.addCustomerForm.controls).forEach((key) => {
@@ -563,6 +575,13 @@ export class AddCustomers implements OnInit, OnDestroy {
       return this.translateService.instant('VALIDATION.MAX_LENGTH', {
         field: fieldNameTranslated,
         max: errors['maxlength'].requiredLength,
+      });
+    }
+
+    // Add pattern error handling for phone field
+    if (errors['pattern'] && fieldName === 'phone') {
+      return this.translateService.instant('LEADS.VALIDATION.PHONE_PATTERN', {
+        field: fieldNameTranslated,
       });
     }
 

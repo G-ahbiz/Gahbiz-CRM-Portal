@@ -899,6 +899,12 @@
       "PROVIDER": "Provider"
     },
     "VALIDATION": {
+      "REQUIRED": "{field} is required.",
+      "EMAIL": "Please enter a valid email address.",
+      "MIN_LENGTH": "{field} must be at least {min} characters.",
+      "MAX_LENGTH": "{field} must not exceed {max} characters.",
+      "PHONE_PATTERN": "Phone number must be a valid Egyptian, US, or Spanish number, with or without country code.",
+      "INVALID": "{field} is invalid.",
       "FORM_HAS_ERRORS": "Please fix the errors in the form before submitting.",
       "FIELDS_REQUIRED": "Fields marked with * are required",
       "ACTIVITY_TYPE_REQUIRED": "Activity type is required",
