@@ -63,6 +63,7 @@ export const environment = {
     addOrderFromLead: '/CRMOrders/from-lead',
     importOrders: '/CRMOrders/import',
     updateOrderStatus: (id: string) => `/CRMOrders/${id}/status`,
+    ordersDropdown: '/CRMOrders/orders-dropdown',
   },
   statistics: {
     getOrderStatistics: '/Statistics/orders',

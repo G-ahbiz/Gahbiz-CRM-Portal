@@ -1,5 +1,4 @@
 export interface AddLeadRequest {
-  parentId?: string;
   firstName: string;
   lastName: string;
   eMail: string;
@@ -9,7 +8,14 @@ export interface AddLeadRequest {
   fromCity?: string;
   dob?: string;
   status?: 'New' | 'Contacted' | 'Qualified' | 'Converted' | 'Lost';
-  source?: 'FacebookAds' | 'GoogleAds' | 'Referral' | 'WebsiteForm' | 'TradeShow' | 'Manual' | 'Provider';
+  source?:
+    | 'FacebookAds'
+    | 'GoogleAds'
+    | 'Referral'
+    | 'WebsiteForm'
+    | 'TradeShow'
+    | 'Manual'
+    | 'Provider';
   servicesOfInterest?: string[];
   zipCode?: string;
   city?: string;

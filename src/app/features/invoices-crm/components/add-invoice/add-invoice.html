@@ -97,22 +97,34 @@
         <!-- Services Select Container -->
         <div class="form-group w-100">
           <label for="items">
-            {{ 'INVOICES.add-invoice-page.services-of-interest' | translate }}
+            {{ 'INVOICES.add-invoice-page.orders-of-interest' | translate }}
           </label>
-          <p-multiselect
-            [options]="services()"
+          <!-- Status Filter Dropdown -->
+          <p-select
+            [options]="orders()"
+            [placeholder]="'INVOICES.add-invoice-page.select-orders' | translate"
+            [showClear]="true"
+            optionLabel="title"
+            optionValue="id"
+            class="w-100"
+            formControlName="orderId"
+          ></p-select>
+          <!-- [filter]="true"
+            (onFilterChange)="onFilterOrders($event)" -->
+          <!-- <p-multiselect
+            [options]="orders()"
             formControlName="items"
             optionLabel="name"
             optionValue="id"
-            placeholder="{{ 'INVOICES.add-invoice-page.select-services' | translate }}"
+            placeholder="{{ 'INVOICES.add-invoice-page.select-orders' | translate }}"
             [maxSelectedLabels]="3"
             [filter]="true"
-            (onFilter)="onFilterServices($event)"
+            (onFilter)="onFilterOrders($event)"
             [showClear]="true"
             class="w-100"
-          />
+          /> -->
           <small class="text-muted">{{
-            'INVOICES.add-invoice-page.search-select-services' | translate
+            'INVOICES.add-invoice-page.search-select-orders' | translate
           }}</small>
         </div>
       </div>

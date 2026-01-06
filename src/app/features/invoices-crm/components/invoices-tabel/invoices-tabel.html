@@ -106,12 +106,14 @@
 
             <!-- Right Section: Add Invoice -->
             <div class="desktop-add-btn">
+              @if (canViewAddInvoice()) {
               <button
                 class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
                 [routerLink]="Routes.addInvoice"
               >
                 <span>{{ 'INVOICES.add-invoice' | translate }}</span>
               </button>
+              }
             </div>
           </div>
 

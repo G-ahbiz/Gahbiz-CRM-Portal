@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from '@core/guards/role.guard';
+import { CRM_HIGH_LEVEL_ROLES } from '@shared/config/constants';
 
 export const invoiceRoutes: Routes = [
   {
@@ -13,6 +15,8 @@ export const invoiceRoutes: Routes = [
   },
   {
     path: 'add-invoice',
+    canActivate: [roleGuard],
+    data: { roles: CRM_HIGH_LEVEL_ROLES },
     loadComponent: () => import('./components/add-invoice/add-invoice').then((m) => m.AddInvoice),
   },
   {

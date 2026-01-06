@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Router, RouterLink } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -29,11 +29,11 @@ import { HttpResponse } from '@angular/common/http';
 import { InvoiceFacadeService } from '../../services/invoice.facade.service';
 import { GetAllInvoicesResponse } from '../../interfaces/get-all-invoices-response';
 import { GetInvoicesFilters } from '../../interfaces/get-invoices-filters';
-import { ROUTES } from '@shared/config/constants';
-import { InvoicesStatistics } from '@features/invoices-crm/interfaces/statistics';
+import { CRM_HIGH_LEVEL_ROLES, ROUTES } from '@shared/config/constants';
 import { ToastService } from '@core/services/toast.service';
 import { LanguageService } from '@core/services/language.service';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
+import { AuthService } from '@core/services/auth.service';
 
 // Constants
 const DATE_FILTER_DAYS: Record<string, number> = {
@@ -77,6 +77,14 @@ export class InvoicesTabel implements OnInit {
   private readonly translate = inject(TranslateService);
   readonly languageService = inject(LanguageService);
   private readonly errorFacade = inject(ErrorFacadeService);
+  private authService = inject(AuthService);
+
+  // Current user signal from AuthService
+  private currentUser = toSignal(this.authService.currentUser$);
+  // User role computed signal
+  private userRole = computed(() => this.currentUser()?.type ?? '');
+
+  canViewAddInvoice = computed(() => this.hasRole(CRM_HIGH_LEVEL_ROLES));
 
   private searchSubject = new Subject<string>();
 
@@ -177,6 +185,14 @@ export class InvoicesTabel implements OnInit {
           this.errorFacade.showError(err);
         },
       });
+  }
+
+  /**
+   * Check if current user has any of the allowed roles
+   */
+  private hasRole(allowedRoles: string[]): boolean {
+    const role = this.userRole();
+    return allowedRoles.includes(role);
   }
 
   /**

@@ -21,7 +21,7 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         canActivate: [roleGuard],
-        data: { roles: ALL_CRM_ROLES },
+        data: { roles: [USER_TYPES.ADMIN] },
         loadComponent: () =>
           import('./features/main-dashboard/main-dashboard').then((m) => m.MainDashboard),
       },
@@ -75,7 +75,7 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'main/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'main/customers', pathMatch: 'full' },
   {
     path: 'unauthorized',
     loadComponent: () =>
