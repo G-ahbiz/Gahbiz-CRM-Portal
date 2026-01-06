@@ -10,6 +10,7 @@ import { OrderListItem } from '../interfaces/order-list-item';
 import { StatisticsResponse } from '../interfaces/statistics-response';
 import { CreateOrderRequest } from '../interfaces/create-order-request';
 import { UpdateStatusRequest } from '../interfaces/update-status-request';
+import { OrderDropdown } from '../interfaces/order-dropdown';
 
 @Injectable({
   providedIn: 'root',
@@ -49,6 +50,10 @@ export class OrdersFacadeService {
 
   getOrderById(id: string) {
     return this.ordersApiService.getOrderById(id);
+  }
+
+  getOrdersDropdown(): Observable<ApiResponse<OrderDropdown[]>> {
+    return this.ordersApiService.ordersDropdown();
   }
 
   /**

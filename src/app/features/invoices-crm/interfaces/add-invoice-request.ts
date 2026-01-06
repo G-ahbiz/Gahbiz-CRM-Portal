@@ -4,8 +4,5 @@ export interface AddInvoiceRequest {
   notes: string;
   assignedSalesAgentId: string;
   invoiceNumber: string;
-  items: {
-    serviceId: string;
-    quantity: number;
-  }[];
+  orderId: string;
 }

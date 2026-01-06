@@ -4,7 +4,6 @@ import {
   ReactiveFormsModule,
   FormsModule,
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
   ValidationErrors,
@@ -130,7 +129,6 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
       // Optional fields
       servicesOfInterest: [],
-      parentId: [''],
       ssn: ['', [Validators.pattern(REG_EXP.SSN_PATTERN)]],
       currentCity: ['', Validators.maxLength(100)],
       fromCity: ['', Validators.maxLength(100)],
@@ -354,7 +352,6 @@ export class LeadsAdd implements OnInit, OnDestroy {
       eMail: lead.email || '',
       phone: lead.phoneNumber || '',
       servicesOfInterest: serviceIds,
-      parentId: lead.parentId || '',
       ssn: lead.ssn || '',
       currentCity: lead.currentCity || '',
       fromCity: lead.fromCity || '',
@@ -625,7 +622,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
   loadAllServices() {
     this.leadsFacadeService
-      .getAllServices()
+      .getAllOrders()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
@@ -638,7 +635,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
   }
 
   getAllServices() {
-    this.leadsFacadeService.getAllServices().subscribe({
+    this.leadsFacadeService.getAllOrders().subscribe({
       next: (response) => {
         this.services.set(response.data.items);
       },
@@ -695,7 +692,6 @@ export class LeadsAdd implements OnInit, OnDestroy {
       zipCode: this.translate.instant('LEADS.leads-add-page.zip-code'),
       status: this.translate.instant('LEADS.leads-add-page.status'),
       source: this.translate.instant('LEADS.leads-add-page.source'),
-      parentId: this.translate.instant('LEADS.leads-add-page.parent-id'),
       workAt: this.translate.instant('LEADS.leads-add-page.work-at'),
       currentCity: this.translate.instant('LEADS.leads-add-page.current-city'),
       fromCity: this.translate.instant('LEADS.leads-add-page.from-city'),

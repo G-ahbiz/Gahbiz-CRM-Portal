@@ -114,7 +114,7 @@ export class LeadsFacadeService {
     return this.leadsService.importLeads(file);
   }
 
-  getAllServices(): Observable<ApiResponse<PaginatedServices>> {
+  getAllOrders(): Observable<ApiResponse<PaginatedServices>> {
     return this.leadsService.getAllServices();
   }
   searchServices(text: string): Observable<ApiResponse<ServiceDetails[]>> {

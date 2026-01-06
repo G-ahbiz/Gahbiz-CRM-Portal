@@ -1,26 +1,39 @@
 <div class="container-fluid p-0 m-0" [dir]="languageService.direction()">
-  <div class="leads-add-container p-3 d-flex flex-column justify-content-start align-items-start gap-3">
+  <div
+    class="leads-add-container p-3 d-flex flex-column justify-content-start align-items-start gap-3"
+  >
     <!-- Top Container -->
     <div class="leads-add-top w-100 d-flex justify-content-start align-items-center gap-3">
       <!-- Back Button -->
       <div class="leads-add-back-btn-container">
         <button
           class="back-btn btn btn-sm p-2 bg-white shadow border-0 d-flex justify-content-center align-items-center"
-          (click)="back()">
-          <i [class]="languageService.isRTL() ? 'pi pi-chevron-right fs-875' : 'pi pi-chevron-left fs-875'"></i>
+          (click)="back()"
+        >
+          <i
+            [class]="
+              languageService.isRTL() ? 'pi pi-chevron-right fs-875' : 'pi pi-chevron-left fs-875'
+            "
+          ></i>
         </button>
       </div>
       <!-- Title -->
       <div class="leads-add-title-container">
         <h1 class="mb-0 fs-4 fw-bold">
-          {{ (isEditMode() ? 'LEADS.leads-edit-page.title' : 'LEADS.leads-add-page.title') | translate }}
+          {{
+            (isEditMode() ? 'LEADS.leads-edit-page.title' : 'LEADS.leads-add-page.title')
+              | translate
+          }}
         </h1>
       </div>
       <!-- Import Button (only in add mode for admins/managers) -->
-      @if((!isEditMode()) && (currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER)){
+      @if((!isEditMode()) && (currentUser()?.type === userTypes.ADMIN || currentUser()?.type ===
+      userTypes.MANAGER)){
       <div class="import-btn-container ms-auto">
-        <button class="btn btn-sm btn-outline-primary px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-          (click)="showDialog()">
+        <button
+          class="btn btn-sm btn-outline-primary px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+          (click)="showDialog()"
+        >
           <i class="pi pi-upload fs-875"></i>
           {{ 'COMMON.IMPORT' | translate }}
         </button>
@@ -30,14 +43,26 @@
 
     <!-- Import Dialog (only show in add mode) -->
     @if(!isEditMode()) {
-    <p-dialog [header]="'LEADS.import-dialog.title' | translate" [modal]="true" [(visible)]="visible"
-      [style]="{ width: '30rem' }">
+    <p-dialog
+      [header]="'LEADS.import-dialog.title' | translate"
+      [modal]="true"
+      [(visible)]="visible"
+      [style]="{ width: '30rem' }"
+    >
       <div class="d-flex flex-column gap-3">
         <span class="text-secondary">{{ 'LEADS.import-dialog.description' | translate }}</span>
         <div class="form-group">
-          <label for="fileInput" class="form-label">{{ 'LEADS.import-dialog.select-file' | translate }}</label>
-          <input type="file" #fileInput id="fileInput" class="form-control" accept=".xlsx,.xls,.csv"
-            (change)="onFileSelected($event)" />
+          <label for="fileInput" class="form-label">{{
+            'LEADS.import-dialog.select-file' | translate
+          }}</label>
+          <input
+            type="file"
+            #fileInput
+            id="fileInput"
+            class="form-control"
+            accept=".xlsx,.xls,.csv"
+            (change)="onFileSelected($event)"
+          />
           <small class="text-muted">{{ 'LEADS.import-dialog.file-type-hint' | translate }}</small>
         </div>
         @if (selectedFileName()) {
@@ -48,16 +73,30 @@
         }
       </div>
       <div class="d-flex justify-content-end gap-2 mt-4">
-        <button type="button" class="btn btn-secondary" (click)="closeDialog()" [disabled]="isImporting()">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeDialog()"
+          [disabled]="isImporting()"
+        >
           {{ 'COMMON.CANCEL' | translate }}
         </button>
-        <button type="button" class="btn btn-primary" (click)="importLeads()"
-          [disabled]="!selectedFile() || isImporting()">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="importLeads()"
+          [disabled]="!selectedFile() || isImporting()"
+        >
           @if (!isImporting()) {
-          <span><i class="pi pi-upload me-2"></i>{{ 'LEADS.import-dialog.import-button' | translate }}</span>
+          <span
+            ><i class="pi pi-upload me-2"></i
+            >{{ 'LEADS.import-dialog.import-button' | translate }}</span
+          >
           } @else {
-          <span><i class="pi pi-spin pi-spinner me-2"></i>{{ 'LEADS.import-dialog.importing-button' | translate
-            }}</span>
+          <span
+            ><i class="pi pi-spin pi-spinner me-2"></i
+            >{{ 'LEADS.import-dialog.importing-button' | translate }}</span
+          >
           }
         </button>
       </div>
@@ -65,14 +104,15 @@
     }
 
     <!-- Form Container -->
-    <form [formGroup]="addLeadForm"
-      class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white rounded-3 shadow-sm">
-
+    <form
+      [formGroup]="addLeadForm"
+      class="leads-add-form w-100 d-flex flex-column justify-content-start align-items-start gap-4 mt-4 p-5 bg-white rounded-3 shadow-sm"
+    >
       <!-- Loading Indicator -->
       @if (isSubmitting()) {
       <div class="w-100 text-center">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">{{ 'COMMON.LOADING' | translate}}</span>
+          <span class="visually-hidden">{{ 'COMMON.LOADING' | translate }}</span>
         </div>
       </div>
       } @else {
@@ -86,16 +126,32 @@
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- First Name Container -->
             <div class="form-group flex-fill">
-              <label for="firstName" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="firstName"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.first-name' | translate }}</span>
-                <span [class]="checkValidity('firstName')" [class.ms-2]="!languageService.isRTL()"
-                  [class.me-2]="languageService.isRTL()">*</span>
+                <span
+                  [class]="checkValidity('firstName')"
+                  [class.ms-2]="!languageService.isRTL()"
+                  [class.me-2]="languageService.isRTL()"
+                  >*</span
+                >
               </label>
-              <input type="text" name="firstName" id="firstName" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.first-name-placeholder' | translate" formControlName="firstName" />
+              <input
+                type="text"
+                name="firstName"
+                id="firstName"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.first-name-placeholder' | translate"
+                formControlName="firstName"
+              />
               @if(checkErrors('firstName')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('firstName') }}
               </div>
               }
@@ -103,16 +159,32 @@
 
             <!-- Last Name Container -->
             <div class="form-group flex-fill">
-              <label for="lastName" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="lastName"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.last-name' | translate }}</span>
-                <span [class]="checkValidity('lastName')" [class.ms-2]="!languageService.isRTL()"
-                  [class.me-2]="languageService.isRTL()">*</span>
+                <span
+                  [class]="checkValidity('lastName')"
+                  [class.ms-2]="!languageService.isRTL()"
+                  [class.me-2]="languageService.isRTL()"
+                  >*</span
+                >
               </label>
-              <input type="text" name="lastName" id="lastName" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.last-name-placeholder' | translate" formControlName="lastName" />
+              <input
+                type="text"
+                name="lastName"
+                id="lastName"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.last-name-placeholder' | translate"
+                formControlName="lastName"
+              />
               @if(checkErrors('lastName')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('lastName') }}
               </div>
               }
@@ -125,16 +197,32 @@
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- Email Container -->
             <div class="form-group flex-fill">
-              <label for="email" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="email"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.email' | translate }}</span>
-                <span [class]="checkValidity('eMail')" [class.ms-2]="!languageService.isRTL()"
-                  [class.me-2]="languageService.isRTL()">*</span>
+                <span
+                  [class]="checkValidity('eMail')"
+                  [class.ms-2]="!languageService.isRTL()"
+                  [class.me-2]="languageService.isRTL()"
+                  >*</span
+                >
               </label>
-              <input type="email" name="email" id="email" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.email-placeholder' | translate" formControlName="eMail" />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.email-placeholder' | translate"
+                formControlName="eMail"
+              />
               @if(checkErrors('eMail')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('eMail') }}
               </div>
               }
@@ -142,16 +230,32 @@
 
             <!-- Phone Container -->
             <div class="form-group flex-fill">
-              <label for="phone" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="phone"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.phone' | translate }}</span>
-                <span [class]="checkValidity('phone')" [class.ms-2]="!languageService.isRTL()"
-                  [class.me-2]="languageService.isRTL()">*</span>
+                <span
+                  [class]="checkValidity('phone')"
+                  [class.ms-2]="!languageService.isRTL()"
+                  [class.me-2]="languageService.isRTL()"
+                  >*</span
+                >
               </label>
-              <input type="tel" name="phone" id="phone" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.phone-placeholder' | translate" formControlName="phone" />
+              <input
+                type="tel"
+                name="phone"
+                id="phone"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.phone-placeholder' | translate"
+                formControlName="phone"
+              />
               @if(checkErrors('phone')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('phone') }}
               </div>
               }
@@ -164,14 +268,26 @@
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- SSN Container -->
             <div class="form-group flex-fill">
-              <label for="ssn" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="ssn"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.ssn' | translate }}</span>
               </label>
-              <input type="text" name="ssn" id="ssn" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.ssn-placeholder' | translate" formControlName="ssn" />
+              <input
+                type="text"
+                name="ssn"
+                id="ssn"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.ssn-placeholder' | translate"
+                formControlName="ssn"
+              />
               @if(checkErrors('ssn')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('ssn') }}
               </div>
               }
@@ -179,20 +295,31 @@
 
             <!-- Gender Container -->
             <div class="form-group flex-fill">
-              <label for="gender" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="gender"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.gender' | translate }}</span>
               </label>
               <select name="gender" id="gender" class="form-select" formControlName="gender">
-                <option value="" selected>{{ 'LEADS.leads-add-page.select-gender' | translate }}</option>
+                <option value="" selected>
+                  {{ 'LEADS.leads-add-page.select-gender' | translate }}
+                </option>
                 <option value="Male">{{ 'LEADS.leads-add-page.gender-male' | translate }}</option>
-                <option value="Female">{{ 'LEADS.leads-add-page.gender-female' | translate }}</option>
+                <option value="Female">
+                  {{ 'LEADS.leads-add-page.gender-female' | translate }}
+                </option>
                 <option value="Other">{{ 'LEADS.leads-add-page.gender-other' | translate }}</option>
-                <option value="PreferNotToSay">{{ 'LEADS.leads-add-page.gender-prefer-not-to-say' | translate }}
+                <option value="PreferNotToSay">
+                  {{ 'LEADS.leads-add-page.gender-prefer-not-to-say' | translate }}
                 </option>
               </select>
               @if(checkErrors('gender')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('gender') }}
               </div>
               }
@@ -205,13 +332,19 @@
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- Date of Birth Container -->
             <div class="form-group flex-fill">
-              <label for="dob" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="dob"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.dob' | translate }}</span>
               </label>
               <input type="date" name="dob" id="dob" class="form-control" formControlName="dob" />
               @if(checkErrors('dob')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('dob') }}
               </div>
               }
@@ -219,12 +352,21 @@
 
             <!-- Work At Container -->
             <div class="form-group flex-fill">
-              <label for="workAt" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="workAt"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.work-at' | translate }}</span>
               </label>
-              <input type="text" name="workAt" id="workAt" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.work-at-placeholder' | translate" formControlName="workAt" />
+              <input
+                type="text"
+                name="workAt"
+                id="workAt"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.work-at-placeholder' | translate"
+                formControlName="workAt"
+              />
             </div>
           </div>
         </div>
@@ -260,8 +402,11 @@
 
             <!-- State Container -->
             <div class="form-group flex-fill">
-              <label for="state" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="state"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.state' | translate }}</span>
               </label>
               <select name="state" id="state" class="form-select" formControlName="state"
@@ -281,7 +426,10 @@
               </div>
               }
               @if(checkErrors('state')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('state') }}
               </div>
               }
@@ -328,14 +476,26 @@
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- Zip Code Container -->
             <div class="form-group flex-fill">
-              <label for="zipCode" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="zipCode"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.zip-code' | translate }}</span>
               </label>
-              <input type="text" name="zipCode" id="zipCode" class="form-control"
-                [placeholder]="'LEADS.leads-add-page.zip-code-placeholder' | translate" formControlName="zipCode" />
+              <input
+                type="text"
+                name="zipCode"
+                id="zipCode"
+                class="form-control"
+                [placeholder]="'LEADS.leads-add-page.zip-code-placeholder' | translate"
+                formControlName="zipCode"
+              />
               @if(checkErrors('zipCode')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('zipCode') }}
               </div>
               }
@@ -343,13 +503,21 @@
 
             <!-- Current City Container -->
             <div class="form-group flex-fill">
-              <label for="currentCity" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="currentCity"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.current-city' | translate }}</span>
               </label>
-              <input type="text" name="currentCity" id="currentCity" class="form-control"
+              <input
+                type="text"
+                name="currentCity"
+                id="currentCity"
+                class="form-control"
                 [placeholder]="'LEADS.leads-add-page.current-city-placeholder' | translate"
-                formControlName="currentCity" />
+                formControlName="currentCity"
+              />
             </div>
           </div>
         </div>
@@ -378,20 +546,36 @@
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- Status Container -->
             <div class="form-group flex-fill">
-              <label for="status" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="status"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.status' | translate }}</span>
               </label>
               <select name="status" id="status" class="form-select" formControlName="status">
-                <option [ngValue]="null" selected>{{ 'LEADS.leads-add-page.select-status' | translate }}</option>
+                <option [ngValue]="null" selected>
+                  {{ 'LEADS.leads-add-page.select-status' | translate }}
+                </option>
                 <option [value]="'New'">{{ 'LEADS.leads-add-page.status-new' | translate }}</option>
-                <option [value]="'Contacted'">{{ 'LEADS.leads-add-page.status-contacted' | translate }}</option>
-                <option [value]="'Qualified'">{{ 'LEADS.leads-add-page.status-qualified' | translate }}</option>
-                <option [value]="'Converted'">{{ 'LEADS.leads-add-page.status-converted' | translate }}</option>
-                <option [value]="'Lost'">{{ 'LEADS.leads-add-page.status-lost' | translate }}</option>
+                <option [value]="'Contacted'">
+                  {{ 'LEADS.leads-add-page.status-contacted' | translate }}
+                </option>
+                <option [value]="'Qualified'">
+                  {{ 'LEADS.leads-add-page.status-qualified' | translate }}
+                </option>
+                <option [value]="'Converted'">
+                  {{ 'LEADS.leads-add-page.status-converted' | translate }}
+                </option>
+                <option [value]="'Lost'">
+                  {{ 'LEADS.leads-add-page.status-lost' | translate }}
+                </option>
               </select>
               @if(checkErrors('status')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('status') }}
               </div>
               }
@@ -399,22 +583,44 @@
 
             <!-- Source Container -->
             <div class="form-group flex-fill">
-              <label for="source" class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()">
+              <label
+                for="source"
+                class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()"
+              >
                 <span>{{ 'LEADS.leads-add-page.source' | translate }}</span>
               </label>
               <select name="source" id="source" class="form-select" formControlName="source">
-                <option [ngValue]="null" selected>{{ 'LEADS.leads-add-page.select-source' | translate }}</option>
-                <option [value]="'FacebookAds'">{{ 'LEADS.leads-add-page.source-facebook-ads' | translate }}</option>
-                <option [value]="'GoogleAds'">{{ 'LEADS.leads-add-page.source-google-ads' | translate }}</option>
-                <option [value]="'Referral'">{{ 'LEADS.leads-add-page.source-referral' | translate }}</option>
-                <option [value]="'WebsiteForm'">{{ 'LEADS.leads-add-page.source-website-form' | translate }}</option>
-                <option [value]="'TradeShow'">{{ 'LEADS.leads-add-page.source-trade-show' | translate }}</option>
-                <option [value]="'Manual'">{{ 'LEADS.leads-add-page.source-manual' | translate }}</option>
-                <option [value]="'Provider'">{{ 'LEADS.leads-add-page.source-provider' | translate }}</option>
+                <option [ngValue]="null" selected>
+                  {{ 'LEADS.leads-add-page.select-source' | translate }}
+                </option>
+                <option [value]="'FacebookAds'">
+                  {{ 'LEADS.leads-add-page.source-facebook-ads' | translate }}
+                </option>
+                <option [value]="'GoogleAds'">
+                  {{ 'LEADS.leads-add-page.source-google-ads' | translate }}
+                </option>
+                <option [value]="'Referral'">
+                  {{ 'LEADS.leads-add-page.source-referral' | translate }}
+                </option>
+                <option [value]="'WebsiteForm'">
+                  {{ 'LEADS.leads-add-page.source-website-form' | translate }}
+                </option>
+                <option [value]="'TradeShow'">
+                  {{ 'LEADS.leads-add-page.source-trade-show' | translate }}
+                </option>
+                <option [value]="'Manual'">
+                  {{ 'LEADS.leads-add-page.source-manual' | translate }}
+                </option>
+                <option [value]="'Provider'">
+                  {{ 'LEADS.leads-add-page.source-provider' | translate }}
+                </option>
               </select>
               @if(checkErrors('source')) {
-              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+              <div
+                class="text-danger small mt-1"
+                [ngClass]="languageService.getTextAlignmentClass()"
+              >
                 {{ getErrorMessage('source') }}
               </div>
               }
@@ -422,29 +628,28 @@
           </div>
         </div>
 
-        <!-- Parent ID Container -->
-        <div class="w-100 mb-4">
-          <div class="form-group w-100">
-            <label for="parentId" class="form-label d-flex align-items-center"
-              [class.flex-row-reverse]="languageService.isRTL()">
-              <span>{{ 'LEADS.leads-add-page.parent-id' | translate }}</span>
-            </label>
-            <input type="text" name="parentId" id="parentId" class="form-control"
-              [placeholder]="'LEADS.leads-add-page.parent-id-placeholder' | translate" formControlName="parentId" />
-          </div>
-        </div>
-
         <!-- Services of Interest Container -->
         <div class="w-100 mb-4">
           <div class="form-group w-100">
-            <label for="servicesOfInterest" class="form-label d-flex align-items-center"
-              [class.flex-row-reverse]="languageService.isRTL()">
+            <label
+              for="servicesOfInterest"
+              class="form-label d-flex align-items-center"
+              [class.flex-row-reverse]="languageService.isRTL()"
+            >
               <span>{{ 'LEADS.leads-add-page.services-of-interest' | translate }}</span>
             </label>
-            <p-multiselect [options]="services()" formControlName="servicesOfInterest" optionLabel="name"
-              optionValue="id" [placeholder]="'LEADS.leads-add-page.select-services' | translate"
-              [maxSelectedLabels]="3" [filter]="true" (onFilter)="onFilterServices($event)" [showClear]="true"
-              class="w-100" />
+            <p-multiselect
+              [options]="services()"
+              formControlName="servicesOfInterest"
+              optionLabel="name"
+              optionValue="id"
+              [placeholder]="'LEADS.leads-add-page.select-services' | translate"
+              [maxSelectedLabels]="3"
+              [filter]="true"
+              (onFilter)="onFilterServices($event)"
+              [showClear]="true"
+              class="w-100"
+            />
             <small class="text-muted">{{ 'LEADS.leads-add-page.services-hint' | translate }}</small>
           </div>
         </div>
@@ -452,36 +657,58 @@
         <!-- Notes Container -->
         <div class="w-100 mb-4">
           <div class="form-group w-100">
-            <label for="notes" class="form-label d-flex align-items-center"
-              [class.flex-row-reverse]="languageService.isRTL()">
+            <label
+              for="notes"
+              class="form-label d-flex align-items-center"
+              [class.flex-row-reverse]="languageService.isRTL()"
+            >
               <span>{{ 'LEADS.leads-add-page.notes' | translate }}</span>
             </label>
-            <textarea name="notes" id="notes" class="form-control" rows="4"
-              [placeholder]="'LEADS.leads-add-page.notes-placeholder' | translate" formControlName="notes"></textarea>
+            <textarea
+              name="notes"
+              id="notes"
+              class="form-control"
+              rows="4"
+              [placeholder]="'LEADS.leads-add-page.notes-placeholder' | translate"
+              formControlName="notes"
+            ></textarea>
           </div>
         </div>
       </div>
 
       <!-- Submit Button Container -->
       <div
-        class="buttons-container w-100 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4">
+        class="buttons-container w-100 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mt-4"
+      >
         <!-- Cancel Button -->
-        <button type="button"
-          class="btn btn-outline-primary d-flex justify-content-center align-items-center  rounded-3 flex-grow-1 mb-2 mb-md-0"
-          (click)="cancel()" [disabled]="isSubmitting()">
+        <button
+          type="button"
+          class="btn btn-outline-primary d-flex justify-content-center align-items-center rounded-3 flex-grow-1 mb-2 mb-md-0"
+          (click)="cancel()"
+          [disabled]="isSubmitting()"
+        >
           {{ 'COMMON.CANCEL' | translate }}
         </button>
 
         <!-- Save/Update Button -->
-        <button type="submit"
-          class="btn btn-primary d-flex justify-content-center align-items-center  rounded-3 flex-grow-1"
-          (click)="saveLead()" [disabled]="isSubmitting() || addLeadForm.invalid">
+        <button
+          type="submit"
+          class="btn btn-primary d-flex justify-content-center align-items-center rounded-3 flex-grow-1"
+          (click)="saveLead()"
+          [disabled]="isSubmitting() || addLeadForm.invalid"
+        >
           @if (!isSubmitting()) {
-          <span>{{ isEditMode() ? ('LEADS.leads-edit-page.update-lead' | translate) : ('LEADS.leads-add-page.save-lead'
-            | translate) }}</span>
+          <span>{{
+            isEditMode()
+              ? ('LEADS.leads-edit-page.update-lead' | translate)
+              : ('LEADS.leads-add-page.save-lead' | translate)
+          }}</span>
           } @else {
-          <span>{{ isEditMode() ? ('LEADS.leads-edit-page.updating' | translate) : ('LEADS.leads-add-page.saving' |
-            translate) }}</span>
+          <span>{{
+            isEditMode()
+              ? ('LEADS.leads-edit-page.updating' | translate)
+              : ('LEADS.leads-add-page.saving' | translate)
+          }}</span>
           }
         </button>
       </div>

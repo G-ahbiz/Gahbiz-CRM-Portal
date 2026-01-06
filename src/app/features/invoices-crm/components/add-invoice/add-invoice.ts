@@ -13,10 +13,7 @@ import { ErrorFacadeService } from '@core/services/error.facade.service';
 import { ToastService } from '@core/services/toast.service';
 import { GetCustomersResponse } from '@features/customers-crm/interfaces/get-customers-response';
 import { CustomersFacadeService } from '@features/customers-crm/services/customers-facade.service';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { DatePicker } from 'primeng/datepicker';
-import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
-import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-facade.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { catchError, debounceTime, distinctUntilChanged, forkJoin, of, Subject } from 'rxjs';
 import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
@@ -25,10 +22,12 @@ import { ROUTES, USER_TYPES } from '@shared/config/constants';
 import { InvoiceFacadeService } from '@features/invoices-crm/services/invoice.facade.service';
 import { AddInvoiceRequest } from '@features/invoices-crm/interfaces/add-invoice-request';
 import { Router } from '@angular/router';
-
+import { SelectModule } from 'primeng/select';
+import { OrdersFacadeService } from '@features/orders-crm/services/orders-facade.service';
+import { OrderDropdown } from '@features/orders-crm/interfaces/order-dropdown';
 @Component({
   selector: 'app-add-invoice',
-  imports: [TranslateModule, ReactiveFormsModule, CommonModule, MultiSelectModule, DatePicker],
+  imports: [TranslateModule, ReactiveFormsModule, CommonModule, SelectModule, DatePicker],
   templateUrl: './add-invoice.html',
   styleUrl: './add-invoice.css',
 })
@@ -42,7 +41,7 @@ export class AddInvoice implements OnInit {
       notes: ['', Validators.maxLength(1000)],
       assignedSalesAgentId: ['', Validators.required],
       invoiceNumber: ['', Validators.minLength(1)],
-      items: ['', [Validators.required, Validators.minLength(1)]],
+      orderId: ['', Validators.required],
     });
   }
 
@@ -61,16 +60,16 @@ export class AddInvoice implements OnInit {
     return null;
   }
 
-  private serviceFilterSubject = new Subject<string>();
+  private orderFilterSubject = new Subject<string>();
   // services
   private customerService = inject(CustomersFacadeService);
   private destroyRef = inject(DestroyRef);
   private errorFacadeService = inject(ErrorFacadeService);
   private toast = inject(ToastService);
-  private leadsFacadeService = inject(LeadsFacadeService);
   private customersFacadeService = inject(CustomersFacadeService);
   private authService = inject(AuthService);
   private invoicesFacadeService = inject(InvoiceFacadeService);
+  private ordersFacadeService = inject(OrdersFacadeService);
   private router = inject(Router);
 
   //signals
@@ -79,7 +78,7 @@ export class AddInvoice implements OnInit {
   currentUser$ = this.authService.currentUser$;
 
   customers = signal<GetCustomersResponse[] | undefined>(undefined);
-  services = signal<ServiceDetails[]>([]);
+  orders = signal<OrderDropdown[]>([]);
   salesAgents = signal<SalesAgentBrief[]>([]);
 
   USER_TYPES = USER_TYPES;
@@ -94,7 +93,7 @@ export class AddInvoice implements OnInit {
           return of(null);
         })
       ),
-      services: this.leadsFacadeService.getAllServices().pipe(
+      orders: this.ordersFacadeService.getOrdersDropdown().pipe(
         catchError(() => {
           this.toast.error('Failed to get services');
           return of(null);
@@ -109,16 +108,16 @@ export class AddInvoice implements OnInit {
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ customers, services, salesAgents }) => {
+        next: ({ customers, orders: orders, salesAgents }) => {
           if (customers) {
             this.customers.set(customers.items);
           }
 
-          if (services) {
-            if (services.succeeded) {
-              this.services.set(services.data.items);
+          if (orders) {
+            if (orders.succeeded) {
+              this.orders.set(orders.data);
             } else {
-              const errorMsg = this.errorFacadeService.handleApiResponse(services);
+              const errorMsg = this.errorFacadeService.handleApiResponse(orders);
               this.toast.error(errorMsg);
             }
           }
@@ -144,32 +143,32 @@ export class AddInvoice implements OnInit {
     });
 
     // Setup service filter subscription with debounce
-    this.serviceFilterSubject
+    this.orderFilterSubject
       .pipe(debounceTime(500), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((filterText) => {
         if (filterText && filterText.length > 0) {
-          this.searchServices(filterText);
+          this.searchOrders(filterText);
         } else {
-          this.getAllServices();
+          this.getAllOrders();
         }
       });
   }
 
-  getAllServices() {
-    this.leadsFacadeService
-      .getAllServices()
+  getAllOrders() {
+    this.ordersFacadeService
+      .getOrdersDropdown()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
           if (response.succeeded) {
-            this.services.set(response.data.items);
+            this.orders.set(response.data);
           } else {
             const errorMsg = this.errorFacadeService.handleApiResponse(response);
             this.toast.error(errorMsg);
           }
         },
         error: () => {
-          this.toast.error('Failed to get services');
+          this.toast.error('Failed to get orders');
         },
       });
   }
@@ -207,27 +206,27 @@ export class AddInvoice implements OnInit {
       });
   }
 
-  searchServices(text: string) {
-    this.leadsFacadeService
-      .searchServices(text)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.services.set(
-            [...this.services(), ...response.data].filter(
-              (service, index, self) => self.findIndex((t) => t.id === service.id) === index
-            )
-          );
-        },
-        error: () => {
-          this.toast.error('Failed to search services');
-        },
-      });
+  searchOrders(text: string) {
+    // this.leadsFacadeService
+    //   .searchServices(text)
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe({
+    //     next: (response) => {
+    //       this.orders.set(
+    //         [...this.orders(), ...response.data].filter(
+    //           (order, index, self) => self.findIndex((t) => t.id === order.id) === index
+    //         )
+    //       );
+    //     },
+    //     error: () => {
+    //       this.toast.error('Failed to search orders');
+    //     },
+    //   });
   }
 
-  onFilterServices(event: { filter: string }) {
+  onFilterOrders(event: any) {
     // Emit to subject instead of calling directly - debounce will handle the delay
-    this.serviceFilterSubject.next(event.filter || '');
+    this.orderFilterSubject.next(event.filter || '');
   }
 
   back() {
@@ -260,11 +259,7 @@ export class AddInvoice implements OnInit {
       notes: formValue.notes || '',
       assignedSalesAgentId: formValue.assignedSalesAgentId,
       invoiceNumber: formValue.invoiceNumber,
-      items:
-        (formValue.items as string[])?.map((serviceId: string) => ({
-          serviceId,
-          quantity: 1,
-        })) || [],
+      orderId: formValue.orderId,
     };
 
     this.isSubmitting.set(true);
@@ -302,7 +297,7 @@ export class AddInvoice implements OnInit {
     notes: 'Notes',
     assignedSalesAgentId: 'Assigned Sales Agent',
     invoiceNumber: 'Invoice Number',
-    items: 'Services',
+    orderId: 'Order',
   };
 
   getErrorMessage(fieldName: string): string {
