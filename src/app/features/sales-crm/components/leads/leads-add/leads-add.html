@@ -378,32 +378,24 @@
       <div class="w-100">
         <h5 class="mb-3 fw-bold">{{ 'LEADS.leads-add-page.location-information' | translate }}</h5>
 
-        <!-- City & State Container -->
+        <!-- Country & State Container -->
         <div class="two-column-container w-100 mb-4">
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
-            <!-- City Container -->
+            <!-- Country Container -->
             <div class="form-group flex-fill">
-              <label
-                for="city"
-                class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()"
-              >
-                <span>{{ 'LEADS.leads-add-page.city' | translate }}</span>
+              <label for="country" class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()">
+                <span>{{ 'LEADS.leads-add-page.country' | translate }}</span>
               </label>
-              <input
-                type="text"
-                name="city"
-                id="city"
-                class="form-control"
-                [placeholder]="'LEADS.leads-add-page.city-placeholder' | translate"
-                formControlName="city"
-              />
-              @if(checkErrors('city')) {
-              <div
-                class="text-danger small mt-1"
-                [ngClass]="languageService.getTextAlignmentClass()"
-              >
-                {{ getErrorMessage('city') }}
+              <select name="country" id="country" class="form-select" formControlName="country">
+                <option [ngValue]="null" selected>{{ 'LEADS.leads-add-page.select-country' | translate }}</option>
+                @for (country of countries(); track country.id) {
+                <option [value]="country.id">{{ country.name }}</option>
+                }
+              </select>
+              @if(checkErrors('country')) {
+              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+                {{ getErrorMessage('country') }}
               </div>
               }
             </div>
@@ -417,14 +409,22 @@
               >
                 <span>{{ 'LEADS.leads-add-page.state' | translate }}</span>
               </label>
-              <input
-                type="text"
-                name="state"
-                id="state"
-                class="form-control"
-                [placeholder]="'LEADS.leads-add-page.state-placeholder' | translate"
-                formControlName="state"
-              />
+              <select name="state" id="state" class="form-select" formControlName="state"
+                [disabled]="!addLeadForm.get('country')?.value || loadingStates()">
+                <option [ngValue]="null" selected>{{ 'LEADS.leads-add-page.select-state' | translate }}</option>
+                @if (loadingStates()) {
+                <option disabled>{{ 'COMMON.LOADING' | translate }}</option>
+                } @else {
+                @for (state of states(); track state.id) {
+                <option [value]="state.id">{{ state.name }}</option>
+                }
+                }
+              </select>
+              @if(loadingStates()) {
+              <div class="text-muted small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+                {{ 'COMMON.LOADING' | translate }}
+              </div>
+              }
               @if(checkErrors('state')) {
               <div
                 class="text-danger small mt-1"
@@ -437,36 +437,43 @@
           </div>
         </div>
 
-        <!-- County & Zip Code Container -->
+        <!-- City Container -->
         <div class="two-column-container w-100 mb-4">
           <div class="d-flex flex-column flex-md-row gap-3 w-100">
-            <!-- County Container -->
+            <!-- City Container -->
             <div class="form-group flex-fill">
-              <label
-                for="county"
-                class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()"
-              >
-                <span>{{ 'LEADS.leads-add-page.county' | translate }}</span>
+              <label for="city" class="form-label d-flex align-items-center"
+                [class.flex-row-reverse]="languageService.isRTL()">
+                <span>{{ 'LEADS.leads-add-page.city' | translate }}</span>
               </label>
-              <input
-                type="text"
-                name="county"
-                id="county"
-                class="form-control"
-                [placeholder]="'LEADS.leads-add-page.county-placeholder' | translate"
-                formControlName="county"
-              />
-              @if(checkErrors('county')) {
-              <div
-                class="text-danger small mt-1"
-                [ngClass]="languageService.getTextAlignmentClass()"
-              >
-                {{ getErrorMessage('county') }}
+              <select name="city" id="city" class="form-select" formControlName="city"
+                [disabled]="!addLeadForm.get('state')?.value || loadingCities()">
+                <option [ngValue]="null" selected>{{ 'LEADS.leads-add-page.select-city' | translate }}</option>
+                @if (loadingCities()) {
+                <option disabled>{{ 'COMMON.LOADING' | translate }}</option>
+                } @else {
+                @for (city of cities(); track city.id) {
+                <option [value]="city.id">{{ city.name }}</option>
+                }
+                }
+              </select>
+              @if(loadingCities()) {
+              <div class="text-muted small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+                {{ 'COMMON.LOADING' | translate }}
+              </div>
+              }
+              @if(checkErrors('city')) {
+              <div class="text-danger small mt-1" [ngClass]="languageService.getTextAlignmentClass()">
+                {{ getErrorMessage('city') }}
               </div>
               }
             </div>
+          </div>
+        </div>
 
+        <!-- Zip Code & Current City Container -->
+        <div class="two-column-container w-100 mb-4">
+          <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- Zip Code Container -->
             <div class="form-group flex-fill">
               <label
@@ -493,12 +500,7 @@
               </div>
               }
             </div>
-          </div>
-        </div>
 
-        <!-- Current City & From City Container -->
-        <div class="two-column-container w-100 mb-4">
-          <div class="d-flex flex-column flex-md-row gap-3 w-100">
             <!-- Current City Container -->
             <div class="form-group flex-fill">
               <label
@@ -517,25 +519,18 @@
                 formControlName="currentCity"
               />
             </div>
+          </div>
+        </div>
 
-            <!-- From City Container -->
-            <div class="form-group flex-fill">
-              <label
-                for="fromCity"
-                class="form-label d-flex align-items-center"
-                [class.flex-row-reverse]="languageService.isRTL()"
-              >
-                <span>{{ 'LEADS.leads-add-page.from-city' | translate }}</span>
-              </label>
-              <input
-                type="text"
-                name="fromCity"
-                id="fromCity"
-                class="form-control"
-                [placeholder]="'LEADS.leads-add-page.from-city-placeholder' | translate"
-                formControlName="fromCity"
-              />
-            </div>
+        <!-- From City Container -->
+        <div class="w-100 mb-4">
+          <div class="form-group w-100">
+            <label for="fromCity" class="form-label d-flex align-items-center"
+              [class.flex-row-reverse]="languageService.isRTL()">
+              <span>{{ 'LEADS.leads-add-page.from-city' | translate }}</span>
+            </label>
+            <input type="text" name="fromCity" id="fromCity" class="form-control"
+              [placeholder]="'LEADS.leads-add-page.from-city-placeholder' | translate" formControlName="fromCity" />
           </div>
         </div>
       </div>

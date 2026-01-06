@@ -769,7 +769,9 @@
       "work-at-placeholder": "Lugar de Trabajo",
       "location-information": "Información de Ubicación",
       "city": "Ciudad",
-      "city-placeholder": "Ciudad",
+      "select-city": "Seleccionar Ciudad",
+      "country": "País",
+      "select-country": "Seleccionar País",
       "state": "Estado",
       "state-placeholder": "Estado",
       "county": "Condado",
@@ -862,6 +864,12 @@
       "PROVIDER": "Proveedor"
     },
     "VALIDATION": {
+      "REQUIRED": "{{field}} es requerido.",
+      "EMAIL": "{{field}} debe ser una dirección de correo electrónica válida.",
+      "MIN_LENGTH": "{{field}} debe tener al menos {{min}} caracteres.",
+      "MAX_LENGTH": "{{field}} no debe exceder {{max}} caracteres.",
+      "PHONE_PATTERN": "El número de teléfono debe ser un número válido de Egipto, EE. UU. o España, con o sin código de país.",
+      "INVALID": "{{field}} es inválido.",
       "FORM_HAS_ERRORS": "Por favor corrige los errores en el formulario antes de enviar.",
       "FIELDS_REQUIRED": "Los campos marcados con * son requeridos",
       "ACTIVITY_TYPE_REQUIRED": "El tipo de actividad es requerido",
@@ -891,6 +899,9 @@
       "NO_ACTIVITY_LOGS": "No hay registros de actividad disponibles para este lead"
     },
     "ERRORS": {
+      "FAILED_TO_LOAD_CITIES": "Error al cargar ciudades",
+      "FAILED_TO_LOAD_COUNTRIES": "Error al cargar paísesz",
+      "FAILED_TO_LOAD_STATES": "Error al cargar estados",
       "FAILED_TO_LOAD_LEAD": "Error al cargar los detalles del lead. Por favor inténtalo de nuevo.",
       "LEAD_NOT_FOUND": "Lead no encontrado o ha sido eliminado.",
       "FAILED_TO_LOAD_ACTIVITY_LOGS": "No se pueden cargar los registros de actividad en este momento.",

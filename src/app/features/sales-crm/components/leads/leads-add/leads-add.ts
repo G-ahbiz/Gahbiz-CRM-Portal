@@ -18,12 +18,16 @@ import { REG_EXP, USER_TYPES } from '@shared/config/constants';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
 import { LanguageService } from '@core/services/language.service';
+import { LocationsService } from '@core/services/locations.service';
+import { Country } from '@core/interfaces/country';
+import { State } from '@core/interfaces/state';
+import { City } from '@core/interfaces/city'; // Add City import
 
 @Component({
   selector: 'app-leads-add',
@@ -48,11 +52,19 @@ export class LeadsAdd implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   private translate = inject(TranslateService);
   languageService = inject(LanguageService);
+  private locationService = inject(LocationsService);
 
   isSubmitting = signal<boolean>(false);
   visible = signal<boolean>(false);
   services = signal<ServiceDetails[]>([]);
   currentUser = signal<User | null>(null);
+
+  // Location states
+  countries = signal<Country[]>([]);
+  states = signal<State[]>([]);
+  cities = signal<City[]>([]); // Add cities signal
+  loadingStates = signal<boolean>(false);
+  loadingCities = signal<boolean>(false); // Add loading cities signal
 
   isEditMode = signal<boolean>(false);
   leadId = signal<string | null>(null);
@@ -123,9 +135,10 @@ export class LeadsAdd implements OnInit, OnDestroy {
       dob: ['', [this.dateFormatValidator, this.pastDateValidator]],
       status: [null],
       source: [null],
+      country: [null],
+      state: [null],
+      city: [null], // Change from text to select
       zipCode: ['', Validators.pattern(REG_EXP.ZIP_CODE_PATTERN)],
-      city: ['', Validators.maxLength(100)],
-      state: ['', Validators.maxLength(100)],
       county: ['', Validators.maxLength(100)],
       gender: ['', this.genderValidator],
       workAt: ['', Validators.maxLength(200)],
@@ -162,6 +175,15 @@ export class LeadsAdd implements OnInit, OnDestroy {
           this.getAllServices();
         }
       });
+
+    // Load countries
+    this.loadCountries();
+
+    // Setup country change listener
+    this.setupCountryChangeListener();
+
+    // Setup state change listener
+    this.setupStateChangeListener();
   }
 
   ngOnDestroy() {
@@ -169,6 +191,105 @@ export class LeadsAdd implements OnInit, OnDestroy {
       window.removeEventListener('resize', this.checkViewport.bind(this));
     }
     this.serviceFilterSubject.complete();
+  }
+
+  private loadCountries(): void {
+    this.locationService
+      .getAllCountries$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (countries) => {
+          this.countries.set(countries);
+        },
+        error: (error) => {
+          this.toastService.error(
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_COUNTRIES') ||
+              'Failed to load countries'
+          );
+        },
+      });
+  }
+
+  private setupCountryChangeListener(): void {
+    this.addLeadForm
+      .get('country')!
+      .valueChanges.pipe(
+        distinctUntilChanged(),
+        debounceTime(120),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (countryId) => {
+          if (countryId) {
+            this.loadStatesByCountryId(countryId.toString());
+          } else {
+            this.states.set([]);
+            this.cities.set([]);
+            this.addLeadForm.get('state')?.setValue(null);
+            this.addLeadForm.get('city')?.setValue(null);
+          }
+        },
+      });
+  }
+
+  private setupStateChangeListener(): void {
+    this.addLeadForm
+      .get('state')!
+      .valueChanges.pipe(
+        distinctUntilChanged(),
+        debounceTime(120),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (stateId) => {
+          if (stateId) {
+            this.loadCitiesByStateId(stateId.toString());
+          } else {
+            this.cities.set([]);
+            this.addLeadForm.get('city')?.setValue(null);
+          }
+        },
+      });
+  }
+
+  private loadStatesByCountryId(countryId: string): void {
+    this.loadingStates.set(true);
+    this.locationService
+      .getStatesByCountry$(countryId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (states) => {
+          this.states.set(states);
+          this.loadingStates.set(false);
+        },
+        error: (error) => {
+          this.states.set([]);
+          this.loadingStates.set(false);
+          this.toastService.error(
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_STATES') || 'Failed to load states'
+          );
+        },
+      });
+  }
+
+  private loadCitiesByStateId(stateId: string): void {
+    this.loadingCities.set(true);
+    this.locationService
+      .getCitiesByState$(stateId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (cities) => {
+          this.cities.set(cities);
+          this.loadingCities.set(false);
+        },
+        error: (error) => {
+          this.cities.set([]);
+          this.loadingCities.set(false);
+          this.toastService.error(
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_CITIES') || 'Failed to load cities'
+          );
+        },
+      });
   }
 
   private initializeResponsiveLayout(): void {
@@ -212,6 +333,11 @@ export class LeadsAdd implements OnInit, OnDestroy {
   }
 
   private populateForm(lead: LeadDetails): void {
+    console.log('Lead data:', lead);
+    console.log('Lead country:', lead.country);
+    console.log('Lead state:', lead.state);
+    console.log('Lead city:', lead.city);
+
     const formattedDob = this.formatDateForInput(lead.dob);
 
     const serviceIds =
@@ -219,6 +345,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
         typeof service === 'string' ? service : service.id
       ) || [];
 
+    // First patch all basic values
     this.addLeadForm.patchValue({
       firstName: lead.firstName || '',
       lastName: lead.lastName || '',
@@ -232,13 +359,164 @@ export class LeadsAdd implements OnInit, OnDestroy {
       status: lead.status || null,
       source: lead.sourceName || null,
       zipCode: lead.zipCode || '',
-      city: lead.city || '',
-      state: lead.state || '',
       county: lead.county || '',
       gender: lead.gender || '',
       workAt: lead.workAt || '',
       notes: '',
     });
+
+    // Handle city - check if it's a valid city name from dropdowns
+    // We'll set it as text for now, then try to match with dropdowns
+    this.addLeadForm.patchValue({
+      city: lead.city || null,
+    });
+
+    // Now handle the cascading dropdowns
+    this.setupLocationDropdowns(lead);
+  }
+
+  private setupLocationDropdowns(lead: LeadDetails): void {
+    // First, load countries and then try to find matches
+    this.locationService
+      .getAllCountries$()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (countries) => {
+          this.countries.set(countries);
+
+          // Check if the lead's "country" is actually a country in our list
+          const countryFound = countries.find(
+            (c) =>
+              c.name?.toLowerCase() === lead.country?.toLowerCase() ||
+              c.shortName?.toLowerCase() === lead.country?.toLowerCase()
+          );
+
+          if (countryFound) {
+            // It's a real country, set it
+            this.addLeadForm.patchValue({
+              country: countryFound.id,
+            });
+
+            // Load states for this country and try to find the state
+            this.locationService
+              .getStatesByCountry$(countryFound.id.toString())
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: (states) => {
+                  this.states.set(states);
+
+                  // Try to find state by name
+                  const stateFound = states.find(
+                    (s) => s.name?.toLowerCase() === lead.state?.toLowerCase()
+                  );
+
+                  if (stateFound) {
+                    this.addLeadForm.patchValue({
+                      state: stateFound.id,
+                    });
+
+                    // Load cities for this state
+                    this.loadCitiesForState(stateFound.id.toString(), lead.city);
+                  }
+                },
+              });
+          } else {
+            // The "country" field might actually be a state name
+            // Let's search for it as a state in all countries
+            this.searchForStateAsCountry(lead, countries);
+          }
+        },
+      });
+  }
+
+  private searchForStateAsCountry(lead: LeadDetails, countries: Country[]): void {
+    // Since "Sharkia Governorate" is a state, not a country,
+    // we need to find which country it belongs to
+    let searchCompleted = false;
+    let countryPromises = [];
+
+    for (const country of countries) {
+      const promise = this.locationService
+        .getStatesByCountry$(country.id.toString())
+        .pipe(take(1))
+        .toPromise()
+        .then((states) => {
+          // Check if any state matches our "country" value
+          const matchingState = states?.find(
+            (s) => s.name?.toLowerCase() === lead.country?.toLowerCase()
+          );
+
+          if (matchingState) {
+            searchCompleted = true;
+            // Found it! Set the actual country and state
+            this.addLeadForm.patchValue({
+              country: country.id,
+              state: matchingState.id,
+            });
+
+            this.locationService
+              .getStatesByCountry$(country.id.toString())
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe((states) => {
+                this.states.set(states);
+              });
+
+            // Load cities for this state
+            this.loadCitiesForState(matchingState.id.toString(), lead.city);
+
+            return true;
+          }
+          return false;
+        });
+
+      countryPromises.push(promise);
+    }
+
+    // Wait for all searches to complete
+    Promise.all(countryPromises).then((results) => {
+      const found = results.some((result) => result === true);
+
+      if (!found) {
+        // Couldn't find a match, keep the fields as-is
+        console.warn('Could not find location match for:', {
+          country: lead.country,
+          state: lead.state,
+          city: lead.city,
+        });
+
+        // Set a default country (e.g., Egypt) if you want
+        // For now, leave them null
+        this.addLeadForm.patchValue({
+          country: null,
+          state: null,
+        });
+      }
+    });
+  }
+
+  private loadCitiesForState(stateId: string, cityName: string): void {
+    this.locationService
+      .getCitiesByState$(stateId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (cities) => {
+          this.cities.set(cities);
+
+          // Try to find the city
+          const cityFound = cities.find((c) => c.name?.toLowerCase() === cityName?.toLowerCase());
+
+          if (cityFound) {
+            this.addLeadForm.patchValue({
+              city: cityFound.id,
+            });
+          } else {
+            // City not found in dropdown, keep as text
+            this.addLeadForm.patchValue({
+              city: null,
+            });
+          }
+        },
+      });
   }
 
   private formatDateForInput(dateString: string): string {
@@ -408,6 +686,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
       dob: this.translate.instant('LEADS.leads-add-page.dob'),
       gender: this.translate.instant('LEADS.leads-add-page.gender'),
       city: this.translate.instant('LEADS.leads-add-page.city'),
+      country: this.translate.instant('LEADS.leads-add-page.country'),
       state: this.translate.instant('LEADS.leads-add-page.state'),
       county: this.translate.instant('LEADS.leads-add-page.county'),
       zipCode: this.translate.instant('LEADS.leads-add-page.zip-code'),
@@ -578,19 +857,37 @@ export class LeadsAdd implements OnInit, OnDestroy {
   private convertToFormData(formValue: any): FormData {
     const formData = new FormData();
 
+    // 1. Get names from IDs using loose equality (==) to handle string/number mismatches
+    const countryObj = this.countries().find((c) => c.id == formValue.country);
+    const stateObj = this.states().find((s) => s.id == formValue.state);
+    const cityObj = this.cities().find((c) => c.id == formValue.city);
+
+    const countryName = countryObj?.name || '';
+    const stateName = stateObj?.name || '';
+    const cityName = cityObj?.name || '';
+
     Object.keys(formValue).forEach((key) => {
-      const value = formValue[key];
+      let value = formValue[key];
+
+      // 2. Map IDs to Names for the request
+      if (key === 'country') {
+        value = countryName;
+      } else if (key === 'state') {
+        value = stateName;
+      } else if (key === 'city') {
+        value = cityName;
+      }
+
+      // 3. Append to FormData (Only if value exists)
+      // Note: If countryName is '', it won't be sent.
+      // If you want to send empty values, remove: && value !== ''
       if (value !== null && value !== undefined && value !== '') {
         if (key === 'servicesOfInterest' && Array.isArray(value)) {
-          // servicesOfInterest is an array of service IDs
           value.forEach((serviceId: string) => {
             formData.append('servicesOfInterest', serviceId);
           });
         } else if (Array.isArray(value)) {
-          // Handle other arrays
-          value.forEach((item) => {
-            formData.append(key, item);
-          });
+          value.forEach((item) => formData.append(key, item));
         } else {
           formData.append(key, value);
         }
