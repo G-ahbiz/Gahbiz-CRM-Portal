@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -159,7 +159,7 @@ export class AddOrder implements OnInit, OnDestroy {
     this.isLoadingServices = true;
     this.serviceError = null;
 
-    this.leadsService.getAllServices().subscribe({
+    this.leadsService.getAllOrders().subscribe({
       next: (response: ApiResponse<PaginatedServices>) => {
         if (response?.succeeded && response.data?.items) {
           this.serviceOptions = response.data.items

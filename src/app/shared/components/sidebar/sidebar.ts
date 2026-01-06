@@ -44,7 +44,7 @@ export class Sidebar implements OnInit {
   private userRole = computed(() => this.currentUser()?.type ?? '');
 
   // Role-based visibility computed signals
-  canViewDashboard = computed(() => this.hasRole(ALL_CRM_ROLES));
+  canViewDashboard = computed(() => this.hasRole([USER_TYPES.ADMIN]));
   canViewCustomers = computed(() => this.hasRole(SALES_ROLES));
   canViewSalesLeads = computed(() =>
     this.hasRole([...SALES_ROLES, USER_TYPES.SALES_AGENT_PROVIDER])
