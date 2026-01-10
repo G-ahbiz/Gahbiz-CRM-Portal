@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   baseApi:
-    'https://gahbiz-appserver20260107022828-eza8a4f4e6a9akfu.canadacentral-01.azurewebsites.net',
+    'https://gahbiz-appserver20260107022828-eza8a4f4e6a9akfu.canadacentral-01.azurewebsites.net/api',
   account: {
     login: '/Account/login',
     refresh: '/Account/refresh-token',
