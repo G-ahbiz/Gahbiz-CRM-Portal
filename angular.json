@@ -48,6 +48,11 @@
             "assets": [
               "src/assets",
               {
+                "glob": "staticwebapp.config.json",
+                "input": "src",
+                "output": "/"
+              },
+              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
