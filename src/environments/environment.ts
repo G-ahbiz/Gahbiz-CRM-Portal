@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  baseApi: 'https://serva-best.runasp.net/api',
+  baseApi:
+    'https://gahbiz-appserver20260107022828-eza8a4f4e6a9akfu.canadacentral-01.azurewebsites.net/api',
   account: {
     login: '/Account/login',
     refresh: '/Account/refresh-token',
