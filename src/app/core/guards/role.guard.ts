@@ -4,6 +4,7 @@ import { AuthService } from '@core/services/auth.service';
 import { TokenService } from '@core/services/token.service';
 import { ROUTES } from '@shared/config/constants';
 import { ALLOWED_ROLES } from '@core/constants/auth.constants';
+import { User } from '@features/auth/interfaces/sign-in/user';
 import { map, shareReplay, of, take } from 'rxjs';
 
 // Module-level cache for role checks
@@ -22,17 +23,19 @@ function initializeCacheClearing(authService: AuthService): void {
   });
 }
 
-function normalizeRoles(user: unknown, tokenService: TokenService): string[] {
-  if (!user || typeof user !== 'object') return [];
+function normalizeRoles(user: User | null, tokenService: TokenService): string[] {
+  if (!user) return [];
 
-  const userObj = user as Record<string, unknown>;
-  const roles =
-    userObj['roles'] || userObj['role'] || tokenService.extractRolesFromLocalStorage() || [];
-  const roleArray = Array.isArray(roles) ? roles : [roles];
+  // User.type is a string per the interface, fallback to token extraction
+  const role = user.type || tokenService.extractRolesFromLocalStorage();
 
-  return roleArray
-    .filter((role): role is string => typeof role === 'string' && role.trim() !== '')
-    .map((role) => role.trim().toLowerCase());
+  if (!role) return [];
+
+  const roles = Array.isArray(role) ? role : [role];
+
+  return roles
+    .filter((r): r is string => typeof r === 'string' && r.trim() !== '')
+    .map((r) => r.trim().toLowerCase());
 }
 
 export const roleGuard: CanActivateFn = (route, state) => {
