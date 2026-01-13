@@ -77,10 +77,7 @@ export class AuthService {
             const { user, token } = response.data;
 
             const userRoles =
-              this.tokenService.extractRolesFromToken(token) ??
-              (user as any)?.roles ??
-              (user as any)?.role ??
-              null;
+              this.tokenService.extractRolesFromToken(token) ?? (user as any)?.type ?? null;
 
             if (!isAnyAllowedRole(userRoles)) {
               this.tokenService.clearAllTokens();
@@ -241,7 +238,6 @@ export class AuthService {
       return throwError(() => ({
         key: errorKey,
         message: errorMessage,
-        originalError: error,
         timestamp: new Date().toISOString(),
       }));
     }
@@ -307,7 +303,6 @@ export class AuthService {
     return throwError(() => ({
       key: errorKey,
       message: errorMessage,
-      originalError: error,
       timestamp: new Date().toISOString(),
     }));
   };
