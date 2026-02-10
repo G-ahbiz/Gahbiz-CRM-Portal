@@ -614,6 +614,16 @@
         "update": "فشل تحديث العميل"
       }
     },
+    "import-dialog": {
+      "title": "استيراد العملاء",
+      "description": "استيراد العملاء من ملف Excel أو CSV.",
+      "select-file": "اختر ملف",
+      "file-type-hint": "يتم دعم ملفات .xlsx (Microsoft Excel) فقط.",
+      "import-button": "استيراد",
+      "importing-button": "جاري الاستيراد...",
+      "select-file-error": "يرجى اختيار ملف للاستيراد",
+      "invalid-file-type": "نوع ملف غير صالح. يرجى رفع ملف Excel أو CSV"
+    },
     "ERROR": {
       "FETCH_CUSTOMER_STATISTICS": "فشل تحميل إحصائيات العملاء. يرجى المحاولة مرة أخرى.",
       "NETWORK_ERROR": "خطأ في الشبكة. يرجى التحقق من اتصالك."

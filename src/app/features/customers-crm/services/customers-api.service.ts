@@ -24,7 +24,7 @@ export class CustomersApiService {
   }
 
   getAllCustomers(
-    filters: GetCustomersFilters
+    filters: GetCustomersFilters,
   ): Observable<PagenatedResponse<GetCustomersResponse>> {
     const url = `${this.baseUrl}${environment.customers.getAllCustomers}`;
     let params = new HttpParams();
@@ -51,7 +51,7 @@ export class CustomersApiService {
 
   getCustomerDetails(
     id?: string,
-    customerName?: string
+    customerName?: string,
   ): Observable<ApiResponse<CustomerDetailsResponse>> {
     const url = `${this.baseUrl}${environment.customers.getCustomer}`;
     return this.http.get<ApiResponse<CustomerDetailsResponse>>(url, {
@@ -64,7 +64,7 @@ export class CustomersApiService {
 
   getCustomer(
     id?: string,
-    customerName?: string
+    customerName?: string,
   ): Observable<ApiResponse<CustomerDetailsResponse>> {
     const url = `${this.baseUrl}${environment.customers.getCustomer}`;
     let params = new HttpParams();
@@ -102,5 +102,10 @@ export class CustomersApiService {
   getStatistics(): Observable<ApiResponse<CustomersStatistics>> {
     const url = `${this.baseUrl}${environment.statistics.getCustomerStatistics}`;
     return this.http.get<ApiResponse<CustomersStatistics>>(url);
+  }
+
+  importCustomers(file: FormData): Observable<ApiResponse<boolean>> {
+    const url = `${this.baseUrl}${environment.customers.importCustomers}`;
+    return this.http.post<ApiResponse<boolean>>(url, file);
   }
 }

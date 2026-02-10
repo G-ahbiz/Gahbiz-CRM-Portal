@@ -625,6 +625,16 @@
         "update": "Failed to update customer"
       }
     },
+    "import-dialog": {
+      "title": "Import Customers",
+      "description": "Import customers from an Excel or CSV file.",
+      "select-file": "Select File",
+      "file-type-hint": "only .xlsx (Microsoft Excel) files are supported.",
+      "import-button": "Import",
+      "importing-button": "Importing...",
+      "select-file-error": "Please select a file to import",
+      "invalid-file-type": "Invalid file type. Please upload an Excel or CSV file"
+    },
     "ERROR": {
       "FETCH_CUSTOMER_STATISTICS": "Failed to load customer statistics. Please try again.",
       "NETWORK_ERROR": "Network error. Please check your connection."

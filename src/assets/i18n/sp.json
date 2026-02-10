@@ -607,6 +607,16 @@
         "update": "Error al actualizar el cliente"
       }
     },
+    "import-dialog": {
+      "title": "Importar Clientes",
+      "description": "Importar clientes desde un archivo Excel o CSV.",
+      "select-file": "Seleccionar Archivo",
+      "file-type-hint": "solo se admiten archivos .xlsx (Microsoft Excel).",
+      "import-button": "Importar",
+      "importing-button": "Importando...",
+      "select-file-error": "Por favor selecciona un archivo para importar",
+      "invalid-file-type": "Tipo de archivo inválido. Por favor sube un archivo Excel o CSV"
+    },
     "ERROR": {
       "FETCH_CUSTOMER_STATISTICS": "Error al cargar estadísticas de clientes. Por favor inténtalo de nuevo.",
       "NETWORK_ERROR": "Error de red. Por favor verifica tu conexión."

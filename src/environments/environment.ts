@@ -1,7 +1,8 @@
 export const environment = {
   production: false,
-  baseApi:
-    'https://gahbiz-appserver20260107022828-eza8a4f4e6a9akfu.canadacentral-01.azurewebsites.net/api',
+  // baseApi:
+  //   'https://gahbiz-appserver20260107022828-eza8a4f4e6a9akfu.canadacentral-01.azurewebsites.net/api',
+  baseApi: 'https://serva-best.runasp.net/api',
   account: {
     login: '/Account/login',
     refresh: '/Account/refresh-token',
@@ -49,6 +50,7 @@ export const environment = {
     updateCustomer: '/Customers/update',
     deleteCustomer: (id: string) => `/Customers/${id}`,
     exportCustomers: '/Customers/export',
+    importCustomers: '/Customers/import',
   },
   invoices: {
     getAllInvoices: '/Invoices',

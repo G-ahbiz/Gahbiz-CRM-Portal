@@ -120,6 +120,32 @@ th {
   }
 }
 
+:host ::ng-deep .p-dialog {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .p-dialog-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.5rem;
+}
+
+:host ::ng-deep .p-dialog-content {
+  padding: 1.5rem;
+}
+
+/* Import button specific */
+.import-btn-container {
+  margin-left: auto;
+}
+
+@media (max-width: 576px) {
+  .import-btn-container {
+    margin-left: 0;
+    width: 100%;
+  }
+}
 /* Responsive header layout */
 .responsive-header {
   display: block;
