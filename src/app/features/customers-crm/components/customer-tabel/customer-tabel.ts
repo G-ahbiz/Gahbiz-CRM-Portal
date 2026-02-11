@@ -32,6 +32,8 @@ import { AuthService } from '@core/services/auth.service';
 import { CUSTOMER_DELETE_ROLES, hasPermission } from '@shared/utils/role-permissions';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
 import { Subject } from 'rxjs';
+import { USER_TYPES } from '@shared/config/constants';
+import { DialogModule } from 'primeng/dialog';
 
 type CustomerViewModel = GetCustomersResponse & { selected: boolean };
 
@@ -52,6 +54,7 @@ const ALLOWED_SORT_FIELDS = ['Name'] as const;
     TooltipModule,
     SkeletonModule,
     ConfirmDialogModule,
+    DialogModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './customer-tabel.html',
@@ -69,6 +72,11 @@ export class CustomerTabel implements OnInit {
   // Search debouncer
   private searchSubject = new Subject<string>();
   private searchValue = signal<string>('');
+  visible = signal<boolean>(false);
+  selectedFile = signal<File | null>(null);
+  selectedFileName = signal<string>('');
+  isImporting = signal<boolean>(false);
+  templateDownloadLoading = signal<boolean>(false);
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(ToastService);
@@ -79,9 +87,10 @@ export class CustomerTabel implements OnInit {
   languageService = inject(LanguageService);
 
   // Current user and role-based permissions
-  private currentUser = toSignal(this.authService.currentUser$);
+  currentUser = toSignal(this.authService.currentUser$);
+  userTypes = USER_TYPES;
   canDeleteCustomer = computed(() =>
-    hasPermission(this.currentUser()?.type, CUSTOMER_DELETE_ROLES)
+    hasPermission(this.currentUser()?.type, CUSTOMER_DELETE_ROLES),
   );
 
   // Data properties
@@ -135,7 +144,10 @@ export class CustomerTabel implements OnInit {
     this.searchSubject.next(value.trim());
   }
 
-  constructor(private readonly customersFacade: CustomersFacadeService, private router: Router) {}
+  constructor(
+    private readonly customersFacade: CustomersFacadeService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.setupSearchSubscription();
@@ -157,7 +169,7 @@ export class CustomerTabel implements OnInit {
       })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
       .subscribe({
         next: (response) => {
@@ -166,7 +178,7 @@ export class CustomerTabel implements OnInit {
             data.map((customer) => ({
               ...customer,
               selected: this.selectedCustomerIds().has(customer.id),
-            }))
+            })),
           );
           this.totalRecords = response.totalCount;
           this.updateSelectAllState();
@@ -190,7 +202,7 @@ export class CustomerTabel implements OnInit {
       })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
       .subscribe({
         next: (response) => {
@@ -198,7 +210,7 @@ export class CustomerTabel implements OnInit {
             response.items.map((customer) => ({
               ...customer,
               selected: this.selectedCustomerIds().has(customer.id),
-            })) || []
+            })) || [],
           );
           this.totalRecords = response.totalCount;
           this.updateSelectAllState();
@@ -334,13 +346,13 @@ export class CustomerTabel implements OnInit {
       .deleteCustomer(id)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.loading.set(false)),
       )
       .subscribe({
         next: (response) => {
           if (response.succeeded) {
             this.toast.success(
-              this.translate.instant('CUSTOMERS-CRM.customer-deleted-successfully')
+              this.translate.instant('CUSTOMERS-CRM.customer-deleted-successfully'),
             );
 
             // Remove from selected IDs if it was selected
@@ -367,7 +379,7 @@ export class CustomerTabel implements OnInit {
 
     if (selectedIds.length === 0) {
       this.toast.error(
-        this.translate.instant('CUSTOMERS-CRM.select-at-least-one-customer-to-delete')
+        this.translate.instant('CUSTOMERS-CRM.select-at-least-one-customer-to-delete'),
       );
       return;
     }
@@ -394,7 +406,7 @@ export class CustomerTabel implements OnInit {
       .deleteMultipleCustomers(ids)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.bulkDeleteLoading.set(false))
+        finalize(() => this.bulkDeleteLoading.set(false)),
       )
       .subscribe({
         next: (result) => {
@@ -403,7 +415,7 @@ export class CustomerTabel implements OnInit {
             this.toast.success(
               this.translate.instant('CUSTOMERS-CRM.customers-deleted-successfully', {
                 count: result.succeeded.length,
-              })
+              }),
             );
 
             // Remove successful deletions from selected IDs
@@ -418,7 +430,7 @@ export class CustomerTabel implements OnInit {
               'CUSTOMERS-CRM.some-customers-delete-failed',
               {
                 count: result.failed.length,
-              }
+              },
             );
             this.toast.error(errorMessage);
 
@@ -448,7 +460,7 @@ export class CustomerTabel implements OnInit {
 
     if (selectedIds.length === 0) {
       this.toast.error(
-        this.translate.instant('CUSTOMERS-CRM.select-at-least-one-customer-to-export')
+        this.translate.instant('CUSTOMERS-CRM.select-at-least-one-customer-to-export'),
       );
       return;
     }
@@ -458,7 +470,7 @@ export class CustomerTabel implements OnInit {
       .exportCustomers(selectedIds)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.exportLoading.set(false))
+        finalize(() => this.exportLoading.set(false)),
       )
       .subscribe({
         next: (blob: Blob) => {
@@ -490,7 +502,103 @@ export class CustomerTabel implements OnInit {
         },
       });
   }
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.selectedFile.set(file);
+      this.selectedFileName.set(file.name);
+    }
+  }
 
+  importCustomers() {
+    const file = this.selectedFile();
+    if (!file) {
+      this.toast.error(this.translate.instant('CUSTOMERS-CRM.import-dialog.select-file-error'));
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+    ];
+
+    if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
+      this.toast.error(this.translate.instant('CUSTOMERS-CRM.import-dialog.invalid-file-type'));
+      return;
+    }
+
+    // Create FormData
+    const formData = new FormData();
+    formData.append('ExcelFile', file);
+
+    this.isImporting.set(true);
+
+    this.customersFacade
+      .importCustomers(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(finalize(() => this.isImporting.set(false)))
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded) {
+            this.toast.success(
+              response.message || this.translate.instant('CUSTOMERS-CRM.SUCCESS.IMPORTED'),
+            );
+            this.closeDialog();
+            this.loadCustomersData();
+            this.clearSelections();
+          } else {
+            this.toast.error(
+              response.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
+            );
+          }
+        },
+        error: (error) => {
+          this.toast.error(
+            error?.error?.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
+          );
+          console.error('Import error:', error);
+        },
+      });
+  }
+
+  showDialog() {
+    this.visible.set(true);
+  }
+
+  downloadTemplate(): void {
+    this.templateDownloadLoading.set(true);
+    this.customersFacade
+      .downloadTemplate()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.templateDownloadLoading.set(false)),
+      )
+      .subscribe({
+        next: (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'customers-import-template.xlsx';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.toast.success(
+            this.translate.instant('CUSTOMERS-CRM.import-dialog.template-downloaded'),
+          );
+        },
+        error: (error) => {
+          this.errorFacade.showError(error as Error);
+        },
+      });
+  }
+
+  closeDialog() {
+    this.visible.set(false);
+    this.selectedFile.set(null);
+    this.selectedFileName.set('');
+  }
   /**
    * Clear all selections
    */

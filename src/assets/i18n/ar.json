@@ -614,9 +614,23 @@
         "update": "فشل تحديث العميل"
       }
     },
+    "import-dialog": {
+      "title": "استيراد العملاء",
+      "description": "استيراد العملاء من ملف Excel أو CSV.",
+      "select-file": "اختر ملف",
+      "file-type-hint": "يتم دعم ملفات .xlsx (Microsoft Excel) , .xls (Microsoft Excel) و .csv (Comma Separated Values) فقط.",
+      "download-template": "تحميل القالب",
+      "template-downloaded": "تم تحميل القالب بنجاح",
+      "import-button": "استيراد",
+      "importing-button": "جاري الاستيراد...",
+      "select-file-error": "يرجى اختيار ملف للاستيراد",
+      "invalid-file-type": "نوع ملف غير صالح. يرجى رفع ملف Excel أو CSV"
+    },
     "ERROR": {
       "FETCH_CUSTOMER_STATISTICS": "فشل تحميل إحصائيات العملاء. يرجى المحاولة مرة أخرى.",
-      "NETWORK_ERROR": "خطأ في الشبكة. يرجى التحقق من اتصالك."
+      "NETWORK_ERROR": "خطأ في الشبكة. يرجى التحقق من اتصالك.",
+      "IMPORT_FAILED": "فشل استيراد العملاء. يرجى المحاولة مرة أخرى.",
+      "IMPORTED": "تم استيراد العملاء بنجاح"
     }
   },
   "SALES-CRM": {
@@ -766,7 +780,7 @@
       "title": "استيراد العملاء المحتملين",
       "description": "استيراد العملاء المحتملين من ملف Excel أو CSV.",
       "select-file": "اختر ملف",
-      "file-type-hint": "يتم دعم ملفات .xlsx (Microsoft Excel) فقط.",
+      "file-type-hint": "يتم دعم ملفات .xlsx (Microsoft Excel) , .xls (Microsoft Excel) و .csv (Comma Separated Values) فقط.",
       "import-button": "استيراد",
       "importing-button": "جاري الاستيراد...",
       "select-file-error": "يرجى اختيار ملف للاستيراد",

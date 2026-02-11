@@ -48,6 +48,8 @@ export const environment = {
     updateCustomer: '/Customers/update',
     deleteCustomer: (id: string) => `/Customers/${id}`,
     exportCustomers: '/Customers/export',
+    importCustomers: '/Customers/import',
+    downloadTemplate: '/Customers/import/template',
   },
   invoices: {
     getAllInvoices: '/Invoices',
