@@ -8,7 +8,7 @@
     <p-table #dt [value]="leadsData()" dataKey="id" [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
       [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
       [rowsPerPageOptions]="responsiveRowsPerPageOptions" [lazy]="true" (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll">
+      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll" paginatorDropdownAppendTo="body">
       <ng-template #caption>
         <!-- Responsive Header Container -->
         <div class="responsive-header">

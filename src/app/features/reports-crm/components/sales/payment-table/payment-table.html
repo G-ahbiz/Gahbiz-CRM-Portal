@@ -1,29 +1,16 @@
 <div class="container-fluid p-0 m-0">
   <div class="card border-0 bg-transparent">
-    <p-table
-      #dt1
-      [value]="paymentsData()"
-      dataKey="paymentId"
-      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
-      [paginator]="true"
-      [rows]="pageSize"
-      [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [lazy]="true"
-      (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)"
-      [loading]="loading()"
-      responsiveLayout="scroll"
-    >
+    <p-table #dt1 [value]="paymentsData()" dataKey="paymentId"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }" [paginator]="true" [rows]="pageSize"
+      [totalRecords]="totalRecords" [rowsPerPageOptions]="[5, 10, 20, 50]" [lazy]="true" (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)" [loading]="loading()" paginatorDropdownAppendTo="body" responsiveLayout="scroll">
       <ng-template #caption>
         <!-- Responsive Header Container -->
         <div class="responsive-header">
           <!-- Desktop Layout -->
           <div class="d-none d-md-flex flex-column w-100">
             <!-- First Row: Title and Action Buttons -->
-            <div
-              class="desktop-top-row w-100 d-flex align-items-center justify-content-between mb-3"
-            >
+            <div class="desktop-top-row w-100 d-flex align-items-center justify-content-between mb-3">
               <!-- Title -->
               <div class="desktop-title-section">
                 <h5 class="m-0 p-0">{{ 'PAYMENT_REPORTS.title' | translate }}</h5>
@@ -32,26 +19,16 @@
 
               <!-- Action Buttons -->
               <div class="desktop-action-btns d-flex gap-2">
-                <button
-                  class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2"
-                  (click)="refreshPayments()"
-                  [disabled]="loading()"
-                  [title]="'COMMON.REFRESH' | translate"
-                >
+                <button class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center gap-2"
+                  (click)="refreshPayments()" [disabled]="loading()" [title]="'COMMON.REFRESH' | translate">
                   <i class="pi" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
                   <span class="d-none d-lg-inline">{{ 'COMMON.REFRESH' | translate }}</span>
                 </button>
 
-                <button
-                  class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center gap-2"
-                  (click)="exportPayments()"
-                  [disabled]="exportLoading() || paymentsData().length === 0"
-                  [title]="'COMMON.EXPORT' | translate"
-                >
-                  <i
-                    class="pi"
-                    [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
-                  ></i>
+                <button class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center gap-2"
+                  (click)="exportPayments()" [disabled]="exportLoading() || paymentsData().length === 0"
+                  [title]="'COMMON.EXPORT' | translate">
+                  <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
                   <span class="d-none d-lg-inline">{{ 'COMMON.EXPORT' | translate }}</span>
                 </button>
               </div>
@@ -65,24 +42,15 @@
                   <p-inputicon>
                     <i class="pi pi-search"></i>
                   </p-inputicon>
-                  <input
-                    pInputText
-                    type="text"
-                    class="w-100"
-                    (input)="onSearchChange($any($event.target).value)"
-                    #searchInput
-                    [placeholder]="'PAYMENT_REPORTS.search' | translate"
-                  />
+                  <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
+                    #searchInput [placeholder]="'PAYMENT_REPORTS.search' | translate" />
                 </p-iconfield>
               </div>
 
               <!-- Filters -->
               <div class="desktop-filters-container d-flex gap-2 align-items-center">
                 <!-- Payment Method Filter -->
-                <select
-                  class="form-select filter-select"
-                  (change)="onPaymentMethodChange($any($event.target).value)"
-                >
+                <select class="form-select filter-select" (change)="onPaymentMethodChange($any($event.target).value)">
                   @for (option of paymentMethodOptions; track option.value) {
                   <option [value]="option.value">
                     {{ option.labelKey | translate }}
@@ -91,10 +59,7 @@
                 </select>
 
                 <!-- Period Filter -->
-                <select
-                  class="form-select filter-select"
-                  (change)="onPeriodChange($any($event.target).value)"
-                >
+                <select class="form-select filter-select" (change)="onPeriodChange($any($event.target).value)">
                   @for (option of periodOptions; track option.value) {
                   <option [value]="option.value">
                     {{ option.labelKey | translate }}
@@ -104,29 +69,12 @@
 
                 <!-- Custom Date Range (shown only when Period/Custom is selected) -->
                 @if (periodValue() === 'Period') {
-                <p-datepicker
-                  [(ngModel)]="fromDate"
-                  [showIcon]="true"
-                  [iconDisplay]="'input'"
-                  dateFormat="dd/mm/yy"
-                  [placeholder]="'PAYMENT_REPORTS.from-date' | translate"
-                  (onSelect)="onDateRangeChange()"
-                  appendTo="body"
-                  styleClass="date-picker-inline"
-                  [maxDate]="maxDate()"
-                ></p-datepicker>
-                <p-datepicker
-                  [(ngModel)]="toDate"
-                  [showIcon]="true"
-                  [iconDisplay]="'input'"
-                  dateFormat="dd/mm/yy"
-                  [placeholder]="'PAYMENT_REPORTS.to-date' | translate"
-                  (onSelect)="onDateRangeChange()"
-                  appendTo="body"
-                  styleClass="date-picker-inline"
-                  [maxDate]="maxDate()"
-                  [minDate]="fromDate()"
-                ></p-datepicker>
+                <p-datepicker [(ngModel)]="fromDate" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.from-date' | translate" (onSelect)="onDateRangeChange()"
+                  appendTo="body" styleClass="date-picker-inline" [maxDate]="maxDate()"></p-datepicker>
+                <p-datepicker [(ngModel)]="toDate" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.to-date' | translate" (onSelect)="onDateRangeChange()" appendTo="body"
+                  styleClass="date-picker-inline" [maxDate]="maxDate()" [minDate]="fromDate()"></p-datepicker>
                 }
               </div>
             </div>
@@ -146,23 +94,16 @@
                 <p-inputicon>
                   <i class="pi pi-search"></i>
                 </p-inputicon>
-                <input
-                  pInputText
-                  type="text"
-                  class="w-100"
-                  (input)="onSearchChange($any($event.target).value)"
-                  [placeholder]="'PAYMENT_REPORTS.search' | translate"
-                />
+                <input pInputText type="text" class="w-100" (input)="onSearchChange($any($event.target).value)"
+                  [placeholder]="'PAYMENT_REPORTS.search' | translate" />
               </p-iconfield>
             </div>
 
             <!-- Filters -->
             <div class="mobile-filters d-flex flex-column gap-2 mb-3">
               <!-- Payment Method Filter -->
-              <select
-                class="form-select filter-select-mobile"
-                (change)="onPaymentMethodChange($any($event.target).value)"
-              >
+              <select class="form-select filter-select-mobile"
+                (change)="onPaymentMethodChange($any($event.target).value)">
                 @for (option of paymentMethodOptions; track option.value) {
                 <option [value]="option.value">
                   {{ 'PAYMENT_REPORTS.payment-method' | translate }}:
@@ -172,10 +113,7 @@
               </select>
 
               <!-- Period Filter -->
-              <select
-                class="form-select filter-select-mobile"
-                (change)="onPeriodChange($any($event.target).value)"
-              >
+              <select class="form-select filter-select-mobile" (change)="onPeriodChange($any($event.target).value)">
                 @for (option of periodOptions; track option.value) {
                 <option [value]="option.value">
                   {{ 'PAYMENT_REPORTS.period' | translate }}: {{ option.labelKey | translate }}
@@ -186,29 +124,12 @@
               <!-- Custom Date Range for Mobile -->
               @if (periodValue() === 'Period') {
               <div class="d-flex gap-2">
-                <p-datepicker
-                  [(ngModel)]="fromDate"
-                  [showIcon]="true"
-                  [iconDisplay]="'input'"
-                  dateFormat="dd/mm/yy"
-                  [placeholder]="'PAYMENT_REPORTS.from-date' | translate"
-                  (onSelect)="onDateRangeChange()"
-                  appendTo="body"
-                  styleClass="date-picker-mobile"
-                  [maxDate]="toDate()"
-                ></p-datepicker>
-                <p-datepicker
-                  [(ngModel)]="toDate"
-                  [showIcon]="true"
-                  [iconDisplay]="'input'"
-                  dateFormat="dd/mm/yy"
-                  [placeholder]="'PAYMENT_REPORTS.to-date' | translate"
-                  (onSelect)="onDateRangeChange()"
-                  appendTo="body"
-                  styleClass="date-picker-mobile"
-                  [maxDate]="maxDate()"
-                  [minDate]="fromDate()"
-                ></p-datepicker>
+                <p-datepicker [(ngModel)]="fromDate" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.from-date' | translate" (onSelect)="onDateRangeChange()"
+                  appendTo="body" styleClass="date-picker-mobile" [maxDate]="toDate()"></p-datepicker>
+                <p-datepicker [(ngModel)]="toDate" [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy"
+                  [placeholder]="'PAYMENT_REPORTS.to-date' | translate" (onSelect)="onDateRangeChange()" appendTo="body"
+                  styleClass="date-picker-mobile" [maxDate]="maxDate()" [minDate]="fromDate()"></p-datepicker>
               </div>
               }
             </div>
@@ -217,22 +138,15 @@
             <div class="mobile-action-btns d-flex gap-2 mb-3">
               <button
                 class="btn btn-sm btn-outline-secondary px-3 py-2 d-flex align-items-center justify-content-center flex-grow-1"
-                (click)="refreshPayments()"
-                [disabled]="loading()"
-              >
+                (click)="refreshPayments()" [disabled]="loading()">
                 <i class="pi me-2" [ngClass]="loading() ? 'pi-spinner pi-spin' : 'pi-refresh'"></i>
                 <span class="d-none d-sm-inline">{{ 'COMMON.REFRESH' | translate }}</span>
               </button>
 
               <button
                 class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex align-items-center justify-content-center flex-grow-1"
-                (click)="exportPayments()"
-                [disabled]="exportLoading() || paymentsData().length === 0"
-              >
-                <i
-                  class="pi me-2"
-                  [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
-                ></i>
+                (click)="exportPayments()" [disabled]="exportLoading() || paymentsData().length === 0">
+                <i class="pi me-2" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
                 <span class="d-none d-sm-inline">{{ 'COMMON.EXPORT' | translate }}</span>
               </button>
             </div>
@@ -247,7 +161,7 @@
             </p-progressSpinner>
             <small class="text-muted">
               {{
-                exportLoading() ? ('REPORTS.exporting' | translate) : ('COMMON.LOADING' | translate)
+              exportLoading() ? ('REPORTS.exporting' | translate) : ('COMMON.LOADING' | translate)
               }}
             </small>
           </div>
@@ -291,16 +205,12 @@
           <td class="d-none d-md-table-cell">
             <span class="py-1 px-2 rounded-3 payment-mode-badge">
               {{
-                'PAYMENT_REPORTS.payment-methods.' + (payment.paymentMode | lowercase) | translate
+              'PAYMENT_REPORTS.payment-methods.' + (payment.paymentMode | lowercase) | translate
               }}
             </span>
           </td>
           <td class="d-none d-md-table-cell">{{ payment.transactionId || '-' }}</td>
-          <td
-            class="text-truncate d-none d-lg-table-cell"
-            style="max-width: 200px"
-            [title]="payment.note"
-          >
+          <td class="text-truncate d-none d-lg-table-cell" style="max-width: 200px" [title]="payment.note">
             {{ payment.note || '-' }}
           </td>
           <td class="fw-bold text-success">$ {{ payment.amount | number : '1.2-2' }}</td>
