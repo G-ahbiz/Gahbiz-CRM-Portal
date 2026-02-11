@@ -108,4 +108,9 @@ export class CustomersApiService {
     const url = `${this.baseUrl}${environment.customers.importCustomers}`;
     return this.http.post<ApiResponse<boolean>>(url, file);
   }
+
+  downloadTemplate(): Observable<Blob> {
+    const url = `${this.baseUrl}${environment.customers.downloadTemplate}`;
+    return this.http.get<Blob>(url, { responseType: 'blob' as 'json' });
+  }
 }

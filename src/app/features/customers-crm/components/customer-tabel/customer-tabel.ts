@@ -76,6 +76,7 @@ export class CustomerTabel implements OnInit {
   selectedFile = signal<File | null>(null);
   selectedFileName = signal<string>('');
   isImporting = signal<boolean>(false);
+  templateDownloadLoading = signal<boolean>(false);
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly toast = inject(ToastService);
@@ -559,6 +560,34 @@ export class CustomerTabel implements OnInit {
 
   showDialog() {
     this.visible.set(true);
+  }
+
+  downloadTemplate(): void {
+    this.templateDownloadLoading.set(true);
+    this.customersFacade
+      .downloadTemplate()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.templateDownloadLoading.set(false)),
+      )
+      .subscribe({
+        next: (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'customers-import-template.xlsx';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          this.toast.success(
+            this.translate.instant('CUSTOMERS-CRM.import-dialog.template-downloaded'),
+          );
+        },
+        error: (error) => {
+          this.errorFacade.showError(error as Error);
+        },
+      });
   }
 
   cancel() {

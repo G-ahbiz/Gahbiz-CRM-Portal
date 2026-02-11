@@ -612,6 +612,8 @@
       "description": "Importar clientes desde un archivo Excel o CSV.",
       "select-file": "Seleccionar Archivo",
       "file-type-hint": "solo se admiten archivos .xlsx (Microsoft Excel).",
+      "download-template": "Descargar Plantilla",
+      "template-downloaded": "Plantilla descargada exitosamente",
       "import-button": "Importar",
       "importing-button": "Importando...",
       "select-file-error": "Por favor selecciona un archivo para importar",

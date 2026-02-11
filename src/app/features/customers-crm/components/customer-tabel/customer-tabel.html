@@ -40,33 +40,48 @@
         </div>
       }
     </div>
-    <div class="d-flex justify-content-end gap-2 mt-4">
+    <div class="d-flex justify-content-between gap-2 mt-4 flex-wrap">
       <button
         type="button"
-        class="btn btn-secondary"
-        (click)="closeDialog()"
-        [disabled]="isImporting()"
+        class="btn btn-outline-primary"
+        (click)="downloadTemplate()"
+        [disabled]="isImporting() || templateDownloadLoading()"
       >
-        {{ 'COMMON.CANCEL' | translate }}
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="importCustomers()"
-        [disabled]="!selectedFile() || isImporting()"
-      >
-        @if (!isImporting()) {
-          <span
-            ><i class="pi pi-upload me-2"></i
-            >{{ 'CUSTOMERS-CRM.import-dialog.import-button' | translate }}</span
-          >
+        @if (!templateDownloadLoading()) {
+          <i class="pi pi-download me-2"></i>
         } @else {
-          <span
-            ><i class="pi pi-spin pi-spinner me-2"></i
-            >{{ 'CUSTOMERS-CRM.import-dialog.importing-button' | translate }}</span
-          >
+          <i class="pi pi-spin pi-spinner me-2"></i>
         }
+        {{ 'CUSTOMERS-CRM.import-dialog.download-template' | translate }}
       </button>
+      <div class="d-flex gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeDialog()"
+          [disabled]="isImporting()"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="importCustomers()"
+          [disabled]="!selectedFile() || isImporting()"
+        >
+          @if (!isImporting()) {
+            <span
+              ><i class="pi pi-upload me-2"></i
+              >{{ 'CUSTOMERS-CRM.import-dialog.import-button' | translate }}</span
+            >
+          } @else {
+            <span
+              ><i class="pi pi-spin pi-spinner me-2"></i
+              >{{ 'CUSTOMERS-CRM.import-dialog.importing-button' | translate }}</span
+            >
+          }
+        </button>
+      </div>
     </div>
   </p-dialog>
   <div class="card border-0 bg-transparent">

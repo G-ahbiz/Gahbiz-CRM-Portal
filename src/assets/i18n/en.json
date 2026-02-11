@@ -630,6 +630,8 @@
       "description": "Import customers from an Excel or CSV file.",
       "select-file": "Select File",
       "file-type-hint": "only .xlsx (Microsoft Excel) files are supported.",
+      "download-template": "Download Template",
+      "template-downloaded": "Template downloaded successfully",
       "import-button": "Import",
       "importing-button": "Importing...",
       "select-file-error": "Please select a file to import",

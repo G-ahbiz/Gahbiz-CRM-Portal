@@ -110,4 +110,8 @@ export class CustomersFacadeService {
   importCustomers(file: FormData): Observable<ApiResponse<boolean>> {
     return this.customerService.importCustomers(file);
   }
+
+  downloadTemplate(): Observable<Blob> {
+    return this.customerService.downloadTemplate();
+  }
 }
