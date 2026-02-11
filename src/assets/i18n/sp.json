@@ -611,7 +611,7 @@
       "title": "Importar Clientes",
       "description": "Importar clientes desde un archivo Excel o CSV.",
       "select-file": "Seleccionar Archivo",
-      "file-type-hint": "solo se admiten archivos .xlsx (Microsoft Excel).",
+      "file-type-hint": "solo se admiten archivos .xlsx (Microsoft Excel) , .xls (Microsoft Excel) y .csv (Comma Separated Values).",
       "download-template": "Descargar Plantilla",
       "template-downloaded": "Plantilla descargada exitosamente",
       "import-button": "Importar",
@@ -621,7 +621,9 @@
     },
     "ERROR": {
       "FETCH_CUSTOMER_STATISTICS": "Error al cargar estadísticas de clientes. Por favor inténtalo de nuevo.",
-      "NETWORK_ERROR": "Error de red. Por favor verifica tu conexión."
+      "NETWORK_ERROR": "Error de red. Por favor verifica tu conexión.",
+      "IMPORT_FAILED": "Error al importar clientes. Por favor inténtalo de nuevo.",
+      "IMPORTED": "Clientes importados exitosamente"
     }
   },
   "SALES-CRM": {
@@ -751,7 +753,7 @@
       "title": "Importar Leads",
       "description": "Importar leads desde un archivo Excel o CSV.",
       "select-file": "Seleccionar Archivo",
-      "file-type-hint": "solo se admiten archivos .xlsx (Microsoft Excel).",
+      "file-type-hint": "solo se admiten archivos .xlsx (Microsoft Excel) , .xls (Microsoft Excel) y .csv (Comma Separated Values).",
       "import-button": "Importar",
       "importing-button": "Importando...",
       "select-file-error": "Por favor selecciona un archivo para importar",

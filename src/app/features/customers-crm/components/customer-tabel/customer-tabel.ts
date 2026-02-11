@@ -534,28 +534,32 @@ export class CustomerTabel implements OnInit {
 
     this.isImporting.set(true);
 
-    this.customersFacade.importCustomers(formData).subscribe({
-      next: (response) => {
-        this.isImporting.set(false);
-        if (response.succeeded) {
-          this.toast.success(
-            response.message || this.translate.instant('CUSTOMERS-CRM.SUCCESS.IMPORTED'),
-          );
-          this.closeDialog();
-        } else {
+    this.customersFacade
+      .importCustomers(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(finalize(() => this.isImporting.set(false)))
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded) {
+            this.toast.success(
+              response.message || this.translate.instant('CUSTOMERS-CRM.SUCCESS.IMPORTED'),
+            );
+            this.closeDialog();
+            this.loadCustomersData();
+            this.clearSelections();
+          } else {
+            this.toast.error(
+              response.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
+            );
+          }
+        },
+        error: (error) => {
           this.toast.error(
-            response.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
+            error?.error?.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
           );
-        }
-      },
-      error: (error) => {
-        this.isImporting.set(false);
-        this.toast.error(
-          error?.error?.message || this.translate.instant('LEADS.ERRORS.IMPORT_FAILED'),
-        );
-        console.error('Import error:', error);
-      },
-    });
+          console.error('Import error:', error);
+        },
+      });
   }
 
   showDialog() {
@@ -588,10 +592,6 @@ export class CustomerTabel implements OnInit {
           this.errorFacade.showError(error as Error);
         },
       });
-  }
-
-  cancel() {
-    window.history.back();
   }
 
   closeDialog() {
