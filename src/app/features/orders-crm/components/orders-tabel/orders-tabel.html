@@ -27,7 +27,7 @@
               </p-inputicon>
               <input pInputText type="text" (input)="onSearch($event)" #searchInput placeholder="Search by address" />
             </p-iconfield>
-            <button type="button" class="btn btn-sm btn-outline-primary outline-primary-clr p-2"
+            <button *ngIf="searchValue()" type="button" class="btn btn-sm btn-outline-primary outline-primary-clr p-2"
               (click)="clearFilters(dt)">
               <i class="pi pi-filter-slash"></i>
               Clear
