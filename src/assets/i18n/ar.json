@@ -549,7 +549,7 @@
         "email": "البريد الإلكتروني",
         "gender": "الجنس",
         "phone": "رقم الهاتف",
-        "nationalId": "الهوية الوطنية",
+        "nationalId": "SSN",
         "country": "البلد",
         "cityState": "الولاية",
         "postalCode": "الرمز البريدي",
