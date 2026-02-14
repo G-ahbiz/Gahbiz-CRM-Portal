@@ -542,7 +542,7 @@
         "email": "Correo Electrónico",
         "gender": "Género",
         "phone": "Número de Teléfono",
-        "nationalId": "ID Nacional",
+        "nationalId": "SSN",
         "country": "País",
         "cityState": "Estado",
         "postalCode": "Código Postal",

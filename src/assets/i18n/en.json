@@ -560,7 +560,7 @@
         "email": "Email",
         "gender": "Gender",
         "phone": "Phone Number",
-        "nationalId": "National ID",
+        "nationalId": "SSN",
         "country": "Country",
         "cityState": "State",
         "postalCode": "Postal Code",
