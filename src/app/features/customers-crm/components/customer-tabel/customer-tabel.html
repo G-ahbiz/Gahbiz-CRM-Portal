@@ -7,7 +7,83 @@
     acceptIcon="pi pi-check red"
     rejectIcon="pi pi-times"
   ></p-confirmDialog>
-
+  <p-dialog
+    [header]="'CUSTOMERS-CRM.import-dialog.title' | translate"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '30rem' }"
+  >
+    <div class="d-flex flex-column gap-3">
+      <span class="text-secondary">{{
+        'CUSTOMERS-CRM.import-dialog.description' | translate
+      }}</span>
+      <div class="form-group">
+        <label for="fileInput" class="form-label">{{
+          'CUSTOMERS-CRM.import-dialog.select-file' | translate
+        }}</label>
+        <input
+          type="file"
+          #fileInput
+          id="fileInput"
+          class="form-control"
+          accept=".xlsx,.xls,.csv"
+          (change)="onFileSelected($event)"
+        />
+        <small class="text-muted">{{
+          'CUSTOMERS-CRM.import-dialog.file-type-hint' | translate
+        }}</small>
+      </div>
+      @if (selectedFileName()) {
+        <div class="alert alert-info py-2">
+          <i class="pi pi-file me-2"></i>
+          <span>{{ selectedFileName() }}</span>
+        </div>
+      }
+    </div>
+    <div class="d-flex justify-content-between gap-2 mt-4 flex-wrap">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="downloadTemplate()"
+        [disabled]="isImporting() || templateDownloadLoading()"
+      >
+        @if (!templateDownloadLoading()) {
+          <i class="pi pi-download me-2"></i>
+        } @else {
+          <i class="pi pi-spin pi-spinner me-2"></i>
+        }
+        {{ 'CUSTOMERS-CRM.import-dialog.download-template' | translate }}
+      </button>
+      <div class="d-flex gap-2">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeDialog()"
+          [disabled]="isImporting()"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="importCustomers()"
+          [disabled]="!selectedFile() || isImporting()"
+        >
+          @if (!isImporting()) {
+            <span
+              ><i class="pi pi-upload me-2"></i
+              >{{ 'CUSTOMERS-CRM.import-dialog.import-button' | translate }}</span
+            >
+          } @else {
+            <span
+              ><i class="pi pi-spin pi-spinner me-2"></i
+              >{{ 'CUSTOMERS-CRM.import-dialog.importing-button' | translate }}</span
+            >
+          }
+        </button>
+      </div>
+    </div>
+  </p-dialog>
   <div class="card border-0 bg-transparent">
     <p-table
       #dt1
@@ -23,6 +99,7 @@
       (onSort)="onSortColumn($event)"
       [loading]="loading()"
       responsiveLayout="scroll"
+      paginatorDropdownAppendTo="body"
     >
       <ng-template #caption>
         <!-- Responsive Header Container -->
@@ -33,21 +110,21 @@
             <div class="desktop-action-btns d-flex gap-2">
               <!-- Bulk Delete Button (Manager/Admin only) -->
               @if (canDeleteCustomer()) {
-              <button
-                class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-                (click)="deleteSelectedCustomers()"
-                [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
-                [title]="'CUSTOMERS-CRM.delete-selected' | translate"
-              >
-                <i
-                  class="pi fs-875"
-                  [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
-                ></i>
-                <span>{{ 'CUSTOMERS-CRM.delete' | translate }}</span>
-                <span *ngIf="selectedCustomersCount > 0" class="ms-1">
-                  ({{ selectedCustomersCount }})
-                </span>
-              </button>
+                <button
+                  class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                  (click)="deleteSelectedCustomers()"
+                  [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
+                  [title]="'CUSTOMERS-CRM.delete-selected' | translate"
+                >
+                  <i
+                    class="pi fs-875"
+                    [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
+                  ></i>
+                  <span>{{ 'CUSTOMERS-CRM.delete' | translate }}</span>
+                  <span *ngIf="selectedCustomersCount > 0" class="ms-1">
+                    ({{ selectedCustomersCount }})
+                  </span>
+                </button>
               }
 
               <!-- Export Button -->
@@ -65,6 +142,19 @@
                   ({{ selectedCustomersCount }})
                 </span>
               </button>
+
+              <!-- Import Button (Admins/Managers only) -->
+              @if (
+                currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER
+              ) {
+                <button
+                  class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                  (click)="showDialog()"
+                >
+                  <i class="pi pi-upload fs-875"></i>
+                  {{ 'COMMON.IMPORT' | translate }}
+                </button>
+              }
 
               <!-- Clear Selection Button -->
               <button
@@ -128,25 +218,38 @@
             <div class="mobile-action-btns d-flex gap-2 mb-3">
               <!-- Delete Button (Icon only) - Manager/Admin only -->
               @if (canDeleteCustomer()) {
-              <button
-                class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="deleteSelectedCustomers()"
-                [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
-                [title]="'CUSTOMERS-CRM.delete-selected' | translate"
-              >
-                <i
-                  class="pi"
-                  [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
-                ></i>
-                <span class="ms-1 d-none d-sm-inline">{{
-                  'CUSTOMERS-CRM.delete' | translate
-                }}</span>
-                <span *ngIf="selectedCustomersCount > 0" class="ms-1">
-                  ({{ selectedCustomersCount }})
-                </span>
-              </button>
+                <button
+                  class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                  (click)="deleteSelectedCustomers()"
+                  [disabled]="bulkDeleteLoading() || selectedCustomersCount === 0"
+                  [title]="'CUSTOMERS-CRM.delete-selected' | translate"
+                >
+                  <i
+                    class="pi"
+                    [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
+                  ></i>
+                  <span class="ms-1 d-none d-sm-inline">{{
+                    'CUSTOMERS-CRM.delete' | translate
+                  }}</span>
+                  <span *ngIf="selectedCustomersCount > 0" class="ms-1">
+                    ({{ selectedCustomersCount }})
+                  </span>
+                </button>
               }
-
+              <!-- Import Button (Admins/Managers only) -->
+              @if (
+                currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER
+              ) {
+                <div class="import-btn-container ms-auto">
+                  <button
+                    class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                    (click)="showDialog()"
+                  >
+                    <i class="pi pi-upload d-sm-none"></i>
+                    <span class="d-none d-sm-inline">{{ 'COMMON.IMPORT' | translate }}</span>
+                  </button>
+                </div>
+              }
               <!-- Export Button (Icon + Text) -->
               <button
                 class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
@@ -194,7 +297,7 @@
           [ngClass]="{
             'text-center': true,
             'text-md-start': !languageService.isRTL(),
-            'text-md-end': languageService.isRTL()
+            'text-md-end': languageService.isRTL(),
           }"
         >
           <h5 class="m-0 p-0">{{ 'CUSTOMERS-CRM.all-customers' | translate }}</h5>
@@ -259,13 +362,13 @@
             />
           </td>
           <td class="d-none d-md-table-cell" [title]="customer.id">
-            {{ customer.id | slice : 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
+            {{ customer.id | slice: 0 : 8 }}{{ customer.id.length > 8 ? '...' : '' }}
           </td>
           <td>{{ customer.phoneNumber }}</td>
           <td>
             <span class="d-none d-md-inline">{{ customer.fullName }}</span>
             <span class="d-md-none"
-              >{{ customer.fullName | slice : 0 : 12
+              >{{ customer.fullName | slice: 0 : 12
               }}{{ customer.fullName.length > 12 ? '...' : '' }}</span
             >
           </td>
@@ -287,13 +390,13 @@
               <i class="pi pi-pencil"></i>
             </button>
             @if (canDeleteCustomer()) {
-            <button
-              class="btn btn-sm p-1"
-              (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
-              [title]="'COMMON.DELETE' | translate"
-            >
-              <i class="pi pi-trash"></i>
-            </button>
+              <button
+                class="btn btn-sm p-1"
+                (click)="onDeleteCustomer(customer.id); $event.stopPropagation()"
+                [title]="'COMMON.DELETE' | translate"
+              >
+                <i class="pi pi-trash"></i>
+              </button>
             }
           </td>
         </tr>

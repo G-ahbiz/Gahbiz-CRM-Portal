@@ -8,7 +8,7 @@
     <p-table #dt [value]="leadsData()" dataKey="id" [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
       [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
       [rowsPerPageOptions]="responsiveRowsPerPageOptions" [lazy]="true" (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll">
+      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll" paginatorDropdownAppendTo="body">
       <ng-template #caption>
         <!-- Responsive Header Container -->
         <div class="responsive-header">
@@ -69,8 +69,8 @@
 
             <!-- Right Section: Clear Filter and Add Lead -->
             <div class="desktop-add-btn d-flex gap-2">
-              <button type="button" class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2"
-                (click)="clear()">
+              <button *ngIf="searchValue()" type="button"
+                class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2" (click)="clear()">
                 <i class="pi pi-filter-slash"></i>
                 <span class="ms-1">{{ 'COMMON.CLEAR_FILTER' | translate }}</span>
               </button>
@@ -151,7 +151,7 @@
               }
 
               <!-- Clear Filter Button (Mobile) -->
-              <button type="button"
+              <button *ngIf="searchValue()" type="button"
                 class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 (click)="clear()">
                 <i class="pi pi-filter-slash d-sm-none"></i>

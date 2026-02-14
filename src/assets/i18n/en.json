@@ -512,7 +512,6 @@
     "TITLE": "Customers",
     "TOTAL_CUSTOMERS": "Total Customers",
     "TOTAL_LEADS": "Total Leads",
-    "TOTAL_USERS": "Total Users",
     "export": "Export",
     "add-customer": "Add Customer",
     "search": "Search...",
@@ -561,7 +560,7 @@
         "email": "Email",
         "gender": "Gender",
         "phone": "Phone Number",
-        "nationalId": "National ID",
+        "nationalId": "SSN",
         "country": "Country",
         "cityState": "State",
         "postalCode": "Postal Code",
@@ -625,9 +624,23 @@
         "update": "Failed to update customer"
       }
     },
+    "import-dialog": {
+      "title": "Import Customers",
+      "description": "Import customers from an Excel or CSV file.",
+      "select-file": "Select File",
+      "file-type-hint": "only .xlsx (Microsoft Excel) , .xls (Microsoft Excel) and .csv (Comma Separated Values) files are supported.",
+      "download-template": "Download Template",
+      "template-downloaded": "Template downloaded successfully",
+      "import-button": "Import",
+      "importing-button": "Importing...",
+      "select-file-error": "Please select a file to import",
+      "invalid-file-type": "Invalid file type. Please upload an Excel or CSV file"
+    },
     "ERROR": {
       "FETCH_CUSTOMER_STATISTICS": "Failed to load customer statistics. Please try again.",
-      "NETWORK_ERROR": "Network error. Please check your connection."
+      "NETWORK_ERROR": "Network error. Please check your connection.",
+      "IMPORT_FAILED": "Failed to import customers. Please try again.",
+      "IMPORTED": "Customers imported successfully"
     }
   },
   "SALES-CRM": {
@@ -777,7 +790,7 @@
       "title": "Import Leads",
       "description": "Import leads from an Excel or CSV file.",
       "select-file": "Select File",
-      "file-type-hint": "only .xlsx (Microsoft Excel) files are supported.",
+      "file-type-hint": "only .xlsx (Microsoft Excel) , .xls (Microsoft Excel) and .csv (Comma Separated Values) files are supported.",
       "import-button": "Import",
       "importing-button": "Importing...",
       "select-file-error": "Please select a file to import",

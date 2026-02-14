@@ -21,21 +21,21 @@ export class CustomersFacadeService {
   }
 
   getAllCustomers(
-    filters: GetCustomersFilters
+    filters: GetCustomersFilters,
   ): Observable<PagenatedResponse<GetCustomersResponse>> {
     return this.customerService.getAllCustomers(filters);
   }
 
   getCustomer(
     id?: string,
-    customerName?: string
+    customerName?: string,
   ): Observable<ApiResponse<CustomerDetailsResponse>> {
     return this.customerService.getCustomer(id, customerName);
   }
 
   getCustomerDetails(
     id?: string,
-    customerName?: string
+    customerName?: string,
   ): Observable<ApiResponse<CustomerDetailsResponse>> {
     return this.customerService.getCustomerDetails(id, customerName);
   }
@@ -49,7 +49,7 @@ export class CustomersFacadeService {
   }
 
   deleteMultipleCustomers(
-    ids: string[]
+    ids: string[],
   ): Observable<{ succeeded: string[]; failed: { id: string; error: any }[] }> {
     if (ids.length === 0) {
       return of({ succeeded: [], failed: [] });
@@ -69,9 +69,9 @@ export class CustomersFacadeService {
             response: null,
             success: false,
             error,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
 
     return forkJoin(deleteRequests).pipe(
@@ -91,7 +91,7 @@ export class CustomersFacadeService {
         });
 
         return { succeeded, failed };
-      })
+      }),
     );
   }
 
@@ -105,5 +105,13 @@ export class CustomersFacadeService {
 
   getStatistics(): Observable<ApiResponse<CustomersStatistics>> {
     return this.customerService.getStatistics();
+  }
+
+  importCustomers(file: FormData): Observable<ApiResponse<boolean>> {
+    return this.customerService.importCustomers(file);
+  }
+
+  downloadTemplate(): Observable<Blob> {
+    return this.customerService.downloadTemplate();
   }
 }
