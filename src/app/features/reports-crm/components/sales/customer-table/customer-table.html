@@ -4,7 +4,7 @@
       [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }" [paginator]="true"
       [rows]="pageSizeControl.value || 10" [totalRecords]="totalRecords()"
       [rowsPerPageOptions]="getResponsiveRowsPerPageOptions()" [lazy]="true" (onPage)="onPageChange($event)"
-      [loading]="loading()" responsiveLayout="scroll">
+      [loading]="loading()" responsiveLayout="scroll" paginatorDropdownAppendTo="body">
 
       <ng-template #caption>
         <!-- Responsive Header Container -->

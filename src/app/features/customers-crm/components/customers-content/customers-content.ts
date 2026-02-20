@@ -69,7 +69,7 @@ export class CustomerContent implements OnInit {
       .getStatistics()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.isLoading.set(false))
+        finalize(() => this.isLoading.set(false)),
       )
       .subscribe({
         next: (response) => {
@@ -112,14 +112,6 @@ export class CustomerContent implements OnInit {
         icon: 'leads',
         bgColor: 'bg-success-light',
       },
-      {
-        title: 'CUSTOMERS-CRM.TOTAL_USERS', // Translation key
-        value: stats.totalUsers || 0,
-        rating: Math.abs(this.formatPercentage(stats.usersChangePercentage || 0)),
-        ratingStatues: (stats.usersChangePercentage || 0) >= 0 ? 'up' : 'down',
-        icon: 'users',
-        bgColor: 'bg-warning-light',
-      },
     ];
   }
 
@@ -145,14 +137,6 @@ export class CustomerContent implements OnInit {
         ratingStatues: 'up',
         icon: 'leads',
         bgColor: 'bg-success-light',
-      },
-      {
-        title: 'CUSTOMERS-CRM.TOTAL_USERS',
-        value: 0,
-        rating: 0,
-        ratingStatues: 'up',
-        icon: 'users',
-        bgColor: 'bg-warning-light',
       },
     ];
   }
