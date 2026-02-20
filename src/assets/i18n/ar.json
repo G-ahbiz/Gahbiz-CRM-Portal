@@ -744,6 +744,7 @@
     "UNASSIGNED": "غير مخصص",
     "FOLLOW_UP": "متابعة",
     "CREATED_AT": "تم الإنشاء",
+    "PHONE_NUMBER": "رقم الهاتف",
     "ACTIVITY_DETAILS": "تفاصيل النشاط",
     "USER": "المستخدم",
     "TIME": "الوقت",

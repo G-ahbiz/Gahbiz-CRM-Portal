@@ -180,7 +180,7 @@ export class AddCustomers implements OnInit, OnDestroy {
           const errorMsg = this.errorFacadeService.handleHttpError(error);
           this.toast.error(this.translateService.instant(errorMsg) || errorMsg);
         },
-      })
+      }),
     );
   }
 
@@ -196,9 +196,9 @@ export class AddCustomers implements OnInit, OnDestroy {
           this.states.set([]);
         }),
         switchMap((countryId: number) =>
-          this.locationService.getStatesByCountry$(countryId.toString())
+          this.locationService.getStatesByCountry$(countryId.toString()),
         ),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (states) => {
@@ -294,7 +294,7 @@ export class AddCustomers implements OnInit, OnDestroy {
 
     // Find country by name or shortName
     const country = this.countries().find(
-      (c) => c.name === customer.country || c.shortName === customer.country
+      (c) => c.name === customer.country || c.shortName === customer.country,
     );
 
     console.log('Found country:', country);
@@ -421,18 +421,16 @@ export class AddCustomers implements OnInit, OnDestroy {
         next: (response) => {
           if (response.succeeded) {
             this.toast.success(
-              this.translateService.instant('CUSTOMERS-CRM.add-customer-page.success.add')
+              this.translateService.instant('CUSTOMERS-CRM.add-customer-page.success.add'),
             );
             this.router.navigate([ROUTES.customersTable]);
           } else {
-            const errorMsg = this.errorFacadeService.handleApiResponse(response);
-            this.toast.error(this.translateService.instant(errorMsg) || errorMsg);
+            this.errorFacadeService.showError(response);
           }
           this.loading.set(false);
         },
-        error: (error) => {
-          const errorMsg = this.errorFacadeService.handleHttpError(error);
-          this.toast.error(this.translateService.instant(errorMsg) || errorMsg);
+        error: (error: Error) => {
+          this.errorFacadeService.showError(error);
           this.loading.set(false);
         },
       });
@@ -480,7 +478,7 @@ export class AddCustomers implements OnInit, OnDestroy {
         next: (response) => {
           if (response.succeeded) {
             this.toast.success(
-              this.translateService.instant('CUSTOMERS-CRM.edit-customer-page.success.update')
+              this.translateService.instant('CUSTOMERS-CRM.edit-customer-page.success.update'),
             );
             this.router.navigate([ROUTES.customersTable]);
           } else {

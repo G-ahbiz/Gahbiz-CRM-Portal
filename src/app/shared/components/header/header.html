@@ -1,118 +1,130 @@
 <div class="container-fluid p-0 m-0">
-  <div class="header-container w-100 d-flex justify-content-between align-items-center py-2 px-3">
-
+  <div class="header-container w-100 d-flex justify-content-end align-items-center py-2 px-3">
     <!-- Left side: Menu button and Search -->
     <div class="d-flex align-items-center">
       <!-- Mobile Menu Toggle Button -->
-      <button *ngIf="isMobile" class="btn mobile-menu-toggle d-md-none me-2" (click)="toggleMobileMenu()"
-        aria-label="Toggle Menu">
+      <button
+        *ngIf="isMobile"
+        class="btn mobile-menu-toggle d-md-none me-2"
+        (click)="toggleMobileMenu()"
+        aria-label="Toggle Menu"
+      >
         <i class="pi pi-bars"></i>
       </button>
 
-      <!-- Search Container -->
-      <div class="search-container">
-        <div class="search-form-group position-relative d-flex justify-content-start align-items-center gap-2">
-          <label for="search" class="m-0 p-0 text-muted">
-            <i class="pi pi-search"></i>
-          </label>
-          <input class="search-input w-100 h-100 border-0 bg-transparent" id="search" type="text"
-            [placeholder]="'HEADER.SEARCH' | translate" aria-label="Search" />
-        </div>
-      </div>
-    </div>
+      <!-- Right side: Icons and Profile -->
+      <div class="icon-profile-container d-flex justify-content-start align-items-center gap-3">
+        <!-- icons container -->
+        <div class="icons-container d-flex justify-content-start align-items-center gap-3">
+          <!-- Language Switcher -->
+          <div class="btn-group language-btn-group">
+            <button
+              type="button"
+              class="btn gap-2 d-flex align-items-center outline-0"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              [title]="currentLanguage().name"
+            >
+              <i class="pi pi-globe fs-6"></i>
+              <span class="ms-1">{{ currentLanguage().code.toUpperCase() }}</span>
+            </button>
 
-    <!-- Right side: Icons and Profile -->
-    <div class="icon-profile-container d-flex justify-content-start align-items-center gap-3">
-      <!-- icons container -->
-      <div class="icons-container d-flex justify-content-start align-items-center gap-3">
-        <!-- Language Switcher -->
-        <div class="btn-group language-btn-group">
-          <button type="button" class="btn gap-2 d-flex align-items-center outline-0" data-bs-toggle="dropdown"
-            aria-expanded="false" [title]="currentLanguage().name">
-            <i class="pi pi-globe fs-6"></i>
-            <span class="ms-1">{{ currentLanguage().code.toUpperCase() }}</span>
-          </button>
+            <ul class="dropdown-menu language-dropdown">
+              @for (lang of languages; track lang.code) {
+                <li>
+                  <a
+                    class="dropdown-item d-flex align-items-center gap-2"
+                    href="#"
+                    (click)="setLanguage(lang.code); $event.preventDefault()"
+                    [class.active]="lang.code === currentLanguage().code"
+                  >
+                    <img title="flag icone" [src]="lang.flag" [alt]="lang.name" class="flag-icon" />
+                    <span>{{ 'HEADER.' + lang.code.toUpperCase() | translate }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
 
-          <ul class="dropdown-menu language-dropdown">
-            @for (lang of languages; track lang.code) {
-            <li>
-              <a class="dropdown-item d-flex align-items-center gap-2" href="#"
-                (click)="setLanguage(lang.code); $event.preventDefault()"
-                [class.active]="lang.code === currentLanguage().code">
-                <img title="flag icone" [src]="lang.flag" [alt]="lang.name" class="flag-icon" />
-                <span>{{ 'HEADER.' + lang.code.toUpperCase() | translate }}</span>
-              </a>
-            </li>
-            }
-          </ul>
-        </div>
-
-        <!-- notification icon -->
-        <button type="button" class="btn p-0 m-0" [title]="'HEADER.NOTIFICATIONS' | translate"
-          aria-label="Notifications">
-          <img title="notifications" src="assets/images/header/notification.svg" [alt]="'HEADER.NOTIFICATIONS' | translate" class="icon" />
-        </button>
-        <!-- messages icon -->
-        <button type="button" class="btn p-0 m-0" [title]="'HEADER.MESSAGES' | translate" aria-label="Messages">
-          <img title="messages" src="assets/images/header/message.svg" [alt]="'HEADER.MESSAGES' | translate" class="icon" />
-        </button>
-      </div>
-
-      <!-- profile container -->
-      <div class="profile-container">
-        <div class="btn-group">
-          <button type="button"
-            class="btn btn-outline-light text-muted rounded-pill d-flex justify-content-start align-items-center gap-2 px-3 py-2 border"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            @if (currentUser()?.profileImageUrl) {
-            <img [src]="currentUser()?.profileImageUrl" alt="Profile" class="icon rounded-circle"
-              style="width: 28px; height: 28px; object-fit: cover" />
-            } @else {
-            <img src="assets/images/header/profile.svg" alt="Profile" class="icon rounded-circle"
-              style="width: 28px; height: 28px" />
-            }
-            <span class="text-nowrap fs-75 fw-medium">{{ currentUser()?.fullName || 'Guest' }}</span>
-            <i class="pi pi-chevron-down small"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2">
-            <li>
-              <span class="dropdown-item text-nowrap fs-75 fw-medium d-flex align-items-center gap-2">
-                <i class="pi pi-user"></i>
-                {{ currentUser()?.fullName || ('HEADER.PROFILE' | translate) }}
-              </span>
-            </li>
-            <li>
-              <hr class="dropdown-divider my-2" />
-            </li>
-            @if (!isLoggedIn()) {
-            <li>
-              <a [routerLink]="ROUTES.signIn"
-                class="dropdown-item px-3 py-2 rounded small fw-medium d-flex align-items-center gap-2"
-                [class.active]="isActiveRoute(ROUTES.signIn)" [class.text-primary]="isActiveRoute(ROUTES.signIn)"
-                [class.text-secondary]="!isActiveRoute(ROUTES.signIn)"
-                [attr.aria-current]="isActiveRoute(ROUTES.signIn) ? 'page' : null">
-                <i class="pi pi-sign-in"></i>
-                {{ 'AUTH.SIGN_IN' | translate }}
-              </a>
-            </li>
-            <li>
-              <a [routerLink]="ROUTES.signUp"
-                class="dropdown-item btn btn-primary text-white px-4 py-2 rounded small fw-medium shadow d-flex align-items-center justify-content-center gap-2"
-                [attr.aria-current]="isActiveRoute(ROUTES.signUp) ? 'page' : null">
-                <i class="pi pi-user-plus"></i>
-                {{ 'AUTH.SIGN_UP' | translate }}
-              </a>
-            </li>
-            } @else {
-            <li>
-              <button (click)="logout()"
-                class="dropdown-item btn btn-outline-danger text-danger px-4 py-2 rounded small fw-medium w-100 d-flex align-items-center justify-content-center gap-2">
-                <i class="pi pi-sign-out"></i>
-                {{ 'HEADER.LOG_OUT' | translate }}
+          <!-- profile container -->
+          <div class="profile-container">
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-outline-light text-muted rounded-pill d-flex justify-content-start align-items-center gap-2 px-3 py-2 border"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                @if (currentUser()?.profileImageUrl) {
+                  <img
+                    [src]="currentUser()?.profileImageUrl"
+                    alt="Profile"
+                    class="icon rounded-circle"
+                    style="width: 28px; height: 28px; object-fit: cover"
+                  />
+                } @else {
+                  <img
+                    src="assets/images/header/profile.svg"
+                    alt="Profile"
+                    class="icon rounded-circle"
+                    style="width: 28px; height: 28px"
+                  />
+                }
+                <span class="text-nowrap fs-75 fw-medium">{{
+                  currentUser()?.fullName || 'Guest'
+                }}</span>
+                <i class="pi pi-chevron-down small"></i>
               </button>
-            </li>
-            }
-          </ul>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2">
+                <li>
+                  <span
+                    class="dropdown-item text-nowrap fs-75 fw-medium d-flex align-items-center gap-2"
+                  >
+                    <i class="pi pi-user"></i>
+                    {{ currentUser()?.fullName || ('HEADER.PROFILE' | translate) }}
+                  </span>
+                </li>
+                <li>
+                  <hr class="dropdown-divider my-2" />
+                </li>
+                @if (!isLoggedIn()) {
+                  <li>
+                    <a
+                      [routerLink]="ROUTES.signIn"
+                      class="dropdown-item px-3 py-2 rounded small fw-medium d-flex align-items-center gap-2"
+                      [class.active]="isActiveRoute(ROUTES.signIn)"
+                      [class.text-primary]="isActiveRoute(ROUTES.signIn)"
+                      [class.text-secondary]="!isActiveRoute(ROUTES.signIn)"
+                      [attr.aria-current]="isActiveRoute(ROUTES.signIn) ? 'page' : null"
+                    >
+                      <i class="pi pi-sign-in"></i>
+                      {{ 'AUTH.SIGN_IN' | translate }}
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      [routerLink]="ROUTES.signUp"
+                      class="dropdown-item btn btn-primary text-white px-4 py-2 rounded small fw-medium shadow d-flex align-items-center justify-content-center gap-2"
+                      [attr.aria-current]="isActiveRoute(ROUTES.signUp) ? 'page' : null"
+                    >
+                      <i class="pi pi-user-plus"></i>
+                      {{ 'AUTH.SIGN_UP' | translate }}
+                    </a>
+                  </li>
+                } @else {
+                  <li>
+                    <button
+                      (click)="logout()"
+                      class="dropdown-item btn btn-outline-danger text-danger px-4 py-2 rounded small fw-medium w-100 d-flex align-items-center justify-content-center gap-2"
+                    >
+                      <i class="pi pi-sign-out"></i>
+                      {{ 'HEADER.LOG_OUT' | translate }}
+                    </button>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

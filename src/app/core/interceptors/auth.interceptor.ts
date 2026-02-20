@@ -82,7 +82,7 @@ export class AuthInterceptor implements HttpInterceptor {
       case 404:
         return 'Resource not found.';
       case 409:
-        return 'A conflict occurred. Please try again.';
+        return error.error?.message || 'A conflict occurred. Please try again.';
       case 429:
         return 'Too many requests. Please try again later.';
       case 500:
