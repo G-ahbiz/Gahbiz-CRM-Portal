@@ -16,6 +16,7 @@ export interface LeadSummaryItem {
   assignedTo?: AssignedTo;
   createdAt: string;
   updatedAt: string;
+  phoneNumber: string;
   servicesOfInterest: {
     id: string;
     name: string;

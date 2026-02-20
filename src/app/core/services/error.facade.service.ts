@@ -56,6 +56,12 @@ export class ErrorFacadeService {
           case 404:
             errorMessage = 'Service not found';
             break;
+          case 409:
+            errorMessage =
+              typeof error.error === 'string'
+                ? error.error
+                : 'A resource with this data already exists';
+            break;
           case 500:
             errorMessage = 'Server error occurred';
             break;
