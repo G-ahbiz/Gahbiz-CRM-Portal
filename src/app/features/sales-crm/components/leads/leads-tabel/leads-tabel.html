@@ -1,14 +1,30 @@
 <div class="container-fluid p-0 m-0">
   <!-- Add PrimeNG ConfirmDialog -->
-  <p-confirmDialog [style]="{ width: '350px' }" acceptLabel="{{ 'COMMON.YES' | translate }}"
-    rejectLabel="{{ 'COMMON.NO' | translate }}" acceptIcon="pi pi-check red" rejectIcon="pi pi-times">
+  <p-confirmDialog
+    [style]="{ width: '350px' }"
+    acceptLabel="{{ 'COMMON.YES' | translate }}"
+    rejectLabel="{{ 'COMMON.NO' | translate }}"
+    acceptIcon="pi pi-check red"
+    rejectIcon="pi pi-times"
+  >
   </p-confirmDialog>
 
   <div class="card border-0 bg-transparent">
-    <p-table #dt [value]="leadsData()" dataKey="id" [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
-      [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords"
-      [rowsPerPageOptions]="responsiveRowsPerPageOptions" [lazy]="true" (onPage)="onPageChange($event)"
-      (onSort)="onSortColumn($event)" [loading]="loading()" responsiveLayout="scroll">
+    <p-table
+      #dt
+      [value]="leadsData()"
+      dataKey="id"
+      [tableStyle]="{ 'min-width': '100%', 'overflow-x': 'auto' }"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="responsiveRowsPerPageOptions"
+      [lazy]="true"
+      (onPage)="onPageChange($event)"
+      (onSort)="onSortColumn($event)"
+      [loading]="loading()"
+      responsiveLayout="scroll"
+    >
       <ng-template #caption>
         <!-- Responsive Header Container -->
         <div class="responsive-header">
@@ -19,9 +35,14 @@
               <!-- Bulk Delete Button -->
               <button
                 class="btn btn-sm btn-danger text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-                (click)="deleteSelectedLeads()" [disabled]="bulkDeleteLoading() || selectedLeadsCount === 0"
-                [title]="'LEADS.DELETE_SELECTED' | translate">
-                <i class="pi fs-875" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
+                (click)="deleteSelectedLeads()"
+                [disabled]="bulkDeleteLoading() || selectedLeadsCount === 0"
+                [title]="'LEADS.DELETE_SELECTED' | translate"
+              >
+                <i
+                  class="pi fs-875"
+                  [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
+                ></i>
                 <span>{{ 'COMMON.DELETE' | translate }}</span>
                 <span *ngIf="selectedLeadsCount > 0" class="ms-1">
                   ({{ selectedLeadsCount }})
@@ -31,8 +52,13 @@
               <!-- Export Button -->
               <button
                 class="btn btn-sm primary-bg-clr text-white px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-                (click)="exportLeads()" [disabled]="exportLoading() || selectedLeadsCount === 0">
-                <i class="pi fs-875" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                (click)="exportLeads()"
+                [disabled]="exportLoading() || selectedLeadsCount === 0"
+              >
+                <i
+                  class="pi fs-875"
+                  [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
+                ></i>
                 <span>{{ 'LEADS.EXPORT' | translate }}</span>
                 <span *ngIf="selectedLeadsCount > 0" class="ms-1">
                   ({{ selectedLeadsCount }})
@@ -41,17 +67,22 @@
 
               <!-- Import Button (Manager, Admin, SalesAgentProvider only) -->
               @if (canImportLeads()) {
-              <button
-                class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2"
-                (click)="showDialog()">
-                <i class="pi pi-upload fs-875"></i>
-                {{ 'COMMON.IMPORT' | translate }}
-              </button>
+                <button
+                  class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+                  (click)="showDialog()"
+                >
+                  <i class="pi pi-upload fs-875"></i>
+                  {{ 'COMMON.IMPORT' | translate }}
+                </button>
               }
 
               <!-- Clear Selection Button -->
-              <button *ngIf="selectedLeadsCount > 0" class="btn btn-sm btn-outline-secondary px-3 py-2"
-                (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
+              <button
+                *ngIf="selectedLeadsCount > 0"
+                class="btn btn-sm btn-outline-secondary px-3 py-2"
+                (click)="clearSelections()"
+                [disabled]="exportLoading() || bulkDeleteLoading()"
+              >
                 {{ 'COMMON.CLEAR' | translate }}
               </button>
             </div>
@@ -62,27 +93,37 @@
                 <p-inputicon>
                   <i class="pi pi-search"></i>
                 </p-inputicon>
-                <input pInputText type="text" class="w-100" (input)="onSearch($event)" #searchInput
-                  [placeholder]="'LEADS.SEARCH' | translate" />
+                <input
+                  pInputText
+                  type="text"
+                  class="w-100"
+                  (input)="onSearch($event)"
+                  #searchInput
+                  [placeholder]="'LEADS.SEARCH' | translate"
+                />
               </p-iconfield>
             </div>
 
             <!-- Right Section: Clear Filter and Add Lead -->
             <div class="desktop-add-btn d-flex gap-2">
-              <button type="button" class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2"
-                (click)="clear()">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2"
+                (click)="clear()"
+              >
                 <i class="pi pi-filter-slash"></i>
                 <span class="ms-1">{{ 'COMMON.CLEAR_FILTER' | translate }}</span>
               </button>
 
               <!-- Add Lead Button (SalesAgent, Manager, Admin only - not SalesAgentProvider) -->
               @if (canAddLead()) {
-              <button
-                class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
-                routerLink="/main/sales/leads/add-lead">
-                <i class="pi pi-plus"></i>
-                <span>{{ 'LEADS.ADD_LEAD' | translate }}</span>
-              </button>
+                <button
+                  class="btn btn-primary primary-bg-clr d-flex justify-content-center px-3 py-2 align-items-center gap-2 rounded-3"
+                  routerLink="/main/sales/leads/add-lead"
+                >
+                  <i class="pi pi-plus"></i>
+                  <span>{{ 'LEADS.ADD_LEAD' | translate }}</span>
+                </button>
               }
             </div>
           </div>
@@ -95,8 +136,14 @@
                 <p-inputicon>
                   <i class="pi pi-search"></i>
                 </p-inputicon>
-                <input pInputText type="text" class="w-100" (input)="onSearch($event)" #searchInput
-                  [placeholder]="'LEADS.SEARCH' | translate" />
+                <input
+                  pInputText
+                  type="text"
+                  class="w-100"
+                  (input)="onSearch($event)"
+                  #searchInput
+                  [placeholder]="'LEADS.SEARCH' | translate"
+                />
               </p-iconfield>
             </div>
 
@@ -105,9 +152,14 @@
               <!-- Delete Button -->
               <button
                 class="btn btn-sm btn-danger text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="deleteSelectedLeads()" [disabled]="bulkDeleteLoading() || selectedLeadsCount === 0"
-                [title]="'LEADS.DELETE_SELECTED' | translate">
-                <i class="pi" [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"></i>
+                (click)="deleteSelectedLeads()"
+                [disabled]="bulkDeleteLoading() || selectedLeadsCount === 0"
+                [title]="'LEADS.DELETE_SELECTED' | translate"
+              >
+                <i
+                  class="pi"
+                  [ngClass]="bulkDeleteLoading() ? 'pi-spinner pi-spin' : 'pi-trash'"
+                ></i>
                 <span class="ms-1 d-none d-sm-inline">{{ 'COMMON.DELETE' | translate }}</span>
                 <span *ngIf="selectedLeadsCount > 0" class="ms-1">
                   ({{ selectedLeadsCount }})
@@ -117,43 +169,55 @@
               <!-- Export Button -->
               <button
                 class="btn btn-sm primary-bg-clr text-white px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="exportLeads()" [disabled]="exportLoading() || selectedLeadsCount === 0">
-                <i class="pi" [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"></i>
+                (click)="exportLeads()"
+                [disabled]="exportLoading() || selectedLeadsCount === 0"
+              >
+                <i
+                  class="pi"
+                  [ngClass]="exportLoading() ? 'pi-spinner pi-spin' : 'pi-download'"
+                ></i>
                 <span class="ms-1 d-none d-sm-inline">{{ 'LEADS.EXPORT' | translate }}</span>
               </button>
 
               <!-- Import Button (Mobile) -->
               @if (canImportLeads()) {
-              <button
-                class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="showDialog()">
-                <i class="pi pi-upload d-sm-none"></i>
-                <span class="d-none d-sm-inline">{{ 'COMMON.IMPORT' | translate }}</span>
-              </button>
+                <button
+                  class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                  (click)="showDialog()"
+                >
+                  <i class="pi pi-upload d-sm-none"></i>
+                  <span class="d-none d-sm-inline">{{ 'COMMON.IMPORT' | translate }}</span>
+                </button>
               }
 
               <!-- Clear Button -->
-              <button *ngIf="selectedLeadsCount > 0"
+              <button
+                *ngIf="selectedLeadsCount > 0"
                 class="btn btn-sm btn-outline-secondary px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="clearSelections()" [disabled]="exportLoading() || bulkDeleteLoading()">
+                (click)="clearSelections()"
+                [disabled]="exportLoading() || bulkDeleteLoading()"
+              >
                 <i class="pi pi-times d-sm-none"></i>
                 <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR' | translate }}</span>
               </button>
 
               <!-- Add Button (Mobile) -->
               @if (canAddLead()) {
-              <button
-                class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                routerLink="/main/sales/leads/add-lead">
-                <i class="pi pi-plus d-sm-none"></i>
-                <span class="d-none d-sm-inline">{{ 'LEADS.ADD_LEAD' | translate }}</span>
-              </button>
+                <button
+                  class="btn btn-sm btn-primary primary-bg-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
+                  routerLink="/main/sales/leads/add-lead"
+                >
+                  <i class="pi pi-plus d-sm-none"></i>
+                  <span class="d-none d-sm-inline">{{ 'LEADS.ADD_LEAD' | translate }}</span>
+                </button>
               }
 
               <!-- Clear Filter Button (Mobile) -->
-              <button type="button"
+              <button
+                type="button"
                 class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
-                (click)="clear()">
+                (click)="clear()"
+              >
                 <i class="pi pi-filter-slash d-sm-none"></i>
                 <span class="d-none d-sm-inline">{{ 'COMMON.CLEAR_FILTER' | translate }}</span>
               </button>
@@ -162,11 +226,15 @@
         </div>
 
         <!-- Title Section -->
-        <div class="title-container my-3 my-md-4" [attr.dir]="languageService.direction()" [ngClass]="{
+        <div
+          class="title-container my-3 my-md-4"
+          [attr.dir]="languageService.direction()"
+          [ngClass]="{
             'text-center': true,
             'text-md-start': !languageService.isRTL(),
-            'text-md-end': languageService.isRTL()
-          }">
+            'text-md-end': languageService.isRTL(),
+          }"
+        >
           <h5 class="m-0 p-0">{{ 'LEADS.ALL_LEADS' | translate }}</h5>
           <small class="text-muted" *ngIf="selectedLeadsCount > 0">
             {{ selectedLeadsCount }} {{ 'LEADS.SELECTED_LEADS_FOR_ACTION' | translate }}
@@ -182,8 +250,14 @@
         <tr>
           <th class="text-center" style="width: 60px">
             <div class="d-flex justify-content-center align-items-center">
-              <input type="checkbox" name="select-all" id="select-all" [checked]="isAllSelected"
-                (change)="onSelectAll($event)" [title]="'LEADS.SELECT_ALL' | translate" />
+              <input
+                type="checkbox"
+                name="select-all"
+                id="select-all"
+                [checked]="isAllSelected"
+                (change)="onSelectAll($event)"
+                [title]="'LEADS.SELECT_ALL' | translate"
+              />
             </div>
           </th>
           <th class="d-none d-md-table-cell">
@@ -210,13 +284,19 @@
               <p-sortIcon field="sourceName" />
             </div>
           </th>
-          <th *ngIf="
+          <th
+            *ngIf="
               currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER
-            " class="d-none d-md-table-cell">
+            "
+            class="d-none d-md-table-cell"
+          >
             {{ 'LEADS.ASSIGNED_TO' | translate }}
           </th>
-          <th class="d-none d-md-table-cell">
+          <!-- <th class="d-none d-md-table-cell">
             {{ 'LEADS.VALUE' | translate }}
+          </th> -->
+          <th class="d-none d-md-table-cell">
+            {{ 'LEADS.PHONE_NUMBER' | translate }}
           </th>
           <th class="d-none d-md-table-cell">
             {{ 'LEADS.CREATED_DATE' | translate }}
@@ -230,61 +310,88 @@
       <ng-template #body let-lead let-rowIndex="rowIndex">
         <tr>
           <td class="text-center">
-            <input type="checkbox" name="select-lead" id="lead-{{ lead.id }}" [checked]="lead.selected"
-              (change)="toggleLeadSelection(lead)" [title]="'LEADS.SELECT_LEAD' | translate" />
+            <input
+              type="checkbox"
+              name="select-lead"
+              id="lead-{{ lead.id }}"
+              [checked]="lead.selected"
+              (change)="toggleLeadSelection(lead)"
+              [title]="'LEADS.SELECT_LEAD' | translate"
+            />
           </td>
           <td class="d-none d-md-table-cell" [title]="lead.id">
-            {{ lead.id | slice : 0 : 8 }}{{ lead.id.length > 8 ? '...' : '' }}
+            {{ lead.id | slice: 0 : 8 }}{{ lead.id.length > 8 ? '...' : '' }}
           </td>
           <td>
             <span class="d-none d-md-inline">{{ lead.firstName }} {{ lead.lastName }}</span>
-            <span class="d-md-none">{{ lead.firstName + ' ' + lead.lastName | slice : 0 : 12
-              }}{{ (lead.firstName + ' ' + lead.lastName).length > 12 ? '...' : '' }}</span>
+            <span class="d-md-none"
+              >{{ lead.firstName + ' ' + lead.lastName | slice: 0 : 12
+              }}{{ (lead.firstName + ' ' + lead.lastName).length > 12 ? '...' : '' }}</span
+            >
           </td>
           <td [pTooltip]="getServiceName(lead)" tooltipPosition="top">
             <div class="text-truncate" style="max-width: 150px">
-              {{ getServiceName(lead) | slice : 0 : 20
+              {{ getServiceName(lead) | slice: 0 : 20
               }}{{ getServiceName(lead).length > 20 ? '...' : '' }}
             </div>
           </td>
           <td>
-            <span class="py-1 px-2 rounded-3" [class]="
+            <span
+              class="py-1 px-2 rounded-3"
+              [class]="
                 lead.status === 'New'
                   ? 'text-white bg-primary'
                   : lead.status === 'Qualified'
-                  ? 'text-success card-green'
-                  : lead.status === 'In-Progress'
-                  ? 'text-warning card-yellow'
-                  : lead.status === 'Lost'
-                  ? 'text-danger card-red'
-                  : ''
-              ">{{ lead.status }}</span>
+                    ? 'text-success card-green'
+                    : lead.status === 'In-Progress'
+                      ? 'text-warning card-yellow'
+                      : lead.status === 'Lost'
+                        ? 'text-danger card-red'
+                        : ''
+              "
+              >{{ lead.status }}</span
+            >
           </td>
           <td>
-            {{ lead.sourceName | slice : 0 : 15 }}{{ lead.sourceName?.length > 15 ? '...' : '' }}
+            {{ lead.sourceName | slice: 0 : 15 }}{{ lead.sourceName?.length > 15 ? '...' : '' }}
           </td>
-          <td *ngIf="
+          <td
+            *ngIf="
               currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER
-            " class="d-none d-md-table-cell">
-            {{ lead.assignedTo?.fullName | slice : 0 : 15
+            "
+            class="d-none d-md-table-cell"
+          >
+            {{ lead.assignedTo?.fullName | slice: 0 : 15
             }}{{ lead.assignedTo?.fullName?.length > 15 ? '...' : '' }}
           </td>
-          <td class="d-none d-md-table-cell">-</td>
-          <td class="d-none d-md-table-cell">{{ lead.createdAt | date : 'dd/MM/yyyy' }}</td>
+          <td class="d-none d-md-table-cell">{{ lead.phoneNumber }}</td>
+          <!-- <td class="d-none d-md-table-cell">
+            {{ lead.value | currency: 'USD' : 'symbol' : '1.0-0' }}
+          </td> -->
+          <td class="d-none d-md-table-cell">{{ lead.createdAt | date: 'dd/MM/yyyy' }}</td>
           <td class="action-buttons">
-            <button class="btn btn-sm p-1" (click)="viewLead(lead.id); $event.stopPropagation()"
-              [title]="'COMMON.VIEW' | translate">
+            <button
+              class="btn btn-sm p-1"
+              (click)="viewLead(lead.id); $event.stopPropagation()"
+              [title]="'COMMON.VIEW' | translate"
+            >
               <i class="pi pi-eye"></i>
             </button>
-            <button class="btn btn-sm p-1" (click)="editLead(lead.id); $event.stopPropagation()"
-              [title]="'COMMON.EDIT' | translate">
+            <button
+              class="btn btn-sm p-1"
+              (click)="editLead(lead.id); $event.stopPropagation()"
+              [title]="'COMMON.EDIT' | translate"
+            >
               <i class="pi pi-pencil"></i>
             </button>
             @if (canDeleteLead()) {
-            <button class="btn btn-sm p-1" (click)="onDeleteLead(lead.id.toString()); $event.stopPropagation()"
-              [title]="'COMMON.DELETE' | translate">
-              <i class="pi pi-trash"></i>
-            </button>
+              <button
+                class="btn btn-sm p-1"
+                (click)="onDeleteLead(lead.id.toString()); $event.stopPropagation()"
+                [title]="'COMMON.DELETE' | translate"
+              >
+                <i class="pi pi-trash"></i>
+              </button>
             }
           </td>
         </tr>
@@ -292,11 +399,14 @@
 
       <ng-template #emptymessage>
         <tr>
-          <td [attr.colspan]="
+          <td
+            [attr.colspan]="
               currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER
                 ? 10
                 : 9
-            " class="text-center py-4">
+            "
+            class="text-center py-4"
+          >
             {{ 'LEADS.NO_LEADS_FOUND' | translate }}
           </td>
         </tr>
@@ -304,42 +414,82 @@
     </p-table>
   </div>
 
-  <p-dialog [header]="'LEADS.import-dialog.title' | translate" [modal]="true" [(visible)]="visible"
-    [style]="{ width: '30rem' }">
+  <p-dialog
+    [header]="'LEADS.import-dialog.title' | translate"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '30rem' }"
+  >
     <div class="d-flex flex-column gap-3">
       <span class="text-secondary">{{ 'LEADS.import-dialog.description' | translate }}</span>
       <div class="form-group">
-        <label for="fileInput" class="form-label">{{ 'LEADS.import-dialog.select-file' | translate }}</label>
-        <input type="file" #fileInput id="fileInput" class="form-control" accept=".xlsx,.xls,.csv"
-          (change)="onFileSelected($event)" />
+        <label for="fileInput" class="form-label">{{
+          'LEADS.import-dialog.select-file' | translate
+        }}</label>
+        <input
+          type="file"
+          #fileInput
+          id="fileInput"
+          class="form-control"
+          accept=".xlsx,.xls,.csv"
+          (change)="onFileSelected($event)"
+        />
         <small class="text-muted">{{ 'LEADS.import-dialog.file-type-hint' | translate }}</small>
       </div>
       @if (selectedFileName()) {
-      <div class="alert alert-info py-2">
-        <i class="pi pi-file me-2"></i>
-        <span>{{ selectedFileName() }}</span>
-      </div>
+        <div class="alert alert-info py-2">
+          <i class="pi pi-file me-2"></i>
+          <span>{{ selectedFileName() }}</span>
+        </div>
       }
     </div>
     <div class="d-flex justify-content-end gap-2 mt-4">
-      <button type="button" class="btn btn-secondary" (click)="closeDialog()" [disabled]="isImporting()">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="closeDialog()"
+        [disabled]="isImporting()"
+      >
         {{ 'COMMON.CANCEL' | translate }}
       </button>
-      <button type="button" class="btn btn-primary" (click)="importLeads()"
-        [disabled]="!selectedFile() || isImporting()">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="importLeads()"
+        [disabled]="!selectedFile() || isImporting()"
+      >
         @if (!isImporting()) {
-        <span><i class="pi pi-upload me-2"></i>{{ 'LEADS.import-dialog.import-button' | translate }}</span>
+          <span
+            ><i class="pi pi-upload me-2"></i
+            >{{ 'LEADS.import-dialog.import-button' | translate }}</span
+          >
         } @else {
-        <span><i class="pi pi-spin pi-spinner me-2"></i>{{ 'LEADS.import-dialog.importing-button' | translate }}</span>
+          <span
+            ><i class="pi pi-spin pi-spinner me-2"></i
+            >{{ 'LEADS.import-dialog.importing-button' | translate }}</span
+          >
         }
       </button>
     </div>
   </p-dialog>
 </div>
 
-<p-dialog [visible]="showLeadModal()" modal="true" (onHide)="closeLeadModal()" [style]="{ width: '700px' }"
-  styleClass="lead-details-dialog" [closable]="true" [dismissableMask]="true" [draggable]="false" [resizable]="false"
-  [showHeader]="false">
-  <app-leads-details *ngIf="selectedLeadData()" [lead]="selectedLeadData()" (closed)="closeLeadModal()">
+<p-dialog
+  [visible]="showLeadModal()"
+  modal="true"
+  (onHide)="closeLeadModal()"
+  [style]="{ width: '700px' }"
+  styleClass="lead-details-dialog"
+  [closable]="true"
+  [dismissableMask]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [showHeader]="false"
+>
+  <app-leads-details
+    *ngIf="selectedLeadData()"
+    [lead]="selectedLeadData()"
+    (closed)="closeLeadModal()"
+  >
   </app-leads-details>
 </p-dialog>

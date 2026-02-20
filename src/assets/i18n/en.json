@@ -756,6 +756,7 @@
     "UNASSIGNED": "Unassigned",
     "FOLLOW_UP": "Follow-up",
     "CREATED_AT": "Created",
+    "PHONE_NUMBER": "Phone Number",
     "ACTIVITY_DETAILS": "Activity Details",
     "USER": "User",
     "TIME": "Time",
