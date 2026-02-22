@@ -8,4 +8,5 @@ export interface UpdateCustomerRequest {
   postalCode: string;
   address: string;
   ssn?: string;
+  assignedAgentId: string;
 }
