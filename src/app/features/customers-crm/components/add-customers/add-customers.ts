@@ -60,7 +60,7 @@ export class AddCustomers implements OnInit, OnDestroy {
     { value: 'male', label: 'CUSTOMERS-CRM.add-customer-page.male' },
     { value: 'female', label: 'CUSTOMERS-CRM.add-customer-page.female' },
     { value: 'other', label: 'CUSTOMERS-CRM.add-customer-page.other' },
-    { value: 'prefer not to say', label: 'CUSTOMERS-CRM.add-customer-page.prefer-not-to-say' },
+    { value: 'PreferNotToSay', label: 'CUSTOMERS-CRM.add-customer-page.prefer-not-to-say' },
   ];
 
   currentUser$ = this.authService.currentUser$;
