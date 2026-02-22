@@ -121,7 +121,7 @@ export class AddCustomers implements OnInit, OnDestroy {
       postalCode: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(5)]],
       address: ['', [Validators.required, Validators.maxLength(200)]],
       defaultLanguage: [{ value: '', disabled: isEdit }, [Validators.required]],
-      assignedAgentId: [{ value: '', disabled: isEdit }, [Validators.required]],
+      assignedAgentId: [{ value: '' }, [Validators.required]],
     });
   }
 
@@ -467,6 +467,7 @@ export class AddCustomers implements OnInit, OnDestroy {
       postalCode: this.addCustomerForm.get('postalCode')?.value,
       address: this.addCustomerForm.get('address')?.value,
       ssn: this.addCustomerForm.get('ssn')?.value,
+      assignedAgentId: this.addCustomerForm.get('assignedAgentId')?.value,
     };
 
     console.log('Sending update data:', updateData);
