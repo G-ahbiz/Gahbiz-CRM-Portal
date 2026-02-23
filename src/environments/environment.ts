@@ -24,6 +24,7 @@ export const environment = {
     getLeadById: (id: string) => `/leads/${id}`,
     exportLeads: '/leads/export',
     importLeads: '/leads/import',
+    downloadTemplate: '/leads/import/template',
   },
   activityLog: {
     getleadActivities: (id: string) => `/ActivityLog/leadActivities/${id}`,
