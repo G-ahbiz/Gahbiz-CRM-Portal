@@ -95,6 +95,9 @@ export const environment = {
   },
   salesAgents: {
     getSalesAgents: '/SalesManagement/agentsList',
+    getSalesAgent: (agentId: string) => `/SalesManagement/agent/${agentId}`,
+    updateSalesAgent: (agentId: string) => `/SalesManagement/agent/${agentId}`,
+    deleteSalesAgent: (agentId: string) => `/SalesManagement/agent/${agentId}`,
     addSalesAgent: '/SalesManagement/AddSalesAgent',
     getSalesAgentDropdown: '/SalesManagement/agents-dropdown-list',
     assignTask: '/SalesManagement/assign-task',

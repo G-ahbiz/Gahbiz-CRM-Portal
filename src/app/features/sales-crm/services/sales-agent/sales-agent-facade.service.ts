@@ -12,7 +12,8 @@ import { LeadSummary } from '@features/sales-crm/interfaces/lead-summary';
 import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
 import { AddSalesAgentRequest } from '@features/sales-crm/interfaces/add-sales-agent-request';
 import { AddSalesAgentResponse } from '@features/sales-crm/interfaces/add-sales-agent-response';
-
+import { GetAgentDetailsResponse } from '@features/sales-crm/interfaces/get-agent-details';
+import { EditAgentRequest } from '@features/sales-crm/interfaces/edit-agent-request';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +26,25 @@ export class SalesAgentFacadeService {
   }
 
   getAllSalesAgents(
-    filters: SalesAgentsFilter
+    filters: SalesAgentsFilter,
   ): Observable<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>> {
     return this.salesAgentApiService.getAllSalesAgents(filters);
   }
 
+  getSalesAgentDetails(agentId: string): Observable<ApiResponse<GetAgentDetailsResponse>> {
+    return this.salesAgentApiService.getSalesAgentDetails(agentId);
+  }
+
+  updateSalesAgent(
+    agentId: string,
+    request: EditAgentRequest,
+  ): Observable<ApiResponse<GetAgentDetailsResponse>> {
+    return this.salesAgentApiService.updateSalesAgent(agentId, request);
+  }
+
+  deleteSalesAgent(agentId: string): Observable<ApiResponse<boolean>> {
+    return this.salesAgentApiService.deleteSalesAgent(agentId);
+  }
   assignTask(request: FormData): Observable<ApiResponse<AssignTaskResponse>> {
     return this.salesAgentApiService.assignTask(request);
   }
@@ -38,14 +53,17 @@ export class SalesAgentFacadeService {
     return this.salesAgentApiService.getSalesAgentStatisticsById(agentId);
   }
 
-  getLeadsBySalesAgentId(agentId: string, filter: SalesAgentsFilter): Observable<ApiResponse<LeadSummary>> {
+  getLeadsBySalesAgentId(
+    agentId: string,
+    filter: SalesAgentsFilter,
+  ): Observable<ApiResponse<LeadSummary>> {
     return this.salesAgentApiService.getLeadsBySalesAgentId(agentId, filter);
   }
-  
+
   getSalesAgentsDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
     return this.salesAgentApiService.getSalesAgentsDropdown();
   }
-  
+
   getManagersDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
     return this.salesAgentApiService.getManagersDropdown();
   }

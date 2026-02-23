@@ -692,6 +692,25 @@
       "SUCCESS": "Agente de ventas agregado exitosamente",
       "ERROR": "Error al agregar agente de ventas"
     },
+    "EDIT-SALES-AGENT": {
+      "TITLE": "Editar Agente de Ventas",
+      "FULL_NAME": "Nombre Completo",
+      "FULL_NAME_PLACEHOLDER": "Ingresa el nombre completo",
+      "EMAIL": "Correo Electrónico",
+      "EMAIL_PLACEHOLDER": "Ingresa la dirección de correo",
+      "MONTHLY_TARGET": "Objetivo Mensual",
+      "MONTHLY_TARGET_PLACEHOLDER": "Ingresa el objetivo mensual",
+      "MANAGER": "Gerente",
+      "MANAGER_PLACEHOLDER": "Seleccionar gerente (opcional)",
+      "IS_ACTIVE": "Activo",
+      "SUBMIT": "Actualizar Agente",
+      "SUBMITTING": "Actualizando...",
+      "SUCCESS": "Agente de ventas actualizado exitosamente",
+      "ERROR": "Error al actualizar agente de ventas"
+    },
+    "delete-sales-agent-confirmation": "¿Estás seguro de que quieres eliminar este agente de ventas?",
+    "sales-agent-deleted-successfully": "Agente de ventas eliminado exitosamente",
+    "sales-agent-updated-successfully": "Agente de ventas actualizado exitosamente",
     "leads-tabel": {
       "export": "Exportar",
       "import": "Importar",

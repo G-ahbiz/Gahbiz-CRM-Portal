@@ -7,6 +7,8 @@ import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-
 import { AddSalesAgentRequest } from '@features/sales-crm/interfaces/add-sales-agent-request';
 import { AddSalesAgentResponse } from '@features/sales-crm/interfaces/add-sales-agent-response';
 import { AssignTaskResponse } from '@features/sales-crm/interfaces/assign-task-response';
+import { EditAgentRequest } from '@features/sales-crm/interfaces/edit-agent-request';
+import { GetAgentDetailsResponse } from '@features/sales-crm/interfaces/get-agent-details';
 import { GetSalesAgentsResponse } from '@features/sales-crm/interfaces/get-sales-agents-response';
 import { LeadSummary } from '@features/sales-crm/interfaces/lead-summary';
 import { SalesAgentStatistics } from '@features/sales-crm/interfaces/sales-agent-statistics';
@@ -28,7 +30,7 @@ export class SalesAgentApiService {
   }
 
   getAllSalesAgents(
-    filters: SalesAgentsFilter
+    filters: SalesAgentsFilter,
   ): Observable<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>> {
     const url = `${this.baseUrl}${environment.salesAgents.getSalesAgents}`;
 
@@ -48,6 +50,24 @@ export class SalesAgentApiService {
     return this.http.get<ApiResponse<PagenatedResponse<GetSalesAgentsResponse>>>(url, { params });
   }
 
+  getSalesAgentDetails(agentId: string): Observable<ApiResponse<GetAgentDetailsResponse>> {
+    const url = `${this.baseUrl}${environment.salesAgents.getSalesAgent(agentId)}`;
+    return this.http.get<ApiResponse<GetAgentDetailsResponse>>(url);
+  }
+
+  updateSalesAgent(
+    agentId: string,
+    request: EditAgentRequest,
+  ): Observable<ApiResponse<GetAgentDetailsResponse>> {
+    const url = `${this.baseUrl}${environment.salesAgents.updateSalesAgent(agentId)}`;
+    return this.http.put<ApiResponse<GetAgentDetailsResponse>>(url, request);
+  }
+
+  deleteSalesAgent(agentId: string): Observable<ApiResponse<boolean>> {
+    const url = `${this.baseUrl}${environment.salesAgents.deleteSalesAgent(agentId)}`;
+    return this.http.delete<ApiResponse<boolean>>(url);
+  }
+
   getSalesAgentsDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
     const url = `${this.baseUrl}${environment.salesAgents.getSalesAgentDropdown}`;
     return this.http.get<ApiResponse<SalesAgentBrief[]>>(url);
@@ -65,7 +85,7 @@ export class SalesAgentApiService {
 
   getLeadsBySalesAgentId(
     agentId: string,
-    params: SalesAgentsFilter
+    params: SalesAgentsFilter,
   ): Observable<ApiResponse<LeadSummary>> {
     let httpParams = new HttpParams()
       .set('pageNumber', params.pageNumber.toString())
@@ -75,9 +95,12 @@ export class SalesAgentApiService {
       httpParams = httpParams.set('searchTerm', params.searchTerm);
     }
 
-    return this.http.get<ApiResponse<LeadSummary>>(`${this.baseUrl}${environment.salesAgents.getLeadsBySalesAgentId(agentId)}`, {
-      params: httpParams,
-    });
+    return this.http.get<ApiResponse<LeadSummary>>(
+      `${this.baseUrl}${environment.salesAgents.getLeadsBySalesAgentId(agentId)}`,
+      {
+        params: httpParams,
+      },
+    );
   }
 
   getManagersDropdown(): Observable<ApiResponse<SalesAgentBrief[]>> {
