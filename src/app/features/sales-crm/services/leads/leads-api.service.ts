@@ -23,7 +23,7 @@ export class LeadsApiService {
     pageSize: number = 10,
     assignedTo: string = '',
     sortColumn: string = '',
-    sortDirection: string = 'ASC'
+    sortDirection: string = 'ASC',
   ): Observable<ApiResponse<LeadSummary>> {
     const getLeadsUrl = `${this.baseApi}${environment.leads.getLeads}`;
     return this.httpClient.get<ApiResponse<LeadSummary>>(getLeadsUrl, {
@@ -45,7 +45,7 @@ export class LeadsApiService {
   searchLeads(
     pageNumber: number = 1,
     pageSize: number = 10,
-    query: string = ''
+    query: string = '',
   ): Observable<ApiResponse<LeadSummary>> {
     const searchLeadsUrl = `${this.baseApi}${environment.leads.searchLeads}`;
     return this.httpClient.get<ApiResponse<LeadSummary>>(searchLeadsUrl, {
@@ -64,7 +64,7 @@ export class LeadsApiService {
 
   updateLead(
     id: string,
-    addLeadRequest: AddLeadRequest | FormData
+    addLeadRequest: AddLeadRequest | FormData,
   ): Observable<ApiResponse<LeadSummaryItem>> {
     const updateLeadUrl = `${this.baseApi}${environment.leads.updateLead(id)}`;
     return this.httpClient.put<ApiResponse<LeadSummaryItem>>(updateLeadUrl, addLeadRequest);
@@ -80,7 +80,7 @@ export class LeadsApiService {
     return this.httpClient.post<Blob>(
       exportLeadsUrl,
       { leadIds },
-      { responseType: 'blob' as 'json' }
+      { responseType: 'blob' as 'json' },
     );
   }
 
@@ -88,6 +88,11 @@ export class LeadsApiService {
     console.log(ExcelFile.get('file'));
     const importLeadsUrl = `${this.baseApi}${environment.leads.importLeads}`;
     return this.httpClient.post<ApiResponse<any>>(importLeadsUrl, ExcelFile as FormData);
+  }
+
+  downloadTemplate(): Observable<Blob> {
+    const downloadTemplateUrl = `${this.baseApi}${environment.leads.downloadTemplate}`;
+    return this.httpClient.get<Blob>(downloadTemplateUrl, { responseType: 'blob' as 'json' });
   }
 
   getAllServices(): Observable<ApiResponse<PaginatedServices>> {

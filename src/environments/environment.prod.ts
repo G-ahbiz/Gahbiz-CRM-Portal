@@ -23,6 +23,7 @@ export const environment = {
     getLeadById: (id: string) => `/leads/${id}`,
     exportLeads: '/leads/export',
     importLeads: '/leads/import',
+    downloadTemplate: '/leads/import/template',
   },
   activityLog: {
     getleadActivities: (id: string) => `/ActivityLog/leadActivities/${id}`,
@@ -39,6 +40,7 @@ export const environment = {
   locations: {
     getAllCountries: '/countries/All/Countries',
     getAllStates: (countryId: string) => `/states/country/${countryId}`,
+    getAllCities: (stateId: string) => `/cities/state/${stateId}`,
   },
   customers: {
     addCustomer: '/Customers/Customer',
@@ -93,6 +95,9 @@ export const environment = {
   },
   salesAgents: {
     getSalesAgents: '/SalesManagement/agentsList',
+    getSalesAgent: (agentId: string) => `/SalesManagement/agent/${agentId}`,
+    updateSalesAgent: (agentId: string) => `/SalesManagement/agent/${agentId}`,
+    deleteSalesAgent: (agentId: string) => `/SalesManagement/agent/${agentId}`,
     addSalesAgent: '/SalesManagement/AddSalesAgent',
     getSalesAgentDropdown: '/SalesManagement/agents-dropdown-list',
     assignTask: '/SalesManagement/assign-task',

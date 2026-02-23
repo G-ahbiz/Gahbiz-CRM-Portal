@@ -18,11 +18,25 @@ import { finalize } from 'rxjs';
 import { ToastService } from '@core/services/toast.service';
 import { ApiResponse } from '@core/interfaces/api-response';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { SalesAgentsUpdate } from '../sales-agents-update/sales-agents-update';
+import { GetAgentDetailsResponse } from '@features/sales-crm/interfaces/get-agent-details';
 
 @Component({
   selector: 'app-sales-agents-details',
   standalone: true,
-  imports: [CommonModule, TabsHeader, SalesAgentsTabel, CanvasJSAngularChartsModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    TabsHeader,
+    SalesAgentsTabel,
+    CanvasJSAngularChartsModule,
+    ConfirmDialogModule,
+    SalesAgentsUpdate,
+  ],
+  providers: [ConfirmationService],
   templateUrl: './sales-agents-details.html',
   styleUrls: ['./sales-agents-details.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +48,7 @@ export class SalesAgentsDetails implements OnInit {
   agentDetails = signal<any>({});
   agentStatistics = signal<SalesAgentStatisticsOne | null>(null);
   salesAgentId = signal<string>('');
+  editDialogVisible = signal<boolean>(false);
 
   // Dependency injection
   private destroyRef = inject(DestroyRef);
@@ -41,6 +56,8 @@ export class SalesAgentsDetails implements OnInit {
   private salesAgentFacade = inject(SalesAgentFacadeService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private confirmationService = inject(ConfirmationService);
+  private translate = inject(TranslateService);
 
   // Chart options signals
   chartOptionsVertical = signal<any>({
@@ -257,5 +274,56 @@ export class SalesAgentsDetails implements OnInit {
 
   goBack() {
     window.history.back();
+  }
+
+  openEditDialog(): void {
+    this.editDialogVisible.set(true);
+  }
+
+  closeEditDialog(): void {
+    this.editDialogVisible.set(false);
+  }
+
+  onAgentUpdated(agent: GetAgentDetailsResponse): void {
+    this.agentDetails.update((prev) => ({
+      ...prev,
+      name: agent.fullName,
+    }));
+    this.loadStatistics(agent.id);
+  }
+
+  onDeleteAgent(): void {
+    const id = this.salesAgentId();
+    if (!id) return;
+
+    this.confirmationService.confirm({
+      message: this.translate.instant('SALES-CRM.delete-sales-agent-confirmation'),
+      header: this.translate.instant('COMMON.CONFIRM'),
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteAgent(id);
+      },
+    });
+  }
+
+  private deleteAgent(id: string): void {
+    this.salesAgentFacade
+      .deleteSalesAgent(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          if (response.succeeded) {
+            this.toast.success(
+              this.translate.instant('SALES-CRM.sales-agent-deleted-successfully')
+            );
+            this.router.navigate(['/main/sales/sales-agents']);
+          } else {
+            this.toast.error(response.message ?? 'Failed to delete sales agent');
+          }
+        },
+        error: (error) => {
+          this.toast.error(error?.message ?? 'Failed to delete sales agent');
+        },
+      });
   }
 }
