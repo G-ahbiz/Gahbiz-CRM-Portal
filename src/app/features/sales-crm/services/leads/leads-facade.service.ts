@@ -21,21 +21,21 @@ export class LeadsFacadeService {
     pageSize: number = 10,
     assignedTo: string = '',
     sortColumn: string = '',
-    sortDirection: string = 'ASC'
+    sortDirection: string = 'ASC',
   ): Observable<ApiResponse<LeadSummary>> {
     return this.leadsService.getAllLeads(
       pageNumber,
       pageSize,
       assignedTo,
       sortColumn,
-      sortDirection
+      sortDirection,
     );
   }
 
   searchLeads(
     pageNumber: number = 1,
     pageSize: number = 10,
-    query: string = ''
+    query: string = '',
   ): Observable<ApiResponse<LeadSummary>> {
     return this.leadsService.searchLeads(pageNumber, pageSize, query);
   }
@@ -50,7 +50,7 @@ export class LeadsFacadeService {
   }
 
   deleteMultipleLeads(
-    ids: string[]
+    ids: string[],
   ): Observable<{ succeeded: string[]; failed: { id: string; error: any }[] }> {
     if (ids.length === 0) {
       return of({ succeeded: [], failed: [] });
@@ -70,9 +70,9 @@ export class LeadsFacadeService {
             response: null,
             success: false,
             error,
-          })
-        )
-      )
+          }),
+        ),
+      ),
     );
 
     return forkJoin(deleteRequests).pipe(
@@ -92,13 +92,13 @@ export class LeadsFacadeService {
         });
 
         return { succeeded, failed };
-      })
+      }),
     );
   }
 
   updateLead(
     id: string,
-    addLeadRequest: AddLeadRequest | FormData
+    addLeadRequest: AddLeadRequest | FormData,
   ): Observable<ApiResponse<LeadSummaryItem>> {
     return this.leadsService.updateLead(id, addLeadRequest);
   }
@@ -112,6 +112,9 @@ export class LeadsFacadeService {
   }
   importLeads(file: FormData): Observable<ApiResponse<any>> {
     return this.leadsService.importLeads(file);
+  }
+  downloadTemplate(): Observable<Blob> {
+    return this.leadsService.downloadTemplate();
   }
 
   getAllOrders(): Observable<ApiResponse<PaginatedServices>> {

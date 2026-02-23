@@ -800,6 +800,8 @@
       "description": "استيراد العملاء المحتملين من ملف Excel أو CSV.",
       "select-file": "اختر ملف",
       "file-type-hint": "يتم دعم ملفات .xlsx (Microsoft Excel) , .xls (Microsoft Excel) و .csv (Comma Separated Values) فقط.",
+      "download-template": "تحميل القالب",
+      "template-downloaded": "تم تحميل القالب بنجاح",
       "import-button": "استيراد",
       "importing-button": "جاري الاستيراد...",
       "select-file-error": "يرجى اختيار ملف للاستيراد",
