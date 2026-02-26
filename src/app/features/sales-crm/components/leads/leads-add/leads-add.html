@@ -33,7 +33,7 @@
       ) {
         <div class="import-btn-container ms-auto">
           <button
-            class="btn btn-sm btn-outline-primary px-3 py-2 d-flex justify-content-center align-items-center gap-2"
+            class="btn btn-sm btn-primary px-3 py-2 d-flex justify-content-center align-items-center gap-2"
             (click)="showDialog()"
           >
             <i class="pi pi-upload fs-875"></i>
@@ -682,9 +682,9 @@
             </div>
           </div>
 
-          <!-- Services of Interest Container -->
-          <div class="w-100 mb-4">
-            <div class="form-group w-100">
+          <div class="d-flex flex-column flex-md-row gap-3 w-100">
+            <!-- Services of Interest Container -->
+            <div class="form-group flex-fill">
               <label
                 for="servicesOfInterest"
                 class="form-label d-flex align-items-center"
@@ -697,17 +697,54 @@
                 formControlName="servicesOfInterest"
                 optionLabel="name"
                 optionValue="id"
-                [placeholder]="'LEADS.leads-add-page.select-services' | translate"
+                [placeholder]="'LEADS.leads-add-page.select-assigned-agent' | translate"
                 [maxSelectedLabels]="3"
                 [filter]="true"
                 (onFilter)="onFilterServices($event)"
                 [showClear]="true"
-                class="w-100"
+                class="w-100 mt-0"
               />
               <small class="text-muted">{{
                 'LEADS.leads-add-page.services-hint' | translate
               }}</small>
             </div>
+
+            <!-- Assigned Agent Container -->
+            @if (
+              isEditMode() &&
+              (currentUser()?.type === userTypes.ADMIN || currentUser()?.type === userTypes.MANAGER)
+            ) {
+              <div class="form-group flex-fill">
+                <label
+                  for="assignedUserId"
+                  class="form-label d-flex align-items-center"
+                  [class.flex-row-reverse]="languageService.isRTL()"
+                >
+                  <span>{{ 'LEADS.leads-add-page.assigned-agent' | translate }}</span>
+                </label>
+                <select
+                  name="assignedUserId"
+                  id="assignedAgentId"
+                  class="form-select w-100 mt-0"
+                  formControlName="assignedUserId"
+                >
+                  <option value="" disabled selected>
+                    {{ 'LEADS.leads-add-page.select-assigned-agent' | translate }}
+                  </option>
+                  @for (agent of salesAgents(); track agent.id) {
+                    <option [value]="agent.id">{{ agent.name }}</option>
+                  }
+                </select>
+                @if (checkErrors('assignedUserId')) {
+                  <div
+                    class="text-danger small mt-1"
+                    [ngClass]="languageService.getTextAlignmentClass()"
+                  >
+                    {{ getErrorMessage('assignedUserId') }}
+                  </div>
+                }
+              </div>
+            }
           </div>
 
           <!-- Notes Container -->
