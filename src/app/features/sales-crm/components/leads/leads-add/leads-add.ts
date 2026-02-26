@@ -18,7 +18,7 @@ import { REG_EXP, USER_TYPES } from '@shared/config/constants';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
@@ -28,6 +28,7 @@ import { LocationsService } from '@core/services/locations.service';
 import { Country } from '@core/interfaces/country';
 import { State } from '@core/interfaces/state';
 import { City } from '@core/interfaces/city'; // Add City import
+import { ErrorFacadeService } from '@core/services/error.facade.service';
 
 @Component({
   selector: 'app-leads-add',
@@ -53,6 +54,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
   private translate = inject(TranslateService);
   languageService = inject(LanguageService);
   private locationService = inject(LocationsService);
+  private errorFacadeService = inject(ErrorFacadeService);
 
   isSubmitting = signal<boolean>(false);
   visible = signal<boolean>(false);
@@ -204,7 +206,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
         error: (error) => {
           this.toastService.error(
             this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_COUNTRIES') ||
-              'Failed to load countries'
+              'Failed to load countries',
           );
         },
       });
@@ -216,7 +218,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
       .valueChanges.pipe(
         distinctUntilChanged(),
         debounceTime(120),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (countryId) => {
@@ -238,7 +240,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
       .valueChanges.pipe(
         distinctUntilChanged(),
         debounceTime(120),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (stateId) => {
@@ -266,7 +268,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
           this.states.set([]);
           this.loadingStates.set(false);
           this.toastService.error(
-            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_STATES') || 'Failed to load states'
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_STATES') || 'Failed to load states',
           );
         },
       });
@@ -286,7 +288,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
           this.cities.set([]);
           this.loadingCities.set(false);
           this.toastService.error(
-            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_CITIES') || 'Failed to load cities'
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_CITIES') || 'Failed to load cities',
           );
         },
       });
@@ -316,7 +318,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
             this.populateForm(response.data);
           } else {
             this.toastService.error(
-              this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
+              this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS'),
             );
             this.router.navigate(['/main/sales/leads/leads-main']);
           }
@@ -324,7 +326,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.toastService.error(
-            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
+            this.translate.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS'),
           );
           this.router.navigate(['/main/sales/leads/leads-main']);
           this.isSubmitting.set(false);
@@ -342,7 +344,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
     const serviceIds =
       lead.servicesOfInterest?.map((service) =>
-        typeof service === 'string' ? service : service.id
+        typeof service === 'string' ? service : service.id,
       ) || [];
 
     // First patch all basic values
@@ -388,7 +390,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
           const countryFound = countries.find(
             (c) =>
               c.name?.toLowerCase() === lead.country?.toLowerCase() ||
-              c.shortName?.toLowerCase() === lead.country?.toLowerCase()
+              c.shortName?.toLowerCase() === lead.country?.toLowerCase(),
           );
 
           if (countryFound) {
@@ -407,7 +409,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
                   // Try to find state by name
                   const stateFound = states.find(
-                    (s) => s.name?.toLowerCase() === lead.state?.toLowerCase()
+                    (s) => s.name?.toLowerCase() === lead.state?.toLowerCase(),
                   );
 
                   if (stateFound) {
@@ -443,7 +445,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
         .then((states) => {
           // Check if any state matches our "country" value
           const matchingState = states?.find(
-            (s) => s.name?.toLowerCase() === lead.country?.toLowerCase()
+            (s) => s.name?.toLowerCase() === lead.country?.toLowerCase(),
           );
 
           if (matchingState) {
@@ -546,8 +548,8 @@ export class LeadsAdd implements OnInit, OnDestroy {
         next: (response) => {
           this.services.set(
             [...this.services(), ...response.data].filter(
-              (service, index, self) => self.findIndex((t) => t.id === service.id) === index
-            )
+              (service, index, self) => self.findIndex((t) => t.id === service.id) === index,
+            ),
           );
         },
         error: (error) => {
@@ -729,6 +731,13 @@ export class LeadsAdd implements OnInit, OnDestroy {
     return formControl?.errors && formControl?.touched;
   }
 
+  onSsnInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digitsOnly = input.value.replace(/\D/g, '');
+    input.value = digitsOnly;
+    this.addLeadForm.get('ssn')?.setValue(digitsOnly, { emitEvent: false });
+  }
+
   back() {
     window.history.back();
   }
@@ -755,14 +764,14 @@ export class LeadsAdd implements OnInit, OnDestroy {
             this.toastService.error(
               response.errors?.[0] ||
                 response.message ||
-                this.translate.instant('LEADS.ERRORS.UPDATE_FAILED')
+                this.translate.instant('LEADS.ERRORS.UPDATE_FAILED'),
             );
           }
         },
         error: (error) => {
           this.isSubmitting.set(false);
           this.toastService.error(
-            error?.error?.message || this.translate.instant('LEADS.ERRORS.UPDATE_FAILED')
+            error?.error?.message || this.translate.instant('LEADS.ERRORS.UPDATE_FAILED'),
           );
         },
       });
@@ -778,14 +787,14 @@ export class LeadsAdd implements OnInit, OnDestroy {
             this.toastService.error(
               response.errors?.[0] ||
                 response.message ||
-                this.translate.instant('LEADS.ERRORS.ADD_FAILED')
+                this.translate.instant('LEADS.ERRORS.ADD_FAILED'),
             );
           }
         },
         error: (error) => {
           this.isSubmitting.set(false);
           this.toastService.error(
-            error?.error?.message || this.translate.instant('LEADS.ERRORS.ADD_FAILED')
+            error?.error?.message || this.translate.instant('LEADS.ERRORS.ADD_FAILED'),
           );
         },
       });
@@ -829,20 +838,18 @@ export class LeadsAdd implements OnInit, OnDestroy {
         this.isImporting.set(false);
         if (response.succeeded) {
           this.toastService.success(
-            response.message || this.translate.instant('LEADS.SUCCESS.IMPORTED')
+            response.message || this.translate.instant('LEADS.SUCCESS.IMPORTED'),
           );
           this.closeDialog();
         } else {
           this.toastService.error(
-            response.message || this.translate.instant('LEADS.ERRORS.IMPORT_FAILED')
+            response.message || this.translate.instant('LEADS.ERRORS.IMPORT_FAILED'),
           );
         }
       },
       error: (error) => {
         this.isImporting.set(false);
-        this.toastService.error(
-          error?.error?.message || this.translate.instant('LEADS.ERRORS.IMPORT_FAILED')
-        );
+        this.errorFacadeService.showError(error);
         console.error('Import error:', error);
       },
     });

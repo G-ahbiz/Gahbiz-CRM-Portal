@@ -548,16 +548,11 @@ export class CustomerTabel implements OnInit {
             this.loadCustomersData();
             this.clearSelections();
           } else {
-            this.toast.error(
-              response.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
-            );
+            this.errorFacade.showError(response);
           }
         },
         error: (error) => {
-          this.toast.error(
-            error?.error?.message || this.translate.instant('CUSTOMERS-CRM.ERRORS.IMPORT_FAILED'),
-          );
-          console.error('Import error:', error);
+          this.errorFacade.showError(error);
         },
       });
   }

@@ -24,7 +24,7 @@ import { LeadsFacadeService } from '@features/sales-crm/services/leads/leads-fac
 import { LeadSummaryItem } from '@features/sales-crm/interfaces/lead-summary';
 import { ToastService } from '@core/services/toast.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { ROUTES, USER_TYPES } from '@shared/config/constants';
+import { USER_TYPES } from '@shared/config/constants';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -42,6 +42,7 @@ import {
   LEAD_ADD_ROLES,
   hasPermission,
 } from '@shared/utils/role-permissions';
+import { ErrorFacadeService } from '@core/services/error.facade.service';
 
 const SESSION_STORAGE_KEYS = {
   LEAD_ID: 'leadId',
@@ -139,6 +140,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
   private readonly translateService = inject(TranslateService);
   private readonly confirmationService = inject(ConfirmationService);
   readonly languageService = inject(LanguageService);
+  private readonly errorFacadeService = inject(ErrorFacadeService);
 
   // Responsive pagination
   get responsiveRowsPerPageOptions(): number[] {
@@ -180,11 +182,11 @@ export class LeadsTabel implements OnInit, OnDestroy {
         this.pageSize,
         this.searchValue(),
         this.sortColumn(),
-        this.sortDirection()
+        this.sortDirection(),
       )
       .pipe(
         finalize(() => this.loading.set(false)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (response) => {
@@ -194,7 +196,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
               data.map((lead) => ({
                 ...lead,
                 selected: this.selectedLeadIds().has(lead.id.toString()),
-              }))
+              })),
             );
             this.totalRecords = response.data.totalCount || 0;
             this.updateSelectAllState();
@@ -221,7 +223,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
           this.showLeadModal.set(true);
         } else {
           this.toast.error(
-            this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS')
+            this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEAD_DETAILS'),
           );
           this.selectedLeadData.set(null);
           this.showLeadModal.set(false);
@@ -309,7 +311,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
       .deleteMultipleLeads?.(ids)
       ?.pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.bulkDeleteLoading.set(false))
+        finalize(() => this.bulkDeleteLoading.set(false)),
       )
       .subscribe({
         next: (result: any) => {
@@ -318,7 +320,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
             this.toast.success(
               this.translateService.instant('LEADS.BULK_DELETE_SUCCESS', {
                 count: result.succeeded.length,
-              })
+              }),
             );
 
             // Remove successful deletions from selected IDs
@@ -440,7 +442,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
         this.toast.success(
           this.translateService.instant('LEADS.EXPORT_SUCCESS', {
             count: selectedIds.length,
-          })
+          }),
         );
       },
       error: (error) => {
@@ -490,22 +492,20 @@ export class LeadsTabel implements OnInit, OnDestroy {
         this.isImporting.set(false);
         if (response.succeeded) {
           this.toast.success(
-            response.message || this.translateService.instant('LEADS.SUCCESS.IMPORTED')
+            response.message || this.translateService.instant('LEADS.SUCCESS.IMPORTED'),
           );
           this.closeDialog();
           // Refresh the table after successful import
           this.loadLeads();
         } else {
           this.toast.error(
-            response.message || this.translateService.instant('LEADS.ERRORS.IMPORT_FAILED')
+            response.message || this.translateService.instant('LEADS.ERRORS.IMPORT_FAILED'),
           );
         }
       },
       error: (error) => {
         this.isImporting.set(false);
-        this.toast.error(
-          error?.error?.message || this.translateService.instant('LEADS.ERRORS.IMPORT_FAILED')
-        );
+        this.errorFacadeService.showError(error);
         console.error('Import error:', error);
       },
     });
@@ -522,7 +522,7 @@ export class LeadsTabel implements OnInit, OnDestroy {
       .downloadTemplate()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.templateDownloadLoading.set(false))
+        finalize(() => this.templateDownloadLoading.set(false)),
       )
       .subscribe({
         next: (blob: Blob) => {
@@ -535,14 +535,11 @@ export class LeadsTabel implements OnInit, OnDestroy {
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
           this.toast.success(
-            this.translateService.instant('LEADS.import-dialog.template-downloaded')
+            this.translateService.instant('LEADS.import-dialog.template-downloaded'),
           );
         },
         error: (error) => {
-          this.toast.error(
-            error?.error?.message || this.translateService.instant('LEADS.ERRORS.IMPORT_FAILED')
-          );
-          console.error('Template download error:', error);
+          this.errorFacadeService.showError(error);
         },
       });
   }

@@ -57,10 +57,7 @@ export class ErrorFacadeService {
             errorMessage = 'Service not found';
             break;
           case 409:
-            errorMessage =
-              typeof error.error === 'string'
-                ? error.error
-                : 'A resource with this data already exists';
+            errorMessage = typeof error.error === 'string' ? error.error : 'Duplicate data';
             break;
           case 500:
             errorMessage = 'Server error occurred';
@@ -110,5 +107,30 @@ export class ErrorFacadeService {
     }
 
     this.toastService.error(errorMessage);
+  }
+
+  /**
+   * Takes a list of error messages and shows them in a single toast.
+   * Accepts array of strings or objects with message/description; null/undefined/safe.
+   */
+  showErrors(
+    errors:
+      | (string | { message?: string; description?: string } | null | undefined)[]
+      | null
+      | undefined,
+  ): void {
+    if (errors == null || !Array.isArray(errors)) {
+      this.toastService.error('An error occurred');
+      return;
+    }
+    const messages = errors
+      .map((e) => (typeof e === 'string' ? e : (e?.message ?? e?.description ?? '')))
+      .filter((m) => typeof m === 'string' && m.trim().length > 0);
+    if (messages.length === 0) {
+      this.toastService.error('An error occurred');
+      return;
+    }
+    const message = messages.length === 1 ? messages[0] : messages.map((m) => `• ${m}`).join('\n');
+    this.toastService.error(message);
   }
 }

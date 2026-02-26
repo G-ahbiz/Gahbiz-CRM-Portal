@@ -856,7 +856,7 @@
       "invalid-guid": "Formato GUID inválido.",
       "name-pattern-error": "El nombre no puede contener caracteres especiales. Solo se permiten letras, espacios, guiones y apóstrofes.",
       "phone-pattern-error": "Formato de número telefónico inválido.",
-      "ssn-pattern-error": "SSN debe estar en formato XXX-XX-XXXX o XXXXXXXXX.",
+      "ssn-pattern-error": "SSN debe estar en formato válido",
       "zip-code-pattern-error": "Formato de código postal inválido. Usa XXXXX o XXXXX-XXXX.",
       "invalid-format": "Formato inválido."
     },
