@@ -892,7 +892,7 @@
       "invalid-guid": "Invalid GUID format.",
       "name-pattern-error": "Name cannot contain special characters. Only letters, spaces, hyphens, and apostrophes are allowed.",
       "phone-pattern-error": "Invalid phone number format.",
-      "ssn-pattern-error": "SSN must be in a valid format",
+      "ssn-pattern-error": "SSN must be in a valid format XXX-XX-XXXX",
       "zip-code-pattern-error": "Invalid ZIP code format. Use XXXXX or XXXXX-XXXX.",
       "invalid-format": "Invalid format."
     },
