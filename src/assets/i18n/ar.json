@@ -883,9 +883,11 @@
       "invalid-guid": "تنسيق GUID غير صالح.",
       "name-pattern-error": "لا يمكن أن يحتوي الاسم على أحرف خاصة. يُسمح فقط بالأحرف والمسافات والشرطات والفواصل.",
       "phone-pattern-error": "تنسيق رقم الهاتف غير صالح.",
-      "ssn-pattern-error": "يجب أن يكون الرقم الوطني بتنسيق صحيح",
+      "ssn-pattern-error": "يجب أن يكون الرقم القومي بتنسيق XXX-XX-XXXX",
       "zip-code-pattern-error": "تنسيق الرمز البريدي غير صالح. استخدم XXXXX أو XXXXX-XXXX.",
-      "invalid-format": "تنسيق غير صالح."
+      "invalid-format": "تنسيق غير صالح.",
+      "select-assigned-agent": "اختر المعين",
+      "assigned-agent": "المعين"
     },
     "leads-edit-page": {
       "title": "تعديل العميل المحتمل",

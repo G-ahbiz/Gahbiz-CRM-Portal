@@ -7,7 +7,7 @@ import { CustomersFacadeService } from '../../services/customers-facade.service'
 import { AuthService } from '@core/services/auth.service';
 import { SalesAgentBrief } from '../../interfaces/sales-agent-brief';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ROUTES, USER_TYPES } from '@shared/config/constants';
+import { REG_EXP, ROUTES, USER_TYPES } from '@shared/config/constants';
 import { UpdateCustomerRequest } from '../../interfaces/update-customer-request';
 import { ToastService } from '@core/services/toast.service';
 import { ErrorFacadeService } from '@core/services/error.facade.service';
@@ -587,7 +587,7 @@ export class AddCustomers implements OnInit, OnDestroy {
 
   onSsnInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const digitsOnly = input.value.replace(/\D/g, '');
+    const digitsOnly = input.value.replace(REG_EXP.SSN_PATTERN_DIGITS, '');
     input.value = digitsOnly;
     this.addCustomerForm.get('ssn')?.setValue(digitsOnly, { emitEvent: false });
   }

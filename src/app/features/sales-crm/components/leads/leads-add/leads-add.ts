@@ -19,7 +19,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ServiceDetails } from '@features/sales-crm/interfaces/service-details';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AuthService } from '@core/services/auth.service';
 import { User } from '@features/auth/interfaces/sign-in/user';
 import { LeadDetails } from '@features/sales-crm/interfaces/lead-details';
@@ -29,6 +29,9 @@ import { Country } from '@core/interfaces/country';
 import { State } from '@core/interfaces/state';
 import { City } from '@core/interfaces/city'; // Add City import
 import { ErrorFacadeService } from '@core/services/error.facade.service';
+import { SelectModule } from 'primeng/select';
+import { SalesAgentFacadeService } from '@features/sales-crm/services/sales-agent/sales-agent-facade.service';
+import { SalesAgentBrief } from '@features/customers-crm/interfaces/sales-agent-brief';
 
 @Component({
   selector: 'app-leads-add',
@@ -39,6 +42,7 @@ import { ErrorFacadeService } from '@core/services/error.facade.service';
     TranslateModule,
     DialogModule,
     MultiSelectModule,
+    SelectModule,
   ],
   templateUrl: './leads-add.html',
   styleUrl: './leads-add.css',
@@ -46,6 +50,7 @@ import { ErrorFacadeService } from '@core/services/error.facade.service';
 export class LeadsAdd implements OnInit, OnDestroy {
   addLeadForm: FormGroup;
   private leadsFacadeService = inject(LeadsFacadeService);
+  private salesAgentFacadeService = inject(SalesAgentFacadeService);
   private toastService = inject(ToastService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -65,6 +70,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
   countries = signal<Country[]>([]);
   states = signal<State[]>([]);
   cities = signal<City[]>([]); // Add cities signal
+  salesAgents = signal<SalesAgentBrief[]>([]);
   loadingStates = signal<boolean>(false);
   loadingCities = signal<boolean>(false); // Add loading cities signal
 
@@ -145,6 +151,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
       gender: ['', this.genderValidator],
       workAt: ['', Validators.maxLength(200)],
       notes: ['', Validators.maxLength(1000)],
+      assignedUserId: [null],
     });
   }
 
@@ -157,6 +164,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
         this.isEditMode.set(true);
         this.leadId.set(id);
         this.loadLeadData(id);
+        this.loadSalesAgents();
       }
     });
 
@@ -333,13 +341,15 @@ export class LeadsAdd implements OnInit, OnDestroy {
         },
       });
   }
+  loadSalesAgents() {
+    this.salesAgentFacadeService.getSalesAgentsDropdown().subscribe({
+      next: (response) => {
+        this.salesAgents.set(response.data);
+      },
+    });
+  }
 
   private populateForm(lead: LeadDetails): void {
-    console.log('Lead data:', lead);
-    console.log('Lead country:', lead.country);
-    console.log('Lead state:', lead.state);
-    console.log('Lead city:', lead.city);
-
     const formattedDob = this.formatDateForInput(lead.dob);
 
     const serviceIds =
@@ -365,6 +375,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
       gender: lead.gender || '',
       workAt: lead.workAt || '',
       notes: '',
+      assignedUserId: lead.assignedTo?.id || null,
     });
 
     // Handle city - check if it's a valid city name from dropdowns
@@ -422,78 +433,9 @@ export class LeadsAdd implements OnInit, OnDestroy {
                   }
                 },
               });
-          } else {
-            // The "country" field might actually be a state name
-            // Let's search for it as a state in all countries
-            this.searchForStateAsCountry(lead, countries);
           }
         },
       });
-  }
-
-  private searchForStateAsCountry(lead: LeadDetails, countries: Country[]): void {
-    // Since "Sharkia Governorate" is a state, not a country,
-    // we need to find which country it belongs to
-    let searchCompleted = false;
-    let countryPromises = [];
-
-    for (const country of countries) {
-      const promise = this.locationService
-        .getStatesByCountry$(country.id.toString())
-        .pipe(take(1))
-        .toPromise()
-        .then((states) => {
-          // Check if any state matches our "country" value
-          const matchingState = states?.find(
-            (s) => s.name?.toLowerCase() === lead.country?.toLowerCase(),
-          );
-
-          if (matchingState) {
-            searchCompleted = true;
-            // Found it! Set the actual country and state
-            this.addLeadForm.patchValue({
-              country: country.id,
-              state: matchingState.id,
-            });
-
-            this.locationService
-              .getStatesByCountry$(country.id.toString())
-              .pipe(takeUntilDestroyed(this.destroyRef))
-              .subscribe((states) => {
-                this.states.set(states);
-              });
-
-            // Load cities for this state
-            this.loadCitiesForState(matchingState.id.toString(), lead.city);
-
-            return true;
-          }
-          return false;
-        });
-
-      countryPromises.push(promise);
-    }
-
-    // Wait for all searches to complete
-    Promise.all(countryPromises).then((results) => {
-      const found = results.some((result) => result === true);
-
-      if (!found) {
-        // Couldn't find a match, keep the fields as-is
-        console.warn('Could not find location match for:', {
-          country: lead.country,
-          state: lead.state,
-          city: lead.city,
-        });
-
-        // Set a default country (e.g., Egypt) if you want
-        // For now, leave them null
-        this.addLeadForm.patchValue({
-          country: null,
-          state: null,
-        });
-      }
-    });
   }
 
   private loadCitiesForState(stateId: string, cityName: string): void {
@@ -733,7 +675,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
   onSsnInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const digitsOnly = input.value.replace(/\D/g, '');
+    const digitsOnly = input.value.replace(REG_EXP.SSN_PATTERN_DIGITS, '');
     input.value = digitsOnly;
     this.addLeadForm.get('ssn')?.setValue(digitsOnly, { emitEvent: false });
   }
@@ -875,6 +817,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
     Object.keys(formValue).forEach((key) => {
       let value = formValue[key];
+      let targetKey = key;
 
       // 2. Map IDs to Names for the request
       if (key === 'country') {
@@ -885,18 +828,21 @@ export class LeadsAdd implements OnInit, OnDestroy {
         value = cityName;
       }
 
-      // 3. Append to FormData (Only if value exists)
-      // Note: If countryName is '', it won't be sent.
-      // If you want to send empty values, remove: && value !== ''
+      // 3. Normalize field names for the API
+      if (key === 'assignedAgentId') {
+        targetKey = 'assignedUserId';
+      }
+
+      // 4. Append to FormData (Only if value exists)
       if (value !== null && value !== undefined && value !== '') {
         if (key === 'servicesOfInterest' && Array.isArray(value)) {
           value.forEach((serviceId: string) => {
             formData.append('servicesOfInterest', serviceId);
           });
         } else if (Array.isArray(value)) {
-          value.forEach((item) => formData.append(key, item));
+          value.forEach((item) => formData.append(targetKey, item));
         } else {
-          formData.append(key, value);
+          formData.append(targetKey, value);
         }
       }
     });

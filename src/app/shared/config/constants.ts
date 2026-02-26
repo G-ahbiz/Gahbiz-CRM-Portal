@@ -147,6 +147,7 @@ export const REG_EXP = {
   NAME_PATTERN: /^[a-zA-Z\s\-']+$/,
   SSN_PATTERN: /^\d{3}-?\d{2}-?\d{4}$/,
   ZIP_CODE_PATTERN: /^\d{5}(-\d{4})?$/,
+  SSN_PATTERN_DIGITS: /[^\d-]/g,
 };
 
 export const CART_ITEMS = {

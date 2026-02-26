@@ -1,3 +1,5 @@
+import { AssignedTo } from './lead-summary';
+
 export interface LeadDetailsResponse {
   id: string;
   parentId?: string;
@@ -21,4 +23,5 @@ export interface LeadDetailsResponse {
   workAt?: string;
   sourceName?: string;
   notes?: string;
+  assignedTo?: AssignedTo;
 }
