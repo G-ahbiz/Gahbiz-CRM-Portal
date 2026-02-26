@@ -733,7 +733,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
 
   onSsnInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const digitsOnly = input.value.replace(/\D/g, '');
+    const digitsOnly = input.value.replace(REG_EXP.SSN_PATTERN_DIGITS, '');
     input.value = digitsOnly;
     this.addLeadForm.get('ssn')?.setValue(digitsOnly, { emitEvent: false });
   }
