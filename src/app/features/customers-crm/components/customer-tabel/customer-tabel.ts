@@ -603,7 +603,6 @@ export class CustomerTabel implements OnInit {
       customer.selected = false;
     });
     this.isAllSelected = false;
-    this.toast.info(this.translate.instant('CUSTOMERS-CRM.selection-cleared'));
   }
 
   /**
