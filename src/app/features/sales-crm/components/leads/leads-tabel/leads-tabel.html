@@ -110,6 +110,7 @@
                 type="button"
                 class="btn btn-sm btn-outline-primary outline-primary-clr px-3 py-2"
                 (click)="clear()"
+                [disabled]="searchValue() === ''"
               >
                 <i class="pi pi-filter-slash"></i>
                 <span class="ms-1">{{ 'COMMON.CLEAR_FILTER' | translate }}</span>
@@ -213,7 +214,9 @@
               }
 
               <!-- Clear Filter Button (Mobile) -->
-              <button *ngIf="searchValue()" type="button"
+              <button
+                *ngIf="searchValue()"
+                type="button"
                 class="btn btn-sm btn-outline-primary outline-primary-clr px-2 py-2 d-flex justify-content-center align-items-center flex-grow-1"
                 (click)="clear()"
               >
@@ -471,17 +474,17 @@
           (click)="importLeads()"
           [disabled]="!selectedFile() || isImporting()"
         >
-        @if (!isImporting()) {
-          <span
-            ><i class="pi pi-upload me-2"></i
-            >{{ 'LEADS.import-dialog.import-button' | translate }}</span
-          >
-        } @else {
-          <span
-            ><i class="pi pi-spin pi-spinner me-2"></i
-            >{{ 'LEADS.import-dialog.importing-button' | translate }}</span
-          >
-        }
+          @if (!isImporting()) {
+            <span
+              ><i class="pi pi-upload me-2"></i
+              >{{ 'LEADS.import-dialog.import-button' | translate }}</span
+            >
+          } @else {
+            <span
+              ><i class="pi pi-spin pi-spinner me-2"></i
+              >{{ 'LEADS.import-dialog.importing-button' | translate }}</span
+            >
+          }
         </button>
       </div>
     </div>
