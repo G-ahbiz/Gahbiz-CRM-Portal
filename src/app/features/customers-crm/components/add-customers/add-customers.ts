@@ -470,8 +470,6 @@ export class AddCustomers implements OnInit, OnDestroy {
       assignedAgentId: this.addCustomerForm.get('assignedAgentId')?.value,
     };
 
-    console.log('Sending update data:', updateData);
-
     this.customersFacadeService
       .updateCustomer(this.customerId()!, updateData)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -585,6 +583,13 @@ export class AddCustomers implements OnInit, OnDestroy {
     }
 
     return this.translateService.instant('VALIDATION.INVALID', { field: fieldNameTranslated });
+  }
+
+  onSsnInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digitsOnly = input.value.replace(/\D/g, '');
+    input.value = digitsOnly;
+    this.addCustomerForm.get('ssn')?.setValue(digitsOnly, { emitEvent: false });
   }
 
   getMarginClass(side: 'start' | 'end' | 'top' | 'bottom', size: string = ''): string {

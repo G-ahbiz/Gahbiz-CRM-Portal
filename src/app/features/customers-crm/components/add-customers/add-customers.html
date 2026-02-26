@@ -246,11 +246,13 @@
               </label>
               <input
                 type="text"
+                inputmode="numeric"
                 name="ssn"
                 id="ssn"
                 class="form-control"
                 [placeholder]="'CUSTOMERS-CRM.add-customer-page.ssn-placeholder' | translate"
                 formControlName="ssn"
+                (input)="onSsnInput($event)"
               />
               @if (addCustomerForm.get('ssn')?.invalid && addCustomerForm.get('ssn')?.touched) {
                 <div
