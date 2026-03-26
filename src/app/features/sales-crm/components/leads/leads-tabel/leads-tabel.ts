@@ -175,41 +175,49 @@ export class LeadsTabel implements OnInit, OnDestroy {
   }
 
   loadLeads() {
-    this.loading.set(true);
-    this.leadsFacadeService
-      .getAllLeads(
+  this.loading.set(true);
+  
+  const request$ = this.searchValue()
+    ? this.leadsFacadeService.searchLeads(
         this.pageNumber,
         this.pageSize,
         this.searchValue(),
+      )
+    : this.leadsFacadeService.getAllLeads(
+        this.pageNumber,
+        this.pageSize,
+        '',
         this.sortColumn(),
         this.sortDirection(),
-      )
-      .pipe(
-        finalize(() => this.loading.set(false)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe({
-        next: (response) => {
-          if (response.succeeded) {
-            const data = response.data.items || [];
-            this.leadsData.set(
-              data.map((lead) => ({
-                ...lead,
-                selected: this.selectedLeadIds().has(lead.id.toString()),
-              })),
-            );
-            this.totalRecords = response.data.totalCount || 0;
-            this.updateSelectAllState();
-          } else {
-            this.toast.error(response.message);
-          }
-        },
-        error: (error: any) => {
-          console.error(error.message || 'An error occurred while fetching leads');
-          this.toast.error(this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEADS'));
-        },
-      });
-  }
+      );
+
+  request$
+    .pipe(
+      finalize(() => this.loading.set(false)),
+      takeUntilDestroyed(this.destroyRef),
+    )
+    .subscribe({
+      next: (response) => {
+        if (response.succeeded) {
+          const data = response.data.items || [];
+          this.leadsData.set(
+            data.map((lead) => ({
+              ...lead,
+              selected: this.selectedLeadIds().has(lead.id.toString()),
+            })),
+          );
+          this.totalRecords = response.data.totalCount || 0;
+          this.updateSelectAllState();
+        } else {
+          this.toast.error(response.message);
+        }
+      },
+      error: (error: any) => {
+        console.error(error.message || 'An error occurred while fetching leads');
+        this.toast.error(this.translateService.instant('LEADS.ERRORS.FAILED_TO_LOAD_LEADS'));
+      },
+    });
+}
 
   viewLead(id: string | number) {
     const leadId = id.toString();
