@@ -43,14 +43,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const tokenService = inject(TokenService);
   const router = inject(Router);
 
-  // Initialize cache clearing on first use
   initializeCacheClearing(authService);
-
-  const cacheKey = `${state.url}-${JSON.stringify(route.data?.['roles'])}`;
-
-  if (roleCache.has(cacheKey)) {
-    return of(roleCache.get(cacheKey)!);
-  }
 
   return authService.waitForInitialization().pipe(
     map(() => {
@@ -60,8 +53,21 @@ export const roleGuard: CanActivateFn = (route, state) => {
         });
       }
 
-      const requiredRoles: string[] = (route.data?.['roles'] as string[]) ?? [...ALLOWED_ROLES];
       const user = authService.getCurrentUser();
+
+      if (!user) {
+        return router.createUrlTree([ROUTES.signIn]);
+      }
+
+      const cacheKey = `${state.url}-${JSON.stringify(route.data?.['roles'])}-${user.type}`;
+
+      if (roleCache.has(cacheKey)) {
+        return roleCache.get(cacheKey)!
+          ? true
+          : router.createUrlTree([ROUTES.unauthorized || '/unauthorized']);
+      }
+
+      const requiredRoles: string[] = (route.data?.['roles'] as string[]) ?? [...ALLOWED_ROLES];
       const userRoles = normalizeRoles(user, tokenService);
 
       const hasRole = requiredRoles.some((requiredRole) =>
@@ -79,3 +85,4 @@ export const roleGuard: CanActivateFn = (route, state) => {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 };
+
