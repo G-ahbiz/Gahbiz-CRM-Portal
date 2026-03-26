@@ -543,22 +543,11 @@ export class LeadsAdd implements OnInit, OnDestroy {
     if (!raw || raw.toString().trim() === '') return null;
 
     let v = String(raw).trim();
-
     v = v.replace(/^00/, '+');
-
     v = v.replace(/[\s-.()]/g, '');
 
-    if (/^\d{10}$/.test(v)) {
-      v = '+1' + v;
-    }
-
-    const usRegex = /^\+1[2-9]\d{9}$/;
-    const intlE164 = /^\+[1-9]\d{6,14}$/;
-
-    if (v.startsWith('+1')) {
-      if (!usRegex.test(v)) return { invalidUSPhone: true };
-    } else {
-      if (!intlE164.test(v)) return { invalidPhone: true };
+    if (!REG_EXP.PHONE_PATTERN.test(v)) {
+      return { invalidPhone: true };
     }
 
     return null;
@@ -613,8 +602,7 @@ export class LeadsAdd implements OnInit, OnDestroy {
       return this.translate.instant('LEADS.leads-add-page.future-date-error');
     if (errors['invalidGender'])
       return this.translate.instant('LEADS.leads-add-page.invalid-gender');
-    if (errors['invalidUSPhone'] || errors['invalidPhone'])
-      return this.translate.instant('LEADS.leads-add-page.invalid-phone');
+    if (errors['invalidPhone']) return this.translate.instant('LEADS.leads-add-page.invalid-phone');
     if (errors['invalidGuid']) return this.translate.instant('LEADS.leads-add-page.invalid-guid');
 
     return this.translate.instant('COMMON.ERROR');
