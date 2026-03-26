@@ -148,6 +148,7 @@ export const REG_EXP = {
   SSN_PATTERN: /^\d{3}-?\d{2}-?\d{4}$/,
   ZIP_CODE_PATTERN: /^\d{5}(-\d{4})?$/,
   SSN_PATTERN_DIGITS: /[^\d-]/g,
+  PHONE_PATTERN: /^((\+20|0)?1[0125]\d{8}|(\+1)?[2-9]\d{9}|(\+34)?[679]\d{8})$/,
 };
 
 export const CART_ITEMS = {
